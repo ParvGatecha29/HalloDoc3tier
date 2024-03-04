@@ -1,0 +1,243 @@
+﻿@model HalloDocDAL.Model.CustomModel
+<div class="d-flex m-auto justify-content-between documents" style=" ">
+    <h2 class=" ">User Profile</h2>
+    <button class="btn btn-outline-info my-3 ms-auto" onclick="">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16"
+             height="16" fill="currentColor" class="bi bi-chevron-left fw-medium mb-1" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                  d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+        </svg>Back
+    </button>
+</div>
+<form id="form2" enctype="multipart/form-data" method="post">
+<div class="shadow-lg">
+    <h5>
+        General Information
+    </h5>
+    <div>
+        <div class="row">
+            <div class="col-11 mt-4 col-md-6 form-floating ">
+                <input type="text" class="t  form-control" id="fname" name="fname" disabled placeholder=" ">
+                <label for="fname" class="ms-2 floating-label">First Name</label>
+            </div>
+            <div class="col-11 mt-4 col-md-6 form-floating ">
+                <input type="text" class="t  form-control" id="lname" name="lname" disabled placeholder=" ">
+                <label for="lname" class="ms-2 floating-label">Last Name</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-11 mt-4 col-md-6 form-floating ">
+                <input type="date" class="t  form-control" id="dob" name="dob" disabled placeholder=" ">
+                <label for="dob" class="ms-2 floating-label">Date of Birth</label>
+            </div>
+        </div>
+    </div>
+    <h5 class="mt-4">
+        Contact Information
+    </h5>
+    <div class="row">
+        <div class="col-11 mt-4 col-md-2 form-floating ">
+            <div class="form-floating">
+                <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
+                    <option selected>Select</option>
+                    <option value="1">Email</option>
+                    <option value="2">Mobile</option>
+
+                </select>
+                <label for="floatingSelect floating-label">Works with selects</label>
+            </div>
+        </div>
+        <div class="col-11 mt-4 col-md-4 form-floating ">
+                <input type="text" class="t  form-control" id="patientTel" name="patientTel" disabled placeholder=" ">
+            <label for="patientTel" class="ms-2 floating-label">Phone Number</label>
+        </div>
+        <div class="col-11 mt-4 col-md-6 form-floating ">
+                <input type="email" class="t  form-control" id="patientEmail" name="patientEmail" disabled placeholder=" ">
+            <label for="patientEmail" class="ms-2 floating-label">Email</label>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <h5>Patient Location</h5>
+    </div>
+    <div class="row ">
+        <div class="col-11 col-md-6 mt-4">
+            <div class="form-floating">
+                <input type="text" class="t form-control" id="street" name="street" disabled placeholder=" ">
+                <label for="street" class="floating-label">Street</label>
+            </div>
+
+        </div>
+        <div class="col-11 col-md-6 mt-4">
+            <div class="form-floating">
+                <input type="text" class="t  form-control" id="city" name="city" disabled placeholder=" ">
+                <label for="city" class="floating-label">City</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row ">
+        <div class="col-11 col-md-6 mt-4">
+            <div class="form-floating">
+                <input type="text" class="t  form-control" id="state" name="state" disabled placeholder=" ">
+                <label for="state" class="floating-label">State</label>
+            </div>
+        </div>
+        <div class="col-11 col-md-4 mt-4">
+            <div class="form-floating">
+                <input type="number" class="t  form-control" id="zip" name="zip" disabled placeholder=" ">
+                <label for="zip" class="floating-label">Zip Code</label>
+            </div>
+        </div>
+        <div class="col-2 mt-4 mr-auto">
+            <button class="btn btn-outline-info " onclick='@Url.Action("https://maps.app.goo.gl/ESACrXuWD9ojL2CL9")'>
+                Map
+            </button>
+        </div>
+
+    </div>
+    <div class="row">
+
+        <div class="d-flex justify-content-end">
+
+            <button id="editBtn" type="button" onclick="editDetails()" class="btn my-4 py-2 px-4" style="background-color: #10bce9; color: white;">
+                Edit
+            </button>
+
+            <button id="saveBtn" type="button" class="btn my-4 py-2 px-4" style="background-color: #10bce9; color: white; display:none;">
+                Save
+            </button>
+
+        </div>
+
+        
+    </div>
+</div>
+</form>
+
+
+
+
+<script>
+    // bind file-input-form click action to text-input-span
+    $('#text_input_span_id').click(function () {
+        $("#file_input_id").trigger('click');
+    })
+    // bind file-input-form click action to text-input-form
+    $('#text_input_id').click(function () {
+        $("#file_input_id").trigger('click');
+    })
+    // display file name in text-input-form
+    $("#file_input_id").change(function () {
+        $('#text_input_id').val(this.value.replace(/C:\\fakepath\\/i, ''))
+    })
+</script>
+
+<script>
+    $(document).ready(function () {
+
+        $('#fname').val('@Model.user.Firstname');
+        $('#patientEmail').val('@Model.user.Email');
+        $('#lname').val('@Model.user.Lastname');
+        $('#street').val('@Model.user.Street');
+        $('#city').val('@Model.user.City');
+        $('#state').val('@Model.user.State');
+        $('#zipcode').val('@Model.user.Zipcode');
+        var d = new Date('@Model.user.Intyear-@Model.user.Strmonth-@Model.user.Intdate');
+        const formattedDate = d.getFullYear() + '-' + ("0" + (d.getMonth() + 1)).slice(-2) + '-' + ("0" + d.getDate()).slice(-2);
+        $('#dob').val(formattedDate);
+    });
+</script>
+
+
+<script>
+
+
+    function editDetails() {
+
+        var inputs = document.getElementsByTagName("input");
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = false;
+        }
+
+        var selects = document.getElementsByTagName("select");
+        for (var i = 0; i < selects.length; i++) {
+            selects[i].disabled = false;
+        }
+
+        var editBtn = document.getElementById("editBtn");
+        editBtn.style.display = "none";
+
+        var saveBtn = document.getElementById("saveBtn");
+        saveBtn.style.display = "block";
+
+    }
+
+    function saveDetails() {
+
+        var inputs = document.getElementsByTagName("input");
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = true;
+        }
+
+        var selects = document.getElementsByTagName("select");
+        for (var i = 0; i < selects.length; i++) {
+            selects[i].disabled = true;
+        }
+
+
+        var editBtn = document.getElementById("editBtn");
+        editBtn.style.display = "block";
+
+        var saveBtn = document.getElementById("saveBtn");
+        saveBtn.style.display = "none";
+
+    }
+
+    $('#saveBtn').click(function (e) {
+        var d = new Date($('#dob').val());
+
+        var data = {
+            firstName: $('#fname').val(),
+            lastName: $('#lname').val(),
+            intDate: d.getDate(),
+            intYear: d.getFullYear(),
+            strMonth: d.getMonth(),
+            email: $('#patientEmail').val(),
+            phone: $('#patientTel').val(),
+            street: $('#street').val(),
+            city: $('#city').val(),
+            state: $('#state').val(),
+            zipcode: $('#zipcode').val(),
+        };
+
+        $.ajax({
+            url: '@Url.Action("EditProfile","PatientDashboard")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (result) {
+                if (result.success) {
+                    Swal.fire({
+                        title: "Good job!",
+                        text: "Details Updated",
+                        icon: "success"
+                    }).finally(() => {
+                        window.location.href = result.redirectUrl;
+                    });
+
+                }
+                else {
+                    alert(result.message);
+                }
+            },
+            error: function () {
+                alert('An error occured');
+            }
+        });
+    });
+</script>
+
+
+
+
+

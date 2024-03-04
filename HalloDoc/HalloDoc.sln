@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalloDoc", "HalloDoc.csproj", "{D810B110-46E1-42F3-9F37-2CE4C610F93B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalloDocBAL", "..\HalloDocBAL\HalloDocBAL.csproj", "{7FEBD20E-9EC1-4CA0-92BD-DA079FC5FF87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalloDocDAL", "..\HalloDocDAL\HalloDocDAL.csproj", "{F656BA0C-6C6A-4E70-B4EA-9AA008E721DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D810B110-46E1-42F3-9F37-2CE4C610F93B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D810B110-46E1-42F3-9F37-2CE4C610F93B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D810B110-46E1-42F3-9F37-2CE4C610F93B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D810B110-46E1-42F3-9F37-2CE4C610F93B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FEBD20E-9EC1-4CA0-92BD-DA079FC5FF87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FEBD20E-9EC1-4CA0-92BD-DA079FC5FF87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FEBD20E-9EC1-4CA0-92BD-DA079FC5FF87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FEBD20E-9EC1-4CA0-92BD-DA079FC5FF87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F656BA0C-6C6A-4E70-B4EA-9AA008E721DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F656BA0C-6C6A-4E70-B4EA-9AA008E721DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F656BA0C-6C6A-4E70-B4EA-9AA008E721DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F656BA0C-6C6A-4E70-B4EA-9AA008E721DC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B2DAA765-FF84-4EF3-99B2-9AAC534EE0A5}
+	EndGlobalSection
+EndGlobal

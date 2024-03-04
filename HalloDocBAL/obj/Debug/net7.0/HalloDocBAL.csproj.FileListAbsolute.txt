@@ -1,0 +1,17 @@
+D:\Projects\HalloDocBAL\obj\Debug\net7.0\HalloDocBAL.csproj.AssemblyReference.cache
+D:\Projects\HalloDocBAL\obj\Debug\net7.0\HalloDocBAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\HalloDocBAL\obj\Debug\net7.0\HalloDocBAL.AssemblyInfoInputs.cache
+D:\Projects\HalloDocBAL\obj\Debug\net7.0\HalloDocBAL.AssemblyInfo.cs
+D:\Projects\HalloDocBAL\obj\Debug\net7.0\HalloDocBAL.csproj.CoreCompileInputs.cache
+D:\Projects\HalloDocBAL\bin\Debug\net7.0\HalloDocBAL.deps.json
+D:\Projects\HalloDocBAL\bin\Debug\net7.0\HalloDocBAL.runtimeconfig.json
+D:\Projects\HalloDocBAL\bin\Debug\net7.0\HalloDocBAL.dll
+D:\Projects\HalloDocBAL\bin\Debug\net7.0\HalloDocBAL.pdb
+D:\Projects\HalloDocBAL\bin\Debug\net7.0\HalloDocDAL.dll
+D:\Projects\HalloDocBAL\bin\Debug\net7.0\HalloDocDAL.pdb
+D:\Projects\HalloDocBAL\obj\Debug\net7.0\HalloDocBAL.csproj.CopyComplete
+D:\Projects\HalloDocBAL\obj\Debug\net7.0\HalloDocBAL.dll
+D:\Projects\HalloDocBAL\obj\Debug\net7.0\refint\HalloDocBAL.dll
+D:\Projects\HalloDocBAL\obj\Debug\net7.0\HalloDocBAL.pdb
+D:\Projects\HalloDocBAL\obj\Debug\net7.0\HalloDocBAL.genruntimeconfig.cache
+D:\Projects\HalloDocBAL\obj\Debug\net7.0\ref\HalloDocBAL.dll

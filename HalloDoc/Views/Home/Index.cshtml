@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_none";
+}
+<div class="container-fluid d-flex justify-content-center align-items-center flex-column min-vh-100">
+    <div class="d-flex justify-content-center align-items-center flex-column col-md-6 col-10">
+        <img src="/images/hallodoc.png" class="img-fluid">
+        <button type="submit" class="btn btn-info w-100 font-weight-bold mt-3 p-3 fs-3 redirect-to" data-page="SubmitRequest" data-controller="SubmitRequest">
+            Submit a request
+        </button>
+        <button type="submit" class="btn btn-primary w-100 font-weight-bold mt-3 p-3 fs-3 redirect-to" data-page="PatientLogin" data-controller="Login">
+            Registered Patients
+        </button>
+        <button class="position-absolute top-0 end-0 m-3 p-2 rounded btn btn-outline-info btn-toggle">
+            <i class="bi bi-moon"></i>
+        </button>
+
+    </div>
+</div>
+
+

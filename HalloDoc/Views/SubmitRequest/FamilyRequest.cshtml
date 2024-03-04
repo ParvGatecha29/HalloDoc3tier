@@ -1,0 +1,294 @@
+﻿
+@model HalloDoc.Views.Home.FamilyRequestModel
+@{
+    ViewData["Title"] = "Family/Friend Request";
+}
+<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-body p-5">
+                <i class="fa-solid fa-circle-exclamation fa-3x text-warning border border-1 p-2 border-warning rounded-circle mb-3"></i>
+                <h3>Information</h3>
+                <p>
+                    When submitting a request, you must provide the correct contact information for the patient or
+                    the responsible party. Failure to provide the correct email and phone number will delay service
+                    or be declined.
+                </p>
+                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid pb-5" style="min-height: 100vh;">
+    <div class="row justify-content-center">
+        <div class="col-10 col-md-8 justify-content-end">
+            <button class="float-end my-4 btn btn-outline-info backBtn redirect-to" data-page="SubmitRequest" data-controller="SubmitRequest">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                     height="16" fill="currentColor" class="bi bi-chevron-left fw-medium mb-1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg>Back
+            </button>
+        </div>
+    </div>
+    <form enctype="multipart/form-data" id="form" method="post">
+    <div class="row justify-content-center">
+        
+        <div class="col-10 col-md-8 rounded" style="box-shadow: 2px 2px 20px rgb(179, 177, 177);">
+            <h6 class="py-3">Family/Friend Information</h6>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-floating mb-3 required">
+                        <input type="text" class="form-control" id="cfname" name="cfname" placeholder=" ">
+                        <label for="fname" class=" floating-label">First Name</label>
+                            <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3 required">
+                            <input type="text" class="form-control" id="clname" name="clname" placeholder=" ">
+                        <label for="lname" class=" floating-label">Last Name</label>
+                            <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+                <div class="col-md-6 z-3">
+                    <div class="form-floating mb-3 h-100 required">
+                            <input type="tel" class="form-control w-100 h-100" id="ctel" name="ctel" placeholder="Phone Number">
+                            <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3 required">
+                            <input type="email" class="form-control" id="cemail" name="cemail" placeholder=" ">
+                        <label for="patientEmail" class=" floating-label">Email address</label>
+                            <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating mb-3 required">
+                            <input type="text" class="form-control" id="relation" name="relation" placeholder=" ">
+                        <label for="relation" class=" floating-label">Relation with Patient</label>
+                            <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+            </div>
+            <h6 class="py-3">Patient Information</h6>
+            <div class="form-floating">
+                    <textarea class="form-control" placeholder=" " id="symptoms" name="symptoms" style="height: 15vh;"></textarea>
+                <label for="symptoms" class=" floating-label d-flex d-inline">
+                    Enter Brief Details of Symptoms
+                    <span class="d-none d-md-block">(Optional)</span>
+                </label>
+            </div>
+            <div class="container-fluid mt-3 p-0">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3 required">
+                            <input type="text" class="form-control" id="fname" name="fname" placeholder=" ">
+                            <label for="fname" class=" floating-label">First Name</label>
+                                <span style="color:red; display:none">Required!</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3 required">
+                                <input type="text" class="form-control" id="lname" name="lname" placeholder=" ">
+                            <label for="lname" class=" floating-label">Last Name</label>
+                                <span style="color:red; display:none">Required!</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3 required">
+                                <input type="date" class="form-control" id="dob" name="dob" placeholder=" ">
+                            <label for="dob" class=" floating-label">Date of Birth</label>
+                                <span style="color:red; display:none">Required!</span>
+                        </div>
+                        <h6 class="py-3">Patient Contact Information</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3 required">
+                                <input type="email" class="form-control" id="patientEmail" name="patientEmail" placeholder=" ">
+                            <label for="patientEmail" class=" floating-label">Email address</label>
+                                <span style="color:red; display:none">Required!</span>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3 h-100 z-3 required">
+                                <input type="tel" class="form-control h-100" id="patientTel" name="patientTel" placeholder="Phone Number">
+                                <span style="color:red; display:none">Required!</span>
+                        </div>
+                    </div>
+                    <h6 class="py-3">Patient Location</h6>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3 required">
+                                <input type="text" class="form-control" id="street" name="street" placeholder=" ">
+                            <label for="street" class=" floating-label">Street</label>
+                                <span style="color:red; display:none">Required!</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3 required">
+                                <input type="text" class="form-control" id="city" name="city" placeholder=" ">
+                            <label for="city" class="floating-label">City</label>
+                                <span style="color:red; display:none">Required!</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3 required">
+                                <input type="text" class="form-control" id="state" name="state" placeholder=" ">
+                            <label for="state" class=" floating-label">State</label>
+                                <span style="color:red; display:none">Required!</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3 required">
+                                <input type="number" class="form-control" id="zip" name="zip" placeholder=" ">
+                            <label for="zip" class=" floating-label">Zip Code</label>
+                                <span style="color:red; display:none">Required!</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="roomNum" name="roomNum" placeholder=" ">
+                            <label for="roomNum" class=" floating-label">Room #/ Suite (Optional)</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="py-3">(Optional) Upload Photo or Document</h6>
+                    </div>
+                    <div class="d-flex">
+                        <label for="document" class="col d-flex">
+                            <div class="col p-1 ps-3 border border-dark-subtle">
+                                <span id="upload">Select</span>
+                            </div>
+                            <div id="btn" class="p-1 btn btn-info w-auto px-3">
+
+                                <i class="bi bi-cloud-arrow-up" style="color:white !important;"></i>
+                                <span style="color:white;" class="ps-1 d-none d-md-block">Upload</span>
+
+                            </div>
+                                <input type="file" class="form-control-file" id="document" name="document" hidden
+                                   onchange="upload(this)">
+                        </label>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="text-end">
+                        <button class="btn btn-info" style="color:white" id="btnsubmit" type="submit">
+                            Submit
+                        </button>
+                        <button class="btn btn-info bg-light text-info">
+                            Cancel
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    </form>
+</div>
+<script>
+    var date = new Date();
+
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+
+    var today = year + "-" + month + "-" + day;
+    document.getElementById("dob").value = today;
+
+    const phoneInputField = document.querySelectorAll("input[type='tel']");
+    for (var i = 0; i < phoneInputField.length; i++) {
+        const phoneInput = window.intlTelInput(phoneInputField[i], {
+            utilsScript:
+                "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        })
+    };
+
+    var myModal = new bootstrap.Modal(document.getElementById('modal'));
+    window.onload = function () {
+        if (sessionStorage.getItem('#modalf') !== 'true') {
+            myModal.show();
+            sessionStorage.setItem('#modalf', 'true');
+        }
+    }
+
+</script>
+<div class="row ">
+    <footer class="text-end bg-black">
+        <a href="#" class="text-white-50 text-decoration-none fs-6">
+            Terms and
+            Conditions
+        </a><span class="text-white-50 mx-3">|</span><a href="#"
+                                                        class="text-white-50 text-decoration-none fs-6">Privacy Policy</a>
+    </footer>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#form').submit(function (e) {
+            e.preventDefault();
+            var data = new FormData(this)
+
+            var validate = true;
+            $('.required').each(function () {
+                var div = $(this);
+                if ($(div).find('input').val() == "") {
+                    Swal.fire({
+                        title: "Information required",
+                        text: "Please enter all the details",
+                        icon: "error"
+                    });
+                    var span = $(div).children('span');
+                    span.show();
+
+                    validate = false;
+                }
+            })
+
+            if (validate) {
+                $.ajax({
+                    url: '@Url.Action("FamRequest","SubmitRequest")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.fire({
+                                title: "Good job!",
+                                text: "Request created succesfully",
+                                icon: "success"
+                            }).finally(() => {
+                                window.location.href = result.redirectUrl;
+                            });
+
+                        }
+                        else {
+                            Swal.fire({
+                                title: "Oopss...",
+                                text: result.message,
+                                icon: "error"
+                            })
+                        }
+                    },
+                    error: function () {
+                        alert('An error occured');
+                    }
+                });
+            }
+        });
+    });
+</script>

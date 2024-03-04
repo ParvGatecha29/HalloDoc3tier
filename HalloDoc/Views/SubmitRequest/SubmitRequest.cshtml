@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewData["Title"] = "Submit Request";
+}
+
+@model HalloDoc.Views.Home.SubmitRequestModel
+
+<div class="container-fluid mt-5">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-9 col-xl-8 text-center">
+                <h2 class="display-6 fw-bold my-4 d-inline-block">I am a..</h2>
+                <button class="float-end my-4 btn btn-outline-info backBtn redirect-to" data-page="Index" data-controller="Home">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                         height="16" fill="currentColor" class="bi bi-chevron-left fw-medium mb-1" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                    </svg>Back
+                </button>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="d-grid col-6 col-md-6 col-lg-5 col-xl-4 mt-2">
+                <button class="btn text-uppercase fw-medium fs-4 my-3 pb-3 text-start patientBtn redirect-to" data-page="PatientRequest" data-controller="SubmitRequest"
+                    type="button">
+                    Patient
+                </button>
+                <button class="btn btn-outline-info text-uppercase fw-medium fs-4 my-3 pb-3 text-start famBtn redirect-to" data-page="FamilyRequest" data-controller="SubmitRequest"
+                    type="button">
+                    Family/Friend
+                </button>
+                <button class="btn btn-outline-success bg-success-subtle text-uppercase fw-medium fs-4 my-3 pb-3 text-start concBtn redirect-to" data-page="ConciergeRequest" data-controller="SubmitRequest"
+                    type="button">
+                    Concierge
+                </button>
+                <button class="btn btn-outline- text-uppercase fw-medium fs-4 my-3 pb-3 text-start busBtn redirect-to" data-page="BusinessRequest" data-controller="SubmitRequest"
+                    type="button">
+                    Business Partner
+                </button>
+            </div>
+        </div>
+      
+    </div>
+</div>

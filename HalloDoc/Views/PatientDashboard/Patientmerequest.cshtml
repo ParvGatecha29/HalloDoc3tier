@@ -1,0 +1,240 @@
+﻿@model HalloDocDAL.Models.User
+@{
+    Layout = "_none";
+}
+
+<div class="container-fluid pb-5" style="min-height: 100vh;">
+    <div class="row justify-content-center">
+        <div class="col-10 col-md-8 justify-content-end">
+            <button class="float-end my-4 btn btn-outline-info backBtn redirect-to" data-page="SubmitRequest" data-controller="SubmitRequest">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                     height="16" fill="currentColor" class="bi bi-chevron-left fw-medium mb-1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg>Back
+            </button>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-10 col-md-8 rounded" style="box-shadow: 2px 2px 20px rgb(179, 177, 177);">
+            <h6 class="py-3">Patient Information</h6>
+            <div class="form-floating">
+                <textarea class="form-control" id="symptoms" style="height: 15vh;" placeholder=" "></textarea>
+                <label for="symptoms" class="floating-label d-inline d-flex">
+                    Enter Brief Details of Symptoms
+                    <span class="d-none d-md-flex ">(Optional)</span>
+                </label>
+            </div>
+            <form enctype="multipart/form-data" id="form" method="post">
+                <div class="container-fluid mt-3 p-0">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="fname" name="fname" placeholder=" ">
+                                <label for="fname" class=" floating-label">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="lname" name="lname" placeholder=" ">
+                                <label for="lname" class=" floating-label">Last Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="date" class="form-control" id="dob" name="dob" placeholder=" ">
+                                <label for="dob" class=" floating-label">Date of Birth</label>
+                            </div>
+                            <h6 class="py-3">Patient Contact Information</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="patientEmail" name="patientEmail" placeholder=" ">
+                                <label for="patientEmail" class=" floating-label">Email address</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 z-3">
+                            <div class="form-floating mb-3 h-100">
+                                <input type="tel" class="form-control h-100" id="patientTel" name="patientTel" placeholder="Phone Number">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 passwordfields" style="display:none">
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="password" name="password" placeholder=" ">
+                                <label for="patientEmail" class=" floating-label">Password</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 passwordfields" style="display:none">
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" placeholder=" ">
+                                <label for="patientEmail" class=" floating-label">Confirm Password</label>
+                            </div>
+                        </div>
+                        <h6 class="py-3">Patient Location</h6>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="street" name="street" placeholder=" ">
+                                <label for="street" class=" floating-label">Street</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="city" name="city" placeholder=" ">
+                                <label for="city" class=" floating-label">City</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="state" name="state" placeholder=" ">
+                                <label for="state" class=" floating-label">State</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="zip" name="zip" placeholder=" ">
+                                <label for="zip" class=" floating-label">Zip Code</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="roomNum" name="roomNum" placeholder=" ">
+                                <label for="roomNum" class=" floating-label">Room #/ Suite (Optional)</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="py-3">(Optional) Upload Photo or Document</h6>
+                        </div>
+                        <div class="d-flex">
+                            <label for="document" class="col d-flex">
+                                <div class="col p-1 ps-3 border border-dark-subtle ">
+                                    <span id="upload">Select</span>
+                                </div>
+                                <div id="btn" class="p-1 btn btn-info w-auto px-3">
+
+                                    <i class="bi bi-cloud-arrow-up" style="color:white !important;"></i>
+                                    <span style="color:white;" class="ps-1 d-none d-md-block">Upload</span>
+
+                                </div>
+                                <input type="file" class="form-control-file" name="document" id="document" hidden
+                                       onchange="upload(this)" multiple>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="text-end">
+                            <button class="btn btn-info" id="btnsubmit" style="color:white" type="submit">
+                                Submit
+                            </button>
+                            <button class="btn btn-info bg-light ">
+                                Cancel
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    var date = new Date();
+
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+
+    if (month < 10) month = "0" + month;
+    if (day < 10) day = "0" + day;
+
+    var today = year + "-" + month + "-" + day;
+    document.getElementById("dob").value = today;
+    const phoneInputField = document.querySelectorAll("input[type='tel']");
+    for (var i = 0; i < phoneInputField.length; i++) {
+        const phoneInput = window.intlTelInput(phoneInputField[i], {
+            utilsScript:
+                "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        })
+    };
+</script>
+<div class="row ">
+    <footer class="text-end bg-black">
+        <a href="#" class="text-white-50 text-decoration-none fs-6">
+            Terms and
+            Conditions
+        </a><span class="text-white-50 mx-3">|</span><a href="#"
+                                                        class="text-white-50 text-decoration-none fs-6">Privacy Policy</a>
+    </footer>
+
+    <script>
+        $(document).ready(function () {
+            $('#patientEmail').blur(function () {
+                var email = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("CheckEmailExists","SubmitRequest")',
+                    type: 'POST',
+                    data: { email: email },
+                    success: function (emailExists) {
+                        if (emailExists) {
+                            $('.passwordfields').hide();
+                        }
+                        else {
+                            $('.passwordfields').show();
+                        }
+                    },
+                    error: function () {
+                        alert("An error occured while checking the email")
+                    }
+                });
+            });
+
+            $('#form').submit(function (e) {
+                e.preventDefault();
+                var data = new FormData(this)
+
+                $.ajax({
+                    url: '@Url.Action("PatRequest","SubmitRequest")',
+                    type: 'POST',
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.fire({
+                                title: "Good job!",
+                                text: "Request created succesfully",
+                                icon: "success"
+                            }).finally(() => {
+                                window.location.href = result.redirectUrl;
+                            });
+
+                        }
+                        else {
+                            alert(result.message);
+                        }
+                    },
+                    error: function () {
+                        alert('An error occured');
+                    }
+                });
+            });
+
+            $('#fname').val('@Model.Firstname');
+            $('#lname').val('@Model.Lastname');
+            $('#patientEmail').val('@Model.Email');
+            $('#patientTel').val('@Model.Mobile');
+        });
+    </script>
+</div>

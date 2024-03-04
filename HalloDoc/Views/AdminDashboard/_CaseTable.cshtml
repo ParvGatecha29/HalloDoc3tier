@@ -1,0 +1,652 @@
+﻿@model HalloDocDAL.Model.AdminDashboard
+@{
+    string[] colors = { "#60bc60", "#ee9125", "#007fc7", "#e36478", "#943db8" };
+
+    @if (Model.Data != null && Model.Data.Count > 0)
+    {
+    @foreach (var item in Model.Data)
+        {
+    <div class="d-md-none">
+                    <div class="bg-info-subtle " data-bs-toggle="collapse" data-bs-target="#collapseexample_@item.requestId"
+                         aria-expanded="false" aria-controls="collapseexample">
+                        <div class="flex-column gap-2 border-bottom border-5 pt-3 pb-5 px-4">
+                            <div class="d-flex  justify-content-between mb-3">
+                                <span class="mobilesearch fs-5 ">@item.name</span>
+                                @if (item.requesttype == 1)
+                            {
+                                    <div class="d-flex align-items-center">
+                                        <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #e36478;"></div>
+                                        <span class="fs-5">Business</span>
+                                    </div>
+                            }
+                            else if (item.requesttype == 2)
+                            {
+                                    <div class="d-flex align-items-center">
+                                        <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #60bc60;"></div>
+                                        <span class="fs-5">Patient</span>
+                                    </div>
+                            }
+                            else if (item.requesttype == 3)
+                            {
+                                    <div class="d-flex align-items-center">
+                                        <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #ee9125;"></div>
+                                        <span class="fs-5">Family/Friend</span>
+                                    </div>
+                            }
+                            else if (item.requesttype == 4)
+                            {
+                                    <div class="d-flex align-items-center">
+                                        <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #007fc7;"></div>
+                                        <span class="fs-5">Concierge</span>
+                                    </div>
+                            }
+                            </div>
+                            <div class="d-flex justify-content-between ">
+                                <div class="">
+                                    <span class="fs-5">@item.address</span>
+                                </div>
+                                <button class="btn btn-transparent border border-1 border-info text-info rounded-5">Map Location</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="collapse" id="collapseexample_@item.requestId">
+                        <div class="d-flex flex-column gap-2 bg-info-subtle   mb-2 py-3 px-4 ">
+                            <div class="d-flex align-items-center ">
+                                <i class="fa-regular fa-calendar fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
+                                <span class="fs-5">Date of Birth: @item.dobdate / @item.dobmonth / @item.dobyear</span>
+                            </div>
+                            <div class="d-flex align-items-center ">
+                                <i class="fa-regular fa-envelope fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
+                                <span class="fs-5">Email: @item.email</span>
+                            </div>
+                            <div class="d-flex align-items-center ">
+                                <i class="fas fa-phone fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
+                                <span class="fs-5">Phone: @item.phone</span>
+                            </div>
+                            <div class="d-flex align-items-center ">
+                                <i class="fa-regular fa-user fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
+                                <span class="fs-5">Requestor: @item.requestor</span>
+                            </div>
+                            @if (Model.Data[0].status == 1)
+                        {
+                                <div class="d-flex flex-column mt-3 gap-3">
+                                    <div class="d-flex gap-3 ">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #943DB8">Assign Case</a>
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #E42929">Cancel Case</a>
+                                    </div>
+                                    <div class="d-flex gap-3 ">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">View Case</a>
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #E42929">View Notes</a>
+                                    </div>
+                                    <div class="d-flex gap-3">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Block Patient</a>
+
+                                    </div>
+                                </div>
+                        }
+                            @if (Model.Data[0].status == 2)
+                        {
+                                <div class="d-flex flex-column mt-3 gap-3">
+                                    <div class="d-flex gap-3 ">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">View Case</a>
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">View Uploads</a>
+                                    </div>
+                                    <div class="d-flex gap-3 ">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22">View Notes</a>
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #00ADEF">Transfer</a>
+                                    </div>
+                                    <div class="d-flex gap-3">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">Clear Case</a>
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Send Agreement</a>
+                                    </div>
+                                </div>
+                        }
+                            @if (Model.Data[0].status == 3)
+                        {
+                                <div class="d-flex flex-column mt-3 gap-3">
+                                    <div class="d-flex gap-3 ">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">View Case</a>
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">View Uploads</a>
+                                    </div>
+                                    <div class="d-flex gap-3 ">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22">View Notes</a>
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #00ADEF">Orders</a>
+                                    </div>
+                                    <div class="d-flex gap-3">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">Doctors Note</a>
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Encounter</a>
+                                    </div>
+                                </div>
+                        }
+                            @if (Model.Data[0].status == 4 || Model.Data[0].status == 4)
+                        {
+                                <div class="d-flex flex-column mt-3 gap-3">
+                                    <div class="d-flex gap-3 ">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #E42929">View Case</a>
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">View Uploads</a>
+                                    </div>
+                                    <div class="d-flex gap-3 ">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22">View Notes</a>
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">Orders</a>
+                                    </div>
+                                    <div class="d-flex gap-3">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #145545">Doctors Note</a>
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Encounter</a>
+
+                                    </div>
+                                </div>
+                        }
+                            @if (Model.Data[0].status == 6)
+                        {
+                                <div class="d-flex flex-column mt-3 gap-3">
+                                    <div class="d-flex gap-3 ">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #E42929">View Case</a>
+                                    </div>
+                                    <div class="d-flex gap-3">
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">View Uploads</a>
+                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22">View Notes</a>
+                                    </div>
+                                </div>
+                        }
+                        </div>
+
+                    </div>
+    </div>
+        }
+    }
+
+    @if (Model != null)
+    {
+    <div class="tablediv d-none d-md-block">
+                <table class="table caseTable" id="adminTable">
+                    <thead class="w-100">
+                        <tr>
+                            <th class="d-none" scope="col">RequestType</th>
+                            <th class="d-none" scope="col">RegionId</th>
+                            <th scope="col" colspan="2">Name</th>
+                            
+                            @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 3 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 6 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
+                        {
+                                <th scope="col">Date Of Birth</th>
+                        }
+
+
+                            @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 4 || Model.Data[0].status == 5)
+                        {
+                                <th scope="col">Requestor</th>
+                        }
+
+                            @if (Model.Data[0].status == 3 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
+                        {
+                                <th scope="col">Region</th>
+                        }
+
+                            @if (Model.Data[0].status == 1)
+                        {
+                                <th scope="col">Requested Date</th>
+                        }
+
+                            @if (Model.Data[0].status == 9 || Model.Data[0].status == 2 || Model.Data[0].status == 3 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 6 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
+                        {
+                                <th scope="col">Physician Name</th>
+                                <th scope="col">Date Of Service</th>
+                        }
+
+                            @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 6 || Model.Data[0].status == 9)
+                        {
+                                <th scope="col">Phone</th>
+                        }
+
+                            <th scope="col">Address</th>
+
+                            @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 3 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
+                        {
+                                <th scope="col">Notes</th>
+                        }
+
+                            <th scope="col">Chat With</th>
+                            <th scope="col">Actions</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody class="w-100">
+
+                        @foreach (var obj in Model.Data)
+                    {
+                            <tr style="background-color:@colors[obj.requesttype - 1] !important; color:white !important" data-rid="@obj.requestId" class="align-middle">
+                                <td class="d-none">@obj.requesttype</td>
+                                <td class="d-none">@obj.regionId</td>
+                                <td name="Name">@obj.firstName @obj.lastName</td>
+                            <td>
+                                <a type="button" class="btn border border-light text-light" href="mailto:@obj.email">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
+                                    </svg>
+                                </a>
+                            </td>
+                                @if (obj.status == 1 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 7 || obj.status == 8)
+                            {
+                                    <td>@obj.dobdate/@obj.dobmonth/@obj.dobyear</td>
+                            }
+
+                                @if (obj.status == 1 || obj.status == 2 || obj.status == 4 || obj.status == 5)
+                            {
+                                    <td>@obj.requestor</td>
+                            }
+
+                                @if (obj.status == 3 || obj.status == 7 || obj.status == 8)
+                            {
+                                    <td>@obj.regionId</td>
+                            }
+
+                                @if (obj.status == 1)
+                            {
+                                    <td>@obj.requestDate</td>
+                            }
+
+                                @if (obj.status == 9 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 7 || obj.status == 8)
+                            {
+                                    <td>@obj.pname</td>
+                                    <td>DateOfService</td>
+                            }
+
+                                @if (obj.status == 1 || obj.status == 2 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 9)
+                            {
+                                    <td>
+                                        <button type="button" class="btn btn-outline-light"><i class="bi bi-telephone text-white"></i>@obj.phone</button><br>(Patient)
+                                        @if (obj.cphone != null && obj.requesttype != 1)
+                                    {
+                                            <br>
+
+                                            <button type="button" class="btn btn-outline-light"><i class="bi bi-telephone text-white"></i>@obj.cphone</button>
+
+                                            <br>
+                                            @if (obj.requesttype == 2)
+                                        {
+                                                <span>(Family/Friend)</span>
+                                        }
+                                        else if (obj.requesttype == 3)
+                                        {
+                                                <span>(Concierge)</span>
+                                        }
+                                        else
+                                        {
+                                                <span>(Business)</span>
+                                        }
+                                    }
+
+                                    </td>
+                            }
+
+                                <td>@obj.address</td>
+
+                                @if (obj.status == 1 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 7 || obj.status == 8)
+                            {
+                                    <td>@obj.notes</td>
+                            }
+
+
+                                <td>
+                                    @if (@obj.status != 1)
+                                {
+                                        <button type="button" class="btn btn-outline-light"><i class="fa fa-solid fa-user text-light"></i> Patient</button>
+                                        <button type="button" class="btn btn-outline-light"><i class="fa-solid fa-user-doctor tetx-light"></i> Provider </button>
+                                }
+                                else
+                                {
+                                        <button type="button" class="btn btn-outline-light"><i class="fa fa-solid fa-user text-light"></i> Patient</button>
+                                }
+
+                                </td>
+
+                                <td>
+                                    @if (@obj.status == 1)
+                                {
+                                        <div class="dropdown bg-transparent">
+                                            <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="action">
+                                                <li><a class="dropdown-item theme-color assigncase" href="#"><i class="fa-regular fa-clipboard"></i>Assign Case</a></li>
+                                                <li><a class="dropdown-item theme-color cancelcase"><i class="fa-regular fa-circle-xmark"></i> Cancel case</a></li>
+                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
+                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
+                                                <li><a class="dropdown-item theme-color blockcase" href="#"><i class="fa-solid fa-ban"></i> Block Patient</a></li>
+                                            </ul>
+                                        </div>
+                                }
+                                else if (@obj.status == 2)
+                                {
+                                        <div class="dropdown bg-transparent">
+                                            <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="action">
+                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
+                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Transfer</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-file-lines"></i> Send Agreement</a></li>
+                                            </ul>
+                                        </div>
+                                }
+                                else if (@obj.status == 4 || @obj.status == 5 || @obj.status == 6)
+                                {
+                                        <div class="dropdown bg-transparent">
+                                            <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="action">
+                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
+                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Doctors Note</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Encounter</a></li>
+                                            </ul>
+                                        </div>
+                                }
+                                else if (@obj.status == 3 || @obj.status == 7 || @obj.status == 8)
+                                {
+                                        <div class="dropdown bg-transparent">
+                                            <button class="btn btn-outline-light  " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="action">
+                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
+                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Close Case</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Doctors Note</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Encounter</a></li>
+                                            </ul>
+                                        </div>
+                                }
+                                else
+                                {
+                                        <div class="dropdown bg-transparent">
+                                            <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Actions
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="action">
+                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
+                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
+                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
+                                            </ul>
+                                        </div>
+                                }
+
+                                </td>
+
+                            </tr>
+
+                    }
+                    </tbody>
+                </table>
+    </div>
+    }
+}
+<div class="modal fade" id="cancelcaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle">Confirm Cancellation</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formcancel" method="post">
+                    <p class="text-secondary"> Patient Name : <span class="text-info" id="cancelcaseName"> </span> </p>
+                    <input type="hidden" class="requestId" value="" name="requestId" id="requestId" />
+                    <div class="form-group mb-3">
+                        <select class="form-control" id="reason" name="reason" placeholder=" " required>
+                            <option hidden value="">Reason for cancellation</option>
+                            <option value="1">No Response to call or text</option>
+                            <option value="2">Cost Issue</option>
+                            <option value="3">Insurance Issue</option>
+                            <option value="4">Out of service area</option>
+                            <option value="5">Not appropriate for service</option>
+                            <option value="6">Referral to Clinic or Hospital</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <div class="mb-3 form-floating">
+                            <textarea class="form-control" placeholder="" id="info" style="height: 100px" name="info" required></textarea>
+                            <label for="info" class="floatingLabel"> Provide additional information </label>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-info text-white">Confirm</button>
+                        <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="assignCaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle">Assign Request</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formassign" method="post">
+                    <p class="text-secondary"> To assign the request, search and select another physician </p>
+                    <input type="hidden" class="requestId" value="" name="requestId" id="requestId" />
+                    <div class="form-group mb-3">
+                        <select class="form-control" id="regionSelect" name="regionSelect" placeholder=" " required>
+                            <option hidden value="">Region</option>
+                            @foreach(var region in Model.regions)
+                            {
+                                <option value="@region.Regionid">@region.Name</option>
+                            }
+
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <select class="form-control" id="physicianSelect" name="physicianSelect" placeholder=" " required>
+                            <option hidden value="">Physician</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <div class="mb-3 form-floating">
+                            <textarea class="form-control" placeholder="" id="info" style="height: 100px" name="info" required></textarea>
+                            <label for="info" class="floatingLabel"> Provide additional information </label>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-info text-white">Confirm</button>
+                        <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="blockcaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle">Block Case</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formblock" method="post">
+                    <p class="text-secondary"> Patient Name : <span class="text-info" id="blockcaseName"> </span> </p>
+                    <input type="hidden" class="requestId" value="" name="requestId" id="requestId" />
+
+                    <div class="form-group mb-3">
+                        <div class="mb-3 form-floating">
+                            <textarea class="form-control" placeholder="" id="info" style="height: 100px" name="info" required></textarea>
+                            <label for="info" class="floatingLabel"> Provide additional information </label>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-info text-white">Confirm</button>
+                        <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+       
+        $('#formcancel').on('submit', function (e) {
+            e.preventDefault();
+            var data = new FormData(this)
+
+            $.ajax({
+                url: '@Url.Action("CancelCase","AdminDashboard")',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Request cancelled succesfully",
+                            icon: "success"
+                        }).finally(() => {
+                            window.location.reload();
+                        });
+
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
+
+
+
+        $('#regionSelect').change(function () {
+            var selectedRegion = $(this).val();
+            $.ajax({
+                url: '@Url.Action("GetPhysiciansByRegion","AdminDashboard")',
+                type: 'POST',
+                data: { region: selectedRegion },
+                success: function (data) {
+                    var physicianSelect = $('#physicianSelect');
+                    physicianSelect.empty().append('<option value="">Select Physician</option>');
+                    $.each(data, function (i, physician) {
+                        physicianSelect.append($('<option>', {
+                            value: physician.Physicianid,
+                            text: physician.Firstname
+                        }));
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching Physicians:', error)
+                }
+            });
+        });
+
+        $('#formassign').on('submit', function (e) {
+            e.preventDefault();
+            var data = new FormData(this)
+
+            $.ajax({
+                url: '@Url.Action("AssignCase","AdminDashboard")',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Request assigned succesfully",
+                            icon: "success"
+                        }).finally(() => {
+                            window.location.reload();
+                        });
+
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
+
+
+        $('#formblock').on('submit', function (e) {
+            e.preventDefault();
+            var data = new FormData(this)
+
+            $.ajax({
+                url: '@Url.Action("BlockCase","AdminDashboard")',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Request blocked",
+                            icon: "success"
+                        }).finally(() => {
+                            window.location.reload();
+                        });
+
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
+    });
+
+
+</script>
+
+<script>
+    $(document).on("click", ".cancelcase", function () {
+        $("#cancelcaseModal").modal('show');
+        $("#cancelcaseName").text($(this).closest('tr').find("td[name='Name']").text());
+        $(".requestId").val($(this).closest('tr').data('rid'));
+    });
+
+    $(document).on("click", ".assigncase", function () {
+        $("#assignCaseModal").modal('show');
+        $(".requestId").val($(this).closest('tr').data('rid'));
+    });
+
+    $(document).on("click", ".blockcase", function () {
+        $("#blockcaseModal").modal('show');
+        $(".requestId").val($(this).closest('tr').data('rid'));
+    });
+
+</script>

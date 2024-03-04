@@ -1,0 +1,223 @@
+﻿@model HalloDocDAL.Model.CustomModel
+@{
+    Layout = "_none";
+}
+<div class="row">
+    <div class="col-12 navBar w-100">
+        <nav class="navbar navbar-expand-md flex-column d-flex">
+            <div class="container-fluid flex-nowrap">
+                <div class="d-flex">
+                    <button class=" btn btn-outline-info d-md-none d-block" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+                            aria-controls="navbarTogglerDemo01" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="material-symbols-outlined">
+                            menu
+                        </span>
+                    </button>
+                    <img src="/images/hallodoc.png" alt="logo" class="navLogo">
+                </div>
+
+                <div class="d-inline d-flex align-items-center justify-content-center">
+                    <div class=" d-inline justify-content-center align-items-center d-none d-md-flex">
+                        <p class="mx-3 my-0">
+                            Welcome <strong id="welcome">Tests Testing</strong>
+                        </p>
+                        <button id="logout" class="btn btn-outline-info ms-auto my-auto darkBtn mx-3" type="button">
+                            Logout
+                        </button>
+                    </div>
+
+                    <button class="btn btn-outline-info d-md-none d-block py-1 px-2 mx-1">
+                        <span class="material-symbols-outlined">
+                            logout
+                        </span>
+                    </button>
+                    <button class="btn btn-outline-info ms-auto my-auto btn-toggle mx-3"
+                            type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                             fill="currentColor" class="bi bi-moon" viewBox="0 0 16 16">
+                            <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="collapse navbar-collapse w-100" id="navbarTogglerDemo01">
+                <ul class="nav nav-tabs navbar-nav me-auto mb-2 mb-lg-0" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active layout" id="dashboard-tab" data-bs-toggle="tab"
+                                data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard"
+                                aria-selected="true" style="color:inherit">
+                            Dashboard
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link layout" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+                                type="button" role="tab" aria-controls="profile" aria-selected="false"
+                                style="color:inherit">
+                            Profile
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active p-4 tab row justify-content-center shadow" id="dashboard" role="tabpanel"
+         aria-labelledby="dashboard-tab">
+        <div class="row d-flex align-items-center justify-content-center">
+            <p class="col fs-4 fw-bold ms-5 pb-0 mb-0 d-inline">Documents</p>
+            <div class="col me-5 mb-0 text-end">
+                <button class="float-end my-4 btn btn-outline-info backBtn redirect-to" data-page="PatientDashboard" data-controller="PatientDashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                         height="16" fill="currentColor" class="bi bi-chevron-left fw-medium mb-1" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                    </svg>Back
+                </button>
+            </div>
+        </div>
+
+        <div class="">
+            <div class="mx-3">
+                <p class="text-secondary" id="name">Patient Name</p>
+                <p class="fs-4 fw-semibold text-info"> @foreach(var item in Model.dashboards)
+                    {
+                        @if(Model.requests[0].Requestid == item.Requestid)
+                        {
+                            <span>@item.confirmationNo</span>
+                        }
+                    }
+                </p>
+                <p class="text-secondary"> Check here for any files that you or the doctors of your subsequents reqestors have attached for you to review. </p>
+                <form enctype="multipart/form-data" id="form">
+                    <div class="d-flex">
+                        <label for="document" class="col d-flex">
+                            <div class="col p-1 ps-3 border border-dark-subtle ">
+                                <span id="upload">Select</span>
+                            </div>
+                            <input type="file" class="form-control-file" name="document" id="document" hidden
+                                   onchange="upload(this)" multiple>
+                        </label>
+                        <button class="btn p-0 m-0" type="submit">
+                            <div id="btn" class="p-1 btn btn-info w-auto px-3">
+
+                                <i class="bi bi-cloud-arrow-up" style="color:white !important;"></i>
+                                <span style="color:white;" class="ps-1 d-none d-md-block">Upload</span>
+
+                            </div>
+                        </button>
+                    </div>
+
+                </form>
+                <div class="row">
+                    <div class="col m-3 p-2 d-inline fs-4 fw-semibold">Documents</div>
+                    <div class="col text-end">
+                        <button class="m-3 p-2 px-3 me-1 rounded btn btn-outline-info" id="dall">
+                            <i class="bi bi-plus-lg d-inline d-xl-none d-lg-none i-info"></i>
+                            <p class="d-none d-xl-inline d-lg-inline i-info">Download All</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <table id="responsiveTable">
+                <thead class="tab">
+                    <tr>
+                        <th><input type="checkbox" class="checkbox" id="selectAll" /></th>
+                        <th> File Name</th>
+                        <th class="mobile-hide">Uploader</th>
+                        <th class="mobile-hide">Update Date</th>
+                        <th class="mobile-hide">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.requests)
+                    {
+
+                        <tr class="table-row">
+                            <td> <input type="checkbox" class="checkbox" name="selectedDocuments" value="@item.Requestwisefileid" /> </td>
+                            <td class="d-flex flex-wrap w-50" data-label="File Name"> @item.Filename </td>
+                            <td class="mobile-hide" data-label="Request ID"> @item.Requestid </td>
+                            <td class="mobile-hide" data-label="Created Date"> @item.Createddate </td>
+                            <td class="mobile-hide">
+                                <button type="button" class="btn btn-outline-info" onclick="location.href='@Url.Action("DownloadOne", "Patientdashboard",new {id = item.Requestwisefileid})'">
+                                    Download
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane fade p-4 tab" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <partial name="_ProfilePartial" />
+    </div>
+</div>
+<script>
+$("#selectAll").change(function () {
+    $(".checkbox").prop('checked', $(this).prop("checked"));
+});
+</script>
+<script>
+    $('#welcome').html('@Model.user.Firstname');
+    $('#name').html('@Model.user.Firstname');
+
+    $('#logout').click(function () {
+        window.location.href = '@Url.Action("Logout","Login")';
+    });
+    $(document).ready(function () {
+        $('#form').submit(function (e) {
+            e.preventDefault();
+            var data = new FormData(this);
+            data.append('rid', '@Model.requests.Select(u=> u.Requestid).FirstOrDefault()');
+
+            $.ajax({
+                url: '@Url.Action("UploadDocument","PatientDashboard")',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Document Uploaded",
+                            icon: "success"
+                        })
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
+        $("#dall").click(function () {
+            var selectedDocuments = $('input[name="selectedDocuments"]:checked').map(function () {
+                return this.value;
+            }).get();
+            
+
+            if (selectedDocuments.length > 0) {
+                $.ajax({
+                    url: '@Url.Action("DownDoc","PatientDashboard")',
+                    type:"post",
+                    data: JSON.stringify(selectedDocuments),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        window.location.href = '@Url.Action("Download","PatientDashboard")' + '?token=' + response.token;
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    });
+</script>

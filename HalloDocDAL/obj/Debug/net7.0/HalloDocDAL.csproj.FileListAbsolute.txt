@@ -1,0 +1,14 @@
+D:\Projects\HalloDocDAL\obj\Debug\net7.0\HalloDocDAL.csproj.AssemblyReference.cache
+D:\Projects\HalloDocDAL\obj\Debug\net7.0\HalloDocDAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\HalloDocDAL\obj\Debug\net7.0\HalloDocDAL.AssemblyInfoInputs.cache
+D:\Projects\HalloDocDAL\obj\Debug\net7.0\HalloDocDAL.AssemblyInfo.cs
+D:\Projects\HalloDocDAL\obj\Debug\net7.0\HalloDocDAL.csproj.CoreCompileInputs.cache
+D:\Projects\HalloDocDAL\bin\Debug\net7.0\HalloDocDAL.deps.json
+D:\Projects\HalloDocDAL\bin\Debug\net7.0\HalloDocDAL.runtimeconfig.json
+D:\Projects\HalloDocDAL\bin\Debug\net7.0\HalloDocDAL.dll
+D:\Projects\HalloDocDAL\bin\Debug\net7.0\HalloDocDAL.pdb
+D:\Projects\HalloDocDAL\obj\Debug\net7.0\HalloDocDAL.dll
+D:\Projects\HalloDocDAL\obj\Debug\net7.0\refint\HalloDocDAL.dll
+D:\Projects\HalloDocDAL\obj\Debug\net7.0\HalloDocDAL.pdb
+D:\Projects\HalloDocDAL\obj\Debug\net7.0\HalloDocDAL.genruntimeconfig.cache
+D:\Projects\HalloDocDAL\obj\Debug\net7.0\ref\HalloDocDAL.dll

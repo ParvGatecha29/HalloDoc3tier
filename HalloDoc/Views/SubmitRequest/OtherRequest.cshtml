@@ -1,0 +1,216 @@
+﻿
+@{
+    ViewData["title"] = "Submit Information Someone Else";
+}
+
+
+<div class="row justify-content-center mb-5 pb-5">
+    <div class="m-4 me-5 mb-0 col-xl-10 col-md-8 col-11 d-block">
+        <p class="fs-5 fw-bold d-inline">Submit Information</p>
+    </div>
+
+    <div class="m-4 me-5 mb-0 col-xl-10 col-md-8 col-11 d-block text-end">
+        <a class="text-decoration-none text-info rounded border border-info p-2 i-info redirect-to" data-page="PatientDashboard" data-controller="Home">
+            <i class="bi bi-chevron-left i-info"></i>
+            Back
+        </a>
+    </div>
+
+    <div class="m-4 shadow col-xl-10 col-md-8 col-11">
+        <form class="p-4" method="post" enctype="multipart/form-data" id="form">
+            <!-- Family / Friend Information -->
+            <div class="row g-2">
+                <div class="col-md-6 col-12 mb-3">
+                    <div>
+                        <input type="hidden" id="cfname" name="cfname">
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <div>
+                        <input type="hidden" id="clname" name="clname">
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 mb-3 z-3">
+                    <div>
+                        <input type="hidden" id="ctel" name="ctel">
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <div>
+                        <input type="hidden" id="cemail" name="cemail">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient Information -->
+            <p class="fs-5 fw-bold">Patient Information</p>
+            <div class="mb-3 form-floating">
+                <textarea class="form-control" placeholder="Enter Brief Details Of Symptoms" id="symptoms" name="symptoms" style="height: 100px" name="symptoms"></textarea>
+                <label for="symptoms" class="floatingLabel">Enter Brief Details Of Symptoms <span class="d-none d-xl-inline-block d-lg-inline-block">(Optional)</span> </label>
+            </div>
+            <div class="row g-2">
+                <div class="col-md-6 col-12 mb-3 form-floating required">
+                  
+                        <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name">
+                        <label for="Firstname" class="floatingLabel">First Name</label>
+                    <span style="color:red; display:none">Required!</span>
+                    
+                </div>
+                <div class="col-md-6 col-12 mb-3 form-floating required">
+                    
+                        <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name">
+                        <label for="Lastname" class="floatingLabel">Last Name</label>
+                    <span style="color:red; display:none">Required!</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3 form-floating required">
+                    
+                        <input type="date" class="form-control" id="dob" name="dob">
+                        <label for="dob" class="floatingLabel">Date Of Birth</label>
+                    <span style="color:red; display:none">Required!</span>
+                </div>
+            </div>
+
+            <!-- Patient Contact Information -->
+            <p class="fs-5 fw-bold pt-3">Patient Contact Information</p>
+            <div class="row g-2">
+                <div class="col-md-6 col-12 mb-3 form-floating required">
+                    
+                        <input type="email" class="form-control" id="patientEmail" name="patientEmail" placeholder="Email">
+                        <label for="Email" class="floatingLabel">Email</label>
+                    <span style="color:red; display:none">Required!</span>
+                 
+                </div>
+                <div class="col-md-6 col-12 mb-3 z-3 form-floating required">
+                    
+                        <input type="tel" class="form-control p-3 ps-5" id="patientTel" name="patientTel" placeholder=" ">
+                    <span style="color:red; display:none">Required!</span>
+                </div>
+            </div>
+
+            <!-- Patient Location -->
+            <p class="fs-5 fw-bold pt-3">Patient Location</p>
+            <div class="row g-2">
+                <div class="col-md-6 col-12 mb-3 form-floating required">
+                    
+                        <input type="text" class="form-control" id="street" name="street" placeholder="Street">
+                        <label for="Street" class="floatingLabel">Street</label>
+                    <span style="color:red; display:none">Required!</span>
+                  
+                </div>
+                <div class="col-md-6 col-12 mb-3 form-floating required">
+                        <input type="text" class="form-control" id="city" name="city" placeholder="City">
+                        <label for="City" class="floatingLabel">City</label>
+                        <span style="color:red; display:none">Required!</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3 form-floating required">
+                        <input type="text" class="form-control" id="state" name="state" placeholder="State">
+                        <label for="State" class="floatingLabel">State</label>
+                        <span style="color:red; display:none">Required!</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3 form-floating required">
+                        <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip Code">
+                        <label for="Zipcode" class="floatingLabel">Zip Code</label>
+                        <span style="color:red; display:none">Required!</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="roomNum" name="roonNum" placeholder="Room# / Suite (Optional)">
+                        <label for="roomNumber" class="floatingLabel">Room# / Suite (Optional)</label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="map" placeholder="Map">
+                        <label for="map" class="floatingLabel">Map</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient Location -->
+            <p class="fs-5 fw-bold pt-3">Relation</p>
+            <div class="col-md-6 col-12 mb-3">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="relation" placeholder="Relation with Patient" >
+                    <label for="familyRelation" class="floatingLabel">Relation with Patient</label>
+                </div>
+            </div>
+
+            <!-- Photo or Document -->
+            <p class="fs-5 fw-bold pt-3">(Optional) Photo Or Document</p>
+            <div class="input-group mb-3">
+                <input type="file" class="form-control" id="document" hidden name="document" >
+                <label for="document" class="input-group-text border-0 col-12 p-0 rounded" name="document" >
+                    <div class="border rounded col-10 p-2 text-start">
+                        <span>Select File</span>
+                    </div>
+                    <div class="border uploadDiv bg-info col-2 text-light p-2">
+                        <i class="bi bi-cloud-arrow-up pe-1"></i>
+                        <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                    </div>
+                </label>
+            </div>
+
+            <!-- submit -->
+            <div class="text-end">
+                <button type="submit" class="btn btn-info text-light">Submit</button>
+                <button type="reset" class="btn btn-outline-info">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#cfname').val('@Model.Firstname');
+        $('#clname').val('@Model.Lastname');
+        $('#cemail').val('@Model.Email');
+        $('#ctel').val('@Model.Mobile');
+        $('#form').submit(function (e) {
+            e.preventDefault();
+            var data = new FormData(this)
+            var validate = true;
+            $('.required').each(function () {
+                var div = $(this);
+                if ($(div).find('input').val() == "") {
+                    Swal.fire({
+                        title: "Information required",
+                        text: "Please enter all the details",
+                        icon: "error"
+
+                    });
+                    var span = $(div).children('span');
+                    span.show();
+
+                    validate = false;
+                }
+            })
+            if (validate) {
+                $.ajax({
+                    url: '@Url.Action("FamRequest","SubmitRequest")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.fire({
+                                title: "Good job!",
+                                text: "Request created succesfully",
+                                icon: "success"
+                            }).finally(() => {
+                                window.location.href = result.redirectUrl;
+                            });
+
+                        }
+                        else {
+                            alert(result.message);
+                        }
+                    },
+                    error: function () {
+                        alert('An error occured');
+                    }
+                });
+            }
+        });
+    });
+</script>
