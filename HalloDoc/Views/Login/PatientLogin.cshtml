@@ -70,7 +70,9 @@
                         Swal.fire({
                             title: "Good job!",
                             text: "Logged In",
-                            icon: "success"
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
                         }).finally(() => {
                             window.location.href = result.redirectUrl;
                         });

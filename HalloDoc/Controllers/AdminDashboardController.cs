@@ -4,6 +4,9 @@ using HalloDocDAL.Model;
 using HalloDocBAL.Interfaces;
 using HalloDocDAL.Models;
 using HalloDocBAL.Services;
+using HalloDocDAL.Contacts;
+using System.Net.Mime;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace HalloDoc.Controllers;
 
@@ -11,16 +14,20 @@ public class AdminDashboardController : Controller
 {
     private readonly IAdminDashboardService _adminDashboardService;
     private readonly IEmailService _emailService;
+    private readonly IDashboardService _dashboardService;
+    private readonly IRequestWiseFilesRepository _requestWiseFilesRepository;
     int[] newcase = { 1 };
     int[] pendingcase = { 2 };
     int[] activecase = { 4,5 };
     int[] concludecase = { 6 };
     int[] toclosecase = { 3,7,8 };
     int[] unpaidcase = { 9 };
-    public AdminDashboardController(IAdminDashboardService adminDashboardService, IEmailService emailService)
+    public AdminDashboardController(IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository)
     {
         _adminDashboardService = adminDashboardService;
         _emailService = emailService;
+        _dashboardService = dashboardService;
+        _requestWiseFilesRepository = requestWiseFilesRepository;
     }
 
     public IActionResult AdminDashboard()
@@ -74,7 +81,10 @@ public class AdminDashboardController : Controller
     }
     public IActionResult ViewCase(int requestid)
     {
-        var dash = _adminDashboardService.GetRequestById(requestid);
+        var dash = new AdminDashboard();
+        
+        dash.regions = _adminDashboardService.GetAllRegions();
+        dash.request = _adminDashboardService.GetRequestById(requestid);
         return View("ViewCase", dash);
     }
     public IActionResult ViewNotes(int requestid)
@@ -137,6 +147,36 @@ public class AdminDashboardController : Controller
         var body = $"You can submit a request <a href='{link}'>here</a>.";
 
         _emailService.SendEmail(email, subject, body);
+        return Json(new { success = true });
+    }
+
+    public IActionResult ViewUploads(int requestid)
+    {
+        ViewUploads viewUploads = new ViewUploads();
+        viewUploads.Request = _adminDashboardService.GetRequestById(requestid);
+        viewUploads.Requestwisefiles = _dashboardService.ViewDocument(requestid);
+        return View(viewUploads);
+    }
+    public JsonResult DeleteFile(int fileid)
+    {
+        _adminDashboardService.DeleteFile(fileid);
+        return Json(new { success = true });
+    }
+
+    public async Task<JsonResult> SendFiles(List<string> selectedDocuments, int requestid, string email)
+    {
+        var subject = "Submit Request";
+        var body = $"Here are your selected files";
+
+        var filesToSend = new List<string>();
+        foreach (var document in selectedDocuments)
+        {
+            var file = await _requestWiseFilesRepository.GetFile(document);
+
+            filesToSend.Add(Path.Combine("wwwroot","documents",requestid.ToString(),file.Filename));
+        }
+
+        _emailService.SendEmailWithAttachment(email, subject, body, filesToSend);
         return Json(new { success = true });
     }
 }

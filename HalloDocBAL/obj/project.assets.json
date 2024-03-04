@@ -10646,11 +10646,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Projects\\HalloDocBAL\\HalloDocBAL.csproj",
+      "projectUniqueName": "D:\\Projects\\HalloDocMain\\HalloDocBAL\\HalloDocBAL.csproj",
       "projectName": "HalloDocBAL",
-      "projectPath": "D:\\Projects\\HalloDocBAL\\HalloDocBAL.csproj",
+      "projectPath": "D:\\Projects\\HalloDocMain\\HalloDocBAL\\HalloDocBAL.csproj",
       "packagesPath": "C:\\Users\\pci200\\.nuget\\packages\\",
-      "outputPath": "D:\\Projects\\HalloDocBAL\\obj\\",
+      "outputPath": "D:\\Projects\\HalloDocMain\\HalloDocBAL\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pci200\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -10667,8 +10667,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\Projects\\HalloDocDAL\\HalloDocDAL.csproj": {
-              "projectPath": "D:\\Projects\\HalloDocDAL\\HalloDocDAL.csproj"
+            "D:\\Projects\\HalloDocMain\\HalloDocDAL\\HalloDocDAL.csproj": {
+              "projectPath": "D:\\Projects\\HalloDocMain\\HalloDocDAL\\HalloDocDAL.csproj"
             }
           }
         }

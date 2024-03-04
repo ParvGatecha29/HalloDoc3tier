@@ -13,5 +13,7 @@ namespace HalloDocDAL.Contacts
         List<Requestwisefile> GetFiles(int requestid);
 
         Task<Requestwisefile> GetFile(string id);
+
+        bool DeleteFile(int id);
     }
 }

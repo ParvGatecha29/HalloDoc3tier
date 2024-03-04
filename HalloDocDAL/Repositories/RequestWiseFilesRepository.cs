@@ -27,13 +27,22 @@ namespace HalloDocDAL.Repositories
 
         public List<Requestwisefile> GetFiles(int requestid)
         {
-            var obj = _context.Requestwisefiles.Where(u => u.Requestid == requestid).ToList();
+            var obj = _context.Requestwisefiles.Where(u => u.Requestid == requestid && u.Isdeleted != true).ToList();
             return obj;
         }
 
         public async Task<Requestwisefile> GetFile(string id)
         {
             return await _context.Requestwisefiles.FirstOrDefaultAsync(u=> u.Requestwisefileid.ToString() == id);
+        }
+
+        public bool DeleteFile(int id)
+        {
+            var file = _context.Requestwisefiles.Find(id);
+            file.Isdeleted = true;
+            _context.Update(file);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

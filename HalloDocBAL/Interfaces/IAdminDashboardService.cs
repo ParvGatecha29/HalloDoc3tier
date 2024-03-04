@@ -20,6 +20,7 @@ namespace HalloDocBAL.Interfaces
         bool BlockRequest(AdminDashboardData data);
         List<Physician> GetPhysiciansByRegion(int regionid);
         List<Region> GetAllRegions();
+        bool DeleteFile(int fileid);
 
     }
 }

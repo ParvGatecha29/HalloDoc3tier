@@ -1,0 +1,247 @@
+﻿@model HalloDocDAL.Model.ViewUploads
+@{
+    Layout = "_adminDash";
+}
+<div class="d-flex justify-content-center mt-2">
+    <div class="col-10" >
+        <div class="row d-flex align-items-center justify-content-center">
+            <p class="col fs-4 fw-bold ms-5 pb-0 mb-0 d-inline">Documents</p>
+            <div class="col me-5 mb-0 text-end">
+                <button class="float-end my-4 btn btn-outline-info backBtn redirect-to" data-page="PatientDashboard" data-controller="PatientDashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                         height="16" fill="currentColor" class="bi bi-chevron-left fw-medium mb-1" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                    </svg>Back
+                </button>
+            </div>
+        </div>
+
+        <div class="">
+            <div class="theme-background navBar p-3">
+                <p class="text-secondary" id="name">Patient Name</p>
+                <p class="fs-4 fw-semibold">
+                     
+                    <span class="text-info">@Model.Request.firstName@Model.Request.lastName</span>
+                    <span>(@Model.Request.confirmationNo)</span>
+                    
+                </p>
+                <p class="text-secondary"> Click here to review and add files that you or the Client/Member has attached to the request. </p>
+                <form enctype="multipart/form-data" id="form">
+                    <div class="d-flex">
+                        <label for="document" class="col d-flex">
+                            <div class="col p-1 ps-3 border border-dark-subtle ">
+                                <span id="upload">Select</span>
+                            </div>
+                            <input type="file" class="form-control-file" name="document" id="document" hidden
+                                   onchange="upload(this)" multiple>
+                        </label>
+                        <button class="btn p-0 m-0" type="submit">
+                            <div id="btn" class="p-1 btn btn-info w-auto px-3">
+
+                                <i class="bi bi-cloud-arrow-up" style="color:white !important;"></i>
+                                <span style="color:white;" class="ps-1 d-none d-md-block">Upload</span>
+
+                            </div>
+                        </button>
+                    </div>
+
+                </form>
+                <div class="row d-flex">
+                    <div class="col m-3 p-2 d-inline fs-4 fw-semibold">Documents</div>
+                    <div class="col justify-content-end d-flex d-inline">
+                        <button class="m-3 p-2 px-3 me-1 rounded btn btn-outline-info" id="downloadall">
+                            <i class="bi bi-plus-lg d-inline d-xl-none d-lg-none i-info"></i>
+                            <p class="d-none d-xl-inline d-lg-inline i-info">Download All</p>
+                        </button>
+
+                        <button class="m-3 p-2 px-3 me-1 rounded btn btn-outline-info" id="deleteall">
+                            <i class="bi bi-plus-lg d-inline d-xl-none d-lg-none i-info"></i>
+                            <p class="d-none d-xl-inline d-lg-inline i-info">Delete All</p>
+                        </button>
+
+                        <button class="m-3 p-2 px-3 me-1 rounded btn btn-outline-info" id="sendFiles">
+                            <i class="bi bi-plus-lg d-inline d-xl-none d-lg-none i-info"></i>
+                            <p class="d-none d-xl-inline d-lg-inline i-info">Send Mail</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="navBar">
+                <table id="responsiveTable">
+                    <thead class="tab">
+                        <tr>
+                            <th><input type="checkbox" class="checkbox" id="selectAll" /></th>
+                            <th>Documents</th>
+                            <th class="mobile-hide">Upload Date</th>
+                            <th class="mobile-hide">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model.Requestwisefiles)
+                        {
+
+                            <tr class="table-row">
+                                <td class="mobile-hide"> <input type="checkbox" class="checkbox" name="selectedDocuments" value="@item.Requestwisefileid" /> </td>
+                                <td class="" data-label="File Name"> @item.Filename </td>
+
+                                <td class="mobile-hide" data-label="Created Date"> @item.Createddate </td>
+                                <td class="mobile-hide" data-label="Actions">
+                                    <button type="button"  class="btn btn-outline-info" onclick="location.href='@Url.Action("DownloadOne", "Patientdashboard",new {id = item.Requestwisefileid})'">
+                                        <span class="material-symbols-outlined">
+                                            cloud_download
+                                        </span>
+                                    </button>
+                                    <button type="button" data-fileid="@item.Requestwisefileid" class="btn btn-outline-info delete">
+                                        <span class="material-symbols-outlined">
+                                            delete
+                                        </span>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+    </div>
+</div>
+    
+
+
+        
+<script>
+    $("#selectAll").change(function () {
+        $(".checkbox").prop('checked', $(this).prop("checked"));
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#form').submit(function (e) {
+            e.preventDefault();
+            var data = new FormData(this);
+            data.append('rid', '@Model.Request.requestId');
+
+            $.ajax({
+                url: '@Url.Action("UploadDocument","PatientDashboard")',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Documents Uploaded",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).finally(()=> {
+                            window.location.reload();
+                        })
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
+
+        $('.delete').on('click', function () {
+            var id = $(this).data('fileid');
+            var row = $(this).closest('tr');
+
+            $.ajax({
+                url: '@Url.Action("DeleteFile","AdminDashboard")',
+                type: 'POST',
+                data: { fileid: id },
+                success: function (response) {
+                    if (response.success) {
+                        row.remove();
+                    }
+                }
+            });
+        })
+        $("#downloadall").click(function () {
+            var selectedDocuments = $('input[name="selectedDocuments"]:checked').map(function () {
+                return this.value;
+            }).get();
+
+
+            if (selectedDocuments.length > 0) {
+                $.ajax({
+                    url: '@Url.Action("DownDoc","PatientDashboard")',
+                    type: "post",
+                    data: JSON.stringify(selectedDocuments),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        window.location.href = '@Url.Action("Download","PatientDashboard")' + '?token=' + response.token;
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+
+        $("#deleteall").click(function () {
+            var selectedDocuments = $('input[name="selectedDocuments"]:checked').map(function () {
+                return this.value;
+            }).get();
+            console.log(selectedDocuments);
+            selectedDocuments.forEach(function (docid) {
+               
+
+                $.ajax({
+                    url: '@Url.Action("DeleteFile","AdminDashboard")',
+                    type: 'POST',
+                    data: { fileid: docid },
+                    success: function (response) {
+                        if (response.success) {
+                            window.location.reload();
+                        }
+                    }
+                });
+            })
+        });
+
+        $("#sendFiles").click(function () {
+            var selectedDocuments = $('input[name="selectedDocuments"]:checked').map(function () {
+                return this.value;
+            }).get();
+            if (selectedDocuments.count > 0) {
+                var requestid = @Model.Request.requestId;
+                var email = "@Model.Request.email";
+
+                $.ajax({
+                    url: '@Url.Action("SendFiles","AdminDashboard")',
+                    type: 'POST',
+                    data: { selectedDocuments: selectedDocuments, requestid: requestid, email: email },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: "Good job!",
+                                text: "Email Sent",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
+                    }
+                });
+            }
+            else {
+                Swal.fire({
+                    title: "No files selected",
+                    text: "PLease select files",
+                    icon: "info"
+                })
+            }
+        });
+    });
+</script> 

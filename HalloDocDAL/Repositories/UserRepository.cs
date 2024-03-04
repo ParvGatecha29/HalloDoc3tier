@@ -70,7 +70,10 @@ namespace HalloDocDAL.Repositories
         public bool IsUserBlocked(string email,string phone)
         {
             var block = _context.Blockrequests.FirstOrDefault(x => x.Email == email || x.Phonenumber == phone);
-
+            if(block == null)
+            {
+                return false;
+            }
             return (bool)!block.Isactive;
         }
 

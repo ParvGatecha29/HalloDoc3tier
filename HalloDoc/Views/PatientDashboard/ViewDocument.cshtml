@@ -144,7 +144,9 @@
                             <td class="mobile-hide" data-label="Created Date"> @item.Createddate </td>
                             <td class="mobile-hide">
                                 <button type="button" class="btn btn-outline-info" onclick="location.href='@Url.Action("DownloadOne", "Patientdashboard",new {id = item.Requestwisefileid})'">
-                                    Download
+                                    <span class="material-symbols-outlined">
+                                        cloud_download
+                                    </span>
                                 </button>
                             </td>
                         </tr>
@@ -186,7 +188,9 @@ $("#selectAll").change(function () {
                         Swal.fire({
                             title: "Good job!",
                             text: "Document Uploaded",
-                            icon: "success"
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
                         })
                     }
                     else {

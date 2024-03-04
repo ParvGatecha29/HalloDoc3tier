@@ -4,36 +4,36 @@
 
     @if (Model.Data != null && Model.Data.Count > 0)
     {
-    @foreach (var item in Model.Data)
+    @foreach (var obj in Model.Data)
         {
     <div class="d-md-none">
-                    <div class="bg-info-subtle " data-bs-toggle="collapse" data-bs-target="#collapseexample_@item.requestId"
+                    <div class="bg-info-subtle " data-bs-toggle="collapse" data-bs-target="#collapseexample_@obj.requestId"
                          aria-expanded="false" aria-controls="collapseexample">
                         <div class="flex-column gap-2 border-bottom border-5 pt-3 pb-5 px-4">
                             <div class="d-flex  justify-content-between mb-3">
-                                <span class="mobilesearch fs-5 ">@item.name</span>
-                                @if (item.requesttype == 1)
+                                <span class="mobilesearch fs-5 ">@obj.name</span>
+                                @if (obj.requesttype == 4)
                             {
                                     <div class="d-flex align-items-center">
                                         <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #e36478;"></div>
                                         <span class="fs-5">Business</span>
                                     </div>
                             }
-                            else if (item.requesttype == 2)
+                            else if (obj.requesttype == 1)
                             {
                                     <div class="d-flex align-items-center">
                                         <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #60bc60;"></div>
                                         <span class="fs-5">Patient</span>
                                     </div>
                             }
-                            else if (item.requesttype == 3)
+                            else if (obj.requesttype == 2)
                             {
                                     <div class="d-flex align-items-center">
                                         <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #ee9125;"></div>
                                         <span class="fs-5">Family/Friend</span>
                                     </div>
                             }
-                            else if (item.requesttype == 4)
+                            else if (obj.requesttype == 3)
                             {
                                     <div class="d-flex align-items-center">
                                         <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #007fc7;"></div>
@@ -43,7 +43,7 @@
                             </div>
                             <div class="d-flex justify-content-between ">
                                 <div class="">
-                                    <span class="fs-5">@item.address</span>
+                                    <span class="fs-5">@obj.address</span>
                                 </div>
                                 <button class="btn btn-transparent border border-1 border-info text-info rounded-5">Map Location</button>
                             </div>
@@ -51,23 +51,23 @@
                         </div>
                     </div>
 
-                    <div class="collapse" id="collapseexample_@item.requestId">
+                <div class="collapse" id="collapseexample_@obj.requestId">
                         <div class="d-flex flex-column gap-2 bg-info-subtle   mb-2 py-3 px-4 ">
                             <div class="d-flex align-items-center ">
                                 <i class="fa-regular fa-calendar fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
-                                <span class="fs-5">Date of Birth: @item.dobdate / @item.dobmonth / @item.dobyear</span>
+                            <span class="fs-5">Date of Birth: @obj.dobdate / @obj.dobmonth / @obj.dobyear</span>
                             </div>
                             <div class="d-flex align-items-center ">
                                 <i class="fa-regular fa-envelope fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
-                                <span class="fs-5">Email: @item.email</span>
+                            <span class="fs-5">Email: @obj.email</span>
                             </div>
                             <div class="d-flex align-items-center ">
                                 <i class="fas fa-phone fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
-                                <span class="fs-5">Phone: @item.phone</span>
+                            <span class="fs-5">Phone: @obj.phone</span>
                             </div>
                             <div class="d-flex align-items-center ">
                                 <i class="fa-regular fa-user fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
-                                <span class="fs-5">Requestor: @item.requestor</span>
+                            <span class="fs-5">Requestor: @obj.requestor</span>
                             </div>
                             @if (Model.Data[0].status == 1)
                         {
@@ -77,7 +77,7 @@
                                         <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #E42929">Cancel Case</a>
                                     </div>
                                     <div class="d-flex gap-3 ">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">View Case</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})">View Case</a>
                                         <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #E42929">View Notes</a>
                                     </div>
                                     <div class="d-flex gap-3">
@@ -90,8 +90,8 @@
                         {
                                 <div class="d-flex flex-column mt-3 gap-3">
                                     <div class="d-flex gap-3 ">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">View Case</a>
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">View Uploads</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})">View Case</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})">View Uploads</a>
                                     </div>
                                     <div class="d-flex gap-3 ">
                                         <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22">View Notes</a>
@@ -107,8 +107,8 @@
                         {
                                 <div class="d-flex flex-column mt-3 gap-3">
                                     <div class="d-flex gap-3 ">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">View Case</a>
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">View Uploads</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})">View Case</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})">View Uploads</a>
                                     </div>
                                     <div class="d-flex gap-3 ">
                                         <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22">View Notes</a>
@@ -124,8 +124,8 @@
                         {
                                 <div class="d-flex flex-column mt-3 gap-3">
                                     <div class="d-flex gap-3 ">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #E42929">View Case</a>
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">View Uploads</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #E42929" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})">View Case</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})">View Uploads</a>
                                     </div>
                                     <div class="d-flex gap-3 ">
                                         <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22">View Notes</a>
@@ -142,10 +142,10 @@
                         {
                                 <div class="d-flex flex-column mt-3 gap-3">
                                     <div class="d-flex gap-3 ">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #E42929">View Case</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #E42929" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})">View Case</a>
                                     </div>
                                     <div class="d-flex gap-3">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">View Uploads</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})">View Uploads</a>
                                         <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22">View Notes</a>
                                     </div>
                                 </div>
@@ -326,7 +326,7 @@
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="action">
                                                 <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
                                                 <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
                                                 <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Transfer</a></li>
                                                 <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>

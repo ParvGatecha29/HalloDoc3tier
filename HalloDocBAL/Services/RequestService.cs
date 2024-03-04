@@ -49,7 +49,7 @@ namespace HalloDocBAL.Services
                 Firstname = model.firstName,
                 Lastname = model.lastName,
                 Phonenumber = model.phone,
-                Email = model.email,
+                Email = model.cemail,
                 Createddate = DateTime.Now,
                 Confirmationnumber = "MD" + DateTime.Now.Day.ToString("D2") + DateTime.Now.Month.ToString("D2") + DateTime.Now.Year.ToString().Substring(2, 2) + model.lastName.Remove(2).ToUpper() + model.firstName.Remove(2).ToUpper() + count.ToString("D4")
         };

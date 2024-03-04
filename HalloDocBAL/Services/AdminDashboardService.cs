@@ -15,11 +15,13 @@ namespace HalloDocBAL.Services
     {
         private readonly IRequestRepository _requestRepository;
         private readonly IPhysicianRepository _physicianRepository;
+        private readonly IRequestWiseFilesRepository _requestWiseFilesRepository;
 
-        public AdminDashboardService(IRequestRepository requestRepository, IPhysicianRepository physicianRepository)
+        public AdminDashboardService(IRequestRepository requestRepository, IPhysicianRepository physicianRepository, IRequestWiseFilesRepository requestWiseFilesRepository)
         {
             _requestRepository = requestRepository;
             _physicianRepository = physicianRepository;
+            _requestWiseFilesRepository = requestWiseFilesRepository;
         }
         public List<AdminDashboardData> GetRequests()
         {
@@ -103,6 +105,12 @@ namespace HalloDocBAL.Services
         public List<Region> GetAllRegions()
         {
             return _requestRepository.GetRegions();
+        }
+
+        public bool DeleteFile(int fileid)
+        {
+            _requestWiseFilesRepository.DeleteFile(fileid);
+            return true;
         }
     }
 }

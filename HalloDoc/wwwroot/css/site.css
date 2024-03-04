@@ -346,9 +346,6 @@ footer {
     width: 40%;
 }
 
-.navBar {
-    box-shadow: 2px 2px 20px rgb(179, 177, 177);
-}
 
 .backBtn:hover {
     color: white;
