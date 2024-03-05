@@ -7,7 +7,7 @@
         <div class="row d-flex align-items-center justify-content-center">
             <p class="col fs-4 fw-bold ms-5 pb-0 mb-0 d-inline">Documents</p>
             <div class="col me-5 mb-0 text-end">
-                <button class="float-end my-4 btn btn-outline-info backBtn redirect-to" data-page="PatientDashboard" data-controller="PatientDashboard">
+                <button class="float-end my-4 btn btn-outline-info backBtn redirect-to" data-page="AdminDashboard" data-controller="AdminDashboard">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16"
                          height="16" fill="currentColor" class="bi bi-chevron-left fw-medium mb-1" viewBox="0 0 16 16">
                         <path fill-rule="evenodd"
@@ -214,7 +214,7 @@
             var selectedDocuments = $('input[name="selectedDocuments"]:checked').map(function () {
                 return this.value;
             }).get();
-            if (selectedDocuments.count > 0) {
+            if (selectedDocuments.length > 0) {
                 var requestid = @Model.Request.requestId;
                 var email = "@Model.Request.email";
 

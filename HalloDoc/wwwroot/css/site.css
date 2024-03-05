@@ -540,8 +540,16 @@ textarea:focus {
     background-color: rgb(32,63,154) !important;
     color:white !important;
 }
+.new:hover {
+    background-color: rgb(32,63,154) !important;
+    color: white !important;
+}
 
 .pending.active {
+    background-color: rgb(38,164,211) !important;
+    color: white !important;
+}
+.pending:hover {
     background-color: rgb(38,164,211) !important;
     color: white !important;
 }
@@ -550,18 +558,32 @@ textarea:focus {
     background-color: rgb(48,129,62) !important;
     color: white !important;
 }
+.act:hover {
+    background-color: rgb(48,129,62) !important;
+    color: white !important;
+}
 
 .conclude.active {
     background-color: rgb(174,38,119) !important;
     color: white !important;
 }
+.conclude:hover {
+    background-color: rgb(174,38,119) !important;
+    color: white !important;
+}
+
 .toclose {
     border: 1px solid rgb(37,110,176);
 }
+
 .toclose.active {
     background-color: rgb(37,110,176) !important;
     color: white !important;
 }
+    .toclose:hover {
+        background-color: rgb(37,110,176) !important;
+        color: white !important;
+    }
 
 .unpaid {
     border:1px solid rgb(145,105,179);
@@ -570,6 +592,10 @@ textarea:focus {
     background-color: rgb(145,105,179) !important;
     color: white !important;
 }
+    .unpaid:hover {
+        background-color: rgb(145,105,179) !important;
+        color: white !important;
+    }
 
 .normal-input:focus {
     border: 1px solid rgb(145,105,179) !important;

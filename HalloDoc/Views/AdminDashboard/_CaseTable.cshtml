@@ -4,222 +4,222 @@
 
     @if (Model.Data != null && Model.Data.Count > 0)
     {
-    @foreach (var obj in Model.Data)
+        @foreach (var obj in Model.Data)
         {
-    <div class="d-md-none">
-                    <div class="bg-info-subtle " data-bs-toggle="collapse" data-bs-target="#collapseexample_@obj.requestId"
-                         aria-expanded="false" aria-controls="collapseexample">
-                        <div class="flex-column gap-2 border-bottom border-5 pt-3 pb-5 px-4">
-                            <div class="d-flex  justify-content-between mb-3">
-                                <span class="mobilesearch fs-5 ">@obj.name</span>
-                                @if (obj.requesttype == 4)
+            <div class="d-md-none">
+                <div class="bg-info-subtle " data-bs-toggle="collapse" data-bs-target="#collapseexample_@obj.requestId"
+                     aria-expanded="false" aria-controls="collapseexample">
+                    <div class="flex-column gap-2 border-bottom border-5 pt-3 pb-5 px-4">
+                        <div class="d-flex  justify-content-between mb-3">
+                            <span class="mobilesearch fs-5 ">@obj.name</span>
+                            @if (obj.requesttype == 4)
                             {
-                                    <div class="d-flex align-items-center">
-                                        <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #e36478;"></div>
-                                        <span class="fs-5">Business</span>
-                                    </div>
+                                <div class="d-flex align-items-center">
+                                    <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #e36478;"></div>
+                                    <span class="fs-5">Business</span>
+                                </div>
                             }
                             else if (obj.requesttype == 1)
                             {
-                                    <div class="d-flex align-items-center">
-                                        <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #60bc60;"></div>
-                                        <span class="fs-5">Patient</span>
-                                    </div>
+                                <div class="d-flex align-items-center">
+                                    <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #60bc60;"></div>
+                                    <span class="fs-5">Patient</span>
+                                </div>
                             }
                             else if (obj.requesttype == 2)
                             {
-                                    <div class="d-flex align-items-center">
-                                        <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #ee9125;"></div>
-                                        <span class="fs-5">Family/Friend</span>
-                                    </div>
+                                <div class="d-flex align-items-center">
+                                    <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #ee9125;"></div>
+                                    <span class="fs-5">Family/Friend</span>
+                                </div>
                             }
                             else if (obj.requesttype == 3)
                             {
-                                    <div class="d-flex align-items-center">
-                                        <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #007fc7;"></div>
-                                        <span class="fs-5">Concierge</span>
-                                    </div>
-                            }
-                            </div>
-                            <div class="d-flex justify-content-between ">
-                                <div class="">
-                                    <span class="fs-5">@obj.address</span>
+                                <div class="d-flex align-items-center">
+                                    <div class="border border-1 rounded-5 m-1" style="width: 15px; height:15px; background-color: #007fc7;"></div>
+                                    <span class="fs-5">Concierge</span>
                                 </div>
-                                <button class="btn btn-transparent border border-1 border-info text-info rounded-5">Map Location</button>
-                            </div>
-
+                            }
                         </div>
+                        <div class="d-flex justify-content-between ">
+                            <div class="">
+                                <span class="fs-5">@obj.address</span>
+                            </div>
+                            <button class="btn btn-transparent border border-1 border-info text-info rounded-5">Map Location</button>
+                        </div>
+
                     </div>
+                </div>
 
                 <div class="collapse" id="collapseexample_@obj.requestId">
-                        <div class="d-flex flex-column gap-2 bg-info-subtle   mb-2 py-3 px-4 ">
-                            <div class="d-flex align-items-center ">
-                                <i class="fa-regular fa-calendar fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
+                    <div class="d-flex flex-column gap-2 bg-info-subtle   mb-2 py-3 px-4 ">
+                        <div class="d-flex align-items-center ">
+                            <i class="fa-regular fa-calendar fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
                             <span class="fs-5">Date of Birth: @obj.dobdate / @obj.dobmonth / @obj.dobyear</span>
-                            </div>
-                            <div class="d-flex align-items-center ">
-                                <i class="fa-regular fa-envelope fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
+                        </div>
+                        <div class="d-flex align-items-center ">
+                            <i class="fa-regular fa-envelope fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
                             <span class="fs-5">Email: @obj.email</span>
-                            </div>
-                            <div class="d-flex align-items-center ">
-                                <i class="fas fa-phone fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
+                        </div>
+                        <div class="d-flex align-items-center ">
+                            <i class="fas fa-phone fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
                             <span class="fs-5">Phone: @obj.phone</span>
-                            </div>
-                            <div class="d-flex align-items-center ">
-                                <i class="fa-regular fa-user fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
+                        </div>
+                        <div class="d-flex align-items-center ">
+                            <i class="fa-regular fa-user fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
                             <span class="fs-5">Requestor: @obj.requestor</span>
-                            </div>
-                            @if (Model.Data[0].status == 1)
+                        </div>
+                        @if (Model.Data[0].status == 1)
                         {
-                                <div class="d-flex flex-column mt-3 gap-3">
-                                    <div class="d-flex gap-3 ">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #943DB8">Assign Case</a>
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #E42929">Cancel Case</a>
-                                    </div>
-                                    <div class="d-flex gap-3 ">
+                            <div class="d-flex flex-column mt-3 gap-3">
+                                <div class="d-flex gap-3 ">
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5 assigncase" style="background-color: #943DB8">Assign Case</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5 cancelcase" style="background-color:  #E42929">Cancel Case</a>
+                                </div>
+                                <div class="d-flex gap-3 ">
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})">View Case</a>
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #E42929">View Notes</a>
-                                    </div>
-                                    <div class="d-flex gap-3">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Block Patient</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #E42929" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})">View Notes</a>
+                                </div>
+                                <div class="d-flex gap-3">
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5 blockcase" style="background-color: #228B22">Block Patient</a>
 
-                                    </div>
                                 </div>
+                            </div>
                         }
-                            @if (Model.Data[0].status == 2)
+                        @if (Model.Data[0].status == 2)
                         {
-                                <div class="d-flex flex-column mt-3 gap-3">
-                                    <div class="d-flex gap-3 ">
+                            <div class="d-flex flex-column mt-3 gap-3">
+                                <div class="d-flex gap-3 ">
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})">View Case</a>
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})">View Uploads</a>
-                                    </div>
-                                    <div class="d-flex gap-3 ">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22">View Notes</a>
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #00ADEF">Transfer</a>
-                                    </div>
-                                    <div class="d-flex gap-3">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">Clear Case</a>
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Send Agreement</a>
-                                    </div>
                                 </div>
+                                <div class="d-flex gap-3 ">
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})">View Notes</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #00ADEF">Transfer</a>
+                                </div>
+                                <div class="d-flex gap-3">
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">Clear Case</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Send Agreement</a>
+                                </div>
+                            </div>
                         }
-                            @if (Model.Data[0].status == 3)
+                        @if (Model.Data[0].status == 3)
                         {
-                                <div class="d-flex flex-column mt-3 gap-3">
-                                    <div class="d-flex gap-3 ">
+                            <div class="d-flex flex-column mt-3 gap-3">
+                                <div class="d-flex gap-3 ">
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})">View Case</a>
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})">View Uploads</a>
-                                    </div>
-                                    <div class="d-flex gap-3 ">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22">View Notes</a>
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #00ADEF">Orders</a>
-                                    </div>
-                                    <div class="d-flex gap-3">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">Doctors Note</a>
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Encounter</a>
-                                    </div>
                                 </div>
+                                <div class="d-flex gap-3 ">
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})">View Notes</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #00ADEF">Orders</a>
+                                </div>
+                                <div class="d-flex gap-3">
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">Doctors Note</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Encounter</a>
+                                </div>
+                            </div>
                         }
-                            @if (Model.Data[0].status == 4 || Model.Data[0].status == 4)
+                        @if (Model.Data[0].status == 4 || Model.Data[0].status == 4)
                         {
-                                <div class="d-flex flex-column mt-3 gap-3">
-                                    <div class="d-flex gap-3 ">
+                            <div class="d-flex flex-column mt-3 gap-3">
+                                <div class="d-flex gap-3 ">
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #E42929" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})">View Case</a>
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})">View Uploads</a>
-                                    </div>
-                                    <div class="d-flex gap-3 ">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22">View Notes</a>
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">Orders</a>
-                                    </div>
-                                    <div class="d-flex gap-3">
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #145545">Doctors Note</a>
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Encounter</a>
-
-                                    </div>
                                 </div>
+                                <div class="d-flex gap-3 ">
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})">View Notes</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">Orders</a>
+                                </div>
+                                <div class="d-flex gap-3">
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #145545">Doctors Note</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Encounter</a>
+
+                                </div>
+                            </div>
                         }
-                            @if (Model.Data[0].status == 6)
+                        @if (Model.Data[0].status == 6)
                         {
-                                <div class="d-flex flex-column mt-3 gap-3">
-                                    <div class="d-flex gap-3 ">
+                            <div class="d-flex flex-column mt-3 gap-3">
+                                <div class="d-flex gap-3 ">
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #E42929" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})">View Case</a>
-                                    </div>
-                                    <div class="d-flex gap-3">
-                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})">View Uploads</a>
-                                        <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22">View Notes</a>
-                                    </div>
                                 </div>
+                                <div class="d-flex gap-3">
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})">View Uploads</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})">View Notes</a>
+                                </div>
+                            </div>
                         }
-                        </div>
-
                     </div>
-    </div>
+
+                </div>
+            </div>
         }
     }
 
     @if (Model != null)
     {
-    <div class="tablediv d-none d-md-block">
-                <table class="table caseTable" id="adminTable">
-                    <thead class="w-100">
-                        <tr>
-                            <th class="d-none" scope="col">RequestType</th>
-                            <th class="d-none" scope="col">RegionId</th>
-                            <th scope="col" colspan="2">Name</th>
-                            
-                            @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 3 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 6 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
+        <div class="tablediv d-none d-md-block">
+            <table class="table caseTable" id="adminTable">
+                <thead class="w-100">
+                    <tr>
+                        <th class="d-none" scope="col">RequestType</th>
+                        <th class="d-none" scope="col">RegionId</th>
+                        <th scope="col" colspan="2">Name</th>
+
+                        @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 3 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 6 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
                         {
-                                <th scope="col">Date Of Birth</th>
+                            <th scope="col">Date Of Birth</th>
                         }
 
 
-                            @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 4 || Model.Data[0].status == 5)
+                        @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 4 || Model.Data[0].status == 5)
                         {
-                                <th scope="col">Requestor</th>
+                            <th scope="col">Requestor</th>
                         }
 
-                            @if (Model.Data[0].status == 3 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
+                        @if (Model.Data[0].status == 3 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
                         {
-                                <th scope="col">Region</th>
+                            <th scope="col">Region</th>
                         }
 
-                            @if (Model.Data[0].status == 1)
+                        @if (Model.Data[0].status == 1)
                         {
-                                <th scope="col">Requested Date</th>
+                            <th scope="col">Requested Date</th>
                         }
 
-                            @if (Model.Data[0].status == 9 || Model.Data[0].status == 2 || Model.Data[0].status == 3 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 6 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
+                        @if (Model.Data[0].status == 9 || Model.Data[0].status == 2 || Model.Data[0].status == 3 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 6 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
                         {
-                                <th scope="col">Physician Name</th>
-                                <th scope="col">Date Of Service</th>
+                            <th scope="col">Physician Name</th>
+                            <th scope="col">Date Of Service</th>
                         }
 
-                            @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 6 || Model.Data[0].status == 9)
+                        @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 6 || Model.Data[0].status == 9)
                         {
-                                <th scope="col">Phone</th>
+                            <th scope="col">Phone</th>
                         }
 
-                            <th scope="col">Address</th>
+                        <th scope="col">Address</th>
 
-                            @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 3 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
+                        @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 3 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
                         {
-                                <th scope="col">Notes</th>
+                            <th scope="col">Notes</th>
                         }
 
-                            <th scope="col">Chat With</th>
-                            <th scope="col">Actions</th>
+                        <th scope="col">Chat With</th>
+                        <th scope="col">Actions</th>
 
 
-                        </tr>
-                    </thead>
-                    <tbody class="w-100">
+                    </tr>
+                </thead>
+                <tbody class="w-100">
 
-                        @foreach (var obj in Model.Data)
+                    @foreach (var obj in Model.Data)
                     {
-                            <tr style="background-color:@colors[obj.requesttype - 1] !important; color:white !important" data-rid="@obj.requestId" class="align-middle">
-                                <td class="d-none">@obj.requesttype</td>
-                                <td class="d-none">@obj.regionId</td>
-                                <td name="Name">@obj.firstName @obj.lastName</td>
+                        <tr style="background-color:@colors[obj.requesttype - 1] !important; color:white !important" data-rid="@obj.requestId" class="align-middle">
+                            <td class="d-none">@obj.requesttype</td>
+                            <td class="d-none">@obj.regionId</td>
+                            <td name="Name">@obj.firstName @obj.lastName</td>
                             <td>
                                 <a type="button" class="btn border border-light text-light" href="mailto:@obj.email">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
@@ -227,169 +227,169 @@
                                     </svg>
                                 </a>
                             </td>
-                                @if (obj.status == 1 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 7 || obj.status == 8)
+                            @if (obj.status == 1 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 7 || obj.status == 8)
                             {
-                                    <td>@obj.dobdate/@obj.dobmonth/@obj.dobyear</td>
+                                <td>@obj.dobdate/@obj.dobmonth/@obj.dobyear</td>
                             }
 
-                                @if (obj.status == 1 || obj.status == 2 || obj.status == 4 || obj.status == 5)
+                            @if (obj.status == 1 || obj.status == 2 || obj.status == 4 || obj.status == 5)
                             {
-                                    <td>@obj.requestor</td>
+                                <td>@obj.requestor</td>
                             }
 
-                                @if (obj.status == 3 || obj.status == 7 || obj.status == 8)
+                            @if (obj.status == 3 || obj.status == 7 || obj.status == 8)
                             {
-                                    <td>@obj.regionId</td>
+                                <td>@obj.regionId</td>
                             }
 
-                                @if (obj.status == 1)
+                            @if (obj.status == 1)
                             {
-                                    <td>@obj.requestDate</td>
+                                <td>@obj.requestDate</td>
                             }
 
-                                @if (obj.status == 9 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 7 || obj.status == 8)
+                            @if (obj.status == 9 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 7 || obj.status == 8)
                             {
-                                    <td>@obj.pname</td>
-                                    <td>DateOfService</td>
+                                <td>@obj.pname</td>
+                                <td>DateOfService</td>
                             }
 
-                                @if (obj.status == 1 || obj.status == 2 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 9)
+                            @if (obj.status == 1 || obj.status == 2 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 9)
                             {
-                                    <td>
-                                        <button type="button" class="btn btn-outline-light"><i class="bi bi-telephone text-white"></i>@obj.phone</button><br>(Patient)
-                                        @if (obj.cphone != null && obj.requesttype != 1)
+                                <td>
+                                    <button type="button" class="btn btn-outline-light"><i class="bi bi-telephone text-white"></i>@obj.phone</button><br>(Patient)
+                                    @if (obj.cphone != null && obj.requesttype != 1)
                                     {
-                                            <br>
+                                        <br>
 
-                                            <button type="button" class="btn btn-outline-light"><i class="bi bi-telephone text-white"></i>@obj.cphone</button>
+                                        <button type="button" class="btn btn-outline-light"><i class="bi bi-telephone text-white"></i>@obj.cphone</button>
 
-                                            <br>
-                                            @if (obj.requesttype == 2)
+                                        <br>
+                                        @if (obj.requesttype == 2)
                                         {
-                                                <span>(Family/Friend)</span>
+                                            <span>(Family/Friend)</span>
                                         }
                                         else if (obj.requesttype == 3)
                                         {
-                                                <span>(Concierge)</span>
+                                            <span>(Concierge)</span>
                                         }
                                         else
                                         {
-                                                <span>(Business)</span>
+                                            <span>(Business)</span>
                                         }
                                     }
 
-                                    </td>
+                                </td>
                             }
 
-                                <td>@obj.address</td>
+                            <td>@obj.address</td>
 
-                                @if (obj.status == 1 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 7 || obj.status == 8)
+                            @if (obj.status == 1 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 7 || obj.status == 8)
                             {
-                                    <td>@obj.notes</td>
+                                <td>@obj.notes</td>
                             }
 
 
-                                <td>
-                                    @if (@obj.status != 1)
+                            <td>
+                                @if (@obj.status != 1)
                                 {
-                                        <button type="button" class="btn btn-outline-light"><i class="fa fa-solid fa-user text-light"></i> Patient</button>
-                                        <button type="button" class="btn btn-outline-light"><i class="fa-solid fa-user-doctor tetx-light"></i> Provider </button>
+                                    <button type="button" class="btn btn-outline-light"><i class="fa fa-solid fa-user text-light"></i> Patient</button>
+                                    <button type="button" class="btn btn-outline-light"><i class="fa-solid fa-user-doctor text-light"></i> Provider </button>
                                 }
                                 else
                                 {
-                                        <button type="button" class="btn btn-outline-light"><i class="fa fa-solid fa-user text-light"></i> Patient</button>
+                                    <button type="button" class="btn btn-outline-light"><i class="fa fa-solid fa-user text-light"></i> Patient</button>
                                 }
 
-                                </td>
+                            </td>
 
-                                <td>
-                                    @if (@obj.status == 1)
+                            <td>
+                                @if (@obj.status == 1)
                                 {
-                                        <div class="dropdown bg-transparent">
-                                            <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Actions
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="action">
-                                                <li><a class="dropdown-item theme-color assigncase" href="#"><i class="fa-regular fa-clipboard"></i>Assign Case</a></li>
-                                                <li><a class="dropdown-item theme-color cancelcase"><i class="fa-regular fa-circle-xmark"></i> Cancel case</a></li>
-                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
-                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
-                                                <li><a class="dropdown-item theme-color blockcase" href="#"><i class="fa-solid fa-ban"></i> Block Patient</a></li>
-                                            </ul>
-                                        </div>
+                                    <div class="dropdown bg-transparent">
+                                        <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="action">
+                                            <li><a class="dropdown-item theme-color assigncase" href="#"><i class="fa-regular fa-clipboard"></i>Assign Case</a></li>
+                                            <li><a class="dropdown-item theme-color cancelcase"><i class="fa-regular fa-circle-xmark"></i> Cancel case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
+                                            <li><a class="dropdown-item theme-color blockcase" href="#"><i class="fa-solid fa-ban"></i> Block Patient</a></li>
+                                        </ul>
+                                    </div>
                                 }
                                 else if (@obj.status == 2)
                                 {
-                                        <div class="dropdown bg-transparent">
-                                            <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Actions
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="action">
-                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
+                                    <div class="dropdown bg-transparent">
+                                        <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="action">
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
-                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Transfer</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-file-lines"></i> Send Agreement</a></li>
-                                            </ul>
-                                        </div>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Transfer</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-file-lines"></i> Send Agreement</a></li>
+                                        </ul>
+                                    </div>
                                 }
                                 else if (@obj.status == 4 || @obj.status == 5 || @obj.status == 6)
                                 {
-                                        <div class="dropdown bg-transparent">
-                                            <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Actions
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="action">
-                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
-                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Doctors Note</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Encounter</a></li>
-                                            </ul>
-                                        </div>
+                                    <div class="dropdown bg-transparent">
+                                        <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="action">
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Doctors Note</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Encounter</a></li>
+                                        </ul>
+                                    </div>
                                 }
                                 else if (@obj.status == 3 || @obj.status == 7 || @obj.status == 8)
                                 {
-                                        <div class="dropdown bg-transparent">
-                                            <button class="btn btn-outline-light  " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Actions
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="action">
-                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
-                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Close Case</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Doctors Note</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Encounter</a></li>
-                                            </ul>
-                                        </div>
+                                    <div class="dropdown bg-transparent">
+                                        <button class="btn btn-outline-light  " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="action">
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Close Case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Doctors Note</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Encounter</a></li>
+                                        </ul>
+                                    </div>
                                 }
                                 else
                                 {
-                                        <div class="dropdown bg-transparent">
-                                            <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Actions
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="action">
-                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
-                                                <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
-                                                <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
-                                            </ul>
-                                        </div>
+                                    <div class="dropdown bg-transparent">
+                                        <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="action">
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
+                                        </ul>
+                                    </div>
                                 }
 
-                                </td>
+                            </td>
 
-                            </tr>
+                        </tr>
 
                     }
-                    </tbody>
-                </table>
-    </div>
+                </tbody>
+            </table>
+        </div>
     }
 }
 <div class="modal fade" id="cancelcaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -446,7 +446,7 @@
                     <div class="form-group mb-3">
                         <select class="form-control" id="regionSelect" name="regionSelect" placeholder=" " required>
                             <option hidden value="">Region</option>
-                            @foreach(var region in Model.regions)
+                            @foreach (var region in Model.regions)
                             {
                                 <option value="@region.Regionid">@region.Name</option>
                             }
@@ -509,7 +509,7 @@
 
 <script>
     $(document).ready(function () {
-       
+
         $('#formcancel').on('submit', function (e) {
             e.preventDefault();
             var data = new FormData(this)
