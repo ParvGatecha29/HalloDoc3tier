@@ -10,7 +10,7 @@ namespace HalloDocBAL.Interfaces
 {
     public interface IUserService
     { 
-        Task<bool> Login(Login model);
+        Task<Aspnetuser> Login(Login model);
         Task<bool> SignUp(Register model);
         Task<Aspnetuser> CheckUser(string email);
         Task<User> GetUser(string email);

@@ -7,6 +7,7 @@ using HalloDocBAL.Services;
 using HalloDocDAL.Contacts;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Routing.Constraints;
+using HalloDocDAL.Repositories;
 
 namespace HalloDoc.Controllers;
 
@@ -30,6 +31,7 @@ public class AdminDashboardController : Controller
         _requestWiseFilesRepository = requestWiseFilesRepository;
     }
 
+    [AuthManager("1")]
     public IActionResult AdminDashboard()
     {
         var dash = new AdminDashboard();

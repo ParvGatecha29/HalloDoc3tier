@@ -28,7 +28,7 @@ namespace HalloDocDAL.Repositories
 
         public async Task<Aspnetuser> FindByEmail(string email)
         {
-            return await _context.Aspnetusers.FirstOrDefaultAsync(x => x.Email == email);
+            return await _context.Aspnetusers.Include(x => x.Aspnetuserroles).FirstOrDefaultAsync(x => x.Email == email);
         }
         public async Task<User> GetByEmail(string email)
         {

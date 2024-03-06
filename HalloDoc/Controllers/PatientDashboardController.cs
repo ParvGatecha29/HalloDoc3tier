@@ -9,6 +9,7 @@ using HalloDocBAL.Interfaces;
 using HalloDocBAL.Services;
 using System.IO.Compression;
 using System.Security.Cryptography;
+using HalloDocDAL.Repositories;
 
 namespace HalloDoc.Controllers;
 
@@ -22,7 +23,8 @@ public class PatientDashboardController : Controller
         _dashboardService = dashboardService;
         _userService = userService;
     }
-    
+
+    [AuthManager("2")]
     public async Task<IActionResult> PatientDashboard()
     {
         var email = HttpContext.Session.GetString("email");

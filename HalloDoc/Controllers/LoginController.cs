@@ -9,6 +9,12 @@ using HalloDocBAL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using HalloDocBAL.Services;
 using System.Net.Mail;
+using HalloDocDAL.Repositories;
+using System.Web.Providers.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using NuGet.Common;
 
 namespace HalloDoc.Controllers;
 
@@ -17,19 +23,36 @@ public class LoginController : Controller
     private readonly IUserService _userService;
     private readonly ITokenService _tokenService;
     private readonly IEmailService _emailService;
+    private readonly IJwtService _jwtService;
 
-    public LoginController(IUserService userService, ITokenService tokenService, IEmailService emailService)
+    public LoginController(IUserService userService, ITokenService tokenService, IEmailService emailService, IJwtService jwtService)
     {
         _userService = userService;
         _tokenService = tokenService;
         _emailService = emailService;
+        _jwtService = jwtService;
     }
 
     public IActionResult PatientLogin()
     {
         if(HttpContext.Session.GetString("email") != null)
         {
-            return RedirectToAction("PatientDashboard", "PatientDashboard");
+            var token = Request.Cookies["jwt"];
+            if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+            {
+                var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
+                var role = "Login";
+                switch (roleClaim.Value)
+                {
+                    case "1":
+                        role = "AdminDashboard";
+                        break;
+                    case "2":
+                        role = "PatientDashboard";
+                        break;
+                }
+                return RedirectToAction(role, role);
+            }
         }
         return View();
     }
@@ -47,10 +70,22 @@ public class LoginController : Controller
     public async Task<JsonResult> PatientLogin([FromBody] Login model)
     {
         var result = await _userService.Login(model);
-        if (result) {
+        if (result != null) {
+            var jwtToken = _jwtService.GenerateToken(result);
+            Response.Cookies.Append("jwt", jwtToken);
             HttpContext.Session.SetString("email", model.Email);
-            
-            return Json(new { success = true, redirectUrl = Url.Action("PatientDashboard", "PatientDashboard") });
+            string role = "";
+            switch (result.Aspnetuserroles.FirstOrDefault().RoleId)
+            {
+                case "1":
+                    role = "AdminDashboard";
+                    break;
+                case "2":
+                    role = "PatientDashboard";
+                    break;
+            }
+            TempData["email"] = result.Email;
+            return Json(new { success = true, redirectUrl = Url.Action(role, role) });
         }
         else
         {
@@ -61,6 +96,7 @@ public class LoginController : Controller
     public IActionResult Logout()
     {
         HttpContext.Session.Clear();
+        Response.Cookies.Delete("jwt");
         return RedirectToAction("PatientLogin","Login");
     }
 

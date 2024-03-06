@@ -2,6 +2,7 @@
 using HalloDocDAL.Contacts;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
+using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 
 namespace HalloDocBAL.Services
@@ -42,14 +43,17 @@ namespace HalloDocBAL.Services
             return await _userRepo.AddUser(user);
         }
 
-        public async Task<bool> Login(Login model)
+        public async Task<Aspnetuser> Login(Login model)
         {
             var user = await _userRepository.FindByEmail(model.Email);
             if (user != null)
             {
-                return model.Password == user.Passwordhash;
+                if(model.Password == user.Passwordhash)
+                {
+                    return user;
+                }
             }
-            return false;
+            return null;
         }
 
         public async Task<Aspnetuser> CheckUser(string email)
@@ -115,7 +119,6 @@ namespace HalloDocBAL.Services
         public bool IsUserBlocked(string email, string phone)
         {
             var user = _userRepository.IsUserBlocked(email, phone); ;
-
             return user;
         }
     }

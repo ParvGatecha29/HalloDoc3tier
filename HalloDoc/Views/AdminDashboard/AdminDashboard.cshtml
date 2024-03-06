@@ -1,16 +1,16 @@
 ﻿@model HalloDocDAL.Model.AdminDashboard
 @{
     Layout = "_adminDash";
-    int newCase= 0;
-    int pendingCase= 0;
-    int activeCase= 0;
-    int concludeCase= 0;
-    int toCloseCase= 0;
-    int unpaidCase= 0;
-
-    foreach(var req in Model.Data)
+    int newCase = 0;
+    int pendingCase = 0;
+    int activeCase = 0;
+    int concludeCase = 0;
+    int toCloseCase = 0;
+    int unpaidCase = 0;
+   
+    foreach (var req in Model.Data)
     {
-        if(req.status == 1)
+        if (req.status == 1)
         {
             newCase++;
         }
@@ -265,7 +265,6 @@
     </div>
 </div>
 <div id="partial-load">
-
 </div>
 <div class="modal fade" id="sendLinkModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -351,7 +350,7 @@
                 tr[j].style.display = "";
             }
         }
-        
+
     }
 
     function search() {
@@ -398,7 +397,7 @@
                 }
             }
         }
-        
+
     }
 
     $(document).ready(function () {
@@ -454,7 +453,7 @@
                 }
             })
 
-            if(validate){
+            if (validate) {
                 $('#sendLinkModal').hide();
                 $.ajax({
                     url: '@Url.Action("SendLink","AdminDashboard")',
@@ -482,6 +481,7 @@
                 });
             }
         });
+        $('#welcome').text("@TempData["email"]");
     });
 </script>
 

@@ -51,7 +51,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
                             <div class="d-inline d-flex align-items-center justify-content-center">
                                 <div class=" d-inline justify-content-center align-items-center d-none d-md-flex">
                                     <p class="mx-3 my-0">
-                                        Welcome <strong id="welcome">Tests Testing</strong>
+                                        Welcome <strong id="welcome"></strong>
                                     </p>
                                     <button id="logout" class="btn btn-outline-info ms-auto my-auto darkBtn mx-3" type="button">
                                         Logout
@@ -163,6 +163,11 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
                     }
                 });
             }
+                
+                $('#logout').click(function () {
+                    window.location.href = '@Url.Action("Logout","Login")';
+                });
+
         });
     </script>
 </body>
