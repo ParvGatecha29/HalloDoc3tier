@@ -81,6 +81,8 @@ public class AdminDashboardController : Controller
         dash.regions = _adminDashboardService.GetAllRegions();
         return PartialView("_CaseTable", dash);
     }
+
+    [AuthManager("1")]
     public IActionResult ViewCase(int requestid)
     {
         var dash = new AdminDashboard();
@@ -180,5 +182,10 @@ public class AdminDashboardController : Controller
 
         _emailService.SendEmailWithAttachment(email, subject, body, filesToSend);
         return Json(new { success = true });
+    }
+
+    public IActionResult Orders()
+    {
+        return View();
     }
 }
