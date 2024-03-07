@@ -10,28 +10,30 @@ using Microsoft.AspNetCore.Routing.Constraints;
 using HalloDocDAL.Repositories;
 
 namespace HalloDoc.Controllers;
-
+[AuthManager("1")]
 public class AdminDashboardController : Controller
 {
     private readonly IAdminDashboardService _adminDashboardService;
     private readonly IEmailService _emailService;
     private readonly IDashboardService _dashboardService;
     private readonly IRequestWiseFilesRepository _requestWiseFilesRepository;
+    private readonly IOrderService _orderService;
     int[] newcase = { 1 };
     int[] pendingcase = { 2 };
     int[] activecase = { 4,5 };
     int[] concludecase = { 6 };
     int[] toclosecase = { 3,7,8 };
     int[] unpaidcase = { 9 };
-    public AdminDashboardController(IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository)
+    public AdminDashboardController(IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService)
     {
         _adminDashboardService = adminDashboardService;
         _emailService = emailService;
         _dashboardService = dashboardService;
         _requestWiseFilesRepository = requestWiseFilesRepository;
+        _orderService = orderService;
     }
 
-    [AuthManager("1")]
+   
     public IActionResult AdminDashboard()
     {
         var dash = new AdminDashboard();
@@ -82,7 +84,7 @@ public class AdminDashboardController : Controller
         return PartialView("_CaseTable", dash);
     }
 
-    [AuthManager("1")]
+    
     public IActionResult ViewCase(int requestid)
     {
         var dash = new AdminDashboard();
@@ -143,6 +145,17 @@ public class AdminDashboardController : Controller
         return Json(new { success = true });
     }
 
+    public JsonResult ClearCase(int requestid)
+    {
+        var dash = new AdminDashboardData
+        {
+            requestId = requestid,
+            notes = ""
+        };
+        _adminDashboardService.ClearRequest(dash);
+        return Json(new { success = true });
+    }
+
     public JsonResult SendLink(IFormCollection formcollection)
     {
         var email = formcollection["email"];
@@ -184,8 +197,41 @@ public class AdminDashboardController : Controller
         return Json(new { success = true });
     }
 
-    public IActionResult Orders()
+    public IActionResult Orders(int requestid)
     {
-        return View();
+        var orders = new Orders();
+        orders.requestid = requestid;
+        orders.healthprofessionaltypes = _orderService.GetAllPrfessions();
+        return View(orders);
+    }
+
+    public ActionResult<IEnumerable<Healthprofessional>> GetVendorsByProfession(int profession)
+    {
+        var vendors = _orderService.GetVendorsByProfessions(profession);
+        return vendors;
+    }
+    public ActionResult<Healthprofessional> GetVendorById(int vendorid)
+    {
+        var vendor = _orderService.GetVendorById(vendorid);
+        return vendor;
+    }
+
+    public JsonResult CreateOrder(IFormCollection formcollection)
+    {
+        var user = SessionService.GetLoggedInUser(HttpContext.Session);
+        var od = new Orderdetail
+        {
+            Vendorid = int.Parse(formcollection["business"]),
+            Requestid = int.Parse(formcollection["requestid"]),
+            Faxnumber = formcollection["fax"],
+            Email = formcollection["email"],
+            Businesscontact = formcollection["contact"],
+            Prescription = formcollection["prescription"],
+            Noofrefill = int.Parse(formcollection["noofrefill"]),
+            Createddate = DateTime.Now,
+            Createdby = user.Name
+        };
+        _orderService.CreateOrder(od);
+        return Json(new {success = true});
     }
 }

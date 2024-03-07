@@ -39,6 +39,8 @@ public partial class Business
 
     public string? Ip { get; set; }
 
+    public string? Email { get; set; }
+
     public virtual Aspnetuser? CreatedbyNavigation { get; set; }
 
     public virtual Aspnetuser? ModifiedbyNavigation { get; set; }

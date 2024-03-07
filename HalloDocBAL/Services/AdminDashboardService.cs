@@ -102,6 +102,12 @@ namespace HalloDocBAL.Services
             return true;
         }
 
+        public bool ClearRequest(AdminDashboardData data)
+        {
+            _requestRepository.transferRequest(data, 10);
+            return true;
+        }
+
         public List<Region> GetAllRegions()
         {
             return _requestRepository.GetRegions();

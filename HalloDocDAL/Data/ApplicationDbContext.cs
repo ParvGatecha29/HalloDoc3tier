@@ -38,6 +38,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Emaillog> Emaillogs { get; set; }
 
+    public virtual DbSet<Healthprofessional> Healthprofessionals { get; set; }
+
     public virtual DbSet<Healthprofessionaltype> Healthprofessionaltypes { get; set; }
 
     public virtual DbSet<Menu> Menus { get; set; }
@@ -254,7 +256,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Ip)
                 .HasMaxLength(20)
                 .HasColumnName("ip");
-            entity.Property(e => e.Isactive).HasColumnName("isactive");
+            entity.Property(e => e.Isactive)
+                .HasDefaultValueSql("true")
+                .HasColumnName("isactive");
             entity.Property(e => e.Modifieddate)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("modifieddate");
@@ -262,9 +266,7 @@ public partial class ApplicationDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("phonenumber");
             entity.Property(e => e.Reason).HasColumnName("reason");
-            entity.Property(e => e.Requestid)
-                .HasMaxLength(50)
-                .HasColumnName("requestid");
+            entity.Property(e => e.Requestid).HasColumnName("requestid");
         });
 
         modelBuilder.Entity<Business>(entity =>
@@ -289,6 +291,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Createddate)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("createddate");
+            entity.Property(e => e.Email)
+                .HasMaxLength(128)
+                .HasColumnName("email");
             entity.Property(e => e.Faxnumber)
                 .HasMaxLength(20)
                 .HasColumnName("faxnumber");
@@ -423,6 +428,62 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Subjectname)
                 .HasMaxLength(200)
                 .HasColumnName("subjectname");
+        });
+
+        modelBuilder.Entity<Healthprofessional>(entity =>
+        {
+            entity.HasKey(e => e.Vendorid).HasName("healthprofessionals_pkey");
+
+            entity.ToTable("healthprofessionals");
+
+            entity.Property(e => e.Vendorid).HasColumnName("vendorid");
+            entity.Property(e => e.Address)
+                .HasMaxLength(150)
+                .HasColumnName("address");
+            entity.Property(e => e.Businesscontact)
+                .HasMaxLength(100)
+                .HasColumnName("businesscontact");
+            entity.Property(e => e.City)
+                .HasMaxLength(100)
+                .HasColumnName("city");
+            entity.Property(e => e.Createddate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("createddate");
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .HasColumnName("email");
+            entity.Property(e => e.Faxnumber)
+                .HasMaxLength(50)
+                .HasColumnName("faxnumber");
+            entity.Property(e => e.Ip)
+                .HasMaxLength(20)
+                .HasColumnName("ip");
+            entity.Property(e => e.Isdeleted).HasColumnName("isdeleted");
+            entity.Property(e => e.Modifieddate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("modifieddate");
+            entity.Property(e => e.Phonenumber)
+                .HasMaxLength(100)
+                .HasColumnName("phonenumber");
+            entity.Property(e => e.Profession).HasColumnName("profession");
+            entity.Property(e => e.Regionid).HasColumnName("regionid");
+            entity.Property(e => e.State)
+                .HasMaxLength(50)
+                .HasColumnName("state");
+            entity.Property(e => e.Vendorname)
+                .HasMaxLength(100)
+                .HasColumnName("vendorname");
+            entity.Property(e => e.Zip)
+                .HasMaxLength(50)
+                .HasColumnName("zip");
+
+            entity.HasOne(d => d.ProfessionNavigation).WithMany(p => p.Healthprofessionals)
+                .HasForeignKey(d => d.Profession)
+                .HasConstraintName("healthprofessionals_profession_fkey");
+
+            entity.HasOne(d => d.Region).WithMany(p => p.Healthprofessionals)
+                .HasForeignKey(d => d.Regionid)
+                .HasConstraintName("healthprofessionals_regionid_fkey");
         });
 
         modelBuilder.Entity<Healthprofessionaltype>(entity =>

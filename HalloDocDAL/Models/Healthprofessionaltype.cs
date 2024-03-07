@@ -14,4 +14,6 @@ public partial class Healthprofessionaltype
     public bool? Isactive { get; set; }
 
     public bool? Isdeleted { get; set; }
+
+    public virtual ICollection<Healthprofessional> Healthprofessionals { get; set; } = new List<Healthprofessional>();
 }

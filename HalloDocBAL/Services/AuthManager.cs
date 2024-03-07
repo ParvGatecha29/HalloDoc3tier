@@ -24,7 +24,7 @@ namespace HalloDocDAL.Repositories
         public AuthManager(string role="") {
             _role = role;
         }
-        public async void OnAuthorization(AuthorizationFilterContext context)
+        public void OnAuthorization(AuthorizationFilterContext context)
         {
             var jwtService = context.HttpContext.RequestServices.GetService<IJwtService>();
 
@@ -39,7 +39,12 @@ namespace HalloDocDAL.Repositories
 
             if(token == null || !jwtService.ValidateToken(token,out JwtSecurityToken jwtToken))
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "PatientLogin" }));
+                if (context.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Home", Action = "AjaxLogout" }));
+                    return;
+                }
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Home", Action = "Index" }));
                 return;
             }
 

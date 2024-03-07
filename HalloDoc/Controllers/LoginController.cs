@@ -33,10 +33,11 @@ public class LoginController : Controller
         _jwtService = jwtService;
     }
 
-    public IActionResult PatientLogin()
+    public async Task<IActionResult> PatientLogin()
     {
         if(HttpContext.Session.GetString("email") != null)
         {
+            var user = await _userService.CheckUser(HttpContext.Session.GetString("email"));
             var token = Request.Cookies["jwt"];
             if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
             {
@@ -51,6 +52,7 @@ public class LoginController : Controller
                         role = "PatientDashboard";
                         break;
                 }
+                SessionService.SetLoggedInUser(HttpContext.Session, user);
                 return RedirectToAction(role, role);
             }
         }
@@ -74,6 +76,8 @@ public class LoginController : Controller
             var jwtToken = _jwtService.GenerateToken(result);
             Response.Cookies.Append("jwt", jwtToken);
             HttpContext.Session.SetString("email", model.Email);
+            var user = await _userService.CheckUser(model.Email);
+            SessionService.SetLoggedInUser(HttpContext.Session, user);
             string role = "";
             switch (result.Aspnetuserroles.FirstOrDefault().RoleId)
             {

@@ -1,68 +1,71 @@
-﻿@{
+﻿@model HalloDocDAL.Model.Orders;
+@{
     ViewData["Title"] = "Send Orders";
     Layout = "_adminDash";
 }
 <div class="container">
     <div class=" mt-4 d-flex justify-content-between align-items-center">
         <h4>Send Orders</h4>
-        <a asp-controller="Admin" asp-action="Admin_Dashboard" class="btn shadow  btn-outline-secondary border-info text-info px-3 ">
+        <a asp-controller="AdminDashboard" asp-action="AdminDashboard" class="btn shadow  btn-outline-secondary border-info text-info px-3 ">
             <i class="fa-solid fa-angle-left"></i> Back
         </a>
     </div>
-    <form action="" class="shadow border rounded my-3" method="post">
+    <form action="" class="shadow border rounded my-3" method="post" id="formorder">
         <div class="mx-3 my-4 ">
             <div class="mt-3">
-
+                <input hidden value="@Model.requestid" id="requestid" name="requestid"/>
                 <div class="row">
                     <div class=" col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-3 ">
-                        <select class="form-select text-secondary" id="inputGroupSelect01" style="height: 58px;">
+                        <select class="form-select text-secondary" id="professiontype" style="height: 58px;">
                             <option selected="" disabled>Select Profession</option>
-                            <option value="1">Profession 1</option>
-                            <option value="2">Profession 2</option>
-                            <option value="3">Profession 3</option>
+                            @foreach (var profession in Model.healthprofessionaltypes)
+                            {
+                                <option value="@profession.Healthprofessionalid">@profession.Professionname</option>
+                            }
+                            
                         </select>
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  ">
-                        <select class="form-select text-secondary" id="inputGroupBusiness" style="height: 58px;">
+                        <select class="form-select text-secondary" id="business" name="business" style="height: 58px;">
                             <option selected="" disabled>Business</option>
-                            <option value="1">Business 1</option>
-                            <option value="2">Business 2</option>
-                            <option value="3">Business 3</option>
                         </select>
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  form-floating">
-                        <input type="text" class=" form-control " id="floatingInputBusinessContact"
-                               placeholder="Business Contact" aria-label="BusinessContact">
-                        <label class="ms-2 text-secondary floating-label" for="floatingInputBusinessContact">Business Contact</label>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  form-floating required">
+                        <input type="text" class=" form-control " id="contact" name="contact"
+                               placeholder=" " aria-label="BusinessContact">
+                        <label class="ms-2 text-secondary floating-label" for="contact">Business Contact</label>
+                        <span style="color:red; display:none">Required!</span>
                     </div>
-                    <div class=" col-xl-6 col-lg-6 col-md-6 col-sm-12 form-floating mb-3">
-                        <input type="email" class=" form-control" id="floatingInputemail" placeholder="Email"
+                    <div class=" col-xl-6 col-lg-6 col-md-6 col-sm-12 form-floating mb-3 required">
+                        <input type="email" class=" form-control" id="email" placeholder=" " name="email"
                                aria-label="Email">
-                        <label class="ms-2 text-secondary " for="floatingInputemail">Email</label>
+                        <label class="ms-2 text-secondary  floating-label" for="email">Email</label>
+                        <span style="color:red; display:none">Required!</span>
                     </div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  form-floating">
-                        <input type="text" class=" form-control " id="floatingInputFaxNumber"
-                               placeholder="Faxnumber" aria-label="Faxnumber">
-                        <label class="ms-2 text-secondary" for="floatingInputFaxNumber">Fax Number</label>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  form-floating required">
+                        <input type="text" class=" form-control " id="fax" name="fax"
+                               placeholder=" " aria-label="Faxnumber">
+                        <label class="ms-2 text-secondary floating-label" for="fax">Fax Number</label>
+                        <span style="color:red; display:none">Required!</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class=" col-12 form-floating mb-3 ">
-                        <textarea class="form-control h-100 " id="floatingInput" placeholder="Textarea"
+                        <textarea class="form-control h-100 " id="prescription" name="prescription" placeholder=" "
                                   rows="3"></textarea>
-                        <label for="floatingInput" class="text-wrap ms-2 text-secondary">Prescription or Order Details</label>
+                        <label for="floatingInput" class="text-wrap ms-2 text-secondary floating-label">Prescription or Order Details</label>
                     </div>
                 </div>
                 <div class=" col-xl-6 col-lg-6 col-md-6 col-sm-12 form-floating mb-3 ">
-                    <select class="form-select" id="inputGroupSelect02" style="width: 619px;">
-                        <option selected="">Not Required</option>
-                        <option value="1">Profession 1</option>
-                        <option value="2">Profession 2</option>
-                        <option value="3">Profession 3</option>
+                    <select class="form-select" id="noofrefill" name="noofrefill" style="width: 619px;">
+                        <option value="0" selected="">Not Required</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
                     </select>
                     <label for="inputGroupSelect02" class="text-wrap small text-secondary">Number Of Refills</label>
                 </div>
@@ -78,3 +81,97 @@
         </div>
     </form>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#professiontype').change(function () {
+            var selectedProfession = $(this).val();
+            $.ajax({
+                url: '@Url.Action("GetVendorsByProfession","AdminDashboard")',
+                type: 'POST',
+                data: { profession: selectedProfession },
+                success: function (data) {
+                    var physicianSelect = $('#business');
+                    physicianSelect.empty().append('<option value="">Select Business</option>');
+                    $.each(data, function (i, vendor) {
+                        physicianSelect.append($('<option>', {
+                            value: vendor.Vendorid,
+                            text: vendor.Vendorname
+                        }));
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching Vendors:', error)
+                }
+            });
+        });
+
+        $('#business').change(function () {
+            var selectedVendor = $(this).val();
+            
+            $.ajax({
+                url: '@Url.Action("GetVendorByid","AdminDashboard")',
+                type: 'POST',
+                data: { vendorid: selectedVendor },
+                success: function (data) {
+                    $("#email").val(data.Email);
+                    $("#fax").val(data.Faxnumber);
+                    $("#contact").val(data.Businesscontact);
+                },
+                error: function (error) {
+                    console.error('Error fetching Vendors:', error)
+                }
+            });
+        });
+
+        $('#formorder').on('submit', function (e) {
+            e.preventDefault();
+            var data = new FormData(this)
+            var validate = true;
+            $('.required').each(function () {
+                var div = $(this);
+                if ($(div).find('input').val() == "") {
+                    Swal.fire({
+                        title: "Information required",
+                        text: "Please enter all the details",
+                        icon: "error"
+
+                    });
+                    var span = $(div).children('span');
+                    span.show();
+
+                    validate = false;
+                }
+            })
+            if (validate) {
+                $.ajax({
+                    url: '@Url.Action("CreateOrder","AdminDashboard")',
+                    type: 'POST',
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.fire({
+                                title: "Good job!",
+                                text: "Order sent succesfully",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).finally(() => {
+                                window.location.reload();
+                            });
+
+                        }
+                        else {
+                            alert(result.message);
+                        }
+                    },
+                    error: function () {
+                        alert('An error occured');
+                    }
+                });
+            }
+            
+        });
+    })
+</script>

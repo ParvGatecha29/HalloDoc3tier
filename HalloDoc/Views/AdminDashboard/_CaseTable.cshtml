@@ -95,10 +95,10 @@
                                 </div>
                                 <div class="d-flex gap-3 ">
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})">View Notes</a>
-                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #00ADEF">Transfer</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5 transferCase" style="background-color: #00ADEF">Transfer</a>
                                 </div>
                                 <div class="d-flex gap-3">
-                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">Clear Case</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5 clearCase" style="background-color: #EE9125">Clear Case</a>
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Send Agreement</a>
                                 </div>
                             </div>
@@ -112,7 +112,7 @@
                                 </div>
                                 <div class="d-flex gap-3 ">
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})">View Notes</a>
-                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #00ADEF">Orders</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #00ADEF" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})">Orders</a>
                                 </div>
                                 <div class="d-flex gap-3">
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">Doctors Note</a>
@@ -129,7 +129,7 @@
                                 </div>
                                 <div class="d-flex gap-3 ">
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white  rounded-5" style="background-color:  #228B22" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})">View Notes</a>
-                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">Orders</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})">Orders</a>
                                 </div>
                                 <div class="d-flex gap-3">
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #145545">Doctors Note</a>
@@ -328,8 +328,8 @@
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Transfer</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
+                                            <li><a class="dropdown-item theme-color transferCase" href="#"><i class="fa-regular fa-note-sticky"></i> Transfer</a></li>
+                                            <li><a class="dropdown-item theme-color clearCase" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
                                             <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-file-lines"></i> Send Agreement</a></li>
                                         </ul>
                                     </div>
@@ -342,9 +342,9 @@
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="action">
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("Orders","AdminDashboard")"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
                                             <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Doctors Note</a></li>
                                             <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Encounter</a></li>
                                         </ul>
@@ -358,12 +358,12 @@
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="action">
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
                                             <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Close Case</a></li>
                                             <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Doctors Note</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
+                                            <li><a class="dropdown-item theme-color clearCase" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
                                             <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Encounter</a></li>
                                         </ul>
                                     </div>
@@ -376,7 +376,7 @@
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="action">
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
                                         </ul>
                                     </div>
@@ -444,7 +444,7 @@
                     <p class="text-secondary"> To assign the request, search and select another physician </p>
                     <input type="hidden" class="requestId" value="" name="requestId" id="requestId" />
                     <div class="form-group mb-3">
-                        <select class="form-control" id="regionSelect" name="regionSelect" placeholder=" " required>
+                        <select class="form-control regionSelect" id="regionSelect" name="regionSelect" placeholder=" " required>
                             <option hidden value="">Region</option>
                             @foreach (var region in Model.regions)
                             {
@@ -455,7 +455,52 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <select class="form-control" id="physicianSelect" name="physicianSelect" placeholder=" " required>
+                        <select class="form-control physicianSelect" id="physicianSelect" name="physicianSelect" placeholder=" " required>
+                            <option hidden value="">Physician</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <div class="mb-3 form-floating">
+                            <textarea class="form-control" placeholder="" id="info" style="height: 100px" name="info" required></textarea>
+                            <label for="info" class="floatingLabel"> Provide additional information </label>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-info text-white">Confirm</button>
+                        <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="transferCaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle">Transfer Request</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formassign" method="post">
+                    <p class="text-secondary"> To transfer the request, search and select another physician </p>
+                    <input type="hidden" class="requestId" value="" name="requestId" id="requestId" />
+                    <div class="form-group mb-3">
+                        <select class="form-control regionSelect" id="regionSelect" name="regionSelect" placeholder=" " required>
+                            <option hidden value="">Region</option>
+                            @foreach (var region in Model.regions)
+                            {
+                                <option value="@region.Regionid">@region.Name</option>
+                            }
+
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <select class="form-control physicianSelect" id="physicianSelect" name="physicianSelect" placeholder=" " required>
                             <option hidden value="">Physician</option>
                         </select>
                     </div>
@@ -507,6 +552,21 @@
 </div>
 
 
+<div class="modal fade" id="clearCaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-body p-5">
+                <i class="fa-solid fa-circle-exclamation fa-4x text-warning border border-1 p-2 border-warning rounded-circle mb-3"></i>
+                <h3>Confirmation for clear case</h3>
+                <p>Are sure you want to clear this request? Once clear this request then you are not able to see this request.</p>
+                <input type="hidden" class="requestId" value="" name="requestId" id="requestId" />
+                <button type="button" class="btn btn-info text-light" id="clearCase">Clear</button>
+                <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
 
@@ -532,7 +592,12 @@
 
                     }
                     else {
-                        alert(result.message);
+                        if(result.message != null){
+                            alert(result.message)
+                        }
+                        else{
+                            window.location.href = "/Login/PatientLogin";
+                        }
                     }
                 },
                 error: function () {
@@ -543,14 +608,14 @@
 
 
 
-        $('#regionSelect').change(function () {
+        $('.regionSelect').change(function () {
             var selectedRegion = $(this).val();
             $.ajax({
                 url: '@Url.Action("GetPhysiciansByRegion","AdminDashboard")',
                 type: 'POST',
                 data: { region: selectedRegion },
                 success: function (data) {
-                    var physicianSelect = $('#physicianSelect');
+                    var physicianSelect = $('.physicianSelect');
                     physicianSelect.empty().append('<option value="">Select Physician</option>');
                     $.each(data, function (i, physician) {
                         physicianSelect.append($('<option>', {
@@ -627,6 +692,35 @@
                 }
             });
         });
+
+        $('#clearCase').on('click', function () {
+            
+            var id = $(".requestId").val();
+            console.log();
+            $.ajax({
+                url: '@Url.Action("ClearCase","AdminDashboard")',
+                type: 'POST',
+                data: { requestid: id },
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Request cleared",
+                            icon: "success"
+                        }).finally(() => {
+                            window.location.reload();
+                        });
+
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
     });
 
 
@@ -646,6 +740,16 @@
 
     $(document).on("click", ".blockcase", function () {
         $("#blockcaseModal").modal('show');
+        $(".requestId").val($(this).closest('tr').data('rid'));
+    });
+
+    $(document).on("click", ".transferCase", function () {
+        $("#transferCaseModal").modal('show');
+        $(".requestId").val($(this).closest('tr').data('rid'));
+    });
+
+    $(document).on("click", ".clearCase", function () {
+        $("#clearCaseModal").modal('show');
         $(".requestId").val($(this).closest('tr').data('rid'));
     });
 

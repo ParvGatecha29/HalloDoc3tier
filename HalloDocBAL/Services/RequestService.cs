@@ -190,7 +190,8 @@ namespace HalloDocBAL.Services
                 City = model.city,
                 Zipcode = model.zipcode,
                 Createddate = DateTime.Now,
-                Phonenumber = model.cphone
+                Phonenumber = model.cphone,
+                Email = model.cemail
             };
             await _businessRepository.AddBusiness(business);
 

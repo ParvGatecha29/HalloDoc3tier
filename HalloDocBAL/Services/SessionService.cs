@@ -16,6 +16,7 @@ namespace HalloDocBAL.Services
                 userInfo.Id = session.GetString("userId");
                 userInfo.Email = session.GetString("Email");
                 userInfo.Role = session.GetString("Role");
+                userInfo.Name = session.GetString("Name");
             }
 
             return userInfo;
@@ -28,6 +29,7 @@ namespace HalloDocBAL.Services
                 session.SetString("userId", user.Id);
                 session.SetString("Email", user.Email);
                 session.SetString("Role", user.Aspnetuserroles.FirstOrDefault().RoleId);
+                session.SetString("Name", user.Username);
             }
         }
     }

@@ -39,6 +39,8 @@ builder.Services.AddScoped<IRequestService, RequestService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAdminDashboardService, AdminDashboardService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 
 
 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
