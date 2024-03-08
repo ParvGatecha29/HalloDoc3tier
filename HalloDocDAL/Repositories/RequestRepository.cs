@@ -2,6 +2,7 @@
 using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -54,52 +55,83 @@ namespace HalloDocDAL.Repositories
 
         public List<AdminDashboardData> GetRequestsByStatus(int[] status)
         {
-            var data = _context.Requests
-    // Join Requests with RequestClient
-    .GroupJoin(_context.Requestclients,
-               request => request.Requestid,
-               client => client.Requestid,
-               (request, clientGroup) => new { request, clientGroup })
-    .SelectMany(
-        rc => rc.clientGroup.DefaultIfEmpty(),
-        (rc, client) => new { rc.request, client })
-    // Join the above with RequestStatusLog
-    .GroupJoin(_context.Requeststatuslogs,
-               rc => rc.request.Requestid,
-               status => status.Requestid,
-               (rc, statusGroup) => new { rc.request, rc.client, statusGroup })
-    .SelectMany(
-        rcs => rcs.statusGroup.DefaultIfEmpty(),
-        (rcs, status) => new { rcs.request, rcs.client, status })
-    // Join the above with Physician
-    .GroupJoin(_context.Physicians,
-               rcs => rcs.request.Physicianid,
-               physician => physician.Physicianid,
-               (rcs, physicianGroup) => new { rcs.request, rcs.client, rcs.status, physicianGroup })
-    .SelectMany(
-        rcsp => rcsp.physicianGroup.DefaultIfEmpty(),
-        (rcsp, physician) => new AdminDashboardData
-        {
-            requestId = rcsp.request.Requestid,
-            firstName = rcsp.client != null ? rcsp.client.Firstname : null,
-            lastName = rcsp.client != null ? rcsp.client.Lastname : null,
-            status = rcsp.request.Status,
-            requestor = rcsp.request.Firstname,
-            pname = physician != null ? physician.Firstname : null,
-            notes = rcsp.status != null ? rcsp.status.Notes : null,
-            requesttype = rcsp.request.Requesttypeid,
-            dobdate = rcsp.client != null ? rcsp.client.Intdate : null,
-            dobmonth = rcsp.client != null ? rcsp.client.Strmonth : null,
-            dobyear = rcsp.client != null ? rcsp.client.Intyear : null,
-            email = rcsp.client != null ? rcsp.client.Email : null,
-            requestDate = rcsp.request.Createddate,
-            address = rcsp.client != null ? rcsp.client.Street +","+ rcsp.client.City +","+ rcsp.client.State: null,
-            cphone = rcsp.request.Phonenumber,
-            phone = rcsp.client !=null ? rcsp.client.Phonenumber : null,
-            regionId = rcsp.client != null ? rcsp.client.Regionid : null,
+    //        var data = _context.Requests
+    //// Join Requests with RequestClient
+    //.GroupJoin(_context.Requestclients,
+    //           request => request.Requestid,
+    //           client => client.Requestid,
+    //           (request, clientGroup) => new { request, clientGroup })
+    //.SelectMany(
+    //    rc => rc.clientGroup.DefaultIfEmpty(),
+    //    (rc, client) => new { rc.request, client })
+    //// Join the above with RequestStatusLog
+    //.GroupJoin(_context.Requeststatuslogs,
+    //           rc => rc.request.Requestid,
+    //           status => status.Requestid,
+    //           (rc, statusGroup) => new { rc.request, rc.client, statusGroup })
+    //.SelectMany(
+    //    rcs => rcs.statusGroup.DefaultIfEmpty(),
+    //    (rcs, status) => new { rcs.request, rcs.client, status })
+    //// Join the above with Physician
+    //.GroupJoin(_context.Physicians,
+    //           rcs => rcs.request.Physicianid,
+    //           physician => physician.Physicianid,
+    //           (rcs, physicianGroup) => new { rcs.request, rcs.client, rcs.status, physicianGroup })
+    //.SelectMany(
+    //    rcsp => rcsp.physicianGroup.DefaultIfEmpty(),
+    //    (rcsp, physician) => new AdminDashboardData
+    //    {
+    //        requestId = rcsp.request.Requestid,
+    //        firstName = rcsp.client != null ? rcsp.client.Firstname : null,
+    //        lastName = rcsp.client != null ? rcsp.client.Lastname : null,
+    //        status = rcsp.request.Status,
+    //        requestor = rcsp.request.Firstname,
+    //        pname = physician != null ? physician.Firstname : null,
+    //        notes = rcsp.status != null ? rcsp.status.Notes : null,
+    //        requesttype = rcsp.request.Requesttypeid,
+    //        dobdate = rcsp.client != null ? rcsp.client.Intdate : null,
+    //        dobmonth = rcsp.client != null ? rcsp.client.Strmonth : null,
+    //        dobyear = rcsp.client != null ? rcsp.client.Intyear : null,
+    //        email = rcsp.client != null ? rcsp.client.Email : null,
+    //        requestDate = rcsp.request.Createddate,
+    //        address = rcsp.client != null ? rcsp.client.Street +","+ rcsp.client.City +","+ rcsp.client.State: null,
+    //        cphone = rcsp.request.Phonenumber,
+    //        phone = rcsp.client !=null ? rcsp.client.Phonenumber : null,
+    //        regionId = rcsp.client != null ? rcsp.client.Regionid : null,
 
-        }).Where(req => status.Contains(req.status)).ToList();
-            return data;
+    //    }).Where(req => status.Contains(req.status)).ToList();
+
+            List<Requestclient> reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Where(_ => status.Contains(_.Request.Status)).ToList();
+            List<AdminDashboardData> abc = new List<AdminDashboardData>();
+            foreach (var item in reqclnt)
+            {
+                AdminDashboardData def = new AdminDashboardData { 
+                    requestId = item.Requestid,
+                    firstName = item.Firstname,
+                    lastName = item.Lastname ?? "",
+                    email = item.Email ?? "",
+                    requestor = item.Request.Firstname ?? "",
+                    status = item.Request.Status,
+                    pname = item.Request.Physician != null ? item.Request.Physician.Firstname : "" ,
+                    requesttype = item.Request.Requesttypeid,
+                    dobdate = item.Intdate,
+                    dobmonth = item.Strmonth ?? "",
+                    dobyear = item.Intyear,
+                    requestDate = item.Request.Createddate,
+                    address = item.Street + item.City + item.State,
+                    cphone = item.Request.Phonenumber ?? "",
+                    phone = item.Phonenumber ?? "",
+                    regionId = item.Regionid
+                };
+                foreach(var item1 in item.Request.Requeststatuslogs)
+                {
+                    def.notes += item1.Notes;
+                }
+                abc.Add(def);
+            }
+
+
+            return abc;
         }
 
         public AdminDashboardData GetRequestById(int id)

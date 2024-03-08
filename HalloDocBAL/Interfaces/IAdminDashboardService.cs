@@ -17,6 +17,7 @@ namespace HalloDocBAL.Interfaces
         bool UpdateNotes(int id, string notes);
         bool CancelRequest(AdminDashboardData data);
         bool AssignRequest(AdminDashboardData data);
+        bool AgreeRequest(AdminDashboardData data);
         bool BlockRequest(AdminDashboardData data);
         bool ClearRequest(AdminDashboardData data);
         List<Physician> GetPhysiciansByRegion(int regionid);

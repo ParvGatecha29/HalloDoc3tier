@@ -1,0 +1,114 @@
+﻿@{
+    Layout = "_none";
+}
+
+<div class="container-fluid text-align-center mt-5 pt-5 justify-content-center col-md-6">
+    <div class="p-md-3 p-1 fs-5">
+        To provide best medical service, we cannot detemine the cost right away. If you are agree to our service, so we will provide care and follow-up until all care is completed.
+        So with this points, if you like us to provide care to you click on 'Agree' and we'll get stated immediately. If you do not agree simply click 'Cancel'.
+    </div>
+
+    <div class="text-align-center row mt-5">
+        <div class="col d-flex justify-content-center">
+            <button class="btn btn-success text-white" id="agree">I Agree</button>
+        </div>
+        <div class="col d-flex text-end justify-content-center">
+            <button class="btn btn-danger text-white cancelcase">Cancel</button>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="cancelcaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle">Cancel confirmation</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formcancel" method="post">
+                    <div class="form-group mb-3">
+                        <div class="mb-3 form-floating">
+                            <textarea class="form-control" placeholder="" id="info" style="height: 100px" name="info" required></textarea>
+                            <label for="info" class="floatingLabel"> Please provide a brief explanation for your cancellation </label>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-info text-white">Confirm</button>
+                        <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on("click", ".cancelcase", function () {
+        $("#cancelcaseModal").modal('show');
+        
+       
+    });
+    $(document).ready(function(){
+        let params = new URLSearchParams(location.search);
+        var rid = params.get('RequestId');
+
+        $("#agree").click(function () {
+            $.ajax({
+                url: '@Url.Action("AgreeCase","AdminDashboard")',
+                type: 'POST',
+                data: { Requestid: rid },
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "You agreed",
+                            icon: "success"
+                        })
+
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
+
+        $('#formcancel').on('submit', function (e) {
+            e.preventDefault();
+            var data = new FormData(this)
+
+            $.ajax({
+                url: '@Url.Action("CancelCase","AdminDashboard")',
+                type: 'POST',
+                data: { Requestid: params.get('RequestId'), info : $("#info").val()},
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Request cancelled succesfully",
+                            icon: "success"
+                        }).finally(() => {
+                            window.location.reload();
+                        });
+
+                    }
+                    else {
+                        if (result.message != null) {
+                            alert(result.message)
+                        }
+                        else {
+                            window.location.href = "/Login/PatientLogin";
+                        }
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
+    })
+</script>

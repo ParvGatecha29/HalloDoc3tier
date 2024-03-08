@@ -27,6 +27,20 @@ btn1.addEventListener("click", function () {
     localStorage.setItem("theme", theme);
 });
 
+var date = new Date();
+
+var day = date.getDate();
+var month = date.getMonth() + 1;
+var year = date.getFullYear();
+
+if (month < 10) month = "0" + month;
+if (day < 10) day = "0" + day;
+
+var today = year + "-" + month + "-" + day;
+document.getElementById("dob").value = today;
+
+$('#dob').attr('max', today);
+
 
 function upload(file){
     var name = file.files[0].name;

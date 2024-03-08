@@ -44,6 +44,7 @@ public class AdminDashboardController : Controller
     public IActionResult NewCasePartial()
     {
         var dash = new AdminDashboard();
+        dash.state = 1;
         dash.Data = _adminDashboardService.GetRequestsByStatus(newcase);
         dash.regions = _adminDashboardService.GetAllRegions();
         return PartialView("_CaseTable",dash);
@@ -51,6 +52,7 @@ public class AdminDashboardController : Controller
     public IActionResult PendingCasePartial()
     {
         var dash = new AdminDashboard();
+        dash.state = 2;
         dash.Data = _adminDashboardService.GetRequestsByStatus(pendingcase);
         dash.regions = _adminDashboardService.GetAllRegions();
         return PartialView("_CaseTable", dash);
@@ -58,6 +60,7 @@ public class AdminDashboardController : Controller
     public IActionResult ActiveCasePartial()
     {
         var dash = new AdminDashboard();
+        dash.state = 3;
         dash.Data = _adminDashboardService.GetRequestsByStatus(activecase);
         dash.regions = _adminDashboardService.GetAllRegions();
         return PartialView("_CaseTable", dash);
@@ -65,6 +68,7 @@ public class AdminDashboardController : Controller
     public IActionResult ConcludeCasePartial()
     {
         var dash = new AdminDashboard();
+        dash.state = 4;
         dash.Data = _adminDashboardService.GetRequestsByStatus(concludecase);
         dash.regions = _adminDashboardService.GetAllRegions();
         return PartialView("_CaseTable", dash);
@@ -72,6 +76,7 @@ public class AdminDashboardController : Controller
     public IActionResult ToCloseCasePartial()
     {
         var dash = new AdminDashboard();
+        dash.state = 5;
         dash.Data = _adminDashboardService.GetRequestsByStatus(toclosecase);
         dash.regions = _adminDashboardService.GetAllRegions();
         return PartialView("_CaseTable", dash);
@@ -79,6 +84,7 @@ public class AdminDashboardController : Controller
     public IActionResult UnpaidCasePartial()
     {
         var dash = new AdminDashboard();
+        dash.state = 6;
         dash.Data = _adminDashboardService.GetRequestsByStatus(unpaidcase);
         dash.regions = _adminDashboardService.GetAllRegions();
         return PartialView("_CaseTable", dash);
@@ -131,6 +137,16 @@ public class AdminDashboardController : Controller
             notes = info
         };
         _adminDashboardService.AssignRequest(dash);
+        return Json(new { success = true });
+    }
+
+    public JsonResult AgreeCase(int Requestid)
+    {
+        var dash = new AdminDashboardData
+        {
+            requestId = Requestid,
+        };
+        _adminDashboardService.AgreeRequest(dash);
         return Json(new { success = true });
     }
 
@@ -232,6 +248,18 @@ public class AdminDashboardController : Controller
             Createdby = user.Name
         };
         _orderService.CreateOrder(od);
+        return Json(new {success = true});
+    }
+
+    public JsonResult SendAgreement(IFormCollection formcollection)
+    {
+        var email = formcollection["sendemail"];
+        var requestid = formcollection["requestId"];
+        var link = "https://localhost:44319/Home/Agreement?RequestId="+requestid;
+        var subject = "Agreement";
+        var body = $"You can view your agreement <a href='{link}'>here</a>.";
+
+        _emailService.SendEmail(email, subject, body);
         return Json(new {success = true});
     }
 }

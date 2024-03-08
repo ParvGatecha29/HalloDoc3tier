@@ -34,4 +34,9 @@ public class HomeController : Controller
         HttpContext.Session.Clear();
         return "<script>window.location.href = '/Login/PatientLogin'</script>";
     }
+
+    public IActionResult Agreement()
+    {
+        return View();
+    }
 }

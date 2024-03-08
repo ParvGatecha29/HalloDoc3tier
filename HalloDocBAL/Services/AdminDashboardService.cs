@@ -95,6 +95,12 @@ namespace HalloDocBAL.Services
             return true;
         }
 
+        public bool AgreeRequest(AdminDashboardData data)
+        {
+            _requestRepository.transferRequest(data, 4);
+            return true;
+        }
+
         public bool BlockRequest(AdminDashboardData data)
         {
             _requestRepository.transferRequest(data, 11);

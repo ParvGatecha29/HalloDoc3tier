@@ -265,7 +265,7 @@
     </div>
 </div>
 
-<div id="partial-load">
+<div id="partial-load" data-state="">
 </div>
 
 <div class="modal fade" id="sendLinkModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -321,6 +321,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         const newTabButton = document.getElementById('new-tab');
+        $("#partial-load").attr("data-state") = "1";
         newTabButton.click();
     });
 

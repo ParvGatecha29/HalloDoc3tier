@@ -1,17 +1,19 @@
 ﻿@model HalloDocDAL.Model.AdminDashboard
 @{
     string[] colors = { "#60bc60", "#ee9125", "#007fc7", "#e36478", "#943db8" };
-
     @if (Model.Data != null && Model.Data.Count > 0)
     {
         @foreach (var obj in Model.Data)
         {
-            <div class="d-md-none">
+            <div class="d-md-none tr" data-rid="@obj.requestId">
                 <div class="bg-info-subtle " data-bs-toggle="collapse" data-bs-target="#collapseexample_@obj.requestId"
                      aria-expanded="false" aria-controls="collapseexample">
+                    <div class="td" name='reqtype'>
+                     @obj.requesttype
+                     </div>
                     <div class="flex-column gap-2 border-bottom border-5 pt-3 pb-5 px-4">
                         <div class="d-flex  justify-content-between mb-3">
-                            <span class="mobilesearch fs-5 ">@obj.name</span>
+                            <span class="mobilesearch fs-5 td" name="Name">@obj.firstName @obj.lastName</span>
                             @if (obj.requesttype == 4)
                             {
                                 <div class="d-flex align-items-center">
@@ -59,11 +61,11 @@
                         </div>
                         <div class="d-flex align-items-center ">
                             <i class="fa-regular fa-envelope fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
-                            <span class="fs-5">Email: @obj.email</span>
+                            <span class="fs-5 ">Email: <span class="email">@obj.email</span></span>
                         </div>
                         <div class="d-flex align-items-center ">
                             <i class="fas fa-phone fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
-                            <span class="fs-5">Phone: @obj.phone</span>
+                            <span class="fs-5 ">Phone: <span class="phone">@obj.phone</span></span>
                         </div>
                         <div class="d-flex align-items-center ">
                             <i class="fa-regular fa-user fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
@@ -99,7 +101,7 @@
                                 </div>
                                 <div class="d-flex gap-3">
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5 clearCase" style="background-color: #EE9125">Clear Case</a>
-                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Send Agreement</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5 sendAgreement" style="background-color: #228B22">Send Agreement</a>
                                 </div>
                             </div>
                         }
@@ -157,7 +159,7 @@
         }
     }
 
-    @if (Model != null)
+    @if (Model!=null)
     {
         <div class="tablediv d-none d-md-block">
             <table class="table caseTable" id="adminTable">
@@ -165,43 +167,44 @@
                     <tr>
                         <th class="d-none" scope="col">RequestType</th>
                         <th class="d-none" scope="col">RegionId</th>
+
                         <th scope="col" colspan="2">Name</th>
 
-                        @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 3 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 6 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
+                        @if (Model.state != 6 )
                         {
-                            <th scope="col">Date Of Birth</th>
+                            <th scope="col">Dat!e Of Birth</th>
                         }
 
 
-                        @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 4 || Model.Data[0].status == 5)
+                        @if (Model.state == 1 || Model.state == 2 || Model.state == 3)
                         {
                             <th scope="col">Requestor</th>
                         }
 
-                        @if (Model.Data[0].status == 3 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
+                        @if (Model.state == 5)
                         {
                             <th scope="col">Region</th>
                         }
 
-                        @if (Model.Data[0].status == 1)
+                        @if (Model.state == 1)
                         {
                             <th scope="col">Requested Date</th>
                         }
 
-                        @if (Model.Data[0].status == 9 || Model.Data[0].status == 2 || Model.Data[0].status == 3 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 6 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
+                        @if (Model.state != 1)
                         {
                             <th scope="col">Physician Name</th>
                             <th scope="col">Date Of Service</th>
                         }
 
-                        @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 6 || Model.Data[0].status == 9)
+                        @if (Model.state == 1 || Model.state == 2 || Model.state == 3 || Model.state == 4 || Model.state == 6 )
                         {
                             <th scope="col">Phone</th>
                         }
 
                         <th scope="col">Address</th>
 
-                        @if (Model.Data[0].status == 1 || Model.Data[0].status == 2 || Model.Data[0].status == 3 || Model.Data[0].status == 4 || Model.Data[0].status == 5 || Model.Data[0].status == 7 || Model.Data[0].status == 8)
+                        @if (Model.state != 6)
                         {
                             <th scope="col">Notes</th>
                         }
@@ -216,15 +219,18 @@
 
                     @foreach (var obj in Model.Data)
                     {
-                        <tr style="background-color:@colors[obj.requesttype - 1] !important; color:white !important" data-rid="@obj.requestId" class="align-middle">
-                            <td class="d-none">@obj.requesttype</td>
+                        <tr style="background-color:@colors[obj.requesttype - 1] !important; color:white !important" data-rid="@obj.requestId" class="align-middle tr">
+                            <td class="d-none td" name="reqtype">@obj.requesttype</td>
                             <td class="d-none">@obj.regionId</td>
-                            <td name="Name">@obj.firstName @obj.lastName</td>
+
+                            <td class="td" name="Name">@obj.firstName @obj.lastName</td>
+
                             <td>
-                                <a type="button" class="btn border border-light text-light" href="mailto:@obj.email">
+                                <a type="button" name="email" class="btn border border-light text-light email" href="mailto:@obj.email">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
                                         <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
                                     </svg>
+                                    @obj.email
                                 </a>
                             </td>
                             @if (obj.status == 1 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 7 || obj.status == 8)
@@ -256,7 +262,7 @@
                             @if (obj.status == 1 || obj.status == 2 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 9)
                             {
                                 <td>
-                                    <button type="button" class="btn btn-outline-light"><i class="bi bi-telephone text-white"></i>@obj.phone</button><br>(Patient)
+                                    <button type="button" class="btn btn-outline-light phone"><i class="bi bi-telephone text-white"></i>@obj.phone</button><br>(Patient)
                                     @if (obj.cphone != null && obj.requesttype != 1)
                                     {
                                         <br>
@@ -330,7 +336,7 @@
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
                                             <li><a class="dropdown-item theme-color transferCase" href="#"><i class="fa-regular fa-note-sticky"></i> Transfer</a></li>
                                             <li><a class="dropdown-item theme-color clearCase" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-solid fa-file-lines"></i> Send Agreement</a></li>
+                                            <li><a class="dropdown-item theme-color sendAgreement" href="#"><i class="fa-solid fa-file-lines"></i> Send Agreement</a></li>
                                         </ul>
                                     </div>
                                 }
@@ -551,6 +557,49 @@
     </div>
 </div>
 
+<div class="modal fade" id="sendAgreementModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle">Send Agreement</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex align-items-center">
+                    <div class="border border-1 rounded-5 m-1" id="circle" style="width: 15px; height:15px;"></div>
+                    <span class="fs-5" id="sendtype"></span>
+                </div>
+                <p class="text-secondary">To send the agreement please make sure you are updating the correct contact information below for the responsible party</p>
+                <form id="sendAgreementForm" method="post">
+
+                    <input type="hidden" class="requestId" value="" name="requestId" id="requestId" />
+
+                    <div class="form-group mb-3">
+                        <div class="form-group pb-3 form-floating">
+                            <input type="text" placeholder="Phone Number" class="form-control" id="sendnumber" name="sendnumber"
+                                   aria-describedby="emailHelp">
+                            <label for="exampleInputEmail1" class="floating-label">Phone Number</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <div class="form-group pb-3 form-floating">
+                            <input type="text" placeholder="Email" class="form-control" id="sendemail" name="sendemail"
+                                   aria-describedby="emailHelp">
+                            <label for="exampleInputEmail1" class="floating-label">Email</label>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-info text-white">Confirm</button>
+                        <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade" id="clearCaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -592,10 +641,10 @@
 
                     }
                     else {
-                        if(result.message != null){
+                        if (result.message != null) {
                             alert(result.message)
                         }
-                        else{
+                        else {
                             window.location.href = "/Login/PatientLogin";
                         }
                     }
@@ -694,7 +743,7 @@
         });
 
         $('#clearCase').on('click', function () {
-            
+
             var id = $(".requestId").val();
             console.log();
             $.ajax({
@@ -721,6 +770,37 @@
                 }
             });
         });
+
+        $('#sendAgreementForm').on('submit', function (e) {
+            e.preventDefault();
+            var data = new FormData(this)
+            $("#sendAgreementModal").modal('hide');
+            $.ajax({
+                url: '@Url.Action("SendAgreement","AdminDashboard")',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Email Sent",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
     });
 
 
@@ -729,28 +809,56 @@
 <script>
     $(document).on("click", ".cancelcase", function () {
         $("#cancelcaseModal").modal('show');
-        $("#cancelcaseName").text($(this).closest('tr').find("td[name='Name']").text());
-        $(".requestId").val($(this).closest('tr').data('rid'));
+        $("#cancelcaseName").text($(this).closest('.tr').find(".td[name='Name']").text());
+        $(".requestId").val($(this).closest('.tr').data('rid'));
     });
 
     $(document).on("click", ".assigncase", function () {
         $("#assignCaseModal").modal('show');
-        $(".requestId").val($(this).closest('tr').data('rid'));
+        $(".requestId").val($(this).closest('.tr').data('rid'));
     });
 
     $(document).on("click", ".blockcase", function () {
         $("#blockcaseModal").modal('show');
-        $(".requestId").val($(this).closest('tr').data('rid'));
+        $(".requestId").val($(this).closest('.tr').data('rid'));
     });
 
     $(document).on("click", ".transferCase", function () {
         $("#transferCaseModal").modal('show');
-        $(".requestId").val($(this).closest('tr').data('rid'));
+        $(".requestId").val($(this).closest('.tr').data('rid'));
     });
 
     $(document).on("click", ".clearCase", function () {
         $("#clearCaseModal").modal('show');
-        $(".requestId").val($(this).closest('tr').data('rid'));
+        $(".requestId").val($(this).closest('.tr').data('rid'));
     });
 
+    $(document).on("click", ".sendAgreement", function () {
+        $("#sendAgreementModal").modal('show');
+        $(".requestId").val($(this).closest('.tr').data('rid'));
+        $("#sendnumber").val($(this).closest('.tr').find(".phone").text());
+        $("#sendemail").val($(this).closest('.tr').find(".email").text().trim());
+
+        var rt = $(this).closest('.tr').find(".td[name='reqtype']").text();
+        
+        if (rt == 1) {
+            $("#sendtype").text("Patient");
+            $("#circle").css("background-color", "#60bc60");
+        }
+        else if (rt == 2) {
+            $("#sendtype").text("Family/Friend");
+            $("#circle").css("background-color", "#ee9125");
+
+        }
+        else if (rt == 3) {
+            $("#sendtype").text("Concierge");
+            $("#circle").css("background-color", "#007fc7");
+
+        }
+        else {
+            $("#sendtype").text("Business");
+            $("#circle").css("background-color", "#e36478");
+
+        }
+    });
 </script>

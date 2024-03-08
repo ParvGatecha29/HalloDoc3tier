@@ -13,5 +13,7 @@ namespace HalloDocDAL.Model
         public List<Physician> physicians { get; set; }
         public List<Region> regions { get; set; }
         public AdminDashboardData request { get; set; }
+
+        public int state { get; set; }
     }
 }
