@@ -38,6 +38,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Emaillog> Emaillogs { get; set; }
 
+    public virtual DbSet<EncounterForm> EncounterForms { get; set; }
+
     public virtual DbSet<Healthprofessional> Healthprofessionals { get; set; }
 
     public virtual DbSet<Healthprofessionaltype> Healthprofessionaltypes { get; set; }
@@ -428,6 +430,30 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Subjectname)
                 .HasMaxLength(200)
                 .HasColumnName("subjectname");
+        });
+
+        modelBuilder.Entity<EncounterForm>(entity =>
+        {
+            entity.HasKey(e => e.EncounterFormId).HasName("EncounterForm_pkey");
+
+            entity.ToTable("EncounterForm");
+
+            entity.Property(e => e.Abd).HasColumnName("ABD");
+            entity.Property(e => e.Cv).HasColumnName("CV");
+            entity.Property(e => e.Hr).HasColumnName("HR");
+            entity.Property(e => e.Rr).HasColumnName("RR");
+
+            entity.HasOne(d => d.Admin).WithMany(p => p.EncounterForms)
+                .HasForeignKey(d => d.AdminId)
+                .HasConstraintName("EncounterForm_AdminId_fkey");
+
+            entity.HasOne(d => d.Physician).WithMany(p => p.EncounterForms)
+                .HasForeignKey(d => d.PhysicianId)
+                .HasConstraintName("EncounterForm_PhysicianId_fkey");
+
+            entity.HasOne(d => d.Request).WithMany(p => p.EncounterForms)
+                .HasForeignKey(d => d.RequestId)
+                .HasConstraintName("EncounterForm_RequestId_fkey");
         });
 
         modelBuilder.Entity<Healthprofessional>(entity =>

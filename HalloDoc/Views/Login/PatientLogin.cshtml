@@ -59,7 +59,9 @@
                 Email: $('#email').val(),
                 Password: $('#pass').val()
             };
-
+            let params = new URLSearchParams(location.search);
+            var review = params.get('review');
+            var requestid = params.get('RequestId');
             $.ajax({
                 url:'@Url.Action("PatientLogin","Login")',
                 type:'POST',
@@ -74,7 +76,13 @@
                             showConfirmButton: false,
                             timer: 1500
                         }).finally(() => {
-                            window.location.href = result.redirectUrl;
+                            if (review) {
+                                window.location.href = "https://localhost:44319/Home/Agreement?RequestId=" + requestid;
+                            }
+                            else {
+                                window.location.href = result.redirectUrl;
+                            }
+                           
                         });
                     }
                     else {

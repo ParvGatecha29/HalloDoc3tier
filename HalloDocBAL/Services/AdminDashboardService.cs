@@ -1,4 +1,5 @@
-﻿using HalloDocBAL.Interfaces;
+﻿using HalloDoc_DAL.CustomModels;
+using HalloDocBAL.Interfaces;
 using HalloDocDAL.Contacts;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
@@ -123,6 +124,47 @@ namespace HalloDocBAL.Services
         {
             _requestWiseFilesRepository.DeleteFile(fileid);
             return true;
+        }
+
+        public bool UpdateEncounterForm(ViewEncounterForm data)
+        {
+            var model = new EncounterForm
+            {
+                RequestId = data.RequestId,
+                HistoryOfPresentIllnessOrInjury = data.HistoryOfPresentIllness,
+                MedicalHistory = data.MedicalHistory,
+                Medications = data.Medications,
+                Allergies = data.Allergies,
+                Temp = data.Temperature,
+                Hr = data.HR,
+                Rr = data.RR,
+                BloodPressureSystolic = data.BPSystolic,
+                BloodPressureDiastolic = data.BPDiastolic,
+                O2 = data.O2,
+                Pain = data.Pain,
+                Heent = data.Heent,
+                Cv = data.CV,
+                Chest = data.Chest,
+                Abd = data.ABD,
+                Extremeties = data.Extr,
+                Skin = data.Skin,
+                Neuro = data.Neuro,
+                Other = data.Other,
+                Diagnosis = data.Diagnosis,
+                TreatmentPlan = data.TreatmentPlan,
+                MedicationsDispensed = data.MedicationDispensed,
+                Procedures = data.Procedures,
+                FollowUp = data.FollowUp,
+                IsFinalize = data.IsFinalizeDB
+            };
+            _requestRepository.EditEncounterForm(model);
+            return true;
+        }
+
+        public EncounterForm GetEncounterForm(int requestId)
+        {
+            var data = _requestRepository.GetEncounterForm(requestId);
+            return data;
         }
     }
 }

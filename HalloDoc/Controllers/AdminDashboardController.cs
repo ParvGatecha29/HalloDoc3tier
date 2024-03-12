@@ -8,6 +8,8 @@ using HalloDocDAL.Contacts;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Routing.Constraints;
 using HalloDocDAL.Repositories;
+using HalloDoc_DAL.CustomModels;
+using System.Globalization;
 
 namespace HalloDoc.Controllers;
 [AuthManager("1")]
@@ -20,9 +22,9 @@ public class AdminDashboardController : Controller
     private readonly IOrderService _orderService;
     int[] newcase = { 1 };
     int[] pendingcase = { 2 };
-    int[] activecase = { 4,5 };
+    int[] activecase = { 4, 5 };
     int[] concludecase = { 6 };
-    int[] toclosecase = { 3,7,8 };
+    int[] toclosecase = { 3, 7, 8 };
     int[] unpaidcase = { 9 };
     public AdminDashboardController(IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService)
     {
@@ -33,7 +35,7 @@ public class AdminDashboardController : Controller
         _orderService = orderService;
     }
 
-   
+
     public IActionResult AdminDashboard()
     {
         var dash = new AdminDashboard();
@@ -47,7 +49,7 @@ public class AdminDashboardController : Controller
         dash.state = 1;
         dash.Data = _adminDashboardService.GetRequestsByStatus(newcase);
         dash.regions = _adminDashboardService.GetAllRegions();
-        return PartialView("_CaseTable",dash);
+        return PartialView("_CaseTable", dash);
     }
     public IActionResult PendingCasePartial()
     {
@@ -90,11 +92,11 @@ public class AdminDashboardController : Controller
         return PartialView("_CaseTable", dash);
     }
 
-    
+
     public IActionResult ViewCase(int requestid)
     {
         var dash = new AdminDashboard();
-        
+
         dash.regions = _adminDashboardService.GetAllRegions();
         dash.request = _adminDashboardService.GetRequestById(requestid);
         return View("ViewCase", dash);
@@ -102,7 +104,7 @@ public class AdminDashboardController : Controller
     public IActionResult ViewNotes(int requestid)
     {
         var dash = _adminDashboardService.GetNotes(requestid);
-        return View("ViewNotes", dash);
+        return PartialView("ViewNotes", dash);
     }
     public JsonResult UpdateNotes(int requestid, string notes)
     {
@@ -150,7 +152,7 @@ public class AdminDashboardController : Controller
         return Json(new { success = true });
     }
 
-    public JsonResult BlockCase(int Requestid,string info)
+    public JsonResult BlockCase(int Requestid, string info)
     {
         var dash = new AdminDashboardData
         {
@@ -206,7 +208,7 @@ public class AdminDashboardController : Controller
         {
             var file = await _requestWiseFilesRepository.GetFile(document);
 
-            filesToSend.Add(Path.Combine("wwwroot","documents",requestid.ToString(),file.Filename));
+            filesToSend.Add(Path.Combine("wwwroot", "documents", requestid.ToString(), file.Filename));
         }
 
         _emailService.SendEmailWithAttachment(email, subject, body, filesToSend);
@@ -248,18 +250,67 @@ public class AdminDashboardController : Controller
             Createdby = user.Name
         };
         _orderService.CreateOrder(od);
-        return Json(new {success = true});
+        return Json(new { success = true });
     }
 
     public JsonResult SendAgreement(IFormCollection formcollection)
     {
         var email = formcollection["sendemail"];
         var requestid = formcollection["requestId"];
-        var link = "https://localhost:44319/Home/Agreement?RequestId="+requestid;
+        var link = "https://localhost:44319/Login/PatientLogin?RequestId=" + requestid + "&review=true";
         var subject = "Agreement";
         var body = $"You can view your agreement <a href='{link}'>here</a>.";
 
         _emailService.SendEmail(email, subject, body);
-        return Json(new {success = true});
+        return Json(new { success = true });
+    }
+
+    public IActionResult Encounter(int requestid)
+    {
+        string[] format = { "dd/MMMM/yyyy", "d/MMMM/yyyy" };
+        AdminDashboardData ad = _adminDashboardService.GetRequestById(requestid);
+        EncounterForm ef = _adminDashboardService.GetEncounterForm(requestid);
+        var data = new ViewEncounterForm
+        {
+            FirstName = ad.firstName,
+            LastName = ad.lastName,
+            Location = ad.address,
+            DateOfBirth = DateTime.ParseExact(ad.dobdate + "/" + ad.dobmonth + "/" + ad.dobyear, format, CultureInfo.InvariantCulture),
+            DateOfService = ad.reqdate.ToString(),
+            Email = ad.email,
+            PhoneNumber = ad.phone,
+            HistoryOfPresentIllness = ef.HistoryOfPresentIllnessOrInjury,
+            MedicalHistory = ef.MedicalHistory,
+            Medications = ef.Medications,
+            Allergies = ef.Allergies,
+            Temperature = ef.Temp,
+            HR = ef.Hr,
+            RR = ef.Rr,
+            BPSystolic = ef.BloodPressureSystolic,
+            BPDiastolic = ef.BloodPressureDiastolic,
+            O2 = ef.O2,
+            Pain = ef.Pain,
+            Heent = ef.Heent,
+            CV = ef.Cv,
+            Chest = ef.Chest,
+            ABD = ef.Abd,
+            Extr = ef.Extremeties,
+            Skin = ef.Skin,
+            Neuro = ef.Neuro,
+            Other = ef.Other,
+            Diagnosis = ef.Diagnosis,
+            TreatmentPlan = ef.TreatmentPlan,
+            MedicationDispensed = ef.MedicationsDispensed,
+            Procedures = ef.Procedures,
+            FollowUp = ef.FollowUp
+        };
+        return View(data);
+    }
+
+    public JsonResult EditEncounterForm(ViewEncounterForm model)
+    {
+        _adminDashboardService.UpdateEncounterForm(model);
+        return Json(new { success = true });
     }
 }
+

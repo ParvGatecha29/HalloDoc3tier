@@ -1,4 +1,5 @@
-﻿using HalloDocDAL.Contacts;
+﻿using HalloDoc_DAL.CustomModels;
+using HalloDocDAL.Contacts;
 using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
@@ -48,71 +49,72 @@ namespace HalloDocDAL.Repositories
                     requestId = r.Requestid,
                     requestDate = r.Createddate,
                     regionId = rc.Regionid,
-                    
+
                 }).ToList();
             return data;
         }
 
         public List<AdminDashboardData> GetRequestsByStatus(int[] status)
         {
-    //        var data = _context.Requests
-    //// Join Requests with RequestClient
-    //.GroupJoin(_context.Requestclients,
-    //           request => request.Requestid,
-    //           client => client.Requestid,
-    //           (request, clientGroup) => new { request, clientGroup })
-    //.SelectMany(
-    //    rc => rc.clientGroup.DefaultIfEmpty(),
-    //    (rc, client) => new { rc.request, client })
-    //// Join the above with RequestStatusLog
-    //.GroupJoin(_context.Requeststatuslogs,
-    //           rc => rc.request.Requestid,
-    //           status => status.Requestid,
-    //           (rc, statusGroup) => new { rc.request, rc.client, statusGroup })
-    //.SelectMany(
-    //    rcs => rcs.statusGroup.DefaultIfEmpty(),
-    //    (rcs, status) => new { rcs.request, rcs.client, status })
-    //// Join the above with Physician
-    //.GroupJoin(_context.Physicians,
-    //           rcs => rcs.request.Physicianid,
-    //           physician => physician.Physicianid,
-    //           (rcs, physicianGroup) => new { rcs.request, rcs.client, rcs.status, physicianGroup })
-    //.SelectMany(
-    //    rcsp => rcsp.physicianGroup.DefaultIfEmpty(),
-    //    (rcsp, physician) => new AdminDashboardData
-    //    {
-    //        requestId = rcsp.request.Requestid,
-    //        firstName = rcsp.client != null ? rcsp.client.Firstname : null,
-    //        lastName = rcsp.client != null ? rcsp.client.Lastname : null,
-    //        status = rcsp.request.Status,
-    //        requestor = rcsp.request.Firstname,
-    //        pname = physician != null ? physician.Firstname : null,
-    //        notes = rcsp.status != null ? rcsp.status.Notes : null,
-    //        requesttype = rcsp.request.Requesttypeid,
-    //        dobdate = rcsp.client != null ? rcsp.client.Intdate : null,
-    //        dobmonth = rcsp.client != null ? rcsp.client.Strmonth : null,
-    //        dobyear = rcsp.client != null ? rcsp.client.Intyear : null,
-    //        email = rcsp.client != null ? rcsp.client.Email : null,
-    //        requestDate = rcsp.request.Createddate,
-    //        address = rcsp.client != null ? rcsp.client.Street +","+ rcsp.client.City +","+ rcsp.client.State: null,
-    //        cphone = rcsp.request.Phonenumber,
-    //        phone = rcsp.client !=null ? rcsp.client.Phonenumber : null,
-    //        regionId = rcsp.client != null ? rcsp.client.Regionid : null,
+            //        var data = _context.Requests
+            //// Join Requests with RequestClient
+            //.GroupJoin(_context.Requestclients,
+            //           request => request.Requestid,
+            //           client => client.Requestid,
+            //           (request, clientGroup) => new { request, clientGroup })
+            //.SelectMany(
+            //    rc => rc.clientGroup.DefaultIfEmpty(),
+            //    (rc, client) => new { rc.request, client })
+            //// Join the above with RequestStatusLog
+            //.GroupJoin(_context.Requeststatuslogs,
+            //           rc => rc.request.Requestid,
+            //           status => status.Requestid,
+            //           (rc, statusGroup) => new { rc.request, rc.client, statusGroup })
+            //.SelectMany(
+            //    rcs => rcs.statusGroup.DefaultIfEmpty(),
+            //    (rcs, status) => new { rcs.request, rcs.client, status })
+            //// Join the above with Physician
+            //.GroupJoin(_context.Physicians,
+            //           rcs => rcs.request.Physicianid,
+            //           physician => physician.Physicianid,
+            //           (rcs, physicianGroup) => new { rcs.request, rcs.client, rcs.status, physicianGroup })
+            //.SelectMany(
+            //    rcsp => rcsp.physicianGroup.DefaultIfEmpty(),
+            //    (rcsp, physician) => new AdminDashboardData
+            //    {
+            //        requestId = rcsp.request.Requestid,
+            //        firstName = rcsp.client != null ? rcsp.client.Firstname : null,
+            //        lastName = rcsp.client != null ? rcsp.client.Lastname : null,
+            //        status = rcsp.request.Status,
+            //        requestor = rcsp.request.Firstname,
+            //        pname = physician != null ? physician.Firstname : null,
+            //        notes = rcsp.status != null ? rcsp.status.Notes : null,
+            //        requesttype = rcsp.request.Requesttypeid,
+            //        dobdate = rcsp.client != null ? rcsp.client.Intdate : null,
+            //        dobmonth = rcsp.client != null ? rcsp.client.Strmonth : null,
+            //        dobyear = rcsp.client != null ? rcsp.client.Intyear : null,
+            //        email = rcsp.client != null ? rcsp.client.Email : null,
+            //        requestDate = rcsp.request.Createddate,
+            //        address = rcsp.client != null ? rcsp.client.Street +","+ rcsp.client.City +","+ rcsp.client.State: null,
+            //        cphone = rcsp.request.Phonenumber,
+            //        phone = rcsp.client !=null ? rcsp.client.Phonenumber : null,
+            //        regionId = rcsp.client != null ? rcsp.client.Regionid : null,
 
-    //    }).Where(req => status.Contains(req.status)).ToList();
+            //    }).Where(req => status.Contains(req.status)).ToList();
 
-            List<Requestclient> reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Where(_ => status.Contains(_.Request.Status)).ToList();
+            List<Requestclient> reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Where(_ => status.Contains(_.Request.Status)).ToList();
             List<AdminDashboardData> abc = new List<AdminDashboardData>();
             foreach (var item in reqclnt)
             {
-                AdminDashboardData def = new AdminDashboardData { 
+                AdminDashboardData def = new AdminDashboardData
+                {
                     requestId = item.Requestid,
                     firstName = item.Firstname,
                     lastName = item.Lastname ?? "",
                     email = item.Email ?? "",
                     requestor = item.Request.Firstname ?? "",
                     status = item.Request.Status,
-                    pname = item.Request.Physician != null ? item.Request.Physician.Firstname : "" ,
+                    pname = item.Request.Physician != null ? item.Request.Physician.Firstname : "",
                     requesttype = item.Request.Requesttypeid,
                     dobdate = item.Intdate,
                     dobmonth = item.Strmonth ?? "",
@@ -121,9 +123,10 @@ namespace HalloDocDAL.Repositories
                     address = item.Street + item.City + item.State,
                     cphone = item.Request.Phonenumber ?? "",
                     phone = item.Phonenumber ?? "",
-                    regionId = item.Regionid
+                    regionId = item.Regionid,
+                    isFinalized = item.Request.EncounterForms.FirstOrDefault(x => x.RequestId == item.Requestid) != null ? item.Request.EncounterForms.FirstOrDefault(x => x.RequestId == item.Requestid).IsFinalize : false
                 };
-                foreach(var item1 in item.Request.Requeststatuslogs)
+                foreach (var item1 in item.Request.Requeststatuslogs)
                 {
                     def.notes += item1.Notes;
                 }
@@ -162,7 +165,7 @@ namespace HalloDocDAL.Repositories
             return data;
         }
 
-        
+
 
         public List<Dashboard> GetRequestByEmail(string email)
         {
@@ -194,15 +197,20 @@ namespace HalloDocDAL.Repositories
         }
         public AdminDashboardData GetNotes(int id)
         {
-            var data = _context.Requeststatuslogs.Join(_context.Requestnotes,
-                rsl => rsl.Requestid, rn => rn.Requestid,
-                (rsl, rn) => new AdminDashboardData
-                {
-                    requestId = rsl.Requestid,
-                    adminNotes = rn.Adminnotes,
-                    physicianNotes = rn.Physiciannotes,
-                    transferNotes = _context.Requeststatuslogs.Where(r=> r.Requestid == id).Select(r => r.Notes).ToList(),
-                }).FirstOrDefault(x=> x.requestId == id);
+
+
+
+            Requestnote rn = _context.Requestnotes.Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).FirstOrDefault(x => x.Requestid == id);
+            var data = new AdminDashboardData
+            {
+                requestId = rn.Requestid,
+                adminNotes = rn.Adminnotes,
+                physicianNotes = rn.Physiciannotes,
+            };
+            foreach (var item in rn.Request.Requeststatuslogs)
+            {
+                data.transferNotes.Add(item.Notes);
+            }
             return data;
         }
         public bool AddNotes(AdminDashboardData data)
@@ -210,19 +218,19 @@ namespace HalloDocDAL.Repositories
             var note = new Requestnote
             {
                 Requestid = data.requestId,
-                Adminnotes = data.notes,
+                Adminnotes = data.adminNotes,
                 Createddate = DateTime.Now,
                 Createdby = "1"
             };
             _context.Requestnotes.Add(note);
-
+            _context.SaveChanges();
             return true;
         }
         public bool UpdateNotes(AdminDashboardData data)
         {
-            var note = _context.Requestnotes.FirstOrDefault(x=> x.Requestid == data.requestId);
+            var note = _context.Requestnotes.FirstOrDefault(x => x.Requestid == data.requestId);
             note.Adminnotes = data.adminNotes;
-            
+
             _context.Requestnotes.Update(note);
             _context.SaveChanges();
             return true;
@@ -271,7 +279,7 @@ namespace HalloDocDAL.Repositories
                 _context.Blockrequests.Add(req);
                 _context.Requests.Update(item);
             }
-            
+
             _context.SaveChanges();
             return true;
         }
@@ -280,5 +288,50 @@ namespace HalloDocDAL.Repositories
         {
             return _context.Regions.ToList();
         }
+
+        public bool EditEncounterForm(EncounterForm model)
+        {
+            var res = _context.EncounterForms.FirstOrDefault(x => x.RequestId == model.RequestId);
+            if (res == null)
+            {
+                _context.EncounterForms.Add(model);
+            }
+            else
+            {
+                res.HistoryOfPresentIllnessOrInjury = model.HistoryOfPresentIllnessOrInjury;
+                res.MedicalHistory = model.MedicalHistory;
+                res.Medications = model.Medications;
+                res.Allergies = model.Allergies;
+                res.Temp = model.Temp;
+                res.Hr = model.Hr;
+                res.Rr = model.Rr;
+                res.BloodPressureSystolic = model.BloodPressureSystolic;
+                res.BloodPressureDiastolic = model.BloodPressureDiastolic;
+                res.O2 = model.O2;
+                res.Pain = model.Pain;
+                res.Heent = model.Heent;
+                res.Cv = model.Cv;
+                res.Chest = model.Chest;
+                res.Abd = model.Abd;
+                res.Extremeties = model.Extremeties;
+                res.Skin = model.Skin;
+                res.Neuro = model.Neuro;
+                res.Other = model.Other;
+                res.Diagnosis = model.Diagnosis;
+                res.TreatmentPlan = model.TreatmentPlan;
+                res.MedicationsDispensed = model.MedicationsDispensed;
+                res.Procedures = model.Procedures;
+                res.FollowUp = model.FollowUp;
+                _context.EncounterForms.Update(res);
+            }
+            _context.SaveChanges();
+            return true;
+        }
+        public EncounterForm GetEncounterForm(int requestId)
+        {
+            return _context.EncounterForms.FirstOrDefault(x => x.RequestId == requestId);
+        }
+
+
     }
 }

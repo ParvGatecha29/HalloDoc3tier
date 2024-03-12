@@ -47,6 +47,8 @@ public partial class Admin
 
     public virtual Aspnetuser Aspnetuser { get; set; } = null!;
 
+    public virtual ICollection<EncounterForm> EncounterForms { get; set; } = new List<EncounterForm>();
+
     public virtual Region? Region { get; set; }
 
     public virtual ICollection<Requeststatuslog> Requeststatuslogs { get; set; } = new List<Requeststatuslog>();

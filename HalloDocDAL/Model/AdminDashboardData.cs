@@ -37,5 +37,6 @@ namespace HalloDocDAL.Model
         public int physicianId { get; set; }
         public string pname { get; set; }
         public List<string> tnotes { get; set; }
+        public bool? isFinalized { get; set; }
     }
 }

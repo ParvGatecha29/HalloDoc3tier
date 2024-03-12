@@ -77,6 +77,8 @@ public partial class Physician
 
     public virtual Aspnetuser? CreatedbyNavigation { get; set; }
 
+    public virtual ICollection<EncounterForm> EncounterForms { get; set; } = new List<EncounterForm>();
+
     public virtual Aspnetuser? ModifiedbyNavigation { get; set; }
 
     public virtual ICollection<Physicianlocation> Physicianlocations { get; set; } = new List<Physicianlocation>();

@@ -1,4 +1,5 @@
-﻿using HalloDocDAL.Model;
+﻿using HalloDoc_DAL.CustomModels;
+using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using System;
 using System.Collections.Generic;
@@ -21,5 +22,8 @@ namespace HalloDocDAL.Contacts
         bool transferRequest(AdminDashboardData data,int newstate);
         bool AddBlockRequest(AdminDashboardData data);
         List<Region> GetRegions();
+
+        bool EditEncounterForm(EncounterForm model);
+        EncounterForm GetEncounterForm(int requestId);
     }
 }

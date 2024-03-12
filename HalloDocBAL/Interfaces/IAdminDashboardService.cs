@@ -1,4 +1,5 @@
-﻿using HalloDocDAL.Model;
+﻿using HalloDoc_DAL.CustomModels;
+using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace HalloDocBAL.Interfaces
         List<Physician> GetPhysiciansByRegion(int regionid);
         List<Region> GetAllRegions();
         bool DeleteFile(int fileid);
+        bool UpdateEncounterForm(ViewEncounterForm model);
+        EncounterForm GetEncounterForm(int requestId);
 
     }
 }
