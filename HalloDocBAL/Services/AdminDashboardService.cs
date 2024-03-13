@@ -1,4 +1,4 @@
-﻿using HalloDoc_DAL.CustomModels;
+﻿
 using HalloDocBAL.Interfaces;
 using HalloDocDAL.Contacts;
 using HalloDocDAL.Model;
@@ -112,6 +112,12 @@ namespace HalloDocBAL.Services
         public bool ClearRequest(AdminDashboardData data)
         {
             _requestRepository.transferRequest(data, 10);
+            return true;
+        }
+
+        public bool CloseRequest(AdminDashboardData data)
+        {
+            _requestRepository.transferRequest(data, 9);
             return true;
         }
 

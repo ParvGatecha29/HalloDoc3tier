@@ -1,4 +1,4 @@
-﻿using HalloDoc_DAL.CustomModels;
+﻿
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using System;
@@ -21,6 +21,7 @@ namespace HalloDocBAL.Interfaces
         bool AgreeRequest(AdminDashboardData data);
         bool BlockRequest(AdminDashboardData data);
         bool ClearRequest(AdminDashboardData data);
+        bool CloseRequest(AdminDashboardData data);
         List<Physician> GetPhysiciansByRegion(int regionid);
         List<Region> GetAllRegions();
         bool DeleteFile(int fileid);

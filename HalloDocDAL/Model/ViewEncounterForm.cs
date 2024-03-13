@@ -1,4 +1,4 @@
-﻿using System;using System.Collections.Generic;using System.Linq;using System.Text;using System.Threading.Tasks;namespace HalloDoc_DAL.CustomModels{    public class ViewEncounterForm    {        public int RequestId { get; set; }        public string FirstName { get; set; }
+﻿using System;using System.Collections.Generic;using System.Linq;using System.Text;using System.Threading.Tasks;namespace HalloDocDAL.Model{    public class ViewEncounterForm    {        public int RequestId { get; set; }        public string FirstName { get; set; }
         public string? LastName { get; set; }
         public int? IsFinalized { get; set; }        public bool IsFinalizeDB        {            get            {                switch (IsFinalized) // Use the db status here
                 {                    case 0:                        return false;                    case 1:                        return true;

@@ -49,7 +49,7 @@ namespace HalloDocBAL.Services
                 Firstname = model.firstName,
                 Lastname = model.lastName,
                 Phonenumber = model.phone,
-                Email = model.cemail,
+                Email = model.email,
                 Createddate = DateTime.Now,
                 Confirmationnumber = "MD" + DateTime.Now.Day.ToString("D2") + DateTime.Now.Month.ToString("D2") + DateTime.Now.Year.ToString().Substring(2, 2) + model.lastName.Remove(2).ToUpper() + model.firstName.Remove(2).ToUpper() + count.ToString("D4")
         };
@@ -128,9 +128,9 @@ namespace HalloDocBAL.Services
                 City = model.city,
                 State = model.state,
                 Zipcode = model.zipcode,
-                Intdate = model.date,
-                Intyear = model.year,
-                Strmonth = model.month
+                Intdate = model.dob.Day,
+                Intyear = model.dob.Year,
+                Strmonth = model.dob.ToString("MMMM")
             };
             await _requestClientRepository.AddRequestClient(requestclient);
             var concierge = new Concierge
@@ -178,9 +178,9 @@ namespace HalloDocBAL.Services
                 City = model.city,
                 State = model.state,
                 Zipcode = model.zipcode,
-                Intdate = model.date,
-                Intyear = model.year,
-                Strmonth = model.month
+                Intdate = model.dob.Day,
+                Intyear = model.dob.Year,
+                Strmonth = model.dob.ToString("MMMM")
             };
             await _requestClientRepository.AddRequestClient(requestclient);
             var business = new Business

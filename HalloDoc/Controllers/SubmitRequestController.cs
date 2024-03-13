@@ -80,6 +80,10 @@ public class SubmitRequestController : Controller
         model.symptoms = formcollection["symptoms"];
         model.firstName = formcollection["fname"];
         model.lastName = formcollection["lname"];
+        var d = DateTime.Parse(formcollection["dob"]);
+        model.year = d.Year;
+        model.month = d.ToString("MMMM");
+        model.date = d.Day;
         model.password = formcollection["password"];
         model.phone = formcollection["patientTel"];
         model.street = formcollection["street"];

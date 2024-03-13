@@ -9,8 +9,8 @@
                                 <div class="bg-info-subtle " data-bs-toggle="collapse" data-bs-target="#collapseexample_@obj.requestId"
                                      aria-expanded="false" aria-controls="collapseexample">
                                     <div class="td" name='reqtype'>
-                                     @obj.requesttype
-                                     </div>
+                                        @obj.requesttype
+                                    </div>
                                     <div class="flex-column gap-2 border-bottom border-5 pt-3 pb-5 px-4">
                                         <div class="d-flex  justify-content-between mb-3">
                                             <span class="mobilesearch fs-5 td" name="Name">@obj.firstName @obj.lastName</span>
@@ -53,8 +53,12 @@
                                     </div>
                                 </div>
 
-                                <div class="collapse" id="collapseexample_@obj.requestId">
+                                <div class="collapse position-relative" id="collapseexample_@obj.requestId">
                                     <div class="d-flex flex-column gap-2 bg-info-subtle   mb-2 py-3 px-4 ">
+                                    <div class="text-end position-absolute w-100">
+                                            <a role="button" class="btn w-25 rounded-5 position-relative" style="background-color:white;bottom:35px;right:25px; color:#943DB8; border:1px solid #943DB8" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})">View Case</a>
+                                    </div>
+
                                         <div class="d-flex align-items-center ">
                                             <i class="fa-regular fa-calendar fs-5 border border-1 border-info rounded-5 p-2 me-2"></i>
                                             <span class="fs-5">Date of Birth: @obj.dobdate / @obj.dobmonth / @obj.dobyear</span>
@@ -159,7 +163,7 @@
         }
     }
 
-    @if (Model!=null)
+    @if (Model != null)
     {
     <div class="tablediv d-none d-md-block">
                             <table class="table caseTable" id="adminTable">
@@ -170,9 +174,9 @@
 
                                         <th scope="col" colspan="2">Name</th>
 
-                                        @if (Model.state != 6 )
+                                        @if (Model.state != 6)
                         {
-                                            <th scope="col">Dat!e Of Birth</th>
+                                            <th scope="col">Date Of Birth</th>
                         }
 
 
@@ -197,7 +201,7 @@
                                             <th scope="col">Date Of Service</th>
                         }
 
-                                        @if (Model.state == 1 || Model.state == 2 || Model.state == 3 || Model.state == 4 || Model.state == 6 )
+                                        @if (Model.state == 1 || Model.state == 2 || Model.state == 3 || Model.state == 4 || Model.state == 6)
                         {
                                             <th scope="col">Phone</th>
                         }
@@ -352,7 +356,7 @@
                                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
                                                             <li><a class="dropdown-item theme-color" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
                                                             <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Doctors Note</a></li>
-                                                            <li><a class="dropdown-item theme-color" onclick="Encounter(@obj.requestId,@obj.isFinalized == false)"><i class="fa-regular fa-note-sticky"></i> Encounter</a></li>
+                                                            <li><a class="dropdown-item theme-color" onclick="Encounter(@obj.requestId,@obj.isFinalized.ToString().ToLower())"><i class="fa-regular fa-note-sticky"></i> Encounter</a></li>
                                                         </ul>
                                                     </div>
                                 }
@@ -367,7 +371,7 @@
                                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
                                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
                                                             <li><a class="dropdown-item theme-color" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
-                                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-circle-xmark"></i> Close Case</a></li>
+                                                            <li><a class="dropdown-item theme-color" href="@Url.Action("CloseCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-circle-xmark"></i> Close Case</a></li>
                                                             <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Doctors Note</a></li>
                                                             <li><a class="dropdown-item theme-color clearCase" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
                                                             <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Encounter</a></li>
@@ -616,16 +620,21 @@
     </div>
 </div>
 
+
+
 <div class="modal fade" id="encounterModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-center">
-            <div class="modal-body p-5">
-                <i class="fa-solid fa-circle-exclamation fa-4x text-warning border border-1 p-2 border-warning rounded-circle mb-3"></i>
-                <h3>Encounter Form</h3>
-                <p>Are sure you want to clear this request? Once clear this request then you are not able to see this request.</p>
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle">Encounter Form</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-secondary">Encounter Form is Finalized successfully</p>
                 <input type="hidden" class="requestId" value="" name="requestId" id="requestId" />
-                <button type="button" class="btn btn-info text-light" id="clearCase">Clear</button>
-                <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
+                <div class="text-center">
+                    <button type="button" id="downenc" class="btn btn-info text-white">Download</button>
+                </div>
             </div>
         </div>
     </div>
@@ -680,7 +689,7 @@
                     $('#divdiv').html(data);
                 },
                 error: function (error) {
-                   
+
                 }
             });
         })
@@ -829,6 +838,16 @@
                 }
             });
         });
+        $("#downenc").click(function () {
+            var rid = $('.requestId').val();
+            $.ajax({
+                url: '@Url.Action("GeneratePDF","AdminDashboard")',
+                data: { requestid: rid },
+                success: function () {
+                    window.location.href = '@Url.Action("GeneratePDF","AdminDashboard")'+"?requestid=" + rid;
+                }
+            })
+        })
     });
 
 
@@ -868,7 +887,7 @@
         $("#sendemail").val($(this).closest('.tr').find(".email").text().trim());
 
         var rt = $(this).closest('.tr').find(".td[name='reqtype']").text();
-        
+
         if (rt == 1) {
             $("#sendtype").text("Patient");
             $("#circle").css("background-color", "#60bc60");
@@ -892,7 +911,10 @@
 
     function Encounter(rid, isFinalized) {
         if (isFinalized) {
-            $("#encounterModal").show();
+            console.log($(this).closest('.tr'));
+            $("#encounterModal").modal('show');
+            $(".requestId").val(rid);
+
         }
         else {
             location.href = "/AdminDashboard/Encounter?requestid=" + rid;

@@ -1,4 +1,4 @@
-﻿using HalloDoc_DAL.CustomModels;
+﻿
 using HalloDocDAL.Contacts;
 using HalloDocDAL.Data;
 using HalloDocDAL.Model;
@@ -200,7 +200,12 @@ namespace HalloDocDAL.Repositories
 
 
 
+            
             Requestnote rn = _context.Requestnotes.Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).FirstOrDefault(x => x.Requestid == id);
+            if(rn == null)
+            {
+                return null;
+            }
             var data = new AdminDashboardData
             {
                 requestId = rn.Requestid,
@@ -322,6 +327,7 @@ namespace HalloDocDAL.Repositories
                 res.MedicationsDispensed = model.MedicationsDispensed;
                 res.Procedures = model.Procedures;
                 res.FollowUp = model.FollowUp;
+                res.IsFinalize = model.IsFinalize;
                 _context.EncounterForms.Update(res);
             }
             _context.SaveChanges();

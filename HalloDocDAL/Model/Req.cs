@@ -16,7 +16,7 @@ namespace HalloDocDAL.Model
         
         public string? lastName { get; set; }
 
-        public string? dob { get; set; }
+        public DateTime dob { get; set; }
         public int? date {  get; set; }
         
         public string? month { get; set; }

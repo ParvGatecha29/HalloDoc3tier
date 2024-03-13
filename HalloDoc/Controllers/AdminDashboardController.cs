@@ -8,8 +8,8 @@ using HalloDocDAL.Contacts;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Routing.Constraints;
 using HalloDocDAL.Repositories;
-using HalloDoc_DAL.CustomModels;
 using System.Globalization;
+using Rotativa.AspNetCore;
 
 namespace HalloDoc.Controllers;
 [AuthManager("1")]
@@ -311,6 +311,77 @@ public class AdminDashboardController : Controller
     {
         _adminDashboardService.UpdateEncounterForm(model);
         return Json(new { success = true });
+    }
+
+    public IActionResult CloseCase(int requestid)
+    {
+        ViewUploads viewUploads = new ViewUploads();
+        viewUploads.Request = _adminDashboardService.GetRequestById(requestid);
+        viewUploads.Requestwisefiles = _dashboardService.ViewDocument(requestid);
+        return View(viewUploads);
+    }
+
+    public IActionResult ConfirmClose(int requestid)
+    {
+        var dash = new AdminDashboardData
+        {
+            requestId = requestid,
+            notes = ""
+        };
+        _adminDashboardService.CloseRequest(dash);
+        return Json(new { success = true });
+    }
+
+    public IActionResult GeneratePDF(int requestid)
+    {
+        string[] format = { "dd/MMMM/yyyy", "d/MMMM/yyyy" };
+        AdminDashboardData ad = _adminDashboardService.GetRequestById(requestid);
+        EncounterForm ef = _adminDashboardService.GetEncounterForm(requestid);
+        var encounterFormView = new ViewEncounterForm
+        {
+            FirstName = ad.firstName,
+            LastName = ad.lastName,
+            Location = ad.address,
+            DateOfBirth = DateTime.ParseExact(ad.dobdate + "/" + ad.dobmonth + "/" + ad.dobyear, format, CultureInfo.InvariantCulture),
+            DateOfService = ad.reqdate.ToString(),
+            Email = ad.email,
+            PhoneNumber = ad.phone,
+            HistoryOfPresentIllness = ef.HistoryOfPresentIllnessOrInjury,
+            MedicalHistory = ef.MedicalHistory,
+            Medications = ef.Medications,
+            Allergies = ef.Allergies,
+            Temperature = ef.Temp,
+            HR = ef.Hr,
+            RR = ef.Rr,
+            BPSystolic = ef.BloodPressureSystolic,
+            BPDiastolic = ef.BloodPressureDiastolic,
+            O2 = ef.O2,
+            Pain = ef.Pain,
+            Heent = ef.Heent,
+            CV = ef.Cv,
+            Chest = ef.Chest,
+            ABD = ef.Abd,
+            Extr = ef.Extremeties,
+            Skin = ef.Skin,
+            Neuro = ef.Neuro,
+            Other = ef.Other,
+            Diagnosis = ef.Diagnosis,
+            TreatmentPlan = ef.TreatmentPlan,
+            MedicationDispensed = ef.MedicationsDispensed,
+            Procedures = ef.Procedures,
+            FollowUp = ef.FollowUp
+        };
+
+        if (encounterFormView == null)
+        {
+            return NotFound();
+        }
+        //return View("EncounterFormDetails", encounterFormView);
+        return new ViewAsPdf("EncounterFormDetails", encounterFormView)
+        {
+            FileName = "Encounter_Form.pdf"
+        };
+
     }
 }
 

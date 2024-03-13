@@ -7,6 +7,7 @@ using HalloDocDAL.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using NuGet.Protocol.Plugins;
+using Rotativa.AspNetCore;
 using System.Configuration;
 using System.Net;
 
@@ -60,7 +61,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
+app.UseRotativa();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

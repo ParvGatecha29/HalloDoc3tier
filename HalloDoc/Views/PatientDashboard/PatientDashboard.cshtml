@@ -71,7 +71,7 @@
              aria-labelledby="dashboard-tab">
             <h2>Medical History</h2>
             <div class="w-100 text-end d-flex justify-content-end p-3 bgdiv">
-                <button class="d-md-none d-block btn btn-outline-info p-0 py-1 px-2">
+                <button class="d-md-none d-block btn btn-outline-info p-0 py-1 px-2" type="button" data-bs-target="#create_new" data-bs-toggle="modal">
                     <span class="material-symbols-outlined">
                         add
                     </span>
@@ -81,7 +81,7 @@
                     Create New Request
                 </button>
                 <div class="modal fade " id="create_new" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-dialog modal-dialog-centered text-center">
                         <div class="modal-content">
                             <div class="modal-header bg-info text-white">
                                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Create New Request</h1>
