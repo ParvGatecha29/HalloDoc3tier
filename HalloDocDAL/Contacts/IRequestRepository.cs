@@ -14,7 +14,7 @@ namespace HalloDocDAL.Contacts
         Task<bool> CreateRequest(Request model);
         List<Dashboard> GetRequestByEmail(string email);
         List<AdminDashboardData> GetAllRequests();
-        List<AdminDashboardData> GetRequestsByStatus(int[] status);
+        List<AdminDashboardData> GetRequestsByStatus(int[] status, int reqtype);
         AdminDashboardData GetRequestById(int id);
         AdminDashboardData GetNotes(int id);
         bool AddNotes(AdminDashboardData data);

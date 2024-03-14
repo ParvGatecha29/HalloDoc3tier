@@ -12,7 +12,7 @@ namespace HalloDocBAL.Interfaces
     public interface IAdminDashboardService
     {
         List<AdminDashboardData> GetRequests();
-        List<AdminDashboardData> GetRequestsByStatus(int[] status);
+        List<AdminDashboardData> GetRequestsByStatus(int[] status, int reqtype = 0);
         AdminDashboardData GetRequestById(int id);
         AdminDashboardData GetNotes(int id);
         bool UpdateNotes(int id, string notes);

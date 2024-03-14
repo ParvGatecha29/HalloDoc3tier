@@ -20,6 +20,7 @@ builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
     options.SerializerSettings.ContractResolver = new DefaultContractResolver();
 });
 var smtpSettings = builder.Configuration.GetSection("SmtpSettings").Get<SmtpSettings>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton(smtpSettings);
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddSession();

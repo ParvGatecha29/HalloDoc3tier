@@ -41,57 +41,102 @@ public class AdminDashboardController : Controller
         var dash = new AdminDashboard();
         dash.Data = _adminDashboardService.GetRequests();
         dash.regions = _adminDashboardService.GetAllRegions();
+        if (HttpContext.Session.GetString("state") == null)
+        {
+            HttpContext.Session.SetString("state", "1");
+        };
         return View(dash);
     }
     public IActionResult NewCasePartial()
     {
+        var reqtype = HttpContext.Session.GetString("reqtype");
+        if(reqtype == null)
+        {
+            reqtype = "0";
+        }
         var dash = new AdminDashboard();
         dash.state = 1;
-        dash.Data = _adminDashboardService.GetRequestsByStatus(newcase);
+        dash.Data = _adminDashboardService.GetRequestsByStatus(newcase, int.Parse(reqtype));
         dash.regions = _adminDashboardService.GetAllRegions();
+        HttpContext.Session.SetString("state","1");
         return PartialView("_CaseTable", dash);
     }
     public IActionResult PendingCasePartial()
     {
+        var reqtype = HttpContext.Session.GetString("reqtype");
+        if (reqtype == null)
+        {
+            reqtype = "0";
+        }
         var dash = new AdminDashboard();
         dash.state = 2;
-        dash.Data = _adminDashboardService.GetRequestsByStatus(pendingcase);
+        dash.Data = _adminDashboardService.GetRequestsByStatus(pendingcase, int.Parse(reqtype));
         dash.regions = _adminDashboardService.GetAllRegions();
+        HttpContext.Session.SetString("state", "2");
         return PartialView("_CaseTable", dash);
     }
     public IActionResult ActiveCasePartial()
     {
+        var reqtype = HttpContext.Session.GetString("reqtype");
+        if (reqtype == null)
+        {
+            reqtype = "0";
+        }
         var dash = new AdminDashboard();
         dash.state = 3;
-        dash.Data = _adminDashboardService.GetRequestsByStatus(activecase);
+        dash.Data = _adminDashboardService.GetRequestsByStatus(activecase, int.Parse(reqtype));
         dash.regions = _adminDashboardService.GetAllRegions();
+        HttpContext.Session.SetString("state", "3");
         return PartialView("_CaseTable", dash);
     }
     public IActionResult ConcludeCasePartial()
     {
+        var reqtype = HttpContext.Session.GetString("reqtype");
+        if (reqtype == null)
+        {
+            reqtype = "0";
+        }
         var dash = new AdminDashboard();
         dash.state = 4;
-        dash.Data = _adminDashboardService.GetRequestsByStatus(concludecase);
+        dash.Data = _adminDashboardService.GetRequestsByStatus(concludecase, int.Parse(reqtype));
         dash.regions = _adminDashboardService.GetAllRegions();
+        HttpContext.Session.SetString("state", "4");
         return PartialView("_CaseTable", dash);
     }
     public IActionResult ToCloseCasePartial()
     {
+        var reqtype = HttpContext.Session.GetString("reqtype");
+        if (reqtype == null)
+        {
+            reqtype = "0";
+        }
         var dash = new AdminDashboard();
         dash.state = 5;
-        dash.Data = _adminDashboardService.GetRequestsByStatus(toclosecase);
+        dash.Data = _adminDashboardService.GetRequestsByStatus(toclosecase, int.Parse(reqtype));
         dash.regions = _adminDashboardService.GetAllRegions();
+        HttpContext.Session.SetString("state", "5");
         return PartialView("_CaseTable", dash);
     }
     public IActionResult UnpaidCasePartial()
     {
+        var reqtype = HttpContext.Session.GetString("reqtype");
+        if (reqtype == null)
+        {
+            reqtype = "0";
+        }
         var dash = new AdminDashboard();
         dash.state = 6;
-        dash.Data = _adminDashboardService.GetRequestsByStatus(unpaidcase);
+        dash.Data = _adminDashboardService.GetRequestsByStatus(unpaidcase, int.Parse(reqtype));
         dash.regions = _adminDashboardService.GetAllRegions();
+        HttpContext.Session.SetString("state", "6");
         return PartialView("_CaseTable", dash);
     }
 
+    public string FilterRequest(int reqtype)
+    {
+        HttpContext.Session.SetString("reqtype", reqtype.ToString());
+        return HttpContext.Session.GetString("state");
+    }
 
     public IActionResult ViewCase(int requestid)
     {
@@ -270,41 +315,60 @@ public class AdminDashboardController : Controller
         string[] format = { "dd/MMMM/yyyy", "d/MMMM/yyyy" };
         AdminDashboardData ad = _adminDashboardService.GetRequestById(requestid);
         EncounterForm ef = _adminDashboardService.GetEncounterForm(requestid);
-        var data = new ViewEncounterForm
+        if(ef!=null)
         {
-            FirstName = ad.firstName,
-            LastName = ad.lastName,
-            Location = ad.address,
-            DateOfBirth = DateTime.ParseExact(ad.dobdate + "/" + ad.dobmonth + "/" + ad.dobyear, format, CultureInfo.InvariantCulture),
-            DateOfService = ad.reqdate.ToString(),
-            Email = ad.email,
-            PhoneNumber = ad.phone,
-            HistoryOfPresentIllness = ef.HistoryOfPresentIllnessOrInjury,
-            MedicalHistory = ef.MedicalHistory,
-            Medications = ef.Medications,
-            Allergies = ef.Allergies,
-            Temperature = ef.Temp,
-            HR = ef.Hr,
-            RR = ef.Rr,
-            BPSystolic = ef.BloodPressureSystolic,
-            BPDiastolic = ef.BloodPressureDiastolic,
-            O2 = ef.O2,
-            Pain = ef.Pain,
-            Heent = ef.Heent,
-            CV = ef.Cv,
-            Chest = ef.Chest,
-            ABD = ef.Abd,
-            Extr = ef.Extremeties,
-            Skin = ef.Skin,
-            Neuro = ef.Neuro,
-            Other = ef.Other,
-            Diagnosis = ef.Diagnosis,
-            TreatmentPlan = ef.TreatmentPlan,
-            MedicationDispensed = ef.MedicationsDispensed,
-            Procedures = ef.Procedures,
-            FollowUp = ef.FollowUp
-        };
-        return View(data);
+            var data = new ViewEncounterForm
+            {
+                FirstName = ad.firstName,
+                LastName = ad.lastName,
+                Location = ad.address,
+                DateOfBirth = DateTime.ParseExact(ad.dobdate + "/" + ad.dobmonth + "/" + ad.dobyear, format, CultureInfo.InvariantCulture),
+                DateOfService = ad.reqdate.ToString(),
+                Email = ad.email,
+                PhoneNumber = ad.phone,
+                HistoryOfPresentIllness = ef.HistoryOfPresentIllnessOrInjury,
+                MedicalHistory = ef.MedicalHistory,
+                Medications = ef.Medications,
+                Allergies = ef.Allergies,
+                Temperature = ef.Temp,
+                HR = ef.Hr,
+                RR = ef.Rr,
+                BPSystolic = ef.BloodPressureSystolic,
+                BPDiastolic = ef.BloodPressureDiastolic,
+                O2 = ef.O2,
+                Pain = ef.Pain,
+                Heent = ef.Heent,
+                CV = ef.Cv,
+                Chest = ef.Chest,
+                ABD = ef.Abd,
+                Extr = ef.Extremeties,
+                Skin = ef.Skin,
+                Neuro = ef.Neuro,
+                Other = ef.Other,
+                Diagnosis = ef.Diagnosis,
+                TreatmentPlan = ef.TreatmentPlan,
+                MedicationDispensed = ef.MedicationsDispensed,
+                Procedures = ef.Procedures,
+                FollowUp = ef.FollowUp
+            };
+            return View(data);
+
+        }
+        else
+        {
+            var data = new ViewEncounterForm
+            {
+                FirstName = ad.firstName,
+                LastName = ad.lastName,
+                Location = ad.address,
+                DateOfBirth = DateTime.ParseExact(ad.dobdate + "/" + ad.dobmonth + "/" + ad.dobyear, format, CultureInfo.InvariantCulture),
+                DateOfService = ad.reqdate.ToString(),
+                Email = ad.email,
+                PhoneNumber = ad.phone,
+            };
+            return View(data);
+        }
+        
     }
 
     public JsonResult EditEncounterForm(ViewEncounterForm model)

@@ -54,7 +54,7 @@ namespace HalloDocDAL.Repositories
             return data;
         }
 
-        public List<AdminDashboardData> GetRequestsByStatus(int[] status)
+        public List<AdminDashboardData> GetRequestsByStatus(int[] status, int reqtype)
         {
             //        var data = _context.Requests
             //// Join Requests with RequestClient
@@ -101,8 +101,15 @@ namespace HalloDocDAL.Repositories
             //        regionId = rcsp.client != null ? rcsp.client.Regionid : null,
 
             //    }).Where(req => status.Contains(req.status)).ToList();
-
-            List<Requestclient> reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Where(_ => status.Contains(_.Request.Status)).ToList();
+            List<Requestclient> reqclnt = new List<Requestclient>();
+            if (reqtype != 0)
+            {
+                reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Where(_ => status.Contains(_.Request.Status) && _.Request.Requesttypeid == reqtype).ToList();
+            }
+            else
+            {
+                reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Where(_ => status.Contains(_.Request.Status)).ToList();
+            }
             List<AdminDashboardData> abc = new List<AdminDashboardData>();
             foreach (var item in reqclnt)
             {
@@ -200,9 +207,9 @@ namespace HalloDocDAL.Repositories
 
 
 
-            
+
             Requestnote rn = _context.Requestnotes.Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).FirstOrDefault(x => x.Requestid == id);
-            if(rn == null)
+            if (rn == null)
             {
                 return null;
             }
