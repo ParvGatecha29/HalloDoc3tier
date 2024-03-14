@@ -54,8 +54,10 @@ namespace HalloDocDAL.Repositories
             return data;
         }
 
-        public List<AdminDashboardData> GetRequestsByStatus(int[] status, int reqtype)
+
+        public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber)
         {
+            int pageSize = 10;
             //        var data = _context.Requests
             //// Join Requests with RequestClient
             //.GroupJoin(_context.Requestclients,
@@ -101,24 +103,28 @@ namespace HalloDocDAL.Repositories
             //        regionId = rcsp.client != null ? rcsp.client.Regionid : null,
 
             //    }).Where(req => status.Contains(req.status)).ToList();
-            List<Requestclient> reqclnt = new List<Requestclient>();
+            IQueryable<Requestclient> reqclnt;
+            List<Requestclient> req;
             if (reqtype != 0)
             {
-                reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Where(_ => status.Contains(_.Request.Status) && _.Request.Requesttypeid == reqtype).ToList();
+                reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Where(_ => status.Contains(_.Request.Status) && _.Request.Requesttypeid == reqtype).AsQueryable();
+                req = reqclnt.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             }
             else
             {
-                reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Where(_ => status.Contains(_.Request.Status)).ToList();
+                reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Where(_ => status.Contains(_.Request.Status)).AsQueryable();
+                req = reqclnt.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             }
             List<AdminDashboardData> abc = new List<AdminDashboardData>();
-            foreach (var item in reqclnt)
+                         
+            foreach (var item in req)
             {
                 AdminDashboardData def = new AdminDashboardData
                 {
                     requestId = item.Requestid,
                     firstName = item.Firstname,
                     lastName = item.Lastname ?? "",
-                    email = item.Email ?? "",
+                    email = item.Email ?? "",   
                     requestor = item.Request.Firstname ?? "",
                     status = item.Request.Status,
                     pname = item.Request.Physician != null ? item.Request.Physician.Firstname : "",
@@ -140,8 +146,8 @@ namespace HalloDocDAL.Repositories
                 abc.Add(def);
             }
 
-
-            return abc;
+            PagedList<AdminDashboardData> result = await PagedList<AdminDashboardData>.CreateAsync(abc, reqclnt.Count(), pageNumber,10);
+            return result;
         }
 
         public AdminDashboardData GetRequestById(int id)
@@ -344,7 +350,6 @@ namespace HalloDocDAL.Repositories
         {
             return _context.EncounterForms.FirstOrDefault(x => x.RequestId == requestId);
         }
-
 
     }
 }

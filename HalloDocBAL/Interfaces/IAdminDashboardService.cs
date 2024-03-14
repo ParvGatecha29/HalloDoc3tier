@@ -1,6 +1,7 @@
 ﻿
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
+using HalloDocDAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace HalloDocBAL.Interfaces
     public interface IAdminDashboardService
     {
         List<AdminDashboardData> GetRequests();
-        List<AdminDashboardData> GetRequestsByStatus(int[] status, int reqtype = 0);
+        Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype = 0, int pageNumber = 1);
         AdminDashboardData GetRequestById(int id);
         AdminDashboardData GetNotes(int id);
         bool UpdateNotes(int id, string notes);

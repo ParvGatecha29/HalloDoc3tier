@@ -10,6 +10,7 @@
     int toCloseCase = 0;
     int unpaidCase = 0;
 
+
     foreach (var req in Model.Data)
     {
         if (req.status == 1)
@@ -269,6 +270,7 @@
 
     <div id="partial-load">
     </div>
+
 </div>
 
 
@@ -309,6 +311,8 @@
         </div>
     </div>
 </div>
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const buttons = document.querySelectorAll('.nav-link');
@@ -323,8 +327,33 @@
         });
     });
 
-    
 
+    function changepage(pageNumber) {
+        $.ajax({
+            url: '@Url.Action("ChangePage", "AdminDashboard")',
+            data: { pageNumber: pageNumber },
+            success: function (state) {
+                if (state == "2") {
+                    $('#pending-tab').click();
+                }
+                else if (state == "3") {
+                    $('#active-tab').click();
+                }
+                else if (state == "4") {
+                    $('#conclude-tab').click();
+                }
+                else if (state == "5") {
+                    $('#toclose-tab').click();
+                }
+                else if (state == "6") {
+                    $('#unpaid-tab').click();
+                }
+                else {
+                    $('#new-tab').click();
+                }
+            }
+        });
+    }
     function filterrequests(reqtype) {
         // table = document.getElementsByClassName("caseTable");
         // for (j = 0; j < table.length; j++) {

@@ -1,6 +1,7 @@
 ﻿
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
+using HalloDocDAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace HalloDocDAL.Contacts
         Task<bool> CreateRequest(Request model);
         List<Dashboard> GetRequestByEmail(string email);
         List<AdminDashboardData> GetAllRequests();
-        List<AdminDashboardData> GetRequestsByStatus(int[] status, int reqtype);
+        Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber);
         AdminDashboardData GetRequestById(int id);
         AdminDashboardData GetNotes(int id);
         bool AddNotes(AdminDashboardData data);

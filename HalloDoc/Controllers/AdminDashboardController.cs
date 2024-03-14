@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Routing.Constraints;
 using HalloDocDAL.Repositories;
 using System.Globalization;
 using Rotativa.AspNetCore;
+using System.Security.Policy;
 
 namespace HalloDoc.Controllers;
 [AuthManager("1")]
@@ -47,86 +48,122 @@ public class AdminDashboardController : Controller
         };
         return View(dash);
     }
-    public IActionResult NewCasePartial()
+    public async Task<IActionResult> NewCasePartial()
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
+        var pageNumber = HttpContext.Session.GetString("pageNumber");
         if(reqtype == null)
         {
             reqtype = "0";
         }
+        if (pageNumber == null)
+        {
+            pageNumber = "1";
+        }
         var dash = new AdminDashboard();
         dash.state = 1;
-        dash.Data = _adminDashboardService.GetRequestsByStatus(newcase, int.Parse(reqtype));
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(newcase, int.Parse(reqtype),int.Parse(pageNumber)); 
+       
         dash.regions = _adminDashboardService.GetAllRegions();
         HttpContext.Session.SetString("state","1");
         return PartialView("_CaseTable", dash);
     }
-    public IActionResult PendingCasePartial()
+    public async Task<IActionResult> PendingCasePartial()
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
+        var pageNumber = HttpContext.Session.GetString("pageNumber");
         if (reqtype == null)
         {
             reqtype = "0";
         }
+        if (pageNumber == null)
+        {
+            pageNumber = "1";
+        }
         var dash = new AdminDashboard();
         dash.state = 2;
-        dash.Data = _adminDashboardService.GetRequestsByStatus(pendingcase, int.Parse(reqtype));
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(pendingcase, int.Parse(reqtype), int.Parse(pageNumber));
+       
         dash.regions = _adminDashboardService.GetAllRegions();
         HttpContext.Session.SetString("state", "2");
         return PartialView("_CaseTable", dash);
     }
-    public IActionResult ActiveCasePartial()
+    public async Task<IActionResult> ActiveCasePartial()
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
+        var pageNumber = HttpContext.Session.GetString("pageNumber");
         if (reqtype == null)
         {
             reqtype = "0";
         }
+        if (pageNumber == null)
+        {
+            pageNumber = "1";
+        }
         var dash = new AdminDashboard();
         dash.state = 3;
-        dash.Data = _adminDashboardService.GetRequestsByStatus(activecase, int.Parse(reqtype));
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(activecase, int.Parse(reqtype), int.Parse(pageNumber));
+
         dash.regions = _adminDashboardService.GetAllRegions();
         HttpContext.Session.SetString("state", "3");
         return PartialView("_CaseTable", dash);
     }
-    public IActionResult ConcludeCasePartial()
+    public async Task<IActionResult> ConcludeCasePartial()
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
+        var pageNumber = HttpContext.Session.GetString("pageNumber");
         if (reqtype == null)
         {
             reqtype = "0";
         }
+        if (pageNumber == null)
+        {
+            pageNumber = "1";
+        }
         var dash = new AdminDashboard();
         dash.state = 4;
-        dash.Data = _adminDashboardService.GetRequestsByStatus(concludecase, int.Parse(reqtype));
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(concludecase, int.Parse(reqtype), int.Parse(pageNumber));
+
         dash.regions = _adminDashboardService.GetAllRegions();
         HttpContext.Session.SetString("state", "4");
         return PartialView("_CaseTable", dash);
     }
-    public IActionResult ToCloseCasePartial()
+    public async Task<IActionResult> ToCloseCasePartial()
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
+        var pageNumber = HttpContext.Session.GetString("pageNumber");
         if (reqtype == null)
         {
             reqtype = "0";
         }
+        if (pageNumber == null)
+        {
+            pageNumber = "1";
+        }
         var dash = new AdminDashboard();
         dash.state = 5;
-        dash.Data = _adminDashboardService.GetRequestsByStatus(toclosecase, int.Parse(reqtype));
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(toclosecase, int.Parse(reqtype), int.Parse(pageNumber));
+
         dash.regions = _adminDashboardService.GetAllRegions();
         HttpContext.Session.SetString("state", "5");
         return PartialView("_CaseTable", dash);
     }
-    public IActionResult UnpaidCasePartial()
+    public async Task<IActionResult> UnpaidCasePartial()
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
+        var pageNumber = HttpContext.Session.GetString("pageNumber");
         if (reqtype == null)
         {
             reqtype = "0";
         }
+        if (pageNumber == null)
+        {
+            pageNumber = "1";
+        }
         var dash = new AdminDashboard();
         dash.state = 6;
-        dash.Data = _adminDashboardService.GetRequestsByStatus(unpaidcase, int.Parse(reqtype));
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(unpaidcase, int.Parse(reqtype), int.Parse(pageNumber));
+
         dash.regions = _adminDashboardService.GetAllRegions();
         HttpContext.Session.SetString("state", "6");
         return PartialView("_CaseTable", dash);
@@ -135,6 +172,12 @@ public class AdminDashboardController : Controller
     public string FilterRequest(int reqtype)
     {
         HttpContext.Session.SetString("reqtype", reqtype.ToString());
+        return HttpContext.Session.GetString("state");
+    }
+
+    public string ChangePage(int pageNumber)
+    {
+        HttpContext.Session.SetString("pageNumber", pageNumber.ToString());
         return HttpContext.Session.GetString("state");
     }
 
