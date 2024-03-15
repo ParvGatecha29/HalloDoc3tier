@@ -46,23 +46,30 @@ public class AdminDashboardController : Controller
         {
             HttpContext.Session.SetString("state", "1");
         };
+        if (HttpContext.Session.GetString("pageNumber") == null)
+        {
+            HttpContext.Session.SetString("pageNumber", "1");
+        };
         return View(dash);
     }
+
     public async Task<IActionResult> NewCasePartial()
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
         var pageNumber = HttpContext.Session.GetString("pageNumber");
+        var region = HttpContext.Session.GetString("region") != null ? HttpContext.Session.GetString("region"): "0";
+        var search = HttpContext.Session.GetString("search") != null ? HttpContext.Session.GetString("search"): "";
         if(reqtype == null)
         {
             reqtype = "0";
         }
-        if (pageNumber == null)
+        if (pageNumber == null || HttpContext.Session.GetString("state")!="1")
         {
             pageNumber = "1";
         }
         var dash = new AdminDashboard();
         dash.state = 1;
-        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(newcase, int.Parse(reqtype),int.Parse(pageNumber)); 
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(newcase, int.Parse(reqtype),int.Parse(pageNumber), int.Parse(region), search); 
        
         dash.regions = _adminDashboardService.GetAllRegions();
         HttpContext.Session.SetString("state","1");
@@ -72,17 +79,19 @@ public class AdminDashboardController : Controller
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
         var pageNumber = HttpContext.Session.GetString("pageNumber");
+        var region = HttpContext.Session.GetString("region") != null ? HttpContext.Session.GetString("region") : "0";
+        var search = HttpContext.Session.GetString("search") != null ? HttpContext.Session.GetString("search") : "";
         if (reqtype == null)
         {
             reqtype = "0";
         }
-        if (pageNumber == null)
+        if (pageNumber == null || HttpContext.Session.GetString("state") != "2")
         {
             pageNumber = "1";
         }
         var dash = new AdminDashboard();
         dash.state = 2;
-        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(pendingcase, int.Parse(reqtype), int.Parse(pageNumber));
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(pendingcase, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search);
        
         dash.regions = _adminDashboardService.GetAllRegions();
         HttpContext.Session.SetString("state", "2");
@@ -92,17 +101,19 @@ public class AdminDashboardController : Controller
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
         var pageNumber = HttpContext.Session.GetString("pageNumber");
+        var region = HttpContext.Session.GetString("region") != null ? HttpContext.Session.GetString("region") : "0";
+        var search = HttpContext.Session.GetString("search") != null ? HttpContext.Session.GetString("search") : "";
         if (reqtype == null)
         {
             reqtype = "0";
         }
-        if (pageNumber == null)
+        if (pageNumber == null || HttpContext.Session.GetString("state") != "3")
         {
             pageNumber = "1";
         }
         var dash = new AdminDashboard();
         dash.state = 3;
-        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(activecase, int.Parse(reqtype), int.Parse(pageNumber));
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(activecase, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search);
 
         dash.regions = _adminDashboardService.GetAllRegions();
         HttpContext.Session.SetString("state", "3");
@@ -112,17 +123,19 @@ public class AdminDashboardController : Controller
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
         var pageNumber = HttpContext.Session.GetString("pageNumber");
+        var region = HttpContext.Session.GetString("region") != null ? HttpContext.Session.GetString("region") : "0";
+        var search = HttpContext.Session.GetString("search") != null ? HttpContext.Session.GetString("search") : "";
         if (reqtype == null)
         {
             reqtype = "0";
         }
-        if (pageNumber == null)
+        if (pageNumber == null || HttpContext.Session.GetString("state") != "4")
         {
             pageNumber = "1";
         }
         var dash = new AdminDashboard();
         dash.state = 4;
-        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(concludecase, int.Parse(reqtype), int.Parse(pageNumber));
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(concludecase, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search);
 
         dash.regions = _adminDashboardService.GetAllRegions();
         HttpContext.Session.SetString("state", "4");
@@ -132,17 +145,19 @@ public class AdminDashboardController : Controller
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
         var pageNumber = HttpContext.Session.GetString("pageNumber");
+        var region = HttpContext.Session.GetString("region") != null ? HttpContext.Session.GetString("region") : "0";
+        var search = HttpContext.Session.GetString("search") != null ? HttpContext.Session.GetString("search") : "";
         if (reqtype == null)
         {
             reqtype = "0";
         }
-        if (pageNumber == null)
+        if (pageNumber == null || HttpContext.Session.GetString("state") != "5")
         {
             pageNumber = "1";
         }
         var dash = new AdminDashboard();
         dash.state = 5;
-        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(toclosecase, int.Parse(reqtype), int.Parse(pageNumber));
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(toclosecase, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search);
 
         dash.regions = _adminDashboardService.GetAllRegions();
         HttpContext.Session.SetString("state", "5");
@@ -152,17 +167,19 @@ public class AdminDashboardController : Controller
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
         var pageNumber = HttpContext.Session.GetString("pageNumber");
+        var region = HttpContext.Session.GetString("region") != null ? HttpContext.Session.GetString("region") : "0";
+        var search = HttpContext.Session.GetString("search") != null ? HttpContext.Session.GetString("search") : "";
         if (reqtype == null)
         {
             reqtype = "0";
         }
-        if (pageNumber == null)
+        if (pageNumber == null || HttpContext.Session.GetString("state") != "6")
         {
             pageNumber = "1";
         }
         var dash = new AdminDashboard();
         dash.state = 6;
-        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(unpaidcase, int.Parse(reqtype), int.Parse(pageNumber));
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(unpaidcase, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search);
 
         dash.regions = _adminDashboardService.GetAllRegions();
         HttpContext.Session.SetString("state", "6");
@@ -175,6 +192,17 @@ public class AdminDashboardController : Controller
         return HttpContext.Session.GetString("state");
     }
 
+    public string RegionFilter(int region)
+    {
+        HttpContext.Session.SetString("region", region.ToString());
+        return HttpContext.Session.GetString("state");
+    }
+
+    public string Search(string search = "")
+    {
+        HttpContext.Session.SetString("search", search);
+        return HttpContext.Session.GetString("state");
+    }
     public string ChangePage(int pageNumber)
     {
         HttpContext.Session.SetString("pageNumber", pageNumber.ToString());

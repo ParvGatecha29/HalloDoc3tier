@@ -4,6 +4,7 @@ using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -55,7 +56,7 @@ namespace HalloDocDAL.Repositories
         }
 
 
-        public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber)
+        public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search)
         {
             int pageSize = 10;
             //        var data = _context.Requests
@@ -105,16 +106,22 @@ namespace HalloDocDAL.Repositories
             //    }).Where(req => status.Contains(req.status)).ToList();
             IQueryable<Requestclient> reqclnt;
             List<Requestclient> req;
+            reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Where(_ => status.Contains(_.Request.Status)).AsQueryable();
+
             if (reqtype != 0)
             {
-                reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Where(_ => status.Contains(_.Request.Status) && _.Request.Requesttypeid == reqtype).AsQueryable();
-                req = reqclnt.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+                reqclnt = reqclnt.Where(_ => _.Request.Requesttypeid == reqtype).AsQueryable();
             }
-            else
+            if (region != 0)
             {
-                reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Where(_ => status.Contains(_.Request.Status)).AsQueryable();
-                req = reqclnt.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+                reqclnt = reqclnt.Where(_ => _.Regionid == region).AsQueryable();
             }
+            if(search.Length > 0)
+            {
+                reqclnt = reqclnt.Where(_ => _.Firstname.ToLower().Contains(search) || _.Lastname.ToLower().Contains(search) || _.Request.Firstname.ToLower().Contains(search)).AsQueryable();
+
+            }
+            req = reqclnt.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             List<AdminDashboardData> abc = new List<AdminDashboardData>();
                          
             foreach (var item in req)
