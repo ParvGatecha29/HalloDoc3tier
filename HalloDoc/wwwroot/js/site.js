@@ -37,9 +37,13 @@ if (month < 10) month = "0" + month;
 if (day < 10) day = "0" + day;
 
 var today = year + "-" + month + "-" + day;
-document.getElementById("dob").value = today;
+var element = document.getElementById("dob");
+if (element != null) {
+    document.getElementById("dob").value = today;
 
-$('#dob').attr('max', today);
+    $('#dob').attr('max', today);
+}
+
 
 
 function upload(file){
@@ -94,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const phoneInputField = document.querySelectorAll("input[type='tel']");
+    console.log(phoneInputField);
     for (var i = 0; i < phoneInputField.length; i++) {
         const phoneInput = window.intlTelInput(phoneInputField[i], {
             utilsScript:

@@ -29,5 +29,8 @@ namespace HalloDocBAL.Interfaces
         bool UpdateEncounterForm(ViewEncounterForm model);
         EncounterForm GetEncounterForm(int requestId);
 
+        Admin GetAdminById(string id);
+
+        bool UpdateProfile(AdminProfile model);
     }
 }

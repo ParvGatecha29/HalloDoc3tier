@@ -23,16 +23,13 @@ html {
 }
 
 body {
-  --text-color: #222;
+  --text-color: #262626;
   --bkg-color: #fff;
 }
 
 body.dark-theme {
   --text-color: #eee;
-  --bkg-color: #121212;
-}
-.dark-theme *{
-    opacity: 0.96;
+  --bkg-color: #262626;
 }
 html {
   --text-color-normal: #0a244d;
@@ -443,7 +440,9 @@ textarea:focus {
     background-color: #222 !important;
 }
 
-
+.table-responsive {
+    overflow:unset;
+}
 #responsiveTable {
     width: 100%;
     border-collapse: collapse;
@@ -456,6 +455,7 @@ textarea:focus {
     }
 
 
+    
 @media (max-width: 600px) {
     #responsiveTable, #responsiveTable thead, #responsiveTable tbody, #responsiveTable th, #responsiveTable td, #responsiveTable tr {
         display: block;
@@ -538,67 +538,117 @@ textarea:focus {
     border-top-color: inherit;
 }
 
-.new.active {
-    background-color: rgb(32,63,154) !important;
-    color:white !important;
-}
-.new:hover {
-    background-color: rgb(32,63,154) !important;
-    color: white !important;
+.new-tab {
+    background-color: #1f1f8c2b !important;
+    color: #6161c4 !important;
+    border: 1px solid #6161c4 !important;
+    border-radius: 10px !important;
 }
 
-.pending.active {
-    background-color: rgb(38,164,211) !important;
-    color: white !important;
-}
-.pending:hover {
-    background-color: rgb(38,164,211) !important;
-    color: white !important;
-}
-
-.act.active {
-    background-color: rgb(48,129,62) !important;
-    color: white !important;
-}
-.act:hover {
-    background-color: rgb(48,129,62) !important;
-    color: white !important;
-}
-.conclude {
-    color: rgb(174,38,119) !important;
-    background-color: rgb(247,230,238) !important;
-}
-.conclude.active {
-    background-color: rgb(174,38,119) !important;
-    color: white !important;
-}
-.conclude:hover {
-    background-color: rgb(174,38,119) !important;
-    color: white !important;
-}
-
-.toclose {
-    border: 1px solid rgb(37,110,176);
-}
-
-.toclose.active {
-    background-color: rgb(37,110,176) !important;
-    color: white !important;
-}
-    .toclose:hover {
-        background-color: rgb(37,110,176) !important;
+    .new-tab:hover {
+        border: none !important;
+        background-color: #1f1f8c !important;
         color: white !important;
     }
 
-.unpaid {
-    border:1px solid rgb(145,105,179);
+    .new-tab.active {
+        border: none !important;
+        background-color: #1f1f8c !important;
+        color: white !important;
+    }
+
+.pending-tab {
+    background-color: #0dcaf026 !important;
+    color: #0dcaf0 !important;
+    border: 1px solid #0dcaf0 !important;
+    border-radius: 10px !important;
 }
-.unpaid.active {
-    background-color: rgb(145,105,179) !important;
-    color: white !important;
+
+    .pending-tab:hover {
+        border: none !important;
+        background-color: #0dcaf0 !important;
+        color: white !important;
+    }
+
+    .pending-tab.active {
+        border: none !important;
+        background-color: #0dcaf0 !important;
+        color: white !important;
+    }
+
+.active-tab {
+    background-color: #05a33914 !important;
+    color: #05a339 !important;
+    border: 1px solid #05a339 !important;
+    border-radius: 10px !important;
 }
-    .unpaid:hover {
-        background-color: rgb(145,105,179) !important;
+
+    .active-tab:hover {
+        border: none !important;
+        background-color: #05a339 !important;
+        color: white !important;
+    }
+
+    .active-tab.active {
+        border: none !important;
+        background-color: #05a339 !important;
+        color: white !important;
+    }
+
+.conclude-tab {
+    background-color: #cb176612 !important;
+    color: #cb1766 !important;
+    border: 1px solid #cb1766 !important;
+    border-radius: 10px !important;
+}
+
+    .conclude-tab:hover {
+        border: none !important;
+        background-color: #cb1766 !important;
+        color: white !important;
+    }
+
+    .conclude-tab.active {
+        border: none !important;
+        background-color: #cb1766 !important;
+        color: white !important;
+    }
+
+.toclose-tab {
+    background-color: #185ce314 !important;
+    color: #185ce3 !important;
+    border: 1px solid #185ce3 !important;
+    border-radius: 10px !important;
+}
+
+    .toclose-tab:hover {
+        border: none !important;
+        background-color: #185ce3 !important;
+        color: white !important;
+    }
+
+    .toclose-tab.active {
+        border: none !important;
+        background-color: #185ce3 !important;
+        color: white !important;
+    }
+
+.unpaid-tab {
+    background-color: #a557b61a !important;
+    color: #a557b6 !important;
+    border: 1px solid #a557b6 !important;
+    border-radius: 10px !important;
+}
+
+    .unpaid-tab:hover {
+        border: none !important;
+        background-color: #a557b6 !important;
+        color: white !important;
+    }
+
+    .unpaid-tab.active {
+        border: none !important;
+        background-color: #a557b6 !important;
         color: white !important;
     }
 

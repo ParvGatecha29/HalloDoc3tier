@@ -53,29 +53,7 @@ public class AdminDashboardController : Controller
         return View(dash);
     }
 
-    public async Task<IActionResult> NewCasePartial()
-    {
-        var reqtype = HttpContext.Session.GetString("reqtype");
-        var pageNumber = HttpContext.Session.GetString("pageNumber");
-        var region = HttpContext.Session.GetString("region") != null ? HttpContext.Session.GetString("region"): "0";
-        var search = HttpContext.Session.GetString("search") != null ? HttpContext.Session.GetString("search"): "";
-        if(reqtype == null)
-        {
-            reqtype = "0";
-        }
-        if (pageNumber == null || HttpContext.Session.GetString("state")!="1")
-        {
-            pageNumber = "1";
-        }
-        var dash = new AdminDashboard();
-        dash.state = 1;
-        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(newcase, int.Parse(reqtype),int.Parse(pageNumber), int.Parse(region), search); 
-       
-        dash.regions = _adminDashboardService.GetAllRegions();
-        HttpContext.Session.SetString("state","1");
-        return PartialView("_CaseTable", dash);
-    }
-    public async Task<IActionResult> PendingCasePartial()
+    public async Task<IActionResult> CaseTable(int state)
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
         var pageNumber = HttpContext.Session.GetString("pageNumber");
@@ -85,104 +63,41 @@ public class AdminDashboardController : Controller
         {
             reqtype = "0";
         }
-        if (pageNumber == null || HttpContext.Session.GetString("state") != "2")
+        if (pageNumber == null || HttpContext.Session.GetString("state") != "1")
         {
             pageNumber = "1";
         }
         var dash = new AdminDashboard();
-        dash.state = 2;
-        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(pendingcase, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search);
-       
-        dash.regions = _adminDashboardService.GetAllRegions();
-        HttpContext.Session.SetString("state", "2");
-        return PartialView("_CaseTable", dash);
-    }
-    public async Task<IActionResult> ActiveCasePartial()
-    {
-        var reqtype = HttpContext.Session.GetString("reqtype");
-        var pageNumber = HttpContext.Session.GetString("pageNumber");
-        var region = HttpContext.Session.GetString("region") != null ? HttpContext.Session.GetString("region") : "0";
-        var search = HttpContext.Session.GetString("search") != null ? HttpContext.Session.GetString("search") : "";
-        if (reqtype == null)
+        dash.state = state;
+        int[] status;
+        switch (state)
         {
-            reqtype = "0";
+            case 1:
+                status = new int[] { 1 };
+                break;
+            case 2:
+                status = new int[] { 2 };
+                break;
+            case 3:
+                status = new int[] { 4,5 };
+                break;
+            case 4:
+                status = new int[] { 6 };
+                break;
+            case 5:
+                status = new int[] { 3,7,8 };
+                break;
+            case 6:
+                status = new int[] { 9 };
+                break;
+            default: status = new int[] { 1 }; break;
+
         }
-        if (pageNumber == null || HttpContext.Session.GetString("state") != "3")
-        {
-            pageNumber = "1";
-        }
-        var dash = new AdminDashboard();
-        dash.state = 3;
-        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(activecase, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search);
+        
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(status, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search);
 
         dash.regions = _adminDashboardService.GetAllRegions();
-        HttpContext.Session.SetString("state", "3");
-        return PartialView("_CaseTable", dash);
-    }
-    public async Task<IActionResult> ConcludeCasePartial()
-    {
-        var reqtype = HttpContext.Session.GetString("reqtype");
-        var pageNumber = HttpContext.Session.GetString("pageNumber");
-        var region = HttpContext.Session.GetString("region") != null ? HttpContext.Session.GetString("region") : "0";
-        var search = HttpContext.Session.GetString("search") != null ? HttpContext.Session.GetString("search") : "";
-        if (reqtype == null)
-        {
-            reqtype = "0";
-        }
-        if (pageNumber == null || HttpContext.Session.GetString("state") != "4")
-        {
-            pageNumber = "1";
-        }
-        var dash = new AdminDashboard();
-        dash.state = 4;
-        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(concludecase, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search);
-
-        dash.regions = _adminDashboardService.GetAllRegions();
-        HttpContext.Session.SetString("state", "4");
-        return PartialView("_CaseTable", dash);
-    }
-    public async Task<IActionResult> ToCloseCasePartial()
-    {
-        var reqtype = HttpContext.Session.GetString("reqtype");
-        var pageNumber = HttpContext.Session.GetString("pageNumber");
-        var region = HttpContext.Session.GetString("region") != null ? HttpContext.Session.GetString("region") : "0";
-        var search = HttpContext.Session.GetString("search") != null ? HttpContext.Session.GetString("search") : "";
-        if (reqtype == null)
-        {
-            reqtype = "0";
-        }
-        if (pageNumber == null || HttpContext.Session.GetString("state") != "5")
-        {
-            pageNumber = "1";
-        }
-        var dash = new AdminDashboard();
-        dash.state = 5;
-        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(toclosecase, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search);
-
-        dash.regions = _adminDashboardService.GetAllRegions();
-        HttpContext.Session.SetString("state", "5");
-        return PartialView("_CaseTable", dash);
-    }
-    public async Task<IActionResult> UnpaidCasePartial()
-    {
-        var reqtype = HttpContext.Session.GetString("reqtype");
-        var pageNumber = HttpContext.Session.GetString("pageNumber");
-        var region = HttpContext.Session.GetString("region") != null ? HttpContext.Session.GetString("region") : "0";
-        var search = HttpContext.Session.GetString("search") != null ? HttpContext.Session.GetString("search") : "";
-        if (reqtype == null)
-        {
-            reqtype = "0";
-        }
-        if (pageNumber == null || HttpContext.Session.GetString("state") != "6")
-        {
-            pageNumber = "1";
-        }
-        var dash = new AdminDashboard();
-        dash.state = 6;
-        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(unpaidcase, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search);
-
-        dash.regions = _adminDashboardService.GetAllRegions();
-        HttpContext.Session.SetString("state", "6");
+        HttpContext.Session.SetString("state", "1");
         return PartialView("_CaseTable", dash);
     }
 
@@ -386,7 +301,7 @@ public class AdminDashboardController : Controller
         string[] format = { "dd/MMMM/yyyy", "d/MMMM/yyyy" };
         AdminDashboardData ad = _adminDashboardService.GetRequestById(requestid);
         EncounterForm ef = _adminDashboardService.GetEncounterForm(requestid);
-        if(ef!=null)
+        if (ef != null)
         {
             var data = new ViewEncounterForm
             {
@@ -439,7 +354,7 @@ public class AdminDashboardController : Controller
             };
             return View(data);
         }
-        
+
     }
 
     public JsonResult EditEncounterForm(ViewEncounterForm model)
@@ -517,6 +432,38 @@ public class AdminDashboardController : Controller
             FileName = "Encounter_Form.pdf"
         };
 
+    }
+
+    public IActionResult AdminProfile()
+    {
+        Admin admin = _adminDashboardService.GetAdminById(HttpContext.Session.GetString("userId"));
+        AdminProfile profile = new AdminProfile
+        {
+            adminId = admin.Adminid,
+            Username = admin.Firstname,
+            Password = "1",
+            Status = admin.Status.ToString(),
+            Role = admin.Roleid.ToString(),
+            FirstName = admin.Firstname,
+            LastName = admin.Lastname,
+            Email = admin.Email,
+            ConfirmEmail = admin.Email,
+            Phone = admin.Mobile,
+            Address1 = admin.Address1,
+            Address2 = admin.Address2,
+            City = admin.City,
+            Zip = admin.Zip,
+
+        };
+        profile.regions = _adminDashboardService.GetAllRegions();
+
+        return View(profile);
+    }
+
+    public IActionResult EditProfile(AdminProfile profile)
+    {
+        _adminDashboardService.UpdateProfile(profile);
+        return RedirectToAction("AdminProfile");
     }
 }
 

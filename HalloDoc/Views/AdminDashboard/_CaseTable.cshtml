@@ -20,7 +20,7 @@
         last = first + Model.pagedList.PageSize - 1;
     }
 
-    string[] colors = { "#60bc60", "#ee9125", "#007fc7", "#e36478", "#943db8" };
+    string[] colors = { "#5fbc61", "#ed9124", "#007fc6", "#e26277"};
     @if (Model.pagedList != null && Model.pagedList.Count > 0)
     {
         @foreach (var obj in Model.pagedList)
@@ -185,7 +185,7 @@
 
     @if (Model != null)
     {
-        <div class="tablediv d-none d-md-block">
+        <div class="tablediv d-none d-md-block table-responsive">
             <table class="table caseTable" id="adminTable">
                 <thead class="w-100">
                     <tr>
@@ -228,12 +228,10 @@
 
                         <th scope="col">Address</th>
 
-                        @if (Model.state != 6)
+                        @if (Model.state != 6 && Model.state != 4)
                         {
                             <th scope="col">Notes</th>
                         }
-
-                        <th scope="col">Chat With</th>
                         <th scope="col">Actions</th>
 
 
@@ -318,20 +316,6 @@
                                 <td>@obj.notes</td>
                             }
 
-
-                            <td>
-                                @if (@obj.status != 1)
-                                {
-                                    <button type="button" class="btn btn-outline-light"><i class="fa fa-solid fa-user text-light"></i> Patient</button>
-                                    <button type="button" class="btn btn-outline-light"><i class="fa-solid fa-user-doctor text-light"></i> Provider </button>
-                                }
-                                else
-                                {
-                                    <button type="button" class="btn btn-outline-light"><i class="fa fa-solid fa-user text-light"></i> Patient</button>
-                                }
-
-                            </td>
-
                             <td>
                                 @if (@obj.status == 1)
                                 {
@@ -339,7 +323,7 @@
                                         <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
                                             Actions
                                         </button>
-                                        <ul class="dropdown-menu" aria-labelledby="action">
+                                        <ul class="dropdown-menu z-3" aria-labelledby="action">
                                             <li><a class="dropdown-item theme-color assigncase" href="#"><i class="fa-regular fa-clipboard"></i>Assign Case</a></li>
                                             <li><a class="dropdown-item theme-color cancelcase"><i class="fa-regular fa-circle-xmark"></i> Cancel case</a></li>
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
@@ -350,11 +334,11 @@
                                 }
                                 else if (@obj.status == 2)
                                 {
-                                    <div class="dropdown bg-transparent">
+                                    <div class="dropdown bg-transparent ">
                                         <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
                                             Actions
                                         </button>
-                                        <ul class="dropdown-menu" aria-labelledby="action">
+                                        <ul class="dropdown-menu z-3" aria-labelledby="action">
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>

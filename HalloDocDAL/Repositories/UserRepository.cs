@@ -1,5 +1,6 @@
 ﻿using HalloDocDAL.Contacts;
 using HalloDocDAL.Data;
+using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,7 +24,7 @@ namespace HalloDocDAL.Repositories
         {
             _context.Aspnetusers.Add(user);
             var result = await _context.SaveChangesAsync();
-            return result>0;
+            return result > 0;
         }
 
         public async Task<Aspnetuser> FindByEmail(string email)
@@ -43,8 +44,8 @@ namespace HalloDocDAL.Repositories
         }
         public bool storeToken(string email, string token)
         {
-            var em = _context.Tokens.FirstOrDefault(x=> x.Email == email);
-            if(em == null)
+            var em = _context.Tokens.FirstOrDefault(x => x.Email == email);
+            if (em == null)
             {
                 var tokens = new Token
                 {
@@ -67,16 +68,47 @@ namespace HalloDocDAL.Repositories
             return tokens.Token1;
         }
 
-        public bool IsUserBlocked(string email,string phone)
+        public bool IsUserBlocked(string email, string phone)
         {
             var block = _context.Blockrequests.FirstOrDefault(x => x.Email == email || x.Phonenumber == phone);
-            if(block == null)
+            if (block == null)
             {
                 return false;
             }
             return (bool)!block.Isactive;
         }
 
-        
+        public Admin GetAdminById(string id)
+        {
+            return _context.Admins.FirstOrDefault(x => x.Aspnetuserid == id);
+        }
+
+        public bool UpdateAdminProfile(AdminProfile profile)
+        {
+            Admin admin = _context.Admins.FirstOrDefault(x => x.Adminid == profile.adminId);
+            if (profile.formtype == 1)
+            {
+                admin.Firstname = profile.FirstName; 
+                admin.Lastname = profile.LastName;
+                admin.Email = profile.Email;
+                admin.Mobile = profile.Phone;
+            }
+            else if (profile.formtype == 2)
+            {
+                admin.Address1 = profile.Address1;
+                admin.Address2 = profile.Address2;
+                admin.City = profile.City;
+                admin.Zip = profile.Zip;
+            }
+            else if (profile.formtype == 3)
+            {
+                Aspnetuser user = _context.Aspnetusers.FirstOrDefault(x => x.Id == admin.Aspnetuserid);
+                user.Passwordhash = profile.Password;
+                _context.Aspnetusers.Update(user);
+            }
+            _context.Admins.Update(admin);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

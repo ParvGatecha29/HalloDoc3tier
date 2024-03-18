@@ -43,7 +43,7 @@
 <div id="divdiv">
     <ul class="nav nav-justified m-2 d-flex flex-wrap" id="dashboard_tab" role="tablist">
         <li class="nav-item m-2 col">
-            <button class="nav-link new mb-0 bg-primary-subtle text-primary border border-primary rounded" id="new-tab" data-bs-toggle="tab" data-bs-target="#new" type="button" role="tab" aria-controls="home" aria-selected="true">
+            <button class="nav-link new-tab mb-0 rounded" id="new-tab" data-bs-toggle="tab" data-bs-target="#new" type="button" role="tab" aria-controls="home" aria-selected="true">
                 <div class="py-2 ps-2 w-100">
                     <div class="d-flex">
                         <span></span>
@@ -55,12 +55,12 @@
                 </div>
             </button>
             <div class=" d-none d-md-flex justify-content-center text-align-center w-100 align-items-center">
-                <div class="arrow-down text-opacity-25" style="color:rgb(32,63,154)"></div>
+                <div class="arrow-down text-opacity-25" style="color:#1f1f8c"></div>
             </div>
         </li>
 
         <li class="nav-item m-2 col">
-            <button class="nav-link pending bg-info-subtle text-info border border-info rounded" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab" aria-controls="home" aria-selected="true">
+            <button class="nav-link pending-tab rounded" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab" aria-controls="home" aria-selected="true">
                 <div class="py-2 ps-2 w-100">
                     <div class="d-flex">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
@@ -72,12 +72,12 @@
                 </div>
             </button>
             <div class="justify-content-center text-align-center w-100 d-none d-md-flex align-items-center">
-                <div class="arrow-down text-opacity-25" style="color:rgb(37,164,202)"></div>
+                <div class="arrow-down text-opacity-25" style="color:#0dcaf0"></div>
             </div>
         </li>
 
         <li class="nav-item m-2 col">
-            <button class="nav-link act bg-success-subtle text-success border border-success rounded" id="active-tab" data-bs-toggle="tab" data-bs-target="#active" type="button" role="tab" aria-controls="home" aria-selected="true">
+            <button class="nav-link active-tab rounded" id="active-tab" data-bs-toggle="tab" data-bs-target="#active" type="button" role="tab" aria-controls="home" aria-selected="true">
                 <div class="py-2 ps-2 w-100">
                     <div class="d-flex">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right-circle" viewBox="0 0 16 16">
@@ -89,12 +89,12 @@
                 </div>
             </button>
             <div class="justify-content-center text-align-center w-100 d-none d-md-flex align-items-center">
-                <div class="arrow-down text-opacity-25" style="color:rgb(48,129,62)"></div>
+                <div class="arrow-down text-opacity-25" style="color:#05a339"></div>
             </div>
         </li>
 
         <li class="nav-item m-2 col">
-            <button class="nav-link conclude border border-danger rounded" style="color:rgb(174,38,119);background-color:rgb(247,230,238)" id="conclude-tab" data-bs-toggle="tab" data-bs-target="#conclude" type="button" role="tab" aria-controls="home" aria-selected="true">
+            <button class="nav-link conclude-tab rounded" id="conclude-tab" data-bs-toggle="tab" data-bs-target="#conclude" type="button" role="tab" aria-controls="home" aria-selected="true">
                 <div class="py-2 ps-2 w-100">
                     <div class="d-flex">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
@@ -107,12 +107,12 @@
                 </div>
             </button>
             <div class="justify-content-center text-align-center w-100 d-none d-md-flex align-items-center">
-                <div class="arrow-down text-opacity-25" style="color:rgb(174,38,119)"></div>
+                <div class="arrow-down text-opacity-25" style="color:#cb1766"></div>
             </div>
         </li>
 
         <li class="nav-item m-2 col">
-            <button class="nav-link toclose rounded" style="color:rgb(37,110,176);background-color:rgb(229,238,245)" id="toclose-tab" data-bs-toggle="tab" data-bs-target="#toclose" type="button" role="tab" aria-controls="home" aria-selected="true">
+            <button class="nav-link toclose-tab rounded" id="toclose-tab" data-bs-toggle="tab" data-bs-target="#toclose" type="button" role="tab" aria-controls="home" aria-selected="true">
                 <div class="py-2 ps-2 w-100">
                     <div class="d-flex">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-x-fill" viewBox="0 0 16 16">
@@ -124,12 +124,12 @@
                 </div>
             </button>
             <div class="justify-content-center text-align-center w-100 d-none d-md-flex align-items-center">
-                <div class="arrow-down text-opacity-25" style="color:rgb(37,110,176)"></div>
+                <div class="arrow-down text-opacity-25" style="color:#185ce3"></div>
             </div>
         </li>
 
         <li class="nav-item m-2 col">
-            <button class="nav-link unpaid rounded" style="color:rgb(145,105,179);background-color:rgb(239,238,244)" id="unpaid-tab" data-bs-toggle="tab" data-bs-target="#unpaid" type="button" role="tab" aria-controls="home" aria-selected="true">
+            <button class="nav-link unpaid-tab rounded" id="unpaid-tab" data-bs-toggle="tab" data-bs-target="#unpaid" type="button" role="tab" aria-controls="home" aria-selected="true">
                 <div class="py-2 ps-2 w-100">
                     <div class="d-flex">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
@@ -141,7 +141,7 @@
                 </div>
             </button>
             <div class="justify-content-center text-align-center w-100 d-none d-md-flex align-items-center">
-                <div class="arrow-down text-opacity-25" style="color:rgb(145,105,179)"></div>
+                <div class="arrow-down text-opacity-25" style="color:#a557b6"></div>
             </div>
         </li>
     </ul>
@@ -255,15 +255,6 @@
                         <circle fill="#e26277" r="45" cx="50" cy="50" stroke="grey" stroke-width="3" />
                     </svg>
                     <span class="ms-2">Business</span>
-                </div>
-            </button>
-
-            <button onclick="filterrequests(5)" class="reqtype rounded theme-color border border-0 bg-transparent d-flex align-items-center ms-0 ms-md-2" style="font-size: 13px;">
-                <div class="d-inline d-md-flex">
-                    <svg height="15" width="15" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <circle fill="#9966cd" r="45" cx="50" cy="50" stroke="grey" stroke-width="3" />
-                    </svg>
-                    <span class="ms-2">VIP</span>
                 </div>
             </button>
         </div>
@@ -501,37 +492,37 @@
             
             $('#statusof').html('(New)');
             
-            $('#partial-load').load('/AdminDashboard/NewCasePartial');
+            $('#partial-load').load('/AdminDashboard/CaseTable?state=1');
         });
         $('#pending-tab').click(function () {
             
             $('#statusof').html('(Pending)');
         
-            $('#partial-load').load('/AdminDashboard/PendingCasePartial');
+            $('#partial-load').load('/AdminDashboard/CaseTable?state=2');
         });
         $('#active-tab').click(function () {
             
             $('#statusof').html('(Active)');
         
-            $('#partial-load').load('/AdminDashboard/ActiveCasePartial');
+            $('#partial-load').load('/AdminDashboard/CaseTable?state=3');
         });
         $('#conclude-tab').click(function () {
             
             $('#statusof').html('(Conclude)');
            
-            $('#partial-load').load('/AdminDashboard/ConcludeCasePartial');
+            $('#partial-load').load('/AdminDashboard/CaseTable?state=4');
         });
         $('#toclose-tab').click(function () {
            
             $('#statusof').html('(To close)');
         
-            $('#partial-load').load('/AdminDashboard/ToCloseCasePartial');
+            $('#partial-load').load('/AdminDashboard/CaseTable?state=5');
         });
         $('#unpaid-tab').click(function () {
             
             $('#statusof').html('(Unpaid)');
           
-            $('#partial-load').load('/AdminDashboard/UnpaidCasePartial');
+            $('#partial-load').load('/AdminDashboard/CaseTable?state=6');
         });
 
         var state = @Accessor.HttpContext.Session.GetString("state");

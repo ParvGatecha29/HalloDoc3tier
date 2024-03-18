@@ -43,7 +43,7 @@
     }
 }
 
-<div class="container">
+<div class="container" id="divdiv">
     <div class=" mt-5 d-flex justify-content-between align-items-center">
         <h4>@okok(Convert.ToInt32(@Model.request.status)) Profile <span class="badge rounded-5 Reqtyp" style="background-color:@GetTableColorClass(@Model.request.requesttype)">@GetReqType(Model.request.requesttype) </span></h4>
 
@@ -160,7 +160,7 @@
                 <div class="d-grid gap-2 d-flex justify-content-center  justify-content-md-end mt-4 pt-4 mb-3">
                     <button type="button" class="btn text-white btn-info assigncase">Assign</button>
 
-                    <button type="button" class="btn text-white btn-info" onclick="location.href='@Url.Action("ViewNotes","AdminDashboard",new{requestid = Model.request.requestId})'">View Notes</button>
+                    <button type="button" class="btn text-white btn-info viewnotes" >View Notes</button>
 
                     <button type="button" class="btn text-white btn-danger cancelcase">Cancel</button>
 
@@ -351,6 +351,21 @@
                 }
             });
         });
+
+        $('.viewnotes').click(function () {
+            var rid = @Model.request.requestId;
+            $.ajax({
+                url: '@Url.Action("ViewNotes","AdminDashboard")',
+                type: 'POST',
+                data: { requestid: rid },
+                success: function (data) {
+                    $('#divdiv').html(data);
+                },
+                error: function (error) {
+
+                }
+            });
+        })
     });
 </script>
 

@@ -1,4 +1,5 @@
-﻿using HalloDocDAL.Models;
+﻿using HalloDocDAL.Model;
+using HalloDocDAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace HalloDocDAL.Contacts
         string GetToken(string email);
 
         bool storeToken(string email, string token);
+        Admin GetAdminById(string id);
 
+        bool UpdateAdminProfile(AdminProfile profile);
     }
 }

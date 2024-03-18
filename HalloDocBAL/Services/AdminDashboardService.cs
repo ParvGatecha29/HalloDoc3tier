@@ -17,12 +17,14 @@ namespace HalloDocBAL.Services
         private readonly IRequestRepository _requestRepository;
         private readonly IPhysicianRepository _physicianRepository;
         private readonly IRequestWiseFilesRepository _requestWiseFilesRepository;
+        private readonly IUserRepository _userRepository;
 
-        public AdminDashboardService(IRequestRepository requestRepository, IPhysicianRepository physicianRepository, IRequestWiseFilesRepository requestWiseFilesRepository)
+        public AdminDashboardService(IRequestRepository requestRepository, IPhysicianRepository physicianRepository, IRequestWiseFilesRepository requestWiseFilesRepository, IUserRepository userRepository)
         {
             _requestRepository = requestRepository;
             _physicianRepository = physicianRepository;
             _requestWiseFilesRepository = requestWiseFilesRepository;
+            _userRepository = userRepository;
         }
         public List<AdminDashboardData> GetRequests()
         {
@@ -172,5 +174,16 @@ namespace HalloDocBAL.Services
             var data = _requestRepository.GetEncounterForm(requestId);
             return data;
         }
+
+        public Admin GetAdminById(string id)
+        {
+            return _userRepository.GetAdminById(id);
+        }
+        public bool UpdateProfile(AdminProfile model)
+        {
+            _userRepository.UpdateAdminProfile(model);
+            return true;
+        }
+
     }
 }
