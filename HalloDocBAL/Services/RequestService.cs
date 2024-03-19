@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HalloDocBAL.Services
 {
@@ -45,7 +46,7 @@ namespace HalloDocBAL.Services
             var request = new Request
             {
                 Userid = model.userid,
-                Requesttypeid = model.typeid,
+                Requesttypeid = model.typeid != 0 ? model.typeid : 1,
                 Firstname = model.firstName,
                 Lastname = model.lastName,
                 Phonenumber = model.phone,
@@ -70,37 +71,47 @@ namespace HalloDocBAL.Services
                 Strmonth = model.month
             };
             await _requestClientRepository.AddRequestClient(requestclient);
-            foreach(var file in model.document)
+            if(model.document != null)
             {
-                var filePath = "";
-                if (file.Length > 0)
+                foreach (var file in model.document)
                 {
-                    var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/documents", request.Requestid.ToString());
-                    if (!Directory.Exists(uploadsFolderPath))
+                    var filePath = "";
+                    if (file.Length > 0)
                     {
-                        Directory.CreateDirectory(uploadsFolderPath);
+                        var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/documents", request.Requestid.ToString());
+                        if (!Directory.Exists(uploadsFolderPath))
+                        {
+                            Directory.CreateDirectory(uploadsFolderPath);
+                        }
+                        filePath = Path.Combine(uploadsFolderPath, file.FileName);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
                     }
-                    filePath = Path.Combine(uploadsFolderPath, file.FileName);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    if (file.FileName.Length > 0)
                     {
-                        await file.CopyToAsync(stream);
+                        var requestWiseFile = new Requestwisefile
+                        {
+                            Requestid = request.Requestid,
+                            Filename = file.FileName,
+                            Createddate = DateTime.Now,
+                            Ispatientrecords = true
+                        };
+                        await _requestWiseFilesRepository.AddFiles(requestWiseFile);
                     }
-                }
-                if (file.FileName.Length > 0)
-                {
-                    var requestWiseFile = new Requestwisefile
-                    {
-                        Requestid = request.Requestid,
-                        Filename = file.FileName,
-                        Createddate = DateTime.Now,
-                        Ispatientrecords = true
-                    };
-                    await _requestWiseFilesRepository.AddFiles(requestWiseFile);
                 }
             }
+            if (model.symptoms != null)
+            {
+                AdminDashboardData data = new AdminDashboardData
+                {
+                    requestId = request.Requestid,
+                    adminNotes = model.symptoms
+                };
+                _requestRepository.AddNotes(data);
+            }
             return true;
-            
-
         }
 
         public async Task<bool> ConciergeRequest(Req model)
@@ -201,6 +212,12 @@ namespace HalloDocBAL.Services
                 Businessid = business.Businessid
             };
             return await _requestBusinessRepository.AddBusinessRequest(reqbus);
+        }
+
+        public bool AddNotes(AdminDashboardData data)
+        {
+            _requestRepository.AddNotes(data);
+            return true;
         }
     }
 }

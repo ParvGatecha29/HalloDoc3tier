@@ -10,8 +10,8 @@ namespace HalloDocBAL.Interfaces
     public interface IRequestService
     {
         Task<bool> PatientRequest(Req model);
-
         Task<bool> ConciergeRequest(Req model);
         Task<bool> BusinessRequest(Req model);
+        bool AddNotes(AdminDashboardData data);
     }
 }

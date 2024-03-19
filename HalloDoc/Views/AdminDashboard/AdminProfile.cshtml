@@ -29,7 +29,7 @@
                 <div class="col-lg-6 col-12 form-floating temp mt-4">
                     <div class="form-floating mb-3">
                         <input asp-for="Username" disabled type="text" required class="form-control inputs border" placeholder="User Name">
-                        <label for="floatingInput" class="input_labels floating-label">User Name</label>
+                        <label for="floatingInput" class="floating-label">User Name</label>
                     </div>
                 </div>
                 <div class="col-lg-6 col-12 form-floating temp mt-4">
@@ -105,21 +105,6 @@
                     <input asp-for="Phone" disabled id="phone" class="adminInfoInput py-3 form-control inputs border" type="tel" />
                 </div>
                 <div class="col-lg-6 col-12 d-flex mt-4">
-                    @* <div class="row ms-2">
-                    <div class="form-check mx-2">
-                    <input class="form-check-input border border-dark" type="checkbox">
-                    <label class="form-check-label" for="customCheck1">
-                    District of Columbia
-                    </label>
-                    </div>
-                    <div class="form-check mx-2">
-                    <input class="form-check-input border border-dark" type="checkbox">
-                    <label class="form-check-label" for="customCheck2">
-                    New York
-                    </label>
-                    </div>
-                    </div> *@
-
                     @for (int i = 0; i < Model.regions.Count; i++)
                     {
                         <div class="form-check mx-2">
@@ -129,8 +114,6 @@
                             </label>
                         </div>
                     }
-
-
                 </div>
             </div>
 

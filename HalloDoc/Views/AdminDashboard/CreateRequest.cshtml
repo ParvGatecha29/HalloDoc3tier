@@ -4,7 +4,7 @@
     <div class="row m-4 col-xl-6 col-md-8 col-11">
         <p class="col fs-4 fw-bold pb-0 mb-0 d-inline">Submit Information</p>
         <div class="col mb-0 text-end">
-            <a class="text-decoration-none text-info rounded border border-info p-2 i-info" onclick="LoadDashboard()">
+            <a class="text-decoration-none text-info rounded border border-info p-2 i-info" onclick="window.location.reload()">
                 <i class="bi bi-chevron-left i-info"></i>
                 Back
             </a>
@@ -18,39 +18,44 @@
 
             <div class="row g-2">
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating required">
                         <input type="text" class="form-control" id="Firstname" placeholder="First Name" name="firstName">
-                        <label for="Firstname" class="floatingLabel">First Name</label>
+                        <label for="Firstname" class="floating-label">First Name</label>
+                        <span style="color:red; display:none">Required!</span>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating required">
                         <input type="text" class="form-control" id="Lastname" placeholder="Last Name" name="lastName">
                         <label for="Lastname" class="floatingLabel">Last Name</label>
+                        <span style="color:red; display:none">Required!</span>
                     </div>
    
                 </div>
 
                 <div class="col-md-6 col-12 mb-3 z-3">
-                    <div class="form-floating">
+                    <div class="form-floating required">
                         <input type="tel" class="form-control p-3 ps-5" id="Mobile" placeholder="(201) 555-0123" name="phone">
+                        <span style="color:red; display:none">Required!</span>
                     </div>
                    
                 </div>
 
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating required">
                         <input class="form-control" id="Email" placeholder="Email" name="email">
                         <label for="Email" class="floatingLabel">Email</label>
+                        <span style="color:red; display:none">Required!</span>
                     </div>
                 
                 </div>
 
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating required">
                         <input type="date" class="form-control" id="dob" name="dob">
                         <label for="dob" class="floatingLabel">Date Of Birth</label>
+                        <span style="color:red; display:none">Required!</span>
                     </div>
             
                 </div>
@@ -60,36 +65,38 @@
             <p class="fs-5 fw-bold pt-3">Location</p>
             <div class="row g-2">
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="Street" placeholder="Street">
+                    <div class="form-floating required">
+                        <input type="text" class="form-control" id="Street" placeholder="Street" name="street">
                         <label for="Street" class="floatingLabel">Street</label>
+                        <span style="color:red; display:none">Required!</span>
                     </div>
                   
                 </div>
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="City" placeholder="City">
+                    <div class="form-floating required">
+                        <input type="text" class="form-control" id="City" placeholder="City" name="city">
                         <label for="City" class="floatingLabel">City</label>
+                        <span style="color:red; display:none">Required!</span>
                     </div>
-                    <span id="City" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
-                        <input type="text" class="form-control" id="State" placeholder="State" >
+                    <div class="form-floating required">
+                        <input type="text" class="form-control" id="State" placeholder="State" name="state">
                         <label for="State" class="floatingLabel">State</label>
+                        <span style="color:red; display:none">Required!</span>
                     </div>
                   
                 </div>
                 <div class="col-md-6 col-12 mb-3">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="Zipcode" placeholder="Zip Code" >
+                        <input type="text" class="form-control" id="Zipcode" placeholder="Zip Code" name="zipcode" >
                         <label for="Zipcode" class="floatingLabel">Zip Code (Optional)</label>
                     </div>
                     <span id="Zipcode" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 col-12 mb-3">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="roomNumber" placeholder="Room# / Suite (Optional)" >
+                        <input type="text" class="form-control" id="roomNumber" placeholder="Room# / Suite (Optional)" name="room">
                         <label for="roomNumber" class="floatingLabel">Room # (Optional)</label>
                     </div>
                    
@@ -97,7 +104,7 @@
             </div>
 
             <div class="mb-3 form-floating">
-                <textarea class="form-control" placeholder="Admin Notes (Optional)" id="notes"  style="height: 100px"></textarea>
+                <textarea class="form-control" placeholder="Admin Notes (Optional)" id="notes" name="symptoms" style="height: 100px"></textarea>
                 <label for="notes" class="floatingLabel"> Admin Notes (Optional) </label>
               
             </div>
@@ -115,28 +122,45 @@
     $('#createRequestForm').on('submit', function (e) {
         e.preventDefault();
         var data = new FormData(this);
+        var validate = true;
+        $('.required').each(function () {
+            var div = $(this);
+            if ($(div).find('input').val() == "") {
+                Swal.fire({
+                    title: "Information required",
+                    text: "Please enter all the details",
+                    icon: "error"
 
-        $.ajax({
-            url: "SaveCreateRequest",
-            type: "Post",
-            data: data,
-            processData: false,
-            contentType: false,
-            success: function (result) {
-                if (result.success) {
-                    $("#dashboard").load('@Url.Action("LoadCreateRequest", "Admin")');
-                    toastr.success("Request Created!");
-                }
-                else {
-                    $.each(result.errors, function (key, value) {
-                        var idvalue = key.substring(key.lastIndexOf('.') + 1);
-                        var id = '#' + idvalue;
-                        console.log(id);
-                        $(id).text(value);
-                    });
-                    toastr.error("Please provide valid data.");
-                }
+                });
+                var span = $(div).children('span');
+                span.show();
+
+                validate = false;
             }
-        });
+        })
+        if (validate) {
+            $.ajax({
+                url: '@Url.Action("SaveRequest","AdminDashboard")',
+                type: "Post",
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        $("#divdiv").load('@Url.Action("CreateRequest", "AdminDashboard")');
+                    }
+                }
+            });
+        }
+        
     });
+
+    const phoneInputField = document.querySelectorAll("input[type='tel']");
+    console.log(phoneInputField);
+    for (var i = 0; i < phoneInputField.length; i++) {
+        const phoneInput = window.intlTelInput(phoneInputField[i], {
+            utilsScript:
+                "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        })
+    };
 </script>

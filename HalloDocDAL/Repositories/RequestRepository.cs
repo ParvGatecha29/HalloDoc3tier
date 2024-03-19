@@ -56,7 +56,7 @@ namespace HalloDocDAL.Repositories
         }
 
 
-        public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search)
+        public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search, bool all)
         {
             int pageSize = 10;
             //        var data = _context.Requests
@@ -121,7 +121,14 @@ namespace HalloDocDAL.Repositories
                 reqclnt = reqclnt.Where(_ => _.Firstname.ToLower().Contains(search) || _.Lastname.ToLower().Contains(search) || _.Request.Firstname.ToLower().Contains(search)).AsQueryable();
 
             }
-            req = reqclnt.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            if (all)
+            {
+                req = reqclnt.ToList();
+            }
+            else
+            {
+                req = reqclnt.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            }
             List<AdminDashboardData> abc = new List<AdminDashboardData>();
                          
             foreach (var item in req)
@@ -152,8 +159,14 @@ namespace HalloDocDAL.Repositories
                 }
                 abc.Add(def);
             }
-
-            PagedList<AdminDashboardData> result = await PagedList<AdminDashboardData>.CreateAsync(abc, reqclnt.Count(), pageNumber,10);
+            PagedList<AdminDashboardData> result;
+            if (all) {
+                 result = await PagedList<AdminDashboardData>.CreateAsync(abc, reqclnt.Count(), 1, reqclnt.Count());
+            }
+            else
+            {
+                result = await PagedList<AdminDashboardData>.CreateAsync(abc, reqclnt.Count(), pageNumber, 10);
+            }
             return result;
         }
 
@@ -185,8 +198,6 @@ namespace HalloDocDAL.Repositories
             return data;
         }
 
-
-
         public List<Dashboard> GetRequestByEmail(string email)
         {
             var requestData = _context.Requests
@@ -217,10 +228,6 @@ namespace HalloDocDAL.Repositories
         }
         public AdminDashboardData GetNotes(int id)
         {
-
-
-
-
             Requestnote rn = _context.Requestnotes.Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).FirstOrDefault(x => x.Requestid == id);
             if (rn == null)
             {

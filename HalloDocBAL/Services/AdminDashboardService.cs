@@ -32,9 +32,9 @@ namespace HalloDocBAL.Services
             return data;
         }
 
-        public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search)
+        public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search, bool all)
         {
-            var data = await _requestRepository.GetRequestsByStatus(status, reqtype, pageNumber, region, search);
+            var data = await _requestRepository.GetRequestsByStatus(status, reqtype, pageNumber, region, search,all);
             return data;
         }
         public AdminDashboardData GetRequestById(int id)

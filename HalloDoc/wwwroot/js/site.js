@@ -6,6 +6,7 @@ const btn1 = document.querySelector(".btn-toggle");
 const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 
 const currentTheme = localStorage.getItem("theme");
+document.documentElement.setAttribute("data-bs-theme", currentTheme);
 if (currentTheme == "dark") {
     document.body.classList.toggle("dark-theme");
 } else if (currentTheme == "light") {
@@ -25,6 +26,7 @@ btn1.addEventListener("click", function () {
             : "light";
     }
     localStorage.setItem("theme", theme);
+    document.documentElement.setAttribute("data-bs-theme", theme);
 });
 
 var date = new Date();

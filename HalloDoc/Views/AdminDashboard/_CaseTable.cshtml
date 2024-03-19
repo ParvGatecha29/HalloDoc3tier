@@ -1,5 +1,6 @@
 ﻿@model HalloDocDAL.Model.AdminDashboard
 @{
+    var list = Model.pagedList.ToList();
     int nextPage = 0, previousPage = 0;
     if (Model.pagedList.hasNext)
     {
@@ -11,7 +12,7 @@
     }
     int first = Model.pagedList.CurrentPage * Model.pagedList.PageSize - 9;
     int last;
-    if(first + Model.pagedList.PageSize - 1 > Model.pagedList.TotalCount)
+    if (first + Model.pagedList.PageSize - 1 > Model.pagedList.TotalCount)
     {
         last = Model.pagedList.TotalCount;
     }
@@ -20,7 +21,7 @@
         last = first + Model.pagedList.PageSize - 1;
     }
 
-    string[] colors = { "#5fbc61", "#ed9124", "#007fc6", "#e26277"};
+    string[] colors = { "#5fbc61", "#ed9124", "#007fc6", "#e26277" };
     @if (Model.pagedList != null && Model.pagedList.Count > 0)
     {
         @foreach (var obj in Model.pagedList)
@@ -28,7 +29,7 @@
             <div class="d-md-none tr" data-rid="@obj.requestId">
                 <div class="bg-info-subtle " data-bs-toggle="collapse" data-bs-target="#collapseexample_@obj.requestId"
                      aria-expanded="false" aria-controls="collapseexample">
-                    <div class="td" name='reqtype'>
+                    <div class="td" name='reqtype' hidden>
                         @obj.requesttype
                     </div>
                     <div class="flex-column gap-2 border-bottom border-5 pt-3 pb-5 px-4">
@@ -185,54 +186,51 @@
 
     @if (Model != null)
     {
-        <div class="tablediv d-none d-md-block table-responsive">
-            <table class="table caseTable" id="adminTable">
+        <div class="tablediv d-none d-md-flex table-responsive">
+            <table class="table w-100 caseTable" id="adminTable">
                 <thead class="w-100">
                     <tr>
-                        <th class="d-none" scope="col">RequestType</th>
-                        <th class="d-none" scope="col">RegionId</th>
-
-                        <th scope="col" colspan="2">Name</th>
+                        <th scope="col" class="bg-secondary bg-opacity-25 ps-4" colspan="2">Name</th>
 
                         @if (Model.state != 6)
                         {
-                            <th scope="col">Date Of Birth</th>
+                            <th scope="col" class="bg-secondary bg-opacity-25">Date Of Birth</th>
                         }
 
 
                         @if (Model.state == 1 || Model.state == 2 || Model.state == 3)
                         {
-                            <th scope="col">Requestor</th>
+                            <th scope="col" class="bg-secondary bg-opacity-25">Requestor</th>
                         }
 
                         @if (Model.state == 5)
                         {
-                            <th scope="col">Region</th>
+                            <th scope="col" class="bg-secondary bg-opacity-25">Region</th>
                         }
 
                         @if (Model.state == 1)
                         {
-                            <th scope="col">Requested Date</th>
+                            <th scope="col" class="bg-secondary bg-opacity-25">Requested Date</th>
                         }
 
                         @if (Model.state != 1)
                         {
-                            <th scope="col">Physician Name</th>
-                            <th scope="col">Date Of Service</th>
+                            <th scope="col" class="bg-secondary bg-opacity-25">Physician Name</th>
+                            <th scope="col" class="bg-secondary bg-opacity-25">Date Of Service</th>
                         }
 
                         @if (Model.state == 1 || Model.state == 2 || Model.state == 3 || Model.state == 4 || Model.state == 6)
                         {
-                            <th scope="col">Phone</th>
+                            <th scope="col" class="bg-secondary bg-opacity-25">Phone</th>
                         }
 
-                        <th scope="col">Address</th>
+                        <th scope="col" class="bg-secondary bg-opacity-25">Address</th>
 
                         @if (Model.state != 6 && Model.state != 4)
                         {
-                            <th scope="col">Notes</th>
+                            <th scope="col" class="bg-secondary bg-opacity-25">Notes</th>
                         }
-                        <th scope="col">Actions</th>
+                        <th scope="col" class="bg-secondary bg-opacity-25">Actions</th>
 
 
                     </tr>
@@ -241,18 +239,20 @@
 
                     @foreach (var obj in Model.pagedList)
                     {
-                        <tr style="background-color:@colors[obj.requesttype - 1] !important; color:white !important" data-rid="@obj.requestId" class="align-middle tr">
-                            <td class="d-none td" name="reqtype">@obj.requesttype</td>
-                            <td class="d-none">@obj.regionId</td>
+                        <tr style="color:white !important" data-rid="@obj.requestId" class="tr-@obj.requesttype align-middle tr">
 
-                            <td class="td" name="Name">@obj.firstName @obj.lastName</td>
+
+                            <td style="background:none;"class="td ps-4" name="Name">@obj.firstName @obj.lastName</td>
 
                             <td>
-                                <a type="button" name="email" class="btn border border-light text-light email" href="mailto:@obj.email">
+                                <a type="button" name="email" class="btn border border-light text-light" href="mailto:@obj.email">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
                                         <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
                                     </svg>
-                                    @obj.email
+                                    <span hidden class="email">
+                                        @obj.email
+                                    </span>
+                                    
                                 </a>
                             </td>
                             @if (obj.status == 1 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 7 || obj.status == 8)
@@ -405,20 +405,22 @@
             </table>
         </div>
         <div class="d-flex justify-content-center">
-            @first - @last of @Model.pagedList.TotalCount
+            <p>
+                @first - @last of @Model.pagedList.TotalCount
+            </p>
         </div>
         <div>
-            <ul class="pagination justify-content-center mt-2 mb-4">
-                <li class="page-item mx-1">
-                    <a class="page-link border-secondary-subtle rounded" onclick="changepage(@previousPage)">&laquo;</a>
+            <ul class="pagination justify-content-center mt-2 mb-4 ">
+                <li class="page-item mx-1 ">
+                    <a class="page-link border-secondary-subtle rounded theme-color theme-background" onclick="changepage(@previousPage)">&laquo;</a>
                 </li>
                 @if (Model.pagedList.hasPrevious)
                 {
-                    <li class="page-item mx-1"><a class="page-link border-secondary-subtle rounded" onclick="changepage(@previousPage)"> @previousPage </a></li>
+                    <li class="page-item mx-1"><a class="page-link border-secondary-subtle rounded theme-color theme-background" onclick="changepage(@previousPage)"> @previousPage </a></li>
                 }
 
                 <li class="page-item active mx-1">
-                    <span class="page-link bg-info border-info rounded">
+                    <span class="page-link  bg-info border-info rounded">
                         @Model.pagedList.CurrentPage
                         <span class="sr-only">(current)</span>
                     </span>
@@ -426,11 +428,11 @@
 
                 @if (Model.pagedList.hasNext)
                 {
-                    <li class="page-item mx-1"><a class="page-link border-secondary-subtle rounded" onclick="changepage(@nextPage)"> @nextPage </a></li>
+                    <li class="page-item mx-1"><a class="page-link theme-color theme-background border-secondary-subtle rounded" onclick="changepage(@nextPage)"> @nextPage </a></li>
                 }
 
                 <li class="page-item mx-1">
-                    <a class="page-link border-secondary-subtle rounded" onclick="changepage(@nextPage)">&raquo;</a>
+                    <a class="page-link border-secondary-subtle rounded theme-color theme-background" onclick="changepage(@nextPage)">&raquo;</a>
                 </li>
             </ul>
         </div>
@@ -645,7 +647,6 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="clearCaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content text-center">
@@ -660,8 +661,6 @@
         </div>
     </div>
 </div>
-
-
 
 <div class="modal fade" id="encounterModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -680,8 +679,6 @@
         </div>
     </div>
 </div>
-
-
 
 <script>
     $(document).ready(function () {
@@ -995,6 +992,9 @@
         $(".requestId").val($(this).closest('.tr').data('rid'));
     });
 
+
+
+
     $(document).on("click", ".sendAgreement", function () {
         $("#sendAgreementModal").modal('show');
         $(".requestId").val($(this).closest('.tr').data('rid'));
@@ -1033,4 +1033,6 @@
             location.href = "/AdminDashboard/Encounter?requestid=" + rid;
         }
     }
+
+
 </script>

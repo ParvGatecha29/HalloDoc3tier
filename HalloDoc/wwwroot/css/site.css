@@ -18,19 +18,59 @@ html {
 }
 
 :root {
-  color-scheme: light dark;
-  /* both supported */
+    color-scheme: light dark;
+    --primary-color: #0ba4c2;
+    /* both supported */
 }
 
 body {
-  --text-color: #262626;
-  --bkg-color: #fff;
+    --text-color: #262626;
+    --bkg-color: #fff;
+    --tr-4: #e26277;
+    --tr-1: #5fbc61;
+    --tr-2: #ed9124;
+    --tr-3: #007fc6;
+    overflow-x: hidden;
 }
 
-body.dark-theme {
-  --text-color: #eee;
-  --bkg-color: #262626;
+    body.dark-theme {
+        --text-color: #eee;
+        --bkg-color: #262626;
+        --tr-4: #bd3149;
+        --tr-1: #37844c;
+        --tr-2: #b3680f;
+        --tr-3: #00669e;
+    }
+
+.tr-1 {
+    background-color: var(--tr-1);
 }
+
+.tr-2 {
+    background-color: var(--tr-2);
+}
+
+.tr-3 {
+    background-color: var(--tr-3);
+}
+
+.tr-4 {
+    background-color: var(--tr-4);
+}
+
+.footer-text p {
+    color: #eee !important;
+}
+
+.form-floating .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: none;
+}
+
+    .form-floating .form-control:focus + .floatingLabel {
+        color: var(--primary-color) !important;
+    }
+
 html {
   --text-color-normal: #0a244d;
   --text-color-light: #8cabd9;
@@ -71,7 +111,6 @@ html[data-theme='dark'] {
 }
 
 body,
-input,
 select,
 textarea,
 label,
@@ -92,7 +131,6 @@ h5,
 h6,
 label,
 strong,
-input,
 textarea,
 p,
 i,
@@ -103,6 +141,7 @@ li,
 table,
 .theme-color{
   color: var(--text-color) !important;
+  fill: var(--text-color) !important;
 }
 
 ::placeholder {
@@ -113,10 +152,7 @@ label {
   background: transparent !important;
 }
 
-.form-control {
-  border: none;
-  border: 1px solid rgb(97, 94, 94);
-}
+
 
 .floating-label::after{
   background: transparent !important;

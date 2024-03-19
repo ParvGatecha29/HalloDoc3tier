@@ -2,6 +2,7 @@
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using HalloDocDAL.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace HalloDocBAL.Interfaces
     public interface IAdminDashboardService
     {
         List<AdminDashboardData> GetRequests();
-        Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype = 0, int pageNumber = 1, int region =0, string search ="");
+        Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype = 0, int pageNumber = 1, int region =0, string search ="", bool all=false);
         AdminDashboardData GetRequestById(int id);
         AdminDashboardData GetNotes(int id);
         bool UpdateNotes(int id, string notes);
@@ -32,5 +33,7 @@ namespace HalloDocBAL.Interfaces
         Admin GetAdminById(string id);
 
         bool UpdateProfile(AdminProfile model);
+
+        
     }
 }

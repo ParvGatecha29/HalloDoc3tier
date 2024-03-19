@@ -11,6 +11,7 @@ using HalloDocDAL.Repositories;
 using System.Globalization;
 using Rotativa.AspNetCore;
 using System.Security.Policy;
+using OfficeOpenXml;
 
 namespace HalloDoc.Controllers;
 [AuthManager("1")]
@@ -21,19 +22,23 @@ public class AdminDashboardController : Controller
     private readonly IDashboardService _dashboardService;
     private readonly IRequestWiseFilesRepository _requestWiseFilesRepository;
     private readonly IOrderService _orderService;
+    private readonly IUserService _userService;
+    private readonly IRequestService _requestService;
     int[] newcase = { 1 };
     int[] pendingcase = { 2 };
     int[] activecase = { 4, 5 };
     int[] concludecase = { 6 };
     int[] toclosecase = { 3, 7, 8 };
     int[] unpaidcase = { 9 };
-    public AdminDashboardController(IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService)
+    public AdminDashboardController(IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService)
     {
         _adminDashboardService = adminDashboardService;
         _emailService = emailService;
         _dashboardService = dashboardService;
         _requestWiseFilesRepository = requestWiseFilesRepository;
         _orderService = orderService;
+        _userService = userService;
+        _requestService = requestService;
     }
 
 
@@ -63,7 +68,7 @@ public class AdminDashboardController : Controller
         {
             reqtype = "0";
         }
-        if (pageNumber == null || HttpContext.Session.GetString("state") != "1")
+        if (pageNumber == null || HttpContext.Session.GetString("state") != state.ToString())
         {
             pageNumber = "1";
         }
@@ -79,13 +84,13 @@ public class AdminDashboardController : Controller
                 status = new int[] { 2 };
                 break;
             case 3:
-                status = new int[] { 4,5 };
+                status = new int[] { 4, 5 };
                 break;
             case 4:
                 status = new int[] { 6 };
                 break;
             case 5:
-                status = new int[] { 3,7,8 };
+                status = new int[] { 3, 7, 8 };
                 break;
             case 6:
                 status = new int[] { 9 };
@@ -93,14 +98,13 @@ public class AdminDashboardController : Controller
             default: status = new int[] { 1 }; break;
 
         }
-        
+
         dash.pagedList = await _adminDashboardService.GetRequestsByStatus(status, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search);
 
         dash.regions = _adminDashboardService.GetAllRegions();
-        HttpContext.Session.SetString("state", "1");
+        HttpContext.Session.SetString("state", state.ToString());
         return PartialView("_CaseTable", dash);
     }
-
     public string FilterRequest(int reqtype)
     {
         HttpContext.Session.SetString("reqtype", reqtype.ToString());
@@ -116,12 +120,19 @@ public class AdminDashboardController : Controller
     public string Search(string search = "")
     {
         HttpContext.Session.SetString("search", search);
+        HttpContext.Session.SetString("pageNumber", "1");
+
         return HttpContext.Session.GetString("state");
     }
     public string ChangePage(int pageNumber)
     {
         HttpContext.Session.SetString("pageNumber", pageNumber.ToString());
         return HttpContext.Session.GetString("state");
+    }
+
+    public IActionResult CreateRequest()
+    {
+        return PartialView();
     }
 
     public IActionResult ViewCase(int requestid)
@@ -464,6 +475,216 @@ public class AdminDashboardController : Controller
     {
         _adminDashboardService.UpdateProfile(profile);
         return RedirectToAction("AdminProfile");
+    }
+
+    public async Task<JsonResult> SaveRequest(Req model)
+    {
+        model.month = model.dob.ToString("MMMM");
+        model.date = model.dob.Day;
+        model.year = model.dob.Year;
+        var user = await _userService.CheckUser(model.email);
+        if (user == null)
+        {
+            var link = "https://localhost:44319/Login/PatientCreate";
+            var subject = "Register Yourself";
+            var body = $"Please register yourself <a href='{link}'>here</a>.";
+
+            _emailService.SendEmail(model.email, subject, body);
+        }
+        await _requestService.PatientRequest(model);
+
+        return Json(new { success = true });
+    }
+
+    public async Task<IActionResult> Export(bool all)
+    {
+        var reqtype = HttpContext.Session.GetString("reqtype");
+        var pageNumber = HttpContext.Session.GetString("pageNumber");
+        var state = int.Parse(HttpContext.Session.GetString("state"));
+        var region = HttpContext.Session.GetString("region") != null ? HttpContext.Session.GetString("region") : "0";
+        var search = HttpContext.Session.GetString("search") != null ? HttpContext.Session.GetString("search") : "";
+        if (reqtype == null)
+        {
+            reqtype = "0";
+        }
+        if (pageNumber == null)
+        {
+            pageNumber = "1";
+        }
+        var dash = new AdminDashboard();
+        dash.state = state;
+        int[] status;
+        switch (state)
+        {
+            case 1:
+                status = new int[] { 1 };
+                break;
+            case 2:
+                status = new int[] { 2 };
+                break;
+            case 3:
+                status = new int[] { 4, 5 };
+                break;
+            case 4:
+                status = new int[] { 6 };
+                break;
+            case 5:
+                status = new int[] { 3, 7, 8 };
+                break;
+            case 6:
+                status = new int[] { 9 };
+                break;
+            default: status = new int[] { 1 }; break;
+
+        }
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+        dash.pagedList = await _adminDashboardService.GetRequestsByStatus(status, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search, all);
+
+        // Create a new Excel package
+        using (var package = new ExcelPackage())
+        {
+            var worksheet = package.Workbook.Worksheets.Add("Sheet1");
+            int row = 2;
+            switch (state)
+            {
+                case 1:
+                    worksheet.Cells[1, 1].Value = "Name";
+                    worksheet.Cells[1, 2].Value = "Date of Birth";
+                    worksheet.Cells[1, 3].Value = "Requestor";
+                    worksheet.Cells[1, 4].Value = "Requested Date";
+                    worksheet.Cells[1, 5].Value = "Phone";
+                    worksheet.Cells[1, 6].Value = "Address";
+                    worksheet.Cells[1, 7].Value = "Notes";
+                    
+                    foreach (var data in dash.pagedList)
+                    {
+                        worksheet.Cells[row, 1].Value = data.firstName + data.lastName;
+                        worksheet.Cells[row, 2].Value = data.dobdate + "/" + data.dobmonth + "/" + data.dobyear;
+                        worksheet.Cells[row, 3].Value = data.requestor;
+                        worksheet.Cells[row, 4].Value = data.reqdate;
+                        worksheet.Cells[row, 5].Value = data.phone;
+                        worksheet.Cells[row, 6].Value = data.address;
+                        worksheet.Cells[row, 7].Value = data.notes;
+                        row++;
+                    }
+                    break;
+                case 2:
+                    worksheet.Cells[1, 1].Value = "Name";
+                    worksheet.Cells[1, 2].Value = "Date of Birth";
+                    worksheet.Cells[1, 3].Value = "Requestor";
+                    worksheet.Cells[1, 4].Value = "Physician Name";
+                    worksheet.Cells[1, 5].Value = "Date of Service";
+                    worksheet.Cells[1, 6].Value = "Phone";
+                    worksheet.Cells[1, 7].Value = "Address";
+                    worksheet.Cells[1, 8].Value = "Notes";
+                    
+                    foreach (var data in dash.pagedList)
+                    {
+                        worksheet.Cells[row, 1].Value = data.firstName + data.lastName;
+                        worksheet.Cells[row, 2].Value = data.dobdate + "/" + data.dobmonth + "/" + data.dobyear;
+                        worksheet.Cells[row, 3].Value = data.requestor;
+                        worksheet.Cells[row, 4].Value = data.physician;
+                        worksheet.Cells[row, 5].Value = data.requestDate;
+                        worksheet.Cells[row, 6].Value = data.phone;
+                        worksheet.Cells[row, 7].Value = data.address;
+                        worksheet.Cells[row, 8].Value = data.notes;
+                        row++;
+                    }
+                    break;
+                case 3:
+                    worksheet.Cells[1, 1].Value = "Name";
+                    worksheet.Cells[1, 2].Value = "Date of Birth";
+                    worksheet.Cells[1, 3].Value = "Requestor";
+                    worksheet.Cells[1, 4].Value = "Physician Name";
+                    worksheet.Cells[1, 5].Value = "Date of Service";
+                    worksheet.Cells[1, 6].Value = "Phone";
+                    worksheet.Cells[1, 7].Value = "Address";
+                    worksheet.Cells[1, 8].Value = "Notes";
+                    
+                    foreach (var data in dash.pagedList)
+                    {
+                        worksheet.Cells[row, 1].Value = data.firstName + data.lastName;
+                        worksheet.Cells[row, 2].Value = data.dobdate + "/" + data.dobmonth + "/" + data.dobyear;
+                        worksheet.Cells[row, 3].Value = data.requestor;
+                        worksheet.Cells[row, 4].Value = data.physician;
+                        worksheet.Cells[row, 5].Value = data.requestDate;
+                        worksheet.Cells[row, 6].Value = data.phone;
+                        worksheet.Cells[row, 7].Value = data.address;
+                        worksheet.Cells[row, 8].Value = data.notes;
+                        row++;
+                    }
+                    break;
+                case 4:
+                    worksheet.Cells[1, 1].Value = "Name";
+                    worksheet.Cells[1, 2].Value = "Date of Birth";
+                    worksheet.Cells[1, 3].Value = "Physician Name";
+                    worksheet.Cells[1, 4].Value = "Date of Service";
+                    worksheet.Cells[1, 5].Value = "Phone";
+                    worksheet.Cells[1, 6].Value = "Address";
+                    
+                    foreach (var data in dash.pagedList)
+                    {
+                        worksheet.Cells[row, 1].Value = data.firstName + data.lastName;
+                        worksheet.Cells[row, 2].Value = data.dobdate + "/" + data.dobmonth + "/" + data.dobyear;
+                        worksheet.Cells[row, 3].Value = data.physician;
+                        worksheet.Cells[row, 4].Value = data.requestDate;
+                        worksheet.Cells[row, 5].Value = data.phone;
+                        worksheet.Cells[row, 6].Value = data.address;
+                        row++;
+                    }
+                    break;
+                case 5:
+                    worksheet.Cells[1, 1].Value = "Name";
+                    worksheet.Cells[1, 2].Value = "Date of Birth";
+                    worksheet.Cells[1, 3].Value = "Region";
+                    worksheet.Cells[1, 4].Value = "Physician Name";
+                    worksheet.Cells[1, 5].Value = "Date of Service";
+                    worksheet.Cells[1, 6].Value = "Address";
+                    worksheet.Cells[1, 7].Value = "Notes";
+                    
+                    foreach (var data in dash.pagedList)
+                    {
+                        worksheet.Cells[row, 1].Value = data.firstName + data.lastName;
+                        worksheet.Cells[row, 2].Value = data.dobdate + "/" + data.dobmonth + "/" + data.dobyear;
+                        worksheet.Cells[row, 3].Value = data.regionId;
+                        worksheet.Cells[row, 4].Value = data.physician;
+                        worksheet.Cells[row, 5].Value = data.requestDate;
+                        worksheet.Cells[row, 6].Value = data.address;
+                        worksheet.Cells[row, 7].Value = data.notes;
+                        row++;
+                    }
+                    break;
+                case 6:
+                    worksheet.Cells[1, 1].Value = "Name";
+                    worksheet.Cells[1, 2].Value = "Physician Name";
+                    worksheet.Cells[1, 3].Value = "Date of Service";
+                    worksheet.Cells[1, 4].Value = "Phone";
+                    worksheet.Cells[1, 5].Value = "Address";
+                   
+
+                    foreach (var data in dash.pagedList)
+                    {
+                        worksheet.Cells[row, 1].Value = data.firstName + data.lastName;
+                        worksheet.Cells[row, 2].Value = data.physician;
+                        worksheet.Cells[row, 3].Value = data.requestDate;
+                        worksheet.Cells[row, 4].Value = data.phone;
+                        worksheet.Cells[row, 5].Value = data.address;
+                        row++;
+                    }
+                    break;
+                default: break;
+            }
+            
+            // Populate Excel sheet with data
+            
+
+            // Convert package to a byte array
+            var excelBytes = package.GetAsByteArray();
+
+            // Return Excel file as a download
+            return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Export.xlsx");
+        }
     }
 }
 
