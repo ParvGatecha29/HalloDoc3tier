@@ -147,6 +147,9 @@ public partial class ApplicationDbContext : DbContext
                 .HasColumnName("modifieddate");
             entity.Property(e => e.Regionid).HasColumnName("regionid");
             entity.Property(e => e.Roleid).HasColumnName("roleid");
+            entity.Property(e => e.State)
+                .HasColumnType("character varying")
+                .HasColumnName("state");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.Zip)
                 .HasMaxLength(10)

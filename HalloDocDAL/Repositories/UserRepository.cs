@@ -83,6 +83,13 @@ namespace HalloDocDAL.Repositories
             return _context.Admins.FirstOrDefault(x => x.Aspnetuserid == id);
         }
 
+        public List<int> GetAdminRegions(string id)
+        {
+            var admin = _context.Admins.FirstOrDefault(x => x.Aspnetuserid == id);
+
+            return _context.Adminregions.Where(x => x.Adminid == admin.Adminid).Select(x => x.Regionid).ToList();
+        }
+
         public bool UpdateAdminProfile(AdminProfile profile)
         {
             Admin admin = _context.Admins.FirstOrDefault(x => x.Adminid == profile.adminId);
@@ -92,6 +99,21 @@ namespace HalloDocDAL.Repositories
                 admin.Lastname = profile.LastName;
                 admin.Email = profile.Email;
                 admin.Mobile = profile.Phone;
+                foreach(var region in profile.selectedRegions)
+                {
+                    if (_context.Adminregions.FirstOrDefault(x => x.Adminid == profile.adminId && x.Regionid == region) == null)
+                    {
+                        Adminregion adminregion = new Adminregion
+                        {
+                            Adminid = admin.Adminid,
+                            Regionid = region
+                        };
+                        _context.Adminregions.Add(adminregion);
+                    }
+                    
+                }
+                List<Adminregion> remove = _context.Adminregions.Where(x => !profile.selectedRegions.Contains(x.Regionid)).ToList();
+                _context.Adminregions.RemoveRange(remove);
             }
             else if (profile.formtype == 2)
             {

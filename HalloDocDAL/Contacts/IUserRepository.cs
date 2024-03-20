@@ -18,6 +18,7 @@ namespace HalloDocDAL.Contacts
 
         bool storeToken(string email, string token);
         Admin GetAdminById(string id);
+        List<int> GetAdminRegions(string id);
 
         bool UpdateAdminProfile(AdminProfile profile);
     }

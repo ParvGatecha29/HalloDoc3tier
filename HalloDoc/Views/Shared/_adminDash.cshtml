@@ -97,7 +97,7 @@ s.net/2.0.1/css/dataTables.dataTables.css" />
                                     </button>
                                 </li>
                                 <li class="nav-item px-3" role="presentation">
-                                    <button class="nav-link layout" id="providers-tab" data-bs-toggle="tab" data-bs-target="#providers"
+                                    <button class="nav-link layout" id="providers-tab" data-bs-toggle="tab"  data-bs-target="#providers"
                                             type="button" role="tab" aria-controls="providers" aria-selected="false"
                                             style="color:inherit">
                                         Providers
@@ -169,8 +169,16 @@ s.net/2.0.1/css/dataTables.dataTables.css" />
                 window.location.href = '@Url.Action("Logout","Login")';
             });
 
+            $('#dashboard-tab').click(function () {
+                window.location.href = '@Url.Action("AdminDashboard","AdminDashboard")';
+            })
+
             $('#myprofile-tab').click(function () {
                 window.location.href = '@Url.Action("AdminProfile","AdminDashboard")';
+            })
+
+            $('#providers-tab').click(function () {
+                window.location.href = '@Url.Action("Provider","AdminDashboard")';
             })
 
         });

@@ -27,10 +27,13 @@ namespace HalloDocDAL.Model
         public string? Address2 { get; set; }
         public string? City { get; set; }
         public string? State { get; set; }
+        public int? RegionId { get; set; }
         public string? Zip { get; set; }
         public string? Phone1 { get; set; }
 
         public List<Region> regions { get; set; }
+        public List<int> adminregions { get; set; }
+        public List<int> selectedRegions { get; set; }
         public List<Role> role { get; set; }
       
 

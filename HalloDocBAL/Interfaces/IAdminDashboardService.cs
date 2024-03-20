@@ -31,6 +31,7 @@ namespace HalloDocBAL.Interfaces
         EncounterForm GetEncounterForm(int requestId);
 
         Admin GetAdminById(string id);
+        List<int> GetAdminRegions(string id);
 
         bool UpdateProfile(AdminProfile model);
 

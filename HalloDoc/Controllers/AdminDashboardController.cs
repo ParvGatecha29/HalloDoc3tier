@@ -108,12 +108,14 @@ public class AdminDashboardController : Controller
     public string FilterRequest(int reqtype)
     {
         HttpContext.Session.SetString("reqtype", reqtype.ToString());
+        HttpContext.Session.SetString("pageNumber", "1");
         return HttpContext.Session.GetString("state");
     }
 
     public string RegionFilter(int region)
     {
         HttpContext.Session.SetString("region", region.ToString());
+        HttpContext.Session.SetString("pageNumber", "1");
         return HttpContext.Session.GetString("state");
     }
 
@@ -448,11 +450,11 @@ public class AdminDashboardController : Controller
     public IActionResult AdminProfile()
     {
         Admin admin = _adminDashboardService.GetAdminById(HttpContext.Session.GetString("userId"));
+       
         AdminProfile profile = new AdminProfile
         {
             adminId = admin.Adminid,
             Username = admin.Firstname,
-            Password = "1",
             Status = admin.Status.ToString(),
             Role = admin.Roleid.ToString(),
             FirstName = admin.Firstname,
@@ -464,10 +466,11 @@ public class AdminDashboardController : Controller
             Address2 = admin.Address2,
             City = admin.City,
             Zip = admin.Zip,
-
+            RegionId = admin.Regionid,
+            Phone1 = admin.Altphone
         };
         profile.regions = _adminDashboardService.GetAllRegions();
-
+        profile.adminregions = _adminDashboardService.GetAdminRegions(HttpContext.Session.GetString("userId"));
         return View(profile);
     }
 
@@ -685,6 +688,11 @@ public class AdminDashboardController : Controller
             // Return Excel file as a download
             return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Export.xlsx");
         }
+    }
+
+    public IActionResult Provider()
+    {
+        return View();
     }
 }
 

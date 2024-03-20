@@ -185,5 +185,9 @@ namespace HalloDocBAL.Services
             return true;
         }
 
+        public List<int> GetAdminRegions(string id)
+        {
+            return _userRepository.GetAdminRegions(id);
+        }
     }
 }
