@@ -690,9 +690,12 @@ public class AdminDashboardController : Controller
         }
     }
 
-    public IActionResult Provider()
+    public IActionResult Provider(int regionid=0)
     {
-        return View();
+        Provider provider = new Provider();
+        provider.physicians = _adminDashboardService.GetPhysiciansByRegion(regionid);
+        provider.regions = _adminDashboardService.GetAllRegions();
+        return View(provider);
     }
 }
 

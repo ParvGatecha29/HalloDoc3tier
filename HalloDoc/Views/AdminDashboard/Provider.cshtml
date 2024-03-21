@@ -1,4 +1,6 @@
-﻿@{
+﻿@model HalloDocDAL.Model.Provider;
+
+@{
     Layout = "_adminDash";
 }
 
@@ -6,14 +8,22 @@
     <div class="col-md-8 col-12 p-4">
         <h2 class="mb-5">Provider Information</h2>
         <div class="w-100 text-end d-flex justify-content-end p-3 bgdiv shadow-lg">
-            <select onchange="regionFilter()" id="region" class="form-select ps-5 form-control theme-color z-3 bg-transparent w-25" aria-label="Default select example">
-                <option selected value="0">All Regions</option>
-                @* @foreach (var region in Model.regions)
-                {
-                    <option value="@region.Regionid">@region.Name</option>
-                } *@
+            <div class="d-flex form-group normal-input rounded align-items-center ms-2 position-relative">
+                <label for="region" class="position-absolute theme-color" style="bottom:30px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="position-absolute theme-color" style="left:15px" width="20" height="20" viewBox="0 0 50 50">
+                        <path d="M 21 3 C 11.654545 3 4 10.654545 4 20 C 4 29.345455 11.654545 37 21 37 C 24.701287 37 28.127393 35.786719 30.927734 33.755859 L 44.085938 46.914062 L 46.914062 44.085938 L 33.875 31.046875 C 36.43682 28.068316 38 24.210207 38 20 C 38 10.654545 30.345455 3 21 3 z M 21 5 C 29.254545 5 36 11.745455 36 20 C 36 28.254545 29.254545 35 21 35 C 12.745455 35 6 28.254545 6 20 C 6 11.745455 12.745455 5 21 5 z">
+                        </path>
+                    </svg>
+                </label>
+                <select onchange="regionFilter()" id="region" class="form-select ps-5 form-control" aria-label="Default select example">
+                    <option selected value="0">All Regions</option>
+                    @foreach (var region in Model.regions)
+                    {
+                        <option value="@region.Regionid">@region.Name</option>
+                    }
 
-            </select>
+                </select>
+            </div>
             <button class="d-md-none d-block btn btn-outline-info p-0 py-1 px-2" type="button" data-bs-target="#create_new" data-bs-toggle="modal">
                 <span class="material-symbols-outlined">
                     add
@@ -23,30 +33,6 @@
                     type="button" data-bs-target="#create_new" data-bs-toggle="modal">
                 Create Provider Account
             </button>
-            <div class="modal fade " id="create_new" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered text-center">
-                    <div class="modal-content">
-                        <div class="modal-header bg-info text-white">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Create New Request</h1>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p class="h5">Here, I want to create new request for..</p>
-
-                            <input type="radio" class="btn-check btn btn-info" name="options-outlined" id="success-outlined" autocomplete="off" checked>
-                            <label class="btn btn-outline-info text-info mx-2" for="success-outlined">Me</label>
-
-                            <input type="radio" class="btn-check btn" name="options-outlined" id="danger-outlined" autocomplete="off">
-                            <label class="btn btn-outline-info text-info mx-2" for="danger-outlined">Some one else</label>
-
-                        </div>
-                        <div class="modal-footer">
-                            <input value="Continue" id="continueButton" type="button" class="btn btn-outline-info btn-info text-info">
-                            <button type="button" class="btn btn-info text-white" data-bs-dismiss="modal">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
 
@@ -55,7 +41,7 @@
             <thead class="tab">
                 <tr>
                     <th>Stop Notification</th>
-                    <th class="mobile-hide">Provider Name</th>
+                    <th>Provider Name</th>
                     <th class="mobile-hide">Role</th>
                     <th class="mobile-hide">On Call Status</th>
                     <th class="mobile-hide">Status</th>
@@ -63,32 +49,26 @@
                 </tr>
             </thead>
             <tbody>
-                @* @foreach (var item in Model.dashboards)
+                @foreach (var i in Model.physicians)
                 {
-                <tr class="table-row">
-                <td data-label="Created Date">@item.Createddate</td>
-                @if (item.Status == 1)
-                {
-                <td class="mobile-hide" data-label="Current Status">Active</td>
+                    <tr class="d-none d-xl-table-row d-md-table-row" data-rid="@i.Physicianid">
+                        <td class="bg-transparent"> <input type="checkbox" class="checkbox" name="checkbox" /> </td>
+                        <td class="bg-transparent"> @i.Firstname , @i.Lastname </td>
+                        <td class="bg-transparent"> @i.Roleid </td>
+                        <td class="bg-transparent"> @i.Status </td>
+                        <td class="bg-transparent"> @i.Status </td>
+                        <td class="bg-transparent">
+                            <div class="d-flex">
+                                <button class="btn border border-info text-info me-1 contactProvider">
+                                    Contact
+                                </button>
+                                <button class="btn border border-info text-info DeleteDocument">
+                                    Edit
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
                 }
-                else
-                {
-                <td class="mobile-hide" data-label="Current Status">Inactive</td>
-                }
-                @if (item.Filename != null)
-                {
-                <td class="mobile-hide" data-label="Document">
-                <button type="button" class="btn btn-outline-info" onclick="location.href='@Url.Action("ViewDocument", "Patientdashboard",new {id = item.Requestid })'">
-                View Document
-                </button>
-                </td>
-                }
-                else
-                {
-                <td> </td>
-                }
-                </tr>
-                } *@
             </tbody>
         </table>
     </div>

@@ -18,6 +18,8 @@ namespace HalloDocDAL.Repositories
         }
         public List<Physician> GetPhysicians(int region)
         {
+            if(region == 0)
+                return _context.Physicians.ToList();
             return _context.Physicians.Where(p => p.Regionid == region).ToList();
         }
     }
