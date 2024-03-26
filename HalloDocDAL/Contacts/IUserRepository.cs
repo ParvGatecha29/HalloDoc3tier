@@ -21,5 +21,6 @@ namespace HalloDocDAL.Contacts
         List<int> GetAdminRegions(string id);
 
         bool UpdateAdminProfile(AdminProfile profile);
+        bool AddProvider(Provider model, string adminId);
     }
 }

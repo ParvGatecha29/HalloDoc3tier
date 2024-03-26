@@ -25,6 +25,9 @@ namespace HalloDocBAL.Interfaces
         bool ClearRequest(AdminDashboardData data);
         bool CloseRequest(AdminDashboardData data);
         List<Physician> GetPhysiciansByRegion(int regionid);
+        Physician GetPhysiciansById(int id);
+        Physician GetPhysiciansByEmail(string email);
+        List<Physicianregion> GetPhysicianRegions(int id);
         List<Region> GetAllRegions();
         bool DeleteFile(int fileid);
         bool UpdateEncounterForm(ViewEncounterForm model);
@@ -35,6 +38,7 @@ namespace HalloDocBAL.Interfaces
 
         bool UpdateProfile(AdminProfile model);
 
-        
+        bool AddProvider(Provider model, string adminId);
+        bool EditPhysician(Provider model);
     }
 }

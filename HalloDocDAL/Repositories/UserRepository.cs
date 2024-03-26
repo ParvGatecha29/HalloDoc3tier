@@ -2,6 +2,7 @@
 using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -95,11 +96,11 @@ namespace HalloDocDAL.Repositories
             Admin admin = _context.Admins.FirstOrDefault(x => x.Adminid == profile.adminId);
             if (profile.formtype == 1)
             {
-                admin.Firstname = profile.FirstName; 
+                admin.Firstname = profile.FirstName;
                 admin.Lastname = profile.LastName;
                 admin.Email = profile.Email;
                 admin.Mobile = profile.Phone;
-                foreach(var region in profile.selectedRegions)
+                foreach (var region in profile.selectedRegions)
                 {
                     if (_context.Adminregions.FirstOrDefault(x => x.Adminid == profile.adminId && x.Regionid == region) == null)
                     {
@@ -110,7 +111,7 @@ namespace HalloDocDAL.Repositories
                         };
                         _context.Adminregions.Add(adminregion);
                     }
-                    
+
                 }
                 List<Adminregion> remove = _context.Adminregions.Where(x => !profile.selectedRegions.Contains(x.Regionid)).ToList();
                 _context.Adminregions.RemoveRange(remove);
@@ -131,6 +132,97 @@ namespace HalloDocDAL.Repositories
             _context.Admins.Update(admin);
             _context.SaveChanges();
             return true;
+        }
+
+        public bool AddProvider(Provider model, string adminId)
+        {
+            var user = new Aspnetuser
+            {
+                Id = Guid.NewGuid().ToString(),
+                Username = "MD." + model.physician.Firstname + "." + model.physician.Lastname,
+                Passwordhash = model.aspphy.Passwordhash,
+                Email = model.physician.Email,
+                Phonenumber = model.physician.Mobile,
+                Createddate = DateTime.Now
+            };
+
+            var role = new Aspnetuserrole()
+            {
+                UserId = user.Id,
+                RoleId = "2"
+            };
+            _context.Aspnetusers.Add(user);
+            _context.Aspnetuserroles.Add(role);
+            _context.SaveChanges();
+
+            var data = new Physician
+            {
+                Aspnetuserid = user.Id,
+                Firstname = model.physician.Firstname,
+                Lastname = model.physician.Lastname,
+                Email = model.physician.Email,
+                Mobile = model.physician.Mobile,
+                Address1 = model.physician.Address1,
+                Address2 = model.physician.Address2,
+                City = model.physician.City,
+                Createdby = adminId,
+                Businessname = model.physician.Businessname,
+                Businesswebsite = model.physician.Businesswebsite,
+                Roleid = 1,
+                Status = 1,
+                Isdeleted = false,
+                Npinumber = model.physician.Npinumber,
+                //Syncemailaddress = model.Syncemailaddress,
+                Medicallicense = model.physician.Medicallicense,
+                Adminnotes = model.physician.Adminnotes,
+                Zip = model.physician.Zip,
+            };
+
+            _context.Physicians.Add(data);
+            _context.SaveChanges();
+
+            var list = model.selectedRegions;
+
+            foreach (var i in list)
+            {
+                if (!_context.Physicianregions.Any(a => a.Regionid == i))
+                {
+                    var a = new Physicianregion
+                    {
+                        Physicianid = data.Physicianid,
+                        Regionid = i
+                    };
+                    _context.Physicianregions.Add(a);
+                }
+            }
+            _context.SaveChanges();
+
+            var notification = new Physiciannotification
+            {
+                Physicianid = data.Physicianid,
+                Isnotificationstopped = false,
+            };
+
+            _context.Physiciannotifications.Add(notification);
+            _context.SaveChanges();
+            var file = model.sign;
+            var filePath = "";
+            if (file.Length > 0)
+            {
+                var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/documents/Physician", data.Physicianid.ToString());
+                if (!Directory.Exists(uploadsFolderPath))
+                {
+                    Directory.CreateDirectory(uploadsFolderPath);
+                }
+                filePath = Path.Combine(uploadsFolderPath, file.FileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyToAsync(stream);
+                }
+            }
+            return true;
+
+
         }
     }
 }

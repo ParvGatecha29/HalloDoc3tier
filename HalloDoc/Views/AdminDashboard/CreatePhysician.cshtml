@@ -1,0 +1,285 @@
+﻿@model HalloDocDAL.Model.Provider
+
+<div class="row justify-content-center mb-5 pb-5">
+    <div class="row m-4 col-xl-8 col-md-9 col-11">
+        <p class="col fs-4 fw-bold pb-0 mb-0 d-inline">Create Provider Account</p>
+        <div class="col mb-0 text-end">
+            <a class="text-decoration-none text-info rounded border border-info p-2 i-info provider-tab">
+                <i class="bi bi-chevron-left i-info"></i>
+                Back
+            </a>
+        </div>
+    </div>
+
+    <div class="m-4 shadow col-xl-8 col-md-9 col-11">
+        <form method="post" id="CreateProvider" class="pb-3">
+            <!-- Account Information -->
+            <p class="fs-5 fw-bold">Account Information</p>
+            <div class="row g-2">
+                <div class="col-md-4 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="username" placeholder="User Name" asp-for="aspphy.Username" disabled>
+                        <label for="username" class="floatingLabel">User Name</label>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="password" placeholder="Password" asp-for="aspphy.Passwordhash">
+                        <label for="password" class="floatingLabel">Password</label>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-12 mb-3">
+                    <div class="form-group mb-3">
+                        <select class="form-select form-control" id="Physicianstatus" style="height: 58px;" asp-for="physician.Roleid">
+                            <option value="">Role</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Administrator Information -->
+            <p class="fs-5 fw-bold">Physician Information</p>
+            <div class="row g-2">
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control PhysicianInput" id="PhysicianFirstname" placeholder="First Name" asp-for="physician.Firstname">
+                        <label for="PhysicianFirstname" class="floatingLabel">First Name</label>
+                    </div>
+                 
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control PhysicianInput" id="PhysicianLastname" placeholder="Last Name" asp-for="physician.Lastname">
+                        <label for="PhysicianLastname" class="floatingLabel">Last Name</label>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="form-floating">
+                        <input type="email" class="form-control PhysicianInput" id="PhysicianEmail" placeholder="Email" asp-for="physician.Email">
+                        <label for="PhysicianEmail" class="floatingLabel">Email</label>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="form-floating">
+                        <input type="tel" class="form-control p-3 ps-5 PhysicianInput" id="PhysicianMobile" placeholder="(201) 555-0123" asp-for="physician.Mobile">
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control PhysicianInput" id="PhysicianMedicalLicense" placeholder="Confirm Email" asp-for="physician.Medicallicense">
+                        <label for="PhysicianMedicalLicense" class="floatingLabel">Medical Liccense#</label>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control PhysicianInput" id="PhysicianNPI" placeholder="Email" asp-for="physician.Npinumber">
+                        <label for="PhysicianNPI" class="floatingLabel">NPI Number</label>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 col-12 d-flex flex-wrap mb-3">
+               
+                    @for (int i = 0; i < Model.regions.Count; i++)
+                    {
+                        <div class="form-check mx-2 required profile">
+                           
+                                <input  class="adminInfoInput adminRegionBox border border-dark" name="selectedRegions" type="checkbox" value="@Model.regions[i].Regionid">
+                            
+                            <label class="form-check-label" for="flexCheckDefault">
+                                @Model.regions[i].Name
+                            </label>
+                        </div>
+                    }
+               
+                </div>
+            </div>
+
+            <!-- Mailing & Billing Information -->
+            <p class="fs-5 fw-bold">Mailing & Billing Information</p>
+            <div class="row g-2">
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control mailingInput" id="MailingAddress1" placeholder="Address1" asp-for="physician.Address1">
+                        <label for="MailingAddress1" class="floatingLabel">Address1</label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control mailingInput" id="MailingAddress2" placeholder="Address2" asp-for="physician.Address2">
+                        <label for="MailingAddress2" class="floatingLabel">Address2</label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control mailingInput" id="MailingCity" placeholder="City" asp-for="physician.City">
+                        <label for="MailingCity" class="floatingLabel">City</label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-group mb-3">
+                        <select class="form-select form-control" id="Physicianstatus" style="height: 58px;" >
+                            <option value="">State</option>
+                            
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control mailingInput" id="MailingZipcode" placeholder="Zip" asp-for="physician.Zip">
+                        <label for="MailingZipcode" class="floatingLabel">Zip</label>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="form-floating">
+                        <input type="tel" class="form-control p-3 ps-5 mailingInput" id="MailingMobile" asp-for="physician.Altphone" placeholder="(201) 555-0123">
+                    </div>
+                </div>
+            </div>
+
+            @* Provider Profile *@
+            <p class="fs-5 fw-bold">Provider Profile</p>
+            <div class="row g-2">
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control mailingInput" id="ProfileBusinessName" placeholder="Business Name" asp-for="physician.Businessname">
+                        <label for="ProfileBusinessName" class="floatingLabel">Business Name</label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control mailingInput" id="ProfileBusinesswebsite" placeholder="Business Website" asp-for="physician.Businesswebsite">
+                        <label for="ProfileBusinesswebsite" class="floatingLabel">Business Website</label>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="d-flex">
+                        <label for="document" class="col d-flex">
+                            <div class="col p-1 ps-3 border border-dark-subtle">
+                                <span id="upload">Select</span>
+                            </div>
+                            <div id="btn" class="p-1 btn btn-info w-auto px-3">
+
+                                <i class="bi bi-cloud-arrow-up" style="color:white !important;"></i>
+                                <span style="color:white;" class="ps-1 d-none d-md-block">Upload</span>
+
+                            </div>
+                                <input type="file" class="form-control-file" id="document" name="sign" hidden
+                                   onchange="upload(this)">
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 form-floating">
+                <textarea class="form-control" placeholder="Admin Notes" id="symptoms" asp-for="physician.Adminnotes" style="height: 100px"></textarea>
+                <label for="symptoms" class="floatingLabel"> Admin Notes </label>
+            </div>
+
+            @* Onboarding *@
+            <p class="fs-5 fw-bold">Onboarding</p>
+            <table class="table table-borderless">
+                <tbody>
+                    <tr>
+                        <th scope="row" class="bg-transparent"> 
+                            <input type="checkbox" />
+                        </th>
+                        <td class="bg-transparent">
+                            <p class="d-inline">Independent Contractor Agreement</p>
+                        </td class="bg-transparent">
+                        <td class="bg-transparent">
+                            <button type="button" class="btn btn-info text-light">
+                                <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                                <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-transparent">
+                            <input type="checkbox" />
+                        </th>
+                        <td class="bg-transparent">
+                            <p class="d-inline">Background Check</p>
+                        </td>
+                        <td class="bg-transparent">
+                            <button type="button" class="btn btn-info text-light">
+                                <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                                <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-transparent">
+                            <input type="checkbox" />
+                        </th>
+                        <td class="bg-transparent">
+                            <p class="d-inline">HIPPA Compliance</p>
+                        </td>
+                        <td class="bg-transparent">
+                            <button type="button" class="btn btn-info text-light">
+                                <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                                <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-transparent">
+                            <input type="checkbox" />
+                        </th>
+                        <td class="bg-transparent">
+                            <p class="d-inline">Non disclosure Agreement</p>
+                        </td>
+                        <td class="bg-transparent">
+                            <button type="button" class="btn btn-info text-light">
+                                <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                                <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-success text-light">Create Account</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $('#CreateProvider').on('submit', function (e) {
+        e.preventDefault();
+        var data = new FormData(this);
+        console.log(data["selectedRegions"]);
+        $.ajax({
+            url: "SaveProvider",
+            type: "Post",
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                if (result.success) {
+                    Swal.fire({
+                        title: "Good job!",
+                        text: "Provider created succesfully",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).finally(() => {
+                        window.location.href = '@Url.Action("Provider", "AdminDashboard")';
+                    });
+                }
+            }
+        });
+    });
+
+    // script for phone number
+    phoneInputField = document.querySelectorAll("input[type='tel']");
+    for (var i = 0; i < phoneInputField.length; i++) {
+        const phoneInput = window.intlTelInput(phoneInputField[i], {
+            utilsScript:
+                "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        });
+    }
+</script>

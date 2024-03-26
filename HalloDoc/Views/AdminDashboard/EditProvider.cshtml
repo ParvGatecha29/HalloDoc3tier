@@ -1,0 +1,587 @@
+﻿@model HalloDocDAL.Model.Provider
+
+<div class="row justify-content-center mb-5 pb-5">
+    <div class="m-4 me-5 mb-0 text-end col-xl-6 col-md-8 col-11">
+        <a class="text-decoration-none text-info rounded border border-info p-2 i-info provider-tab">
+            <i class="bi bi-chevron-left i-info"></i>
+            Back
+        </a>
+    </div>
+
+    <div class="m-4 shadow col-xl-6 col-md-8 col-11 pb-3">
+
+        <!-- Account Information -->
+        <form id="AccountInfo">
+        <input type="hidden" id="adminID" value="@Model.physician.Aspnetuserid" />
+        <input type="hidden" name="formtype" value="1" />
+
+        <p class="fs-5 fw-bold">Account Information</p>
+        <div class="row g-2">
+            <div class="col-md-6 col-12 mb-3">
+                <div class="form-floating">
+                    <input type="text" class="form-control physicianAccountInput" id="PhysicianUsername" placeholder="User Name" asp-for="aspphy.Username" disabled>
+                    <label for="PhysicianUsername" class="floatingLabel">User Name</label>
+                </div>
+                <span id="username" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 col-12 mb-3">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="PhysicianPassword" placeholder="Password">
+                    <label for="PhysicianPassword" class="floatingLabel">Password</label>
+                </div>
+                <span id="resetpassword" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 col-12 mb-3">
+                <div class="form-group mb-3">
+                    <select class="form-select form-control physicianAccountInput" id="Physicianstatus" style="height: 58px;" asp-for="physician.Status" disabled>
+                        <option value="">Status</option>
+                    </select>
+                </div>
+                <span id="status" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 col-12 mb-3">
+                <div class="form-group mb-3">
+                    <select class="form-select form-control physicianAccountInput" id="Physicianrole" style="height: 58px;" asp-for="physician.Roleid" disabled>
+                        <option value="">Role</option>
+                    </select>
+                </div>
+                <span id="role" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="button" id="editPhysicianAccount" class="btn btn-info text-light me-2">Edit</button>
+            <button type="button" id="savePhysicianAccount" class="btn btn-info text-light me-2" style="display: none">Save</button>
+            <button type="button" id="cancelPhysicianAccount" class="btn btn-info text-light me-2" style="display: none">Cancel</button>
+            <button type="button" id="PhysicianResetPassword" class="btn btn-outline-info text-info">Reset Password</button>
+        </div>
+        </form>
+
+        <!-- Physician Information -->
+        <p class="fs-5 fw-bold">Physician Information</p>
+        <form id="PhysicianInfo">
+            <input type="hidden" asp-for="physician.Physicianid"/>
+        <input type="hidden" name="formtype" value="2" />
+
+            <div class="row g-2">
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating requiredPhysicianInfo">
+                        <input type="text" class="form-control physicianInput" id="PhysicianFirstname" placeholder="First Name" asp-for="physician.Firstname" disabled>
+                        <label for="PhysicianFirstname" class="floatingLabel">First Name</label>
+                        <span class="text-danger" style="display: none">First name is Required!</span>
+                    </div>
+                    
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating requiredPhysicianInfo">
+                        <input type="text" class="form-control physicianInput" id="PhysicianLastname" placeholder="Last Name" asp-for="physician.Lastname" disabled>
+                        <label for="PhysicianLastname" class="floatingLabel">Last Name</label>
+                        <span class="text-danger" style="display: none">Last name is Required!</span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="form-floating requiredPhysicianInfo">
+                        <input type="email" class="form-control physicianInput" id="PhysicianEmail" placeholder="Email" asp-for="physician.Email" disabled>
+                        <label for="PhysicianEmail" class="floatingLabel">Email</label>
+                        <span class="text-danger" style="display: none">Email is Required!</span>
+                    </div>
+                    
+                </div>           
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="form-floating requiredPhysicianInfo">
+                        <input type="tel" class="form-control p-3 ps-5 physicianInput" id="PhysicianMobile" placeholder="(201) 555-0123" asp-for="physician.Mobile" disabled>
+                        <span class="text-danger" style="display: none">Phone number is Required!</span>
+                    </div>
+                    
+                </div> 
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="form-floating requiredPhysicianInfo">
+                        <input type="text" class="form-control physicianInput" id="PhysicianMedicalLicense" placeholder="Confirm Email" asp-for="physician.Medicallicense" disabled>
+                        <label for="PhysicianMedicalLicense" class="floatingLabel">Medical License#</label>
+                        <span class="text-danger" style="display: none">Medical License is Required!</span>
+                    </div>
+                    
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="form-floating requiredPhysicianInfo">
+                        <input type="text" class="form-control physicianInput" id="PhysicianNPI" placeholder="Email" asp-for="physician.Npinumber" disabled>
+                        <label for="PhysicianNPI" class="floatingLabel">NPI Number</label>
+                        <span class="text-danger" style="display: none">NPI Number is Required!</span>
+                    </div>
+                    
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control physicianInput" id="PhysicianSynchronizationEmail" placeholder="Email" asp-for="physician.Syncemailaddress" disabled>
+                        <label for="PhysicianSynchronizationEmail" class="floatingLabel">Synchronization Email Address</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12 d-flex flex-wrap requiredPhysicianInfo">
+                    @foreach (var i in Model.regions)
+                    {
+                        bool isChecked = Model.phyregions.Any(x=> x.Regionid == i.Regionid);
+                        if (isChecked)
+                        {
+                            <div class="form-check">
+                                <input disabled class="physicianInput border border-dark me-2" type="checkbox" name="selectedRegions" value="@i.Regionid" checked>
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    @i.Name
+                                </label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-check ">
+                                <input disabled class="physicianInput border border-dark me-2" type="checkbox" name="selectedRegions" value="@i.Regionid">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    @i.Name
+                                </label>
+                            </div>
+                        }
+                    } 
+                    <input type="hidden" asp-for="selectedRegions" id="SelectedRegionIds" />
+                    <span class="text-danger" style="display:none">Atleast one region is required</span>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="button" id="EnterPayRate" class="btn btn-info text-light me-2">Enter Payrate</button>
+                <button type="button" id="editPhysician" class="btn btn-info text-light">Edit</button>
+                <button type="submit" id="savePhysician" class="btn btn-info text-light me-2" style="display: none">Save</button>
+                <button type="button" id="cancelPhysician" class="btn btn-info text-light" style="display: none">Cancel</button>
+            </div>
+        </form>
+
+        <!-- Mailing & Billing Information -->
+        <form id="BillingInfo">
+        <input type="hidden" name="formtype" value="3" />
+
+        <p class="fs-5 fw-bold">Mailing & Billing Information</p>
+        <div class="row g-2">
+            <div class="col-md-6 col-12 mb-3">
+                <div class="form-floating">
+                    <input type="text" class="form-control mailingInput" id="MailingAddress1" placeholder="Address1" asp-for="physician.Address1" disabled>
+                    <label for="MailingAddress1" class="floatingLabel">Address1</label>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div class="form-floating">
+                    <input type="text" class="form-control mailingInput" id="MailingAddress2" placeholder="Address2" asp-for="physician.Address2" disabled>
+                    <label for="MailingAddress2" class="floatingLabel">Address2</label>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div class="form-floating">
+                    <input type="text" class="form-control mailingInput" id="MailingCity" placeholder="City" asp-for="physician.City" disabled>
+                    <label for="MailingCity" class="floatingLabel">City</label>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div class="form-floating">
+                    <input type="text" class="form-control mailingInput" id="MailingState" placeholder="State"  disabled>
+                    <label for="MailingState" class="floatingLabel">State</label>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div class="form-floating">
+                    <input type="text" class="form-control mailingInput" id="MailingZipcode" placeholder="Zip" asp-for="physician.Zip" disabled>
+                    <label for="MailingZipcode" class="floatingLabel">Zip</label>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+                <div class="form-floating">
+                    <input type="tel" class="form-control p-3 ps-5 mailingInput" id="MailingMobile" asp-for="physician.Altphone" placeholder="(201) 555-0123" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="button" id="editMailing" class="btn btn-info text-light">Edit</button>
+            <button type="button" id="saveMailing" class="btn btn-info text-light me-2" style="display: none">Save</button>
+            <button type="button" id="cancelMailing" class="btn btn-info text-light" style="display: none">Cancel</button>
+        </div>
+        </form>
+
+        <form id="ProviderInfo">
+        <!-- Provider Profile -->
+        <input type="hidden" name="formtype" value="4" />
+
+        <p class="fs-5 fw-bold">Provider Profile</p>
+        <div class="row g-2">
+            <div class="col-md-6 col-12 mb-3">
+                <div class="form-floating">
+                    <input type="text" class="form-control profileInput" id="ProfileBusinessName" placeholder="Business Name" asp-for="physician.Businessname" disabled>
+                    <label for="ProfileBusinessName" class="floatingLabel">Business Name</label>
+                </div>
+               
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div class="form-floating">
+                    <input type="text" class="form-control profileInput" id="ProfileBusinesswebsite" placeholder="Business Website" asp-for="physician.Businesswebsite" disabled>
+                    <label for="ProfileBusinesswebsite" class="floatingLabel">Business Website</label>
+                </div>
+               
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div class="input-group mb-3">
+                    <input type="file" class="form-control profileInput" id="document" hidden onchange="upload(this)" name="document" disabled>
+                    <label class="input-group-text border-0 col-12 p-0 rounded" for="document" name="document">
+                        <div class="border rounded col-10 p-2 text-start">
+                            <span id="upload">Select Photo</span>
+                        </div>
+                        <button type="submit" class="border uploadDiv bg-info col-2 text-light p-2">
+                            <div>
+                                <i class="bi bi-cloud-arrow-up pe-1"></i>
+                                <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                            </div>
+                        </button>
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div class="input-group mb-3">
+                    <input type="file" class="form-control profileInput" id="document" hidden onchange="upload(this)" name="document" disabled>
+                    <label class="input-group-text border-0 col-12 p-0 rounded" for="document" name="document">
+                        <div class="border rounded col-10 p-2 text-start">
+                            <span id="upload">Select Signature</span>
+                        </div>
+                        <button type="submit" class="border uploadDiv bg-info col-2 text-light p-2">
+                            <div>
+                                <i class="bi bi-cloud-arrow-up pe-1"></i>
+                                <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                            </div>
+                        </button>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 form-floating">
+            <textarea class="form-control profileInput" placeholder="Admin Notes" id="symptoms" asp-for="physician.Adminnotes" style="height: 100px" disabled></textarea>
+            <label for="symptoms" class="floatingLabel"> Admin Notes </label>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="button" id="editProfile" class="btn btn-info text-light">Edit</button>
+            <button type="button" id="saveProfile" class="btn btn-info text-light me-2" style="display: none">Save</button>
+            <button type="button" id="cancelProfile" class="btn btn-info text-light" style="display: none">Cancel</button>
+        </div>
+        </form>
+        <div class="mb-1 py-2"></div>
+
+        <p class="fs-5 fw-bold">Onboarding</p>
+        <table class="table table-borderless w-100 w-md-75">
+            <tbody>
+                <tr>
+                    <th scope="row" class="bg-transparent"> 
+                        <input type="checkbox" />
+                    </th>
+                    <td class="bg-transparent">
+                        <p class="d-inline">Independent Contractor Agreement</p>
+                    </td class="bg-transparent">
+                    <td class="bg-transparent">
+                        <button type="button" class="btn btn-info text-light">
+                            <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                            <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                        </button>
+                    </td>
+                    <td class="bg-transparent">
+                        <button type="button" class="btn btn-info text-light">
+                            <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                            <span class="d-none d-xl-inline d-lg-inline">View</span>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" class="bg-transparent">
+                        <input type="checkbox" />
+                    </th>
+                    <td class="bg-transparent">
+                        <p class="d-inline">Background Check</p>
+                    </td>
+                    <td class="bg-transparent">
+                        <button type="button" class="btn btn-info text-light">
+                            <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                            <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                        </button>
+                    </td>
+                    <td class="bg-transparent">
+                        <button type="button" class="btn btn-info text-light">
+                            <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                            <span class="d-none d-xl-inline d-lg-inline">View</span>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" class="bg-transparent">
+                        <input type="checkbox" />
+                    </th>
+                    <td class="bg-transparent">
+                        <p class="d-inline">HIPPA Compliance</p>
+                    </td>
+                    <td class="bg-transparent">
+                        <button type="button" class="btn btn-info text-light">
+                            <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                            <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" class="bg-transparent">
+                        <input type="checkbox" />
+                    </th>
+                    <td class="bg-transparent">
+                        <p class="d-inline">Non disclosure Agreement</p>
+                    </td>
+                    <td class="bg-transparent">
+                        <button type="button" class="btn btn-info text-light">
+                            <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                            <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-info text-light me-2">Save</button>
+            <button type="button" class="btn btn-danger text-light">Delete Account</button>
+        </div>
+    </div>
+</div>
+<script>
+    
+    $(document).on('click', '#editPhysicianAccount', function () {
+        let input = document.getElementsByClassName('physicianAccountInput');
+        for (var i = 0; i < input.length; i++) {
+            input[i].disabled = false;
+        }
+
+        var editBtn = document.getElementById("editPhysicianAccount");
+        editBtn.style.display = "none";
+
+        var saveBtn = document.getElementById("savePhysicianAccount");
+        saveBtn.style.display = "block";
+
+        var cancelBtn = document.getElementById("cancelPhysicianAccount");
+        cancelBtn.style.display = "block";
+    });
+
+    $(document).on('click', '#cancelPhysicianAccount', function () {
+        $("#dashboard").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
+    });
+
+    $(document).on('click', '#editPhysician', function () {
+        let input = document.getElementsByClassName('physicianInput');
+        for (var i = 0; i < input.length; i++) {
+            input[i].disabled = false;
+        }
+
+        var editBtn = document.getElementById("editPhysician");
+        editBtn.style.display = "none";
+
+        var saveBtn = document.getElementById("savePhysician");
+        saveBtn.style.display = "block";
+
+        var cancelBtn = document.getElementById("cancelPhysician");
+        cancelBtn.style.display = "block";
+    });
+
+    $(document).on('click', '#cancelPhysician', function () {
+        $("#dashboard").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
+    });
+
+    $(document).on('click', '#editMailing', function () {
+        let input = document.getElementsByClassName('mailingInput');
+        for (var i = 0; i < input.length; i++) {
+            input[i].disabled = false;
+        }
+
+        var editBtn = document.getElementById("editMailing");
+        editBtn.style.display = "none";
+
+        var saveBtn = document.getElementById("saveMailing");
+        saveBtn.style.display = "block";
+
+        var cancelBtn = document.getElementById("cancelMailing");
+        cancelBtn.style.display = "block";
+    });
+
+    $(document).on('click', '#cancelMailing', function () {
+        $("#dashboard").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
+    });
+
+    $(document).on('click', '#editProfile', function () {
+        let input = document.getElementsByClassName('profileInput');
+        for (var i = 0; i < input.length; i++) {
+            input[i].disabled = false;
+        }
+
+        var editBtn = document.getElementById("editProfile");
+        editBtn.style.display = "none";
+
+        var saveBtn = document.getElementById("saveProfile");
+        saveBtn.style.display = "block";
+
+        var cancelBtn = document.getElementById("cancelProfile");
+        cancelBtn.style.display = "block";
+    });
+
+    $(document).on('click', '#cancelProfile', function () {
+        $("#dashboard").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
+    });
+
+    // Reset Password
+    $(document).on('click', '#PhysicianResetPassword', function () {
+        var Password = $('#PhysicianPassword').val();
+        var phyid = $('#adminID').val();
+
+        $.ajax({
+            url: '/Admin/ResetPassword',
+            type: 'POST',
+            data: { Password: Password, adminID: phyid },
+            success: function (result) {
+                if (result.success) {
+                    $("#providerdiv").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
+                    toastr.success("Password Updated!");
+                }
+                else {
+                    $('#resetpassword').text("Password is required!");
+                }
+            },
+        });
+    });
+
+    // Save Physician Account
+    $(document).on('click', '#savePhysicianAccount', function () {
+        var phyid = $('#adminID').val();
+        var username = $('#PhysicianUsername').val();
+        var Status = 1;
+        var Role = 1;
+
+        var count = 3;
+
+        if(username == null)
+        {
+             $('#username').text("Username is required!");
+             count--;
+        }
+        if(Status == null)
+        {
+             $('#status').text("Status is required!");
+             count--;
+        }
+        if(Role == null)
+        {
+             $('#role').text("Role is required!");
+             count--;
+        }
+
+        if (count == 3) { 
+            $.ajax({
+                url: '/Admin/SavePhysicianAccountData',
+                type: 'POST',
+                data: { Password: Password, adminID: phyid },
+                success: function (result) {
+                    if (result.success) {
+                        $("#dashboard").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
+                        toastr.success("Account Data Updated!");
+                    }
+                }
+            });
+        }
+        else
+        {
+            toastr.error("Please provide valid data!");
+        }
+    });
+
+    $('#PhysicianInfo').submit(function(e) {       
+        e.preventDefault();
+
+        var validate = true;
+        $('.requiredPhysicianInfo').each(function () {
+            var div = $(this);
+            
+            if ($(div).find('input').val() == "") {
+                
+                var span = $(div).children('span');
+                span.show();
+                console.log(span);
+
+                validate = false;
+            }
+        });
+
+        var data = new FormData(this);
+
+        if (validate) { 
+            $.ajax({
+                url: '/AdminDashboard/EditPhysician',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+                    }
+                }
+            });
+        }
+        else
+        {
+            toastr.error("Please provide valid data!");
+        }
+    });
+
+    $('#BillingInfo').submit(function(e) {       
+        e.preventDefault();
+
+        var validate = true;
+        $('.requiredBillingInfo').each(function () {
+            var div = $(this);
+            
+            if ($(div).find('input').val() == "") {
+                
+                var span = $(div).children('span');
+                span.show();
+                console.log(span);
+
+                validate = false;
+            }
+        });
+
+        var data = new FormData(this);
+
+        if (validate) { 
+            $.ajax({
+                url: '/AdminDashboard/EditPhysician',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+                    }
+                }
+            });
+        }
+        else
+        {
+            toastr.error("Please provide valid data!");
+        }
+    });
+
+    // script for phone number
+    phoneInputField = document.querySelectorAll("input[type='tel']");
+    for (var i = 0; i < phoneInputField.length; i++) {
+        const phoneInput = window.intlTelInput(phoneInputField[i], {
+            utilsScript:
+                "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+        });
+    }
+</script>

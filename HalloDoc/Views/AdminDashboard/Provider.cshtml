@@ -3,76 +3,80 @@
 @{
     Layout = "_adminDash";
 }
+<div id="providerdiv">
+    <div class="d-flex align-items-center justify-content-center pt-5">
+        <div class="col-md-8 col-12 p-4">
+            <h2 class="mb-5">Provider Information</h2>
+            <div class="w-100 text-end d-flex justify-content-end p-3 bgdiv shadow-lg">
+                <div class="d-flex form-group normal-input rounded align-items-center ms-2 position-relative">
+                    <label for="region" class="position-absolute theme-color" style="bottom:30px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="position-absolute theme-color" style="left:15px" width="20" height="20" viewBox="0 0 50 50">
+                            <path d="M 21 3 C 11.654545 3 4 10.654545 4 20 C 4 29.345455 11.654545 37 21 37 C 24.701287 37 28.127393 35.786719 30.927734 33.755859 L 44.085938 46.914062 L 46.914062 44.085938 L 33.875 31.046875 C 36.43682 28.068316 38 24.210207 38 20 C 38 10.654545 30.345455 3 21 3 z M 21 5 C 29.254545 5 36 11.745455 36 20 C 36 28.254545 29.254545 35 21 35 C 12.745455 35 6 28.254545 6 20 C 6 11.745455 12.745455 5 21 5 z">
+                            </path>
+                        </svg>
+                    </label>
+                    <select onchange="providerRegionFilter()" id="region" class="form-select ps-5 form-control" aria-label="Default select example">
+                        <option selected value="0">All Regions</option>
+                        @foreach (var region in Model.regions)
+                        {
+                            <option value="@region.Regionid">@region.Name</option>
+                        }
 
-<div class="d-flex align-items-center justify-content-center pt-5">
-    <div class="col-md-8 col-12 p-4">
-        <h2 class="mb-5">Provider Information</h2>
-        <div class="w-100 text-end d-flex justify-content-end p-3 bgdiv shadow-lg">
-            <div class="d-flex form-group normal-input rounded align-items-center ms-2 position-relative">
-                <label for="region" class="position-absolute theme-color" style="bottom:30px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="position-absolute theme-color" style="left:15px" width="20" height="20" viewBox="0 0 50 50">
-                        <path d="M 21 3 C 11.654545 3 4 10.654545 4 20 C 4 29.345455 11.654545 37 21 37 C 24.701287 37 28.127393 35.786719 30.927734 33.755859 L 44.085938 46.914062 L 46.914062 44.085938 L 33.875 31.046875 C 36.43682 28.068316 38 24.210207 38 20 C 38 10.654545 30.345455 3 21 3 z M 21 5 C 29.254545 5 36 11.745455 36 20 C 36 28.254545 29.254545 35 21 35 C 12.745455 35 6 28.254545 6 20 C 6 11.745455 12.745455 5 21 5 z">
-                        </path>
-                    </svg>
-                </label>
-                <select onchange="regionFilter()" id="region" class="form-select ps-5 form-control" aria-label="Default select example">
-                    <option selected value="0">All Regions</option>
-                    @foreach (var region in Model.regions)
-                    {
-                        <option value="@region.Regionid">@region.Name</option>
-                    }
-
-                </select>
+                    </select>
+                </div>
+                <button class="d-md-none d-block btn btn-outline-info p-0 py-1 px-2 createProvider" type="button">
+                    <span class="material-symbols-outlined">
+                        add
+                    </span>
+                </button>
+                <button class="btn btn-info ms-auto my-auto darkBtn mx-3 d-none d-md-block createProvider"
+                        type="button">
+                    Create Provider Account
+                </button>
             </div>
-            <button class="d-md-none d-block btn btn-outline-info p-0 py-1 px-2" type="button" data-bs-target="#create_new" data-bs-toggle="modal">
-                <span class="material-symbols-outlined">
-                    add
-                </span>
-            </button>
-            <button class="btn btn-info ms-auto my-auto darkBtn mx-3 d-none d-md-block"
-                    type="button" data-bs-target="#create_new" data-bs-toggle="modal">
-                Create Provider Account
-            </button>
+
+
+            <div id="providertable">
+                <table id="responsiveTable">
+                    <thead class="tab">
+                        <tr>
+                            <th>Stop Notification</th>
+                            <th>Provider Name</th>
+                            <th class="mobile-hide">Role</th>
+                            <th class="mobile-hide">On Call Status</th>
+                            <th class="mobile-hide">Status</th>
+                            <th class="mobile-hide">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var i in Model.physicians)
+                        {
+                            <tr class="d-none d-xl-table-row d-md-table-row tr" data-pid="@i.Physicianid">
+                                <td class="bg-transparent"> <input type="checkbox" class="checkbox" name="checkbox" /> </td>
+                                <td class="bg-transparent"> @i.Firstname , @i.Lastname </td>
+                                <td class="bg-transparent"> @i.Roleid </td>
+                                <td class="bg-transparent"> @i.Status </td>
+                                <td class="bg-transparent"> @i.Status </td>
+                                <td class="bg-transparent">
+                                    <div class="d-flex">
+                                        <button class="btn border border-info text-info me-1 contactProvider">
+                                            Contact
+                                        </button>
+                                        <button class="btn border border-info text-info editProvider">
+                                            Edit
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
         </div>
-
-
-
-        <table id="responsiveTable">
-            <thead class="tab">
-                <tr>
-                    <th>Stop Notification</th>
-                    <th>Provider Name</th>
-                    <th class="mobile-hide">Role</th>
-                    <th class="mobile-hide">On Call Status</th>
-                    <th class="mobile-hide">Status</th>
-                    <th class="mobile-hide">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var i in Model.physicians)
-                {
-                    <tr class="d-none d-xl-table-row d-md-table-row" data-rid="@i.Physicianid">
-                        <td class="bg-transparent"> <input type="checkbox" class="checkbox" name="checkbox" /> </td>
-                        <td class="bg-transparent"> @i.Firstname , @i.Lastname </td>
-                        <td class="bg-transparent"> @i.Roleid </td>
-                        <td class="bg-transparent"> @i.Status </td>
-                        <td class="bg-transparent"> @i.Status </td>
-                        <td class="bg-transparent">
-                            <div class="d-flex">
-                                <button class="btn border border-info text-info me-1 contactProvider">
-                                    Contact
-                                </button>
-                                <button class="btn border border-info text-info DeleteDocument">
-                                    Edit
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
     </div>
 </div>
+
 <script>
     var dash = document.getElementById("dashboard-tab");
     var providerLoc = document.getElementById("providerlocation-tab");
@@ -89,5 +93,33 @@
     partner.classList.remove("active");
     access.classList.remove("active");
     records.classList.remove("active");
+
+    function providerRegionFilter() {
+        var region = document.getElementById("region").value;
+        $.ajax({
+            url: '@Url.Action("ProviderByRegion","AdminDashboard")',
+            data: { regionid: region },
+            success: function (result) {
+                $('#providertable').html(result);
+            }
+        });
+    }
+
+    $(".editProvider").click(function () {
+        var physicianid = $(this).closest('.tr').data('pid');
+        $.ajax({
+            url: '@Url.Action("EditProvider","AdminDashboard")',
+            data: { physicianid: physicianid},
+            success: function (result) {
+                $('#providerdiv').html(result);
+            }
+        });
+    })
+
+    $(".createProvider").click(function () {
+        
+                $('#providerdiv').load("/AdminDashboard/CreateProvider");
+            
+    })
 
 </script>

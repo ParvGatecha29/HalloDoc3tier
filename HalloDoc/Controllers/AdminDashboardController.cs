@@ -12,6 +12,8 @@ using System.Globalization;
 using Rotativa.AspNetCore;
 using System.Security.Policy;
 using OfficeOpenXml;
+using Microsoft.DotNet.Scaffolding.Shared;
+using System.Drawing;
 
 namespace HalloDoc.Controllers;
 [AuthManager("1")]
@@ -696,6 +698,53 @@ public class AdminDashboardController : Controller
         provider.physicians = _adminDashboardService.GetPhysiciansByRegion(regionid);
         provider.regions = _adminDashboardService.GetAllRegions();
         return View(provider);
+    }
+
+    public IActionResult ProviderByRegion(int regionid)
+    {
+        Provider prov = new Provider();
+        prov.physicians = _adminDashboardService.GetPhysiciansByRegion(regionid);
+        return PartialView("ProviderTable",prov);
+    }
+
+    public IActionResult EditProvider(int physicianid)
+    {
+        Provider prov = new Provider();
+        prov.physician = _adminDashboardService.GetPhysiciansById(physicianid);
+        prov.regions = _adminDashboardService.GetAllRegions();
+        prov.phyregions = _adminDashboardService.GetPhysicianRegions(physicianid);
+        return PartialView(prov);
+    }
+
+    public IActionResult CreateProvider()
+    {
+        Provider prov = new Provider();
+        prov.regions = _adminDashboardService.GetAllRegions();
+        return PartialView("CreatePhysician",prov);
+    }
+
+    public JsonResult SaveProvider(Provider model)
+    {
+        var provider = _adminDashboardService.GetPhysiciansByEmail(model.physician.Email);
+        if(provider != null)
+        {
+            return Json(new { success = false });
+        }
+        var user = SessionService.GetLoggedInUser(HttpContext.Session);
+        var adminId = user.Id;
+        var add = _adminDashboardService.AddProvider(model,adminId);
+
+        if (add)
+        {
+            return Json(new { success = true });
+        }
+        return Json(new { success = false });
+    }
+
+    public JsonResult EditPhysician(Provider model)
+    {
+        var edit = _adminDashboardService.EditPhysician(model);
+        return Json(new { success = true });
     }
 }
 

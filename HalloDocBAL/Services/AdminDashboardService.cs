@@ -4,6 +4,7 @@ using HalloDocDAL.Contacts;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using HalloDocDAL.Repositories;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,6 +91,21 @@ namespace HalloDocBAL.Services
         public List<Physician> GetPhysiciansByRegion(int regionid)
         {
             return _physicianRepository.GetPhysicians(regionid);
+        }
+
+        public Physician GetPhysiciansById(int id)
+        {
+            return _physicianRepository.GetPhysicianById(id);
+        }
+
+        public Physician GetPhysiciansByEmail(string email)
+        {
+            return _physicianRepository.GetPhysicianByEmail(email);
+        }
+
+        public List<Physicianregion> GetPhysicianRegions(int id)
+        {
+            return _physicianRepository.GetPhysicianRegions(id);
         }
 
         public bool AssignRequest(AdminDashboardData data)
@@ -188,6 +204,18 @@ namespace HalloDocBAL.Services
         public List<int> GetAdminRegions(string id)
         {
             return _userRepository.GetAdminRegions(id);
+        }
+
+        public bool AddProvider(Provider model, string adminId)
+        {
+            bool add = _userRepository.AddProvider(model, adminId);
+            return add;
+        }
+
+        public bool EditPhysician(Provider model)
+        {
+            bool add = _physicianRepository.EditPhysician(model);
+            return add;
         }
     }
 }

@@ -1,0 +1,36 @@
+﻿@model HalloDocDAL.Model.Provider
+
+<table id="responsiveTable">
+    <thead class="tab">
+        <tr>
+            <th>Stop Notification</th>
+            <th>Provider Name</th>
+            <th class="mobile-hide">Role</th>
+            <th class="mobile-hide">On Call Status</th>
+            <th class="mobile-hide">Status</th>
+            <th class="mobile-hide">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model.physicians)
+        {
+            <tr class="d-none d-xl-table-row d-md-table-row" data-rid="@i.Physicianid">
+                <td class="bg-transparent"> <input type="checkbox" class="checkbox" name="checkbox" /> </td>
+                <td class="bg-transparent"> @i.Firstname , @i.Lastname </td>
+                <td class="bg-transparent"> @i.Roleid </td>
+                <td class="bg-transparent"> @i.Status </td>
+                <td class="bg-transparent"> @i.Status </td>
+                <td class="bg-transparent">
+                    <div class="d-flex">
+                        <button class="btn border border-info text-info me-1 contactProvider">
+                            Contact
+                        </button>
+                        <button class="btn border border-info text-info DeleteDocument">
+                            Edit
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
