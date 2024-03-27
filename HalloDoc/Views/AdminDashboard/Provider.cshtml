@@ -5,9 +5,9 @@
 }
 <div id="providerdiv">
     <div class="d-flex align-items-center justify-content-center pt-5">
-        <div class="col-md-8 col-12 p-4">
+        <div class="col-md-8 col-12 p-4 shadow-lg">
             <h2 class="mb-5">Provider Information</h2>
-            <div class="w-100 text-end d-flex justify-content-end p-3 bgdiv shadow-lg">
+            <div class="w-100 text-end d-flex justify-content-end p-3 bgdiv ">
                 <div class="d-flex form-group normal-input rounded align-items-center ms-2 position-relative">
                     <label for="region" class="position-absolute theme-color" style="bottom:30px;">
                         <svg xmlns="http://www.w3.org/2000/svg" class="position-absolute theme-color" style="left:15px" width="20" height="20" viewBox="0 0 50 50">
@@ -53,7 +53,7 @@
                         {
                             <tr class="d-none d-xl-table-row d-md-table-row tr" data-pid="@i.Physicianid">
                                 <td class="bg-transparent"> <input type="checkbox" class="checkbox" name="checkbox" /> </td>
-                                <td class="bg-transparent"> @i.Firstname , @i.Lastname </td>
+                                <td class="bg-transparent"> @i.Firstname @i.Lastname </td>
                                 <td class="bg-transparent"> @i.Roleid </td>
                                 <td class="bg-transparent"> @i.Status </td>
                                 <td class="bg-transparent"> @i.Status </td>
@@ -77,6 +77,53 @@
     </div>
 </div>
 
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle"> Contact Your Provider </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="ContactProviderForm">
+                    <input type="hidden" id="CPPhysicianID"/>
+                    <p> Choose Communication to send message </p>
+
+                    <div class="form-check">
+                        <input class="form-check-input text-info" type="radio" name="radio" id="one" checked>
+                        <label class="form-check-label" for="one">
+                            SMS
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radio" id="two">
+                        <label class="form-check-label" for="two">
+                            Email
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radio" id="three">
+                        <label class="form-check-label" for="three">
+                            Both
+                        </label>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <div class="mb-3 form-floating">
+                            <textarea class="form-control" placeholder="" id="CPmessage" style="height: 100px" required></textarea>
+                            <label for="CPmessage" class="floatingLabel"> Message </label>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-info text-white">Send</button>
+                        <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     var dash = document.getElementById("dashboard-tab");
     var providerLoc = document.getElementById("providerlocation-tab");
@@ -122,4 +169,7 @@
             
     })
 
+    $(document).on("click", ".contactProvider", function () {
+        $("#contactModal").modal('show');
+    });
 </script>

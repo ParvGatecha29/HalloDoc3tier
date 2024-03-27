@@ -217,5 +217,11 @@ namespace HalloDocBAL.Services
             bool add = _physicianRepository.EditPhysician(model);
             return add;
         }
+
+        public List<Physicianlocation> GetProviders()
+        {
+            var add = _physicianRepository.GetProviders();
+            return add;
+        }
     }
 }

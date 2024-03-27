@@ -22,7 +22,7 @@ namespace HalloDocDAL.Repositories
         public List<Physician> GetPhysicians(int region)
         {
             if(region == 0)
-                return _context.Physicians.ToList();
+                return _context.Physicians.Include(_ => _.Physicianlocations).ToList();
             return _context.Physicians.Where(p => p.Regionid == region).ToList();
         }
 
@@ -78,9 +78,20 @@ namespace HalloDocDAL.Repositories
                 p.Zip = model.physician.Zip;
                 p.Altphone = model.physician.Altphone;
             }
+            else if (model.formtype == 4)
+            {
+                p.Businessname = model.physician.Businessname;
+                p.Businesswebsite = model.physician.Businesswebsite;
+                p.Adminnotes = model.physician.Adminnotes;
+            }
             _context.Physicians.Update(p);
             _context.SaveChanges();
             return true;
+        }
+
+        public List<Physicianlocation> GetProviders()
+        {
+            return _context.Physicianlocations.ToList();
         }
     }
 }

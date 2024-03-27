@@ -40,5 +40,6 @@ namespace HalloDocBAL.Interfaces
 
         bool AddProvider(Provider model, string adminId);
         bool EditPhysician(Provider model);
+        List<Physicianlocation> GetProviders();
     }
 }

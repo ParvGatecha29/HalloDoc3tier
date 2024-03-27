@@ -2,7 +2,7 @@
 
 <div class="row justify-content-center mb-5 pb-5">
     <div class="m-4 me-5 mb-0 text-end col-xl-6 col-md-8 col-11">
-        <a class="text-decoration-none text-info rounded border border-info p-2 i-info provider-tab">
+        <a class="text-decoration-none text-info rounded border border-info p-2 i-info provider-tab" asp-action="Provider" asp-controller="AdminDashboard">
             <i class="bi bi-chevron-left i-info"></i>
             Back
         </a>
@@ -226,36 +226,38 @@
                
             </div>
             <div class="col-md-6 col-12 mb-3">
-                <div class="input-group mb-3">
-                    <input type="file" class="form-control profileInput" id="document" hidden onchange="upload(this)" name="document" disabled>
-                    <label class="input-group-text border-0 col-12 p-0 rounded" for="document" name="document">
-                        <div class="border rounded col-10 p-2 text-start">
-                            <span id="upload">Select Photo</span>
-                        </div>
-                        <button type="submit" class="border uploadDiv bg-info col-2 text-light p-2">
-                            <div>
-                                <i class="bi bi-cloud-arrow-up pe-1"></i>
-                                <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                <div class="d-flex mb-3">
+                        <label for="document" class="col d-flex">
+                            <div class="col p-1 ps-3 border border-dark-subtle">
+                                <span id="upload">Select</span>
                             </div>
-                        </button>
-                    </label>
-                </div>
+                            <div id="btn" class="p-1 btn btn-info w-auto px-3">
+
+                                <i class="bi bi-cloud-arrow-up" style="color:white !important;"></i>
+                                <span style="color:white;" class="ps-1 d-none d-md-block">Upload</span>
+
+                            </div>
+                                <input type="file" class="form-control-file" id="document" name="document" hidden
+                                   onchange="upload(this)">
+                        </label>
+                    </div>
             </div>
             <div class="col-md-6 col-12 mb-3">
-                <div class="input-group mb-3">
-                    <input type="file" class="form-control profileInput" id="document" hidden onchange="upload(this)" name="document" disabled>
-                    <label class="input-group-text border-0 col-12 p-0 rounded" for="document" name="document">
-                        <div class="border rounded col-10 p-2 text-start">
-                            <span id="upload">Select Signature</span>
-                        </div>
-                        <button type="submit" class="border uploadDiv bg-info col-2 text-light p-2">
-                            <div>
-                                <i class="bi bi-cloud-arrow-up pe-1"></i>
-                                <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                <div class="d-flex mb-3">
+                        <label for="document" class="col d-flex">
+                            <div class="col p-1 ps-3 border border-dark-subtle">
+                                <span id="upload">Select</span>
                             </div>
-                        </button>
-                    </label>
-                </div>
+                            <div id="btn" class="p-1 btn btn-info w-auto px-3">
+
+                                <i class="bi bi-cloud-arrow-up" style="color:white !important;"></i>
+                                <span style="color:white;" class="ps-1 d-none d-md-block">Upload</span>
+
+                            </div>
+                                <input type="file" class="form-control-file" id="document" name="document" hidden
+                                   onchange="upload(this)">
+                        </label>
+                    </div>
             </div>
         </div>
         <div class="mb-3 form-floating">
@@ -390,7 +392,8 @@
     });
 
     $(document).on('click', '#cancelPhysician', function () {
-        $("#dashboard").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
+                $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+
     });
 
     $(document).on('click', '#editMailing', function () {
@@ -410,7 +413,7 @@
     });
 
     $(document).on('click', '#cancelMailing', function () {
-        $("#dashboard").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
+        $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
     });
 
     $(document).on('click', '#editProfile', function () {
@@ -430,7 +433,7 @@
     });
 
     $(document).on('click', '#cancelProfile', function () {
-        $("#dashboard").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
+                $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
     });
 
     // Reset Password
@@ -542,6 +545,45 @@
 
         var validate = true;
         $('.requiredBillingInfo').each(function () {
+            var div = $(this);
+            
+            if ($(div).find('input').val() == "") {
+                
+                var span = $(div).children('span');
+                span.show();
+                console.log(span);
+
+                validate = false;
+            }
+        });
+
+        var data = new FormData(this);
+
+        if (validate) { 
+            $.ajax({
+                url: '/AdminDashboard/EditPhysician',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+                    }
+                }
+            });
+        }
+        else
+        {
+            toastr.error("Please provide valid data!");
+        }
+    });
+
+    $('#ProviderInfo').submit(function(e) {       
+        e.preventDefault();
+
+        var validate = true;
+        $('.requiredProviderInfo').each(function () {
             var div = $(this);
             
             if ($(div).find('input').val() == "") {

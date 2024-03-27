@@ -746,5 +746,15 @@ public class AdminDashboardController : Controller
         var edit = _adminDashboardService.EditPhysician(model);
         return Json(new { success = true });
     }
+
+    public IActionResult ProviderLocation()
+    {
+        return View();
+    }
+
+    public List<Physicianlocation> GetProviders()
+    {
+        return _adminDashboardService.GetProviders();
+    }
 }
 
