@@ -756,5 +756,45 @@ public class AdminDashboardController : Controller
     {
         return _adminDashboardService.GetProviders();
     }
+
+    public IActionResult Access()
+    {
+        var access = new Access();
+        access.Roles= _adminDashboardService.GetRoles();
+        return View(access);
+    }
+
+    public IActionResult CreateAccess(int id=0)
+    {
+        var access = new Access();
+        access.Roles = _adminDashboardService.GetRoles();
+        if (id != 0)
+        {
+            access.edit = 1;
+            access.roleid = id;
+        }
+        return PartialView(access);
+    }
+
+    public IActionResult AccessMenu(int AccountType,int roleid=0)
+    {
+        var access = new Access();
+        access.Menus = _adminDashboardService.GetMenus(AccountType);
+        access.RoleMenus = _adminDashboardService.GetRoleMenus(roleid);
+        return PartialView(access);
+    }
+    public JsonResult CreateAccessRole(Access model)
+    {
+        var user = SessionService.GetLoggedInUser(HttpContext.Session);
+        model.userid = user.Id;
+        _adminDashboardService.CreateAccess(model);
+        return Json(new { success = true });
+    }
+
+    public JsonResult EditCase(AdminDashboard model)
+    {
+        _adminDashboardService.EditCase(model);
+        return Json(new { success = true });
+    }
 }
 

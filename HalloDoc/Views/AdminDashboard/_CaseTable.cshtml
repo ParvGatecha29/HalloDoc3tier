@@ -11,6 +11,10 @@
         previousPage = Model.pagedList.CurrentPage - 1;
     }
     int first = Model.pagedList.CurrentPage * Model.pagedList.PageSize - 9;
+    if(Model.pagedList.TotalCount == 0)
+    {
+        first = 0;
+    }
     int last;
     if (first + Model.pagedList.PageSize - 1 > Model.pagedList.TotalCount)
     {
@@ -324,11 +328,11 @@
                                             Actions
                                         </button>
                                         <ul class="dropdown-menu z-3" aria-labelledby="action">
-                                            <li><a class="dropdown-item theme-color assigncase" href="#"><i class="fa-regular fa-clipboard"></i>Assign Case</a></li>
-                                            <li><a class="dropdown-item theme-color cancelcase"><i class="fa-regular fa-circle-xmark"></i> Cancel case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
-                                            <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
-                                            <li><a class="dropdown-item theme-color blockcase" href="#"><i class="fa-solid fa-ban"></i> Block Patient</a></li>
+                                            <li><a class="dropdown-item theme-color assigncase"><i class="fa-regular fa-clipboard p-2"></i>Assign Case</a></li>
+                                            <li><a class="dropdown-item theme-color cancelcase"><i class="fa-regular fa-circle-xmark p-2"></i> Cancel case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
+                                            <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
+                                            <li><a class="dropdown-item theme-color blockcase" href="#"><i class="fa-solid fa-ban p-2"></i> Block Patient</a></li>
                                         </ul>
                                     </div>
                                 }
@@ -339,12 +343,12 @@
                                             Actions
                                         </button>
                                         <ul class="dropdown-menu z-3" aria-labelledby="action">
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
-                                            <li><a class="dropdown-item theme-color transferCase" href="#"><i class="fa-regular fa-note-sticky"></i> Transfer</a></li>
-                                            <li><a class="dropdown-item theme-color clearCase" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
-                                            <li><a class="dropdown-item theme-color sendAgreement" href="#"><i class="fa-solid fa-file-lines"></i> Send Agreement</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload p-2"></i> View Uploads</a></li>
+                                            <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
+                                            <li><a class="dropdown-item theme-color transferCase" href="#"><i class="fa-regular fa-note-sticky p-2"></i> Transfer</a></li>
+                                            <li><a class="dropdown-item theme-color clearCase" href="#"><i class="fa-regular fa-circle-xmark p-2"></i> Clear Case</a></li>
+                                            <li><a class="dropdown-item theme-color sendAgreement" href="#"><i class="fa-solid fa-file-lines p-2"></i> Send Agreement</a></li>
                                         </ul>
                                     </div>
                                 }
@@ -355,12 +359,12 @@
                                             Actions
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="action">
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Doctors Note</a></li>
-                                            <li><a class="dropdown-item theme-color" onclick="Encounter(@obj.requestId,@obj.isFinalized.ToString().ToLower())"><i class="fa-regular fa-note-sticky"></i> Encounter</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload p-2"></i> View Uploads</a></li>
+                                            <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-cart-plus p-2"></i> Orders</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky p-2"></i> Doctors Note</a></li>
+                                            <li><a class="dropdown-item theme-color" onclick="Encounter(@obj.requestId,@obj.isFinalized.ToString().ToLower())"><i class="fa-regular fa-note-sticky p-2"></i> Encounter</a></li>
                                         </ul>
                                     </div>
                                 }
@@ -371,14 +375,14 @@
                                             Actions
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="action">
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-cart-plus"></i> Orders</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("CloseCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-circle-xmark"></i> Close Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Doctors Note</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload p-2"></i> View Uploads</a></li>
+                                            <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-cart-plus p-2"></i> Orders</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("CloseCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-circle-xmark p-2"></i> Close Case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky p-2"></i> Doctors Note</a></li>
                                             <li><a class="dropdown-item theme-color clearCase" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky"></i> Encounter</a></li>
+                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky p-2"></i> Encounter</a></li>
                                         </ul>
                                     </div>
                                 }
@@ -389,9 +393,9 @@
                                             Actions
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="action">
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewNotes","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
+                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload p-2"></i> View Uploads</a></li>
+                                            <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
                                         </ul>
                                     </div>
                                 }
@@ -463,7 +467,7 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <div class="mb-3 form-floating required">
+                        <div class="mb-3 form-floating requiredcc">
                             <textarea class="form-control" placeholder="" id="info" style="height: 100px" name="info" required></textarea>
                             <label for="info" class="floatingLabel"> Provide additional information </label>
                             <span style="color:red; display:none">Required!</span>
@@ -509,7 +513,7 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <div class="mb-3 form-floating required">
+                        <div class="mb-3 form-floating requiredac">
                             <textarea class="form-control" placeholder="" id="info" style="height: 100px" name="info" required></textarea>
                             <label for="info" class="floatingLabel"> Provide additional information </label>
                             <span style="color:red; display:none">Required!</span>
@@ -555,7 +559,7 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <div class="mb-3 form-floating required">
+                        <div class="mb-3 form-floating requiredtc">
                             <textarea class="form-control" placeholder="" id="info" style="height: 100px" name="info" required></textarea>
                             <label for="info" class="floatingLabel"> Provide additional information </label>
                             <span style="color:red; display:none">Required!</span>
@@ -581,11 +585,11 @@
             </div>
             <div class="modal-body">
                 <form id="formblock" method="post">
-                    <p class="text-secondary"> Patient Name : <span class="text-info" id="blockcaseName"> </span> </p>
+                    <p class="text-secondary"> Patient Name : <span class="text-info" id="blockcasename"> </span> </p>
                     <input type="hidden" class="requestId" value="" name="requestId" id="requestId" />
 
                     <div class="form-group mb-3">
-                        <div class="mb-3 form-floating required">
+                        <div class="mb-3 form-floating requiredbc">
                             <textarea class="form-control" placeholder="" id="info" style="height: 100px" name="info" required></textarea>
                             <label for="info" class="floatingLabel"> Provide additional information </label>
                             <span style="color:red; display:none">Required!</span>
@@ -620,7 +624,7 @@
                     <input type="hidden" class="requestId" value="" name="requestId" id="requestId" />
 
                     <div class="form-group mb-3">
-                        <div class="form-group pb-3 form-floating required">
+                        <div class="form-group pb-3 form-floating requiredsa">
                             <input type="text" placeholder="Phone Number" class="form-control" id="sendnumber" name="sendnumber"
                                    aria-describedby="emailHelp">
                             <label for="exampleInputEmail1" class="floating-label">Phone Number</label>
@@ -687,7 +691,7 @@
             e.preventDefault();
             var data = new FormData(this)
             var validate = true;
-            $('.required').each(function () {
+            $('.requiredcc').each(function () {
                 var div = $(this);
                 if ($(div).find('input').val() == "" || $(div).find('textarea').val() == "") {
                     Swal.fire({
@@ -777,7 +781,7 @@
             e.preventDefault();
             var data = new FormData(this)
             var validate = true;
-            $('.required').each(function () {
+            $('.requiredac').each(function () {
                 var div = $(this);
                 if ($(div).find('input').val() == "" || $(div).find('textarea').val() == "") {
                     Swal.fire({
@@ -827,7 +831,7 @@
             e.preventDefault();
             var data = new FormData(this)
             var validate = true;
-            $('.required').each(function () {
+            $('.requiredbc').each(function () {
                 var div = $(this);
                 if ($(div).find('input').val() == "" || $(div).find('textarea').val() == "") {
                     Swal.fire({
@@ -905,7 +909,7 @@
             e.preventDefault();
             var data = new FormData(this)
             var validate = true;
-            $('.required').each(function () {
+            $('.requiredsa').each(function () {
                 var div = $(this);
                 if ($(div).find('input').val() == "" || $(div).find('textarea').val() == "") {
                     Swal.fire({
@@ -979,6 +983,7 @@
 
     $(document).on("click", ".blockcase", function () {
         $("#blockcaseModal").modal('show');
+        $("#blockcasename").text($(this).closest('.tr').find(".td[name='Name']").text());
         $(".requestId").val($(this).closest('.tr').data('rid'));
     });
 

@@ -28,7 +28,7 @@ namespace HalloDocDAL.Model
         public string physician { get; set; }
         public string notes { get; set; }
         public string confirmationNo { get; set; }
-        public List<string> transferNotes { get; set; }
+        public List<string> transferNotes { get; set; } = new List<string>();
         public string adminNotes { get; set; }
         public string physicianNotes { get; set; }
         public string cancelreqid { get; set; }

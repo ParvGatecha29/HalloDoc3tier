@@ -23,7 +23,7 @@ namespace HalloDocDAL.Contacts
         bool transferRequest(AdminDashboardData data,int newstate);
         bool AddBlockRequest(AdminDashboardData data);
         List<Region> GetRegions();
-
+        bool EditCase(AdminDashboard model);
         bool EditEncounterForm(EncounterForm model);
         EncounterForm GetEncounterForm(int requestId);
     }

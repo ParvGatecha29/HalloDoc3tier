@@ -1,0 +1,39 @@
+﻿@model HalloDocDAL.Model.Access
+
+@if(Model.RoleMenus != null)
+{
+    @foreach (var i in Model.Menus)
+    {
+        @if (Model.RoleMenus.Any(x=> x.Menuid == i.Menuid))
+        {
+            <div class="form-check d-flex d-inline-block">
+                <input class="PhysicianInput border border-dark mt-1 me-2" type="checkbox" value="@i.Menuid" name="selectedMenus" checked>
+                <label class="form-check-label" for="flexCheckDefault">
+                    @i.Name
+                </label>
+            </div>
+        }
+        else
+        {
+            <div class="form-check d-flex d-inline-block">
+                <input class="PhysicianInput border border-dark mt-1 me-2" type="checkbox" value="@i.Menuid" name="selectedMenus">
+                <label class="form-check-label" for="flexCheckDefault">
+                    @i.Name
+                </label>
+            </div>
+        }
+        
+    }
+}
+else
+{
+    @foreach (var i in Model.Menus)
+    {
+        <div class="form-check d-flex d-inline-block">
+            <input class="PhysicianInput border border-dark mt-1 me-2" type="checkbox" value="@i.Menuid" name="selectedMenus">
+            <label class="form-check-label" for="flexCheckDefault">
+                @i.Name
+            </label>
+        </div>
+    }
+}

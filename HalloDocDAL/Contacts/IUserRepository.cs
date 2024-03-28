@@ -22,5 +22,9 @@ namespace HalloDocDAL.Contacts
 
         bool UpdateAdminProfile(AdminProfile profile);
         bool AddProvider(Provider model, string adminId);
+        List<Role> GetRoles();
+        List<Menu> GetMenus(int AccountType);
+        List<Rolemenu> GetRoleMenus(int roleid);
+        bool AddRole(Access role);
     }
 }

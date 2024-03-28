@@ -96,26 +96,29 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
                                         My Profile
                                     </button>
                                 </li>
-                                <li class="nav-item px-3" role="presentation">
-                                    <button class="nav-link layout" id="providers-tab" data-bs-toggle="tab"  data-bs-target="#providers"
-                                            type="button" role="tab" aria-controls="providers" aria-selected="false"
-                                            style="color:inherit">
-                                        Providers
-                                    </button>
+                                <li class="nav-item dropdown" role="presentation">
+                                    <button class="nav-link dropdown-toggle layout" id="providers-tab" data-bs-toggle="dropdown" type="button">Providers</button>
+                                    <ul class="dropdown-menu">
+                                        <li><button class="dropdown-item" id="provider-tab" data-bs-toggle="tab">Provider</button></li>
+                                        <li><button class="dropdown-item" data-bs-toggle="tab">Scheduling</button></li>
+                                        <li><button class="dropdown-item" data-bs-toggle="tab">Invoicing</button></li>
+                                    </ul>
                                 </li>
                                 <li class="nav-item px-3" role="presentation">
-                                    <button class="nav-link layout" id="partners-tab" data-bs-toggle="tab" data-bs-target="#partners"
+                                    <button class="nav-link  layout" id="partners-tab" data-bs-toggle="tab" data-bs-target="#partners"
                                             type="button" role="tab" aria-controls="partners" aria-selected="false"
                                             style="color:inherit">
                                         Partners
                                     </button>
                                 </li>
-                                <li class="nav-item px-3" role="presentation">
-                                    <button class="nav-link layout" id="access-tab" data-bs-toggle="tab" data-bs-target="#access"
-                                            type="button" role="tab" aria-controls="access" aria-selected="false"
-                                            style="color:inherit">
+                                <li class="nav-item dropdown px-3" role="presentation">
+                                    <button class="nav-link dropdown-toggle layout" id="access-tab" data-bs-toggle="dropdown" type="button">
                                         Access
                                     </button>
+                                    <ul class="dropdown-menu">
+                                        <li><button class="dropdown-item" id="account-tab" data-bs-toggle="tab">Account</button></li>
+                                        <li><button class="dropdown-item" data-bs-toggle="tab">User</button></li>
+                                    </ul>
                                 </li>
                                 <li class="nav-item px-3" role="presentation">
                                     <button class="nav-link layout" id="records-tab" data-bs-toggle="tab" data-bs-target="#records"
@@ -181,8 +184,12 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
                 window.location.href = '@Url.Action("AdminProfile","AdminDashboard")';
             })
 
-            $('#providers-tab').click(function () {
+            $('#provider-tab').click(function () {
                 window.location.href = '@Url.Action("Provider","AdminDashboard")';
+            })
+
+            $('#account-tab').click(function () {
+                window.location.href = '@Url.Action("Access","AdminDashboard")';
             })
 
         });

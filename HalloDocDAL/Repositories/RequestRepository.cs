@@ -239,6 +239,7 @@ namespace HalloDocDAL.Repositories
                 adminNotes = rn.Adminnotes,
                 physicianNotes = rn.Physiciannotes,
             };
+            
             foreach (var item in rn.Request.Requeststatuslogs)
             {
                 data.transferNotes.Add(item.Notes);
@@ -319,6 +320,17 @@ namespace HalloDocDAL.Repositories
         public List<Region> GetRegions()
         {
             return _context.Regions.ToList();
+        }
+
+        public bool EditCase(AdminDashboard model)
+        {
+            Request request = _context.Requests.FirstOrDefault(x => x.Confirmationnumber == model.request.confirmationNo);
+            request.Firstname = model.request.confirmationNo;
+            request.Lastname = model.request.lastName;
+
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+            return true;
         }
 
         public bool EditEncounterForm(EncounterForm model)

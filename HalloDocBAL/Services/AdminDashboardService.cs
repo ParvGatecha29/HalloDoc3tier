@@ -206,6 +206,12 @@ namespace HalloDocBAL.Services
             return _userRepository.GetAdminRegions(id);
         }
 
+        public bool EditCase(AdminDashboard model)
+        {
+            _requestRepository.EditCase(model);
+            return true;
+        }
+
         public bool AddProvider(Provider model, string adminId)
         {
             bool add = _userRepository.AddProvider(model, adminId);
@@ -222,6 +228,30 @@ namespace HalloDocBAL.Services
         {
             var add = _physicianRepository.GetProviders();
             return add;
+        }
+
+        public List<Role> GetRoles()
+        {
+            var roles = _userRepository.GetRoles();
+            return roles;
+        }
+
+        public List<Menu> GetMenus(int AccountType)
+        {
+            var menus = _userRepository.GetMenus(AccountType);
+            return menus;
+        }
+
+        public List<Rolemenu> GetRoleMenus(int roleid)
+        {
+            var menus = _userRepository.GetRoleMenus(roleid);
+            return menus;
+        }
+
+        public bool CreateAccess(Access model)
+        {
+            bool role = _userRepository.AddRole(model);
+            return role;
         }
     }
 }

@@ -472,10 +472,6 @@ textarea:focus {
 .dark-theme .tab {
     background-color: #222 !important;
 }
-
-.table-responsive {
-    overflow:unset;
-}
 #responsiveTable {
     width: 100%;
     border-collapse: collapse;

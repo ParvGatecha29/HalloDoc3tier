@@ -10,7 +10,7 @@
     {
         switch (RequstTypeId)
         {
-            case 1: return "Patient";   
+            case 1: return "Patient";
             case 2: return "Family";
             case 3: return "Concierge";
             case 4: return "Business";
@@ -48,11 +48,11 @@
         <h4>@okok(Convert.ToInt32(@Model.request.status)) Profile <span class="badge rounded-5 Reqtyp" style="background-color:@GetTableColorClass(@Model.request.requesttype)">@GetReqType(Model.request.requesttype) </span></h4>
 
         <a asp-controller="AdminDashboard" asp-action="AdminDashboard"
-            class="btn shadow  btn-outline-secondary border-info text-info px-3 ">
+           class="btn shadow  btn-outline-secondary border-info text-info px-3 ">
             <i class="fa-solid fa-angle-left"></i> Back
         </a>
     </div>
-    <form action="" class="shadow border rounded my-3" method="post">
+    <form id="editform" class="shadow border rounded my-3" method="post">
         <div class="mx-3 my-4 ">
             <div class="mt-3">
                 <h4 class="ms-auto me-auto mb-4">Patient Information</h4>
@@ -71,59 +71,62 @@
                     <div class="row">
 
                         <div class="form-floating mb-3 col-12 col-sm-6">
-                            <input type="text" class="form-control " id="floatingInput" placeholder="John"
+                            <input type="text" class="form-control dclass" id="firstname" placeholder="John"
                                    required disabled asp-for="@Model.request.firstName">
-                            <label for="floatingInput" class="floating-label ms-2 ">First Name</label>
+                            <label for="firstName" class="floating-label ms-2 ">First Name</label>
                         </div>
 
                         <div class="form-floating mb-3 col-12 col-sm-6">
-                            <input type="text" class="form-control " id="floatingInput" placeholder="Wick"
+                            <input type="text" class="form-control dclass" id="lastName" placeholder="Wick"
                                    disabled asp-for="@Model.request.lastName">
-                            <label for="floatingInput" class="floating-label ms-2 ">Last Name</label>
+                            <label for="lastName" class="floating-label ms-2 ">Last Name</label>
                         </div>
 
                         <div class="form-floating mb-3 col-12 col-sm-6">
-                            <input type="date" class="form-control " id="floatingInput" placeholder="02-10-2002"
-                                disabled />
-                            <label for="floatingInput" class="floating-label ms-2 ">Date of Birth</label>
+                            <input type="date" class="form-control dclass" id="dob" placeholder="02-10-2002"
+                                   disabled />
+                            <label for="dob" class="floating-label ms-2 ">Date of Birth</label>
                         </div>
                         <div class="col-12 col-sm-5 z-3">
                             <div class="form-floating mb-3  h-100 ">
-                                <input type="tel" class="phone form-control dclass h-100" id="floatingInput"
+                                <input type="tel" class="phone form-control h-100" id="floatingInput"
                                        placeholder=" " disabled asp-for="@Model.request.phone">
                             </div>
                         </div>
 
-                        
+
 
                         <div class="form-floating mb-3 col-12 col-sm-1 ">
-                            <button type="button" class="dclass btn btn-outline-dark border-info p-3 text-info w-100"style="height: 100%;">
+                            <button type="button" class="btn btn-outline-dark border-info p-3 text-info w-100" style="height: 100%;">
                                 <i class="bi bi-telephone"></i>
                             </button>
                         </div>
-
                     </div>
-
                 </div>
 
                 <div class="row">
-
                     <div class="form-floating mb-3 col-12 col-sm-6">
-                        <input type="email" class="form-control emailInp dclass" id="floatingInput1"
+                        <input type="email" class="form-control emailInp" id="floatingInput1"
                                mailto:placeholder="test@google.com" disabled asp-for="@Model.request.email">
                         <label for="floatingInput" class="floating-label ms-2 ">Email</label>
                     </div>
-                    @*
-                    <div
-                    class="form-floating mb-3 col-12 col-sm-1 d-flex align-items-center justify-content-center mx-2">
+                    <div class="form-floating mb-3 col-12 col-sm-6">
+                        @if (Model.request.status != 1)
+                        {
+                            <button type="button" id="editBtn" class="btn btn-info text-white EditBtn"
+                                    onclick="enableFields()">
+                                Edit
+                            </button>
 
-                    <button type="button" id="editBtn" class="btn btn-outline-info EditBtn px-4 py-3"
-                    onclick="enableFields()">Edit</button>
-                    <button type="submit" id="submitBtn"
-                    class="btn btn-outline-info EditBtn px-4 py-3">Save</button>
-                    <button type="button" id="cancelBtn" class="btn btn-outline-info EditBtn px-4 py-3"
-                    onclick="disableFields()">Cancel</button>
-                    </div> *@
+                            <button type="submit" id="submitBtn" class="btn btn-info text-white EditBtn">Save</button>
+
+                            <button type="button" id="cancelBtn" class="btn btn-outline-info EditBtn"
+                                    onclick="disableFields()">
+                                Cancel
+                            </button>
+                        }
+                    </div>
+
 
                 </div>
 
@@ -134,7 +137,7 @@
 
                     <div class="form-floating mb-3 col-12 col-sm-6">
                         <input type="text" class="form-control " id="floatingInput" placeholder="Maryland"
-                            disabled>
+                               disabled>
                         <label for="floatingInput" class="floating-label ms-2 ">Region</label>
                     </div>
 
@@ -146,7 +149,7 @@
 
 
                     <div class="form-floating mb-3 col-12 col-sm-1 ">
-                        <button type="button" class="dclass btn btn-outline-dark border-info p-3 text-info w-100 "style="height: 100%;">
+                        <button type="button" class="dclass btn btn-outline-dark border-info p-3 text-info w-100 " style="height: 100%;">
                             <i class="bi bi-geo-alt"></i>
                         </button>
                     </div>
@@ -158,25 +161,16 @@
 
                 </div>
                 <div class="d-grid gap-2 d-flex justify-content-center  justify-content-md-end mt-4 pt-4 mb-3">
+
                     <button type="button" class="btn text-white btn-info assigncase">Assign</button>
 
-                    <button type="button" class="btn text-white btn-info viewnotes" >View Notes</button>
+                    <button type="button" class="btn text-white btn-info viewnotes">View Notes</button>
 
                     <button type="button" class="btn text-white btn-danger cancelcase">Cancel</button>
 
                 </div>
 
-                @* <div class="d-grid gap-2 d-flex justify-content-center justify-content-md-end mt-4 pt-4 mb-3">
 
-                <button type="button" id="editBtn" class="btn btn-info text-white EditBtn"
-                onclick="enableFields()">Edit
-                </button>
-
-                <button type="submit" id="submitBtn" class="btn btn-info text-white EditBtn">Save</button>
-
-                <button type="button" id="cancelBtn" class="btn btn-outline-info EditBtn"
-                onclick="disableFields()">Cancel</button>
-                </div> *@
 
             </div>
         </div>
@@ -268,6 +262,8 @@
 </div>
 <script>
     $(document).ready(function () {
+
+
         $('#form').on('submit', function (e) {
             e.preventDefault();
             var data = new FormData(this)
@@ -352,6 +348,33 @@
             });
         });
 
+        $('#editform').on('submit', function (e) {
+            e.preventDefault();
+            var data = new FormData(this)
+
+            $.ajax({
+                url: '@Url.Action("EditCase","AdminDashboard")',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+
+                        window.location.reload();
+
+
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
+
         $('.viewnotes').click(function () {
             var rid = @Model.request.requestId;
             $.ajax({
@@ -382,25 +405,25 @@
     });
 
 </script>
-@* <script>
-function disableFields() {
-document.querySelectorAll('.dclass').forEach(function (element) {
-element.disabled = true;
-});
-// Hide the submit and cancel buttons, show the edit button
-document.getElementById('submitBtn').style.display = 'none';
-document.getElementById('cancelBtn').style.display = 'none';
-document.getElementById('editBtn').style.display = 'block';
-}
+<script>
+    function disableFields() {
+        document.querySelectorAll('.dclass').forEach(function (element) {
+            element.disabled = true;
+        });
+        // Hide the submit and cancel buttons, show the edit button
+        document.getElementById('submitBtn').style.display = 'none';
+        document.getElementById('cancelBtn').style.display = 'none';
+        document.getElementById('editBtn').style.display = 'block';
+    }
 
-function enableFields() {
-document.querySelectorAll('.dclass').forEach(function (element) {
-element.disabled = false;
-});
-// Show the submit and cancel buttons, hide the edit button
-document.getElementById('submitBtn').style.display = 'block';
-document.getElementById('cancelBtn').style.display = 'block';
-document.getElementById('editBtn').style.display = 'none';
-}
-disableFields();
-</script>  *@
+    function enableFields() {
+        document.querySelectorAll('.dclass').forEach(function (element) {
+            element.disabled = false;
+        });
+        // Show the submit and cancel buttons, hide the edit button
+        document.getElementById('submitBtn').style.display = 'block';
+        document.getElementById('cancelBtn').style.display = 'block';
+        document.getElementById('editBtn').style.display = 'none';
+    }
+    disableFields();
+</script> 

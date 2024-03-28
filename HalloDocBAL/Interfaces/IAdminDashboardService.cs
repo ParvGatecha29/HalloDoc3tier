@@ -14,7 +14,7 @@ namespace HalloDocBAL.Interfaces
     public interface IAdminDashboardService
     {
         List<AdminDashboardData> GetRequests();
-        Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype = 0, int pageNumber = 1, int region =0, string search ="", bool all=false);
+        Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype = 0, int pageNumber = 1, int region = 0, string search = "", bool all = false);
         AdminDashboardData GetRequestById(int id);
         AdminDashboardData GetNotes(int id);
         bool UpdateNotes(int id, string notes);
@@ -33,6 +33,7 @@ namespace HalloDocBAL.Interfaces
         bool UpdateEncounterForm(ViewEncounterForm model);
         EncounterForm GetEncounterForm(int requestId);
 
+        bool EditCase(AdminDashboard model);
         Admin GetAdminById(string id);
         List<int> GetAdminRegions(string id);
 
@@ -41,5 +42,9 @@ namespace HalloDocBAL.Interfaces
         bool AddProvider(Provider model, string adminId);
         bool EditPhysician(Provider model);
         List<Physicianlocation> GetProviders();
+        List<Role> GetRoles();
+        List<Menu> GetMenus(int AccountType=0);
+        List<Rolemenu> GetRoleMenus(int roleid=0);
+        bool CreateAccess(Access model);
     }
 }

@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HalloDocDAL.Repositories
 {
@@ -223,6 +225,61 @@ namespace HalloDocDAL.Repositories
             return true;
 
 
+        }
+        public List<Role> GetRoles()
+        {
+            return _context.Roles.ToList();
+        }
+        public List<Menu> GetMenus(int AccountType)
+        {
+            
+            var menu = _context.Menus.AsQueryable();
+            if(AccountType != 0)
+            {
+                menu = menu.Where(x => x.Accounttype == AccountType).AsQueryable();
+            }
+            return menu.ToList();
+        }
+
+        public List<Rolemenu> GetRoleMenus(int roleid)
+        {
+
+            var rolemenu = _context.Rolemenus.AsQueryable();
+
+            return rolemenu.Where(x => x.Roleid == roleid).ToList();
+        }
+
+        public bool AddRole(Access model)
+        {
+            if(model.edit != 1)
+            {
+                Role role = new Role
+                {
+                    Name = model.roleName,
+                    Accounttype = (short)model.accountType,
+                    Createdby = model.userid,
+                    Createddate = DateTime.Now,
+                };
+                _context.Roles.Add(role);
+                _context.SaveChanges();
+            }
+            foreach (var menu in model.selectedMenus)
+            {
+                if (_context.Rolemenus.FirstOrDefault(x => x.Roleid == model.roleid && x.Menuid == menu) == null)
+                {
+                    Rolemenu rolemenu = new Rolemenu
+                    {
+                        Roleid = model.roleid,
+                        Menuid = menu
+                    };
+                    _context.Rolemenus.Add(rolemenu);
+                }
+
+            }
+            List<Rolemenu> remove = _context.Rolemenus.Where(x => !model.selectedMenus.Contains(x.Menuid) && x.Roleid == model.roleid).ToList();
+            _context.Rolemenus.RemoveRange(remove);
+            _context.SaveChanges();
+            return true;
         }
     }
 }
