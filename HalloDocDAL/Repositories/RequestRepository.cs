@@ -377,5 +377,7 @@ namespace HalloDocDAL.Repositories
             return _context.EncounterForms.FirstOrDefault(x => x.RequestId == requestId);
         }
 
+        
+
     }
 }

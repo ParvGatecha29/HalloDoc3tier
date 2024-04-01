@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -280,6 +281,100 @@ namespace HalloDocDAL.Repositories
             _context.Rolemenus.RemoveRange(remove);
             _context.SaveChanges();
             return true;
+        }
+
+        public bool AddShift(Shift shift)
+        {
+            _context.Shifts.Add(shift);
+            _context.SaveChanges();
+            return true;
+        }
+
+        public bool AddShiftDetails(Shiftdetail shiftdetail)
+        {
+            _context.Shiftdetails.Add(shiftdetail);
+            _context.SaveChanges();
+            return true;
+        }
+        public bool AddShiftDetailRegions(Shiftdetailregion shiftdetailregion)
+        {
+            _context.Shiftdetailregions.Add(shiftdetailregion);
+            _context.SaveChanges();
+            return true;
+        }
+
+        public Shiftdetail FindShiftDetails(int detailId)
+        {
+            return _context.Shiftdetails.Find(detailId);
+        }
+
+        public bool UpdateShiftDetails(Shiftdetail details)
+        {
+            _context.Shiftdetails.Update(details);
+            _context.SaveChanges();
+            return true;
+        }
+        public List<ScheduleModel> GetEvents()
+        {
+            var eventswithoutdelet = (from s in _context.Shifts
+                                      join pd in _context.Physicians on s.Physicianid equals pd.Physicianid
+                                      join sd in _context.Shiftdetails on s.Shiftid equals sd.Shiftid into shiftGroup
+                                      from sd in shiftGroup.DefaultIfEmpty()
+
+                                      select new ScheduleModel
+                                      {
+                                          Shiftid = sd.Shiftdetailid,
+                                          Status = sd.Status,
+                                          Starttime = sd.Starttime,
+                                          Endtime = sd.Endtime,
+                                          Physicianid = pd.Physicianid,
+                                          PhysicianName = pd.Firstname + ' ' + pd.Lastname,
+                                          Shiftdate = sd.Shiftdate,
+                                          ShiftDetailId = sd.Shiftdetailid,
+                                          Regionid = sd.Regionid,
+                                          ShiftDeleted = sd.Isdeleted
+                                      }).ToList();
+            var events = eventswithoutdelet.Where(item => !item.ShiftDeleted).ToList();
+            return events;
+        }
+        public List<MappedEvents> GetMappedEvents()
+        {
+            var events = GetEvents();
+            var mappedEvents = events.Select(e => new MappedEvents
+            {
+                id = e.Shiftid,
+                resourceId = e.Physicianid,
+                title = e.PhysicianName,
+                start = new DateTime(e.Shiftdate.Value.Year, e.Shiftdate.Value.Month, e.Shiftdate.Value.Day, e.Starttime.Hour, e.Starttime.Minute, e.Starttime.Second),
+                end = new DateTime(e.Shiftdate.Value.Year, e.Shiftdate.Value.Month, e.Shiftdate.Value.Day, e.Endtime.Hour, e.Endtime.Minute, e.Endtime.Second),
+                ShiftDetailId = e.ShiftDetailId,
+                region = _context.Regions.Where(i => i.Regionid == e.Regionid).ToList(),
+                status = e.Status
+            }).ToList();
+
+            return mappedEvents;
+        }
+        public List<ScheduleModel> GetReviewShifts(int region)
+        {
+             return (from shiftis in _context.Shifts
+             join shiftdetails in _context.Shiftdetails
+             on shiftis.Shiftid equals shiftdetails.Shiftid
+             join regionis in _context.Regions
+             on shiftdetails.Regionid equals regionis.Regionid
+             select new ScheduleModel
+             {
+                 Shiftid =  shiftis.Shiftid,
+                 ShiftDetailId = shiftdetails.Shiftdetailid,
+                 PhysicianName =  shiftis.Physician.Firstname+ shiftis.Physician.Lastname,
+
+                 Shiftdate = shiftdetails.Shiftdate,
+                 Starttime = shiftdetails.Starttime,
+                 Endtime = shiftdetails.Endtime,
+                 Regionid = shiftdetails.Regionid,
+                 RegionName = regionis.Name,
+                 Status = shiftdetails.Status
+             }).Where(item => (region == 0 || item.Regionid == region) && item.Status == 1).ToList();
+            
         }
     }
 }

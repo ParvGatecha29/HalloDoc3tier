@@ -14,6 +14,8 @@ using System.Security.Policy;
 using OfficeOpenXml;
 using Microsoft.DotNet.Scaffolding.Shared;
 using System.Drawing;
+using System.Collections;
+using System.Transactions;
 
 namespace HalloDoc.Controllers;
 [AuthManager("1")]
@@ -26,13 +28,14 @@ public class AdminDashboardController : Controller
     private readonly IOrderService _orderService;
     private readonly IUserService _userService;
     private readonly IRequestService _requestService;
+    private readonly IUserRepository _userRepository;
     int[] newcase = { 1 };
     int[] pendingcase = { 2 };
     int[] activecase = { 4, 5 };
     int[] concludecase = { 6 };
     int[] toclosecase = { 3, 7, 8 };
     int[] unpaidcase = { 9 };
-    public AdminDashboardController(IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService)
+    public AdminDashboardController(IUserRepository userRepository, IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService)
     {
         _adminDashboardService = adminDashboardService;
         _emailService = emailService;
@@ -41,6 +44,7 @@ public class AdminDashboardController : Controller
         _orderService = orderService;
         _userService = userService;
         _requestService = requestService;
+        _userRepository = userRepository;
     }
 
 
@@ -452,7 +456,7 @@ public class AdminDashboardController : Controller
     public IActionResult AdminProfile()
     {
         Admin admin = _adminDashboardService.GetAdminById(HttpContext.Session.GetString("userId"));
-       
+
         AdminProfile profile = new AdminProfile
         {
             adminId = admin.Adminid,
@@ -561,7 +565,7 @@ public class AdminDashboardController : Controller
                     worksheet.Cells[1, 5].Value = "Phone";
                     worksheet.Cells[1, 6].Value = "Address";
                     worksheet.Cells[1, 7].Value = "Notes";
-                    
+
                     foreach (var data in dash.pagedList)
                     {
                         worksheet.Cells[row, 1].Value = data.firstName + data.lastName;
@@ -583,7 +587,7 @@ public class AdminDashboardController : Controller
                     worksheet.Cells[1, 6].Value = "Phone";
                     worksheet.Cells[1, 7].Value = "Address";
                     worksheet.Cells[1, 8].Value = "Notes";
-                    
+
                     foreach (var data in dash.pagedList)
                     {
                         worksheet.Cells[row, 1].Value = data.firstName + data.lastName;
@@ -606,7 +610,7 @@ public class AdminDashboardController : Controller
                     worksheet.Cells[1, 6].Value = "Phone";
                     worksheet.Cells[1, 7].Value = "Address";
                     worksheet.Cells[1, 8].Value = "Notes";
-                    
+
                     foreach (var data in dash.pagedList)
                     {
                         worksheet.Cells[row, 1].Value = data.firstName + data.lastName;
@@ -627,7 +631,7 @@ public class AdminDashboardController : Controller
                     worksheet.Cells[1, 4].Value = "Date of Service";
                     worksheet.Cells[1, 5].Value = "Phone";
                     worksheet.Cells[1, 6].Value = "Address";
-                    
+
                     foreach (var data in dash.pagedList)
                     {
                         worksheet.Cells[row, 1].Value = data.firstName + data.lastName;
@@ -647,7 +651,7 @@ public class AdminDashboardController : Controller
                     worksheet.Cells[1, 5].Value = "Date of Service";
                     worksheet.Cells[1, 6].Value = "Address";
                     worksheet.Cells[1, 7].Value = "Notes";
-                    
+
                     foreach (var data in dash.pagedList)
                     {
                         worksheet.Cells[row, 1].Value = data.firstName + data.lastName;
@@ -666,7 +670,7 @@ public class AdminDashboardController : Controller
                     worksheet.Cells[1, 3].Value = "Date of Service";
                     worksheet.Cells[1, 4].Value = "Phone";
                     worksheet.Cells[1, 5].Value = "Address";
-                   
+
 
                     foreach (var data in dash.pagedList)
                     {
@@ -680,9 +684,9 @@ public class AdminDashboardController : Controller
                     break;
                 default: break;
             }
-            
+
             // Populate Excel sheet with data
-            
+
 
             // Convert package to a byte array
             var excelBytes = package.GetAsByteArray();
@@ -692,7 +696,7 @@ public class AdminDashboardController : Controller
         }
     }
 
-    public IActionResult Provider(int regionid=0)
+    public IActionResult Provider(int regionid = 0)
     {
         Provider provider = new Provider();
         provider.physicians = _adminDashboardService.GetPhysiciansByRegion(regionid);
@@ -704,7 +708,7 @@ public class AdminDashboardController : Controller
     {
         Provider prov = new Provider();
         prov.physicians = _adminDashboardService.GetPhysiciansByRegion(regionid);
-        return PartialView("ProviderTable",prov);
+        return PartialView("ProviderTable", prov);
     }
 
     public IActionResult EditProvider(int physicianid)
@@ -720,19 +724,19 @@ public class AdminDashboardController : Controller
     {
         Provider prov = new Provider();
         prov.regions = _adminDashboardService.GetAllRegions();
-        return PartialView("CreatePhysician",prov);
+        return PartialView("CreatePhysician", prov);
     }
 
     public JsonResult SaveProvider(Provider model)
     {
         var provider = _adminDashboardService.GetPhysiciansByEmail(model.physician.Email);
-        if(provider != null)
+        if (provider != null)
         {
             return Json(new { success = false });
         }
         var user = SessionService.GetLoggedInUser(HttpContext.Session);
         var adminId = user.Id;
-        var add = _adminDashboardService.AddProvider(model,adminId);
+        var add = _adminDashboardService.AddProvider(model, adminId);
 
         if (add)
         {
@@ -760,11 +764,11 @@ public class AdminDashboardController : Controller
     public IActionResult Access()
     {
         var access = new Access();
-        access.Roles= _adminDashboardService.GetRoles();
+        access.Roles = _adminDashboardService.GetRoles();
         return View(access);
     }
 
-    public IActionResult CreateAccess(int id=0)
+    public IActionResult CreateAccess(int id = 0)
     {
         var access = new Access();
         access.Roles = _adminDashboardService.GetRoles();
@@ -776,7 +780,7 @@ public class AdminDashboardController : Controller
         return PartialView(access);
     }
 
-    public IActionResult AccessMenu(int AccountType,int roleid=0)
+    public IActionResult AccessMenu(int AccountType, int roleid = 0)
     {
         var access = new Access();
         access.Menus = _adminDashboardService.GetMenus(AccountType);
@@ -795,6 +799,210 @@ public class AdminDashboardController : Controller
     {
         _adminDashboardService.EditCase(model);
         return Json(new { success = true });
+    }
+
+
+
+
+
+
+
+    public IActionResult Scheduling()
+    {
+        var region = _adminDashboardService.GetAllRegions();
+        ViewBag.regions = region;
+        return View();
+    }
+
+    public IActionResult CreateShift(ScheduleModel data)
+    {
+        var user = SessionService.GetLoggedInUser(HttpContext.Session);
+        Admin? admin = _adminDashboardService.GetAdminById(user.Id);
+
+        using (var transaction = new TransactionScope())
+        {
+            Shift shift = new Shift();
+            shift.Physicianid = data.Physicianid;
+            shift.Repeatupto = data.Repeatupto;
+            shift.Startdate = data.Startdate;
+            shift.Createdby = admin.Aspnetuserid;
+            shift.Createddate = DateTime.Now;
+            shift.Isrepeat = data.Isrepeat;
+            shift.Repeatupto = data.Repeatupto;
+            _userRepository.AddShift(shift);
+
+            Shiftdetail sd = new Shiftdetail();
+            sd.Shiftid = shift.Shiftid;
+            sd.Shiftdate = new DateTime(data.Startdate.Year, data.Startdate.Month, data.Startdate.Day);
+            sd.Starttime = data.Starttime;
+            sd.Endtime = data.Endtime;
+            sd.Regionid = data.Regionid;
+            sd.Status = data.Status;
+            sd.Isdeleted = false;
+            _userRepository.AddShiftDetails(sd);
+
+            Shiftdetailregion sr = new Shiftdetailregion();
+            sr.Shiftdetailid = sd.Shiftdetailid;
+            sr.Regionid = (int)data.Regionid;
+            sr.Isdeleted = false;
+            _userRepository.AddShiftDetailRegions(sr);
+
+            if (data.checkWeekday != null)
+            {
+
+                List<int> day = data.checkWeekday.Split(',').Select(int.Parse).ToList();
+
+                foreach (int d in day)
+                {
+                    DayOfWeek desiredDayOfWeek = (DayOfWeek)d;
+                    DateTime today = DateTime.Today;
+                    DateTime nextOccurrence = new DateTime(data.Startdate.Year, data.Startdate.Month, data.Startdate.Day);
+                    int occurrencesFound = 0;
+                    while (occurrencesFound < data.Repeatupto)
+                    {
+                        if (nextOccurrence.DayOfWeek == desiredDayOfWeek)
+                        {
+
+                            Shiftdetail sdd = new Shiftdetail();
+                            sdd.Shiftid = shift.Shiftid;
+                            sdd.Shiftdate = nextOccurrence;
+                            sdd.Starttime = data.Starttime;
+                            sdd.Endtime = data.Endtime;
+                            sdd.Regionid = data.Regionid;
+                            sdd.Status = (short)data.Status;
+                            sdd.Isdeleted = false;
+                            _userRepository.AddShiftDetails(sdd);
+
+                            Shiftdetailregion srr = new Shiftdetailregion();
+                            srr.Shiftdetailid = sdd.Shiftdetailid;
+                            srr.Regionid = (int)data.Regionid;
+                            srr.Isdeleted = false;
+                            _userRepository.AddShiftDetailRegions(srr);
+                            occurrencesFound++;
+                        }
+                        nextOccurrence = nextOccurrence.AddDays(1);
+                    }
+                }
+            }
+
+            transaction.Complete();
+        }
+        return RedirectToAction("Scheduling");
+    }
+    [HttpGet]
+    public IActionResult GetPhysicianShift(int region)
+    {
+
+
+        // Retrieve physicians associated with the specified region
+        var physicians = _adminDashboardService.GetPhysiciansByRegion(region);
+
+        return Ok(physicians);
+    }
+
+    [HttpGet]
+    public IActionResult GetEvents()
+    {
+        var mappedEvents = _userRepository.GetMappedEvents();
+
+        return Ok(mappedEvents);
+    }
+    [HttpPost]
+    public IActionResult SaveShift(int shiftDetailId, DateTime startDate, TimeOnly startTime, TimeOnly endTime)
+    {
+        // Find the shift detail by its ID
+        Shiftdetail? shiftdetail = _userRepository.FindShiftDetails(shiftDetailId);
+
+        // If shift detail is not found, return a 404 Not Found response
+        if (shiftdetail == null)
+        {
+            return NotFound("Shift detail not found.");
+        }
+
+        try
+        {
+            // Update the shift detail properties
+            shiftdetail.Shiftdate = startDate;
+            shiftdetail.Starttime = startTime;
+            shiftdetail.Endtime = endTime;
+
+            // Update the database
+            _userRepository.UpdateShiftDetails(shiftdetail);
+            var mappedEvents = _userRepository.GetMappedEvents();
+            // Return a 200 OK response
+            return Ok(new { message = "Shift detail updated successfully.", events = mappedEvents });
+        }
+        catch (Exception ex)
+        {
+            // Return a 400 Bad Request response with the error message
+            return BadRequest("Error updating shift detail: " + ex.Message);
+        }
+    }
+
+    public IActionResult DeleteShift(int shiftDetailId)
+    {
+        Shiftdetail? shiftdetail = _userRepository.FindShiftDetails(shiftDetailId);
+        if (shiftdetail == null)
+        {
+            return NotFound("Shift detail not found.");
+        }
+        shiftdetail.Isdeleted = true;
+        _userRepository.UpdateShiftDetails(shiftdetail);
+        var mappedEvents = _userRepository.GetMappedEvents();
+        return Ok(new { message = "Shift detail Deleted successfully.", events = mappedEvents });
+
+    }
+
+
+    public IActionResult ReturnShift(int shiftDetailId)
+    {
+        Shiftdetail? shiftdetail = _userRepository.FindShiftDetails(shiftDetailId);
+
+        // If shift detail is not found, return a 404 Not Found response
+        if (shiftdetail == null)
+        {
+            return NotFound("Shift detail not found.");
+        }
+        shiftdetail.Status = (short)((shiftdetail.Status == 0) ? 1 : 0);
+
+        _userRepository.UpdateShiftDetails(shiftdetail);
+        var mappedEvents = _userRepository.GetMappedEvents();
+        return Ok(new { message = "Shift detail updated successfully.", events = mappedEvents });
+
+    }
+
+    public IActionResult ShiftReview()
+    {
+        return View();
+    }
+
+    public IActionResult GetReviewShift(int region)
+    {
+        var shifts = _userRepository.GetReviewShifts(region);
+        return PartialView("RequestedShiftPartial", shifts);
+    }
+
+    [HttpPost]
+    public IActionResult ApprovedShifts(List<int> selectedIds)
+    {
+        try
+        {
+            foreach (var id in selectedIds)
+            {
+                var shiftDetail = _userRepository.FindShiftDetails(id);
+                if (shiftDetail != null)
+                {
+                    shiftDetail.Status = 0; // Change the state to 0
+                    _userRepository.UpdateShiftDetails(shiftDetail);
+                }
+            }
+
+            return Ok("Selected shifts have been successfully approved.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "An error occurred while approving selected shifts: " + ex.Message);
+        }
     }
 }
 

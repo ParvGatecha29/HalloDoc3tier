@@ -26,5 +26,12 @@ namespace HalloDocDAL.Contacts
         List<Menu> GetMenus(int AccountType);
         List<Rolemenu> GetRoleMenus(int roleid);
         bool AddRole(Access role);
+        bool AddShift(Shift shift);
+        bool AddShiftDetails(Shiftdetail shift);
+        bool AddShiftDetailRegions(Shiftdetailregion shift);
+        Shiftdetail FindShiftDetails(int detailid);
+        bool UpdateShiftDetails(Shiftdetail details);
+        List<MappedEvents> GetMappedEvents();
+        List<ScheduleModel> GetReviewShifts(int region);
     }
 }
