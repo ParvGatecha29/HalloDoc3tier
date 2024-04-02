@@ -16,6 +16,7 @@ using Microsoft.DotNet.Scaffolding.Shared;
 using System.Drawing;
 using System.Collections;
 using System.Transactions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HalloDoc.Controllers;
 [AuthManager("1")]
@@ -801,6 +802,12 @@ public class AdminDashboardController : Controller
         return Json(new { success = true });
     }
 
+    public IActionResult UserAccess()
+    {
+        Access access = new Access();
+        access.Users = _adminDashboardService.GetAllUsers();
+        return View(access);
+    }
 
 
 
@@ -814,51 +821,71 @@ public class AdminDashboardController : Controller
         return View();
     }
 
-    public IActionResult CreateShift(ScheduleModel data)
+    public IActionResult CreateShift(ScheduleModel model)
     {
         var user = SessionService.GetLoggedInUser(HttpContext.Session);
         Admin? admin = _adminDashboardService.GetAdminById(user.Id);
+        var events = _userRepository.GetMappedEvents();
+        bool slotAvailable = true;
+        foreach (var e in events)
+        {
 
+
+
+            if (e.resourceId == model.Physicianid)
+            {
+                if (model.Startdate == DateOnly.FromDateTime(e.start.Date))
+                    if ((TimeOnly.FromDateTime(e.start) <= model.Starttime && model.Starttime <= TimeOnly.FromDateTime(e.end)) ||
+                 (TimeOnly.FromDateTime(e.start) <= model.Endtime && model.Endtime <= TimeOnly.FromDateTime(e.end)))
+                    {
+                        slotAvailable = false;
+                        return Json(new { success = false });
+                    }
+            }
+
+        }
         using (var transaction = new TransactionScope())
         {
             Shift shift = new Shift();
-            shift.Physicianid = data.Physicianid;
-            shift.Repeatupto = data.Repeatupto;
-            shift.Startdate = data.Startdate;
+            shift.Physicianid = model.Physicianid;
+            shift.Repeatupto = model.Repeatupto;
+            shift.Startdate = model.Startdate;
             shift.Createdby = admin.Aspnetuserid;
             shift.Createddate = DateTime.Now;
-            shift.Isrepeat = data.Isrepeat;
-            shift.Repeatupto = data.Repeatupto;
+            shift.Isrepeat = model.Isrepeat;
+            shift.Repeatupto = model.Repeatupto;
             _userRepository.AddShift(shift);
 
             Shiftdetail sd = new Shiftdetail();
             sd.Shiftid = shift.Shiftid;
-            sd.Shiftdate = new DateTime(data.Startdate.Year, data.Startdate.Month, data.Startdate.Day);
-            sd.Starttime = data.Starttime;
-            sd.Endtime = data.Endtime;
-            sd.Regionid = data.Regionid;
-            sd.Status = data.Status;
+            sd.Shiftdate = new DateTime(model.Startdate.Year, model.Startdate.Month, model.Startdate.Day);
+            sd.Starttime = model.Starttime;
+            sd.Endtime = model.Endtime;
+            sd.Regionid = model.Regionid;
+            sd.Status = model.Status;
             sd.Isdeleted = false;
+
+
             _userRepository.AddShiftDetails(sd);
 
             Shiftdetailregion sr = new Shiftdetailregion();
             sr.Shiftdetailid = sd.Shiftdetailid;
-            sr.Regionid = (int)data.Regionid;
+            sr.Regionid = (int)model.Regionid;
             sr.Isdeleted = false;
             _userRepository.AddShiftDetailRegions(sr);
 
-            if (data.checkWeekday != null)
+            if (model.checkWeekday != null)
             {
 
-                List<int> day = data.checkWeekday.Split(',').Select(int.Parse).ToList();
+                List<int> day = model.checkWeekday.Split(',').Select(int.Parse).ToList();
 
                 foreach (int d in day)
                 {
                     DayOfWeek desiredDayOfWeek = (DayOfWeek)d;
                     DateTime today = DateTime.Today;
-                    DateTime nextOccurrence = new DateTime(data.Startdate.Year, data.Startdate.Month, data.Startdate.Day);
+                    DateTime nextOccurrence = new DateTime(model.Startdate.Year, model.Startdate.Month, model.Startdate.Day);
                     int occurrencesFound = 0;
-                    while (occurrencesFound < data.Repeatupto)
+                    while (occurrencesFound < model.Repeatupto)
                     {
                         if (nextOccurrence.DayOfWeek == desiredDayOfWeek)
                         {
@@ -866,16 +893,16 @@ public class AdminDashboardController : Controller
                             Shiftdetail sdd = new Shiftdetail();
                             sdd.Shiftid = shift.Shiftid;
                             sdd.Shiftdate = nextOccurrence;
-                            sdd.Starttime = data.Starttime;
-                            sdd.Endtime = data.Endtime;
-                            sdd.Regionid = data.Regionid;
-                            sdd.Status = (short)data.Status;
+                            sdd.Starttime = model.Starttime;
+                            sdd.Endtime = model.Endtime;
+                            sdd.Regionid = model.Regionid;
+                            sdd.Status = (short)model.Status;
                             sdd.Isdeleted = false;
                             _userRepository.AddShiftDetails(sdd);
 
                             Shiftdetailregion srr = new Shiftdetailregion();
                             srr.Shiftdetailid = sdd.Shiftdetailid;
-                            srr.Regionid = (int)data.Regionid;
+                            srr.Regionid = (int)model.Regionid;
                             srr.Isdeleted = false;
                             _userRepository.AddShiftDetailRegions(srr);
                             occurrencesFound++;
@@ -887,7 +914,7 @@ public class AdminDashboardController : Controller
 
             transaction.Complete();
         }
-        return RedirectToAction("Scheduling");
+        return Json(new { success = true });
     }
     [HttpGet]
     public IActionResult GetPhysicianShift(int region)
@@ -916,7 +943,7 @@ public class AdminDashboardController : Controller
         // If shift detail is not found, return a 404 Not Found response
         if (shiftdetail == null)
         {
-            return NotFound("Shift detail not found.");
+            return Json(new { success = false });
         }
 
         try
@@ -928,14 +955,12 @@ public class AdminDashboardController : Controller
 
             // Update the database
             _userRepository.UpdateShiftDetails(shiftdetail);
-            var mappedEvents = _userRepository.GetMappedEvents();
-            // Return a 200 OK response
-            return Ok(new { message = "Shift detail updated successfully.", events = mappedEvents });
+            return RedirectToAction("GetEvents");
         }
         catch (Exception ex)
         {
             // Return a 400 Bad Request response with the error message
-            return BadRequest("Error updating shift detail: " + ex.Message);
+            return Json(new { success = false });
         }
     }
 
@@ -949,7 +974,7 @@ public class AdminDashboardController : Controller
         shiftdetail.Isdeleted = true;
         _userRepository.UpdateShiftDetails(shiftdetail);
         var mappedEvents = _userRepository.GetMappedEvents();
-        return Ok(new { message = "Shift detail Deleted successfully.", events = mappedEvents });
+        return RedirectToAction("GetEvents");
 
     }
 
@@ -966,8 +991,7 @@ public class AdminDashboardController : Controller
         shiftdetail.Status = (short)((shiftdetail.Status == 0) ? 1 : 0);
 
         _userRepository.UpdateShiftDetails(shiftdetail);
-        var mappedEvents = _userRepository.GetMappedEvents();
-        return Ok(new { message = "Shift detail updated successfully.", events = mappedEvents });
+        return RedirectToAction("GetEvents");
 
     }
 

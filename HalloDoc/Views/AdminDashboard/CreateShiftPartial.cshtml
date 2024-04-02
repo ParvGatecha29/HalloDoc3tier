@@ -8,7 +8,7 @@
                     <span aria-hidden="true"><i class="bi bi-x-lg text-white"></i></span>
                 </button>
             </div>
-            <form asp-action="CreateShift" class="row p-3">
+            <form id="CreateShift" class="row p-3">
                 @*<input type="hidden" asp-for="Shiftid" />*@
 
                 <div class="form-floating my-3">
@@ -61,37 +61,37 @@
 
                     <div class="col-md-4 ">
                         <div class="form-check mx-2 d-flex align-items-center">
-                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Monday" value="1">
+                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="repeatBox" value="1">
                             <label class="form-check-label" for="Monday">Every Monday</label>
                         </div>
                     </div>
                     <div class="col-md-4 ">
                         <div class="form-check mx-2 d-flex align-items-center">
-                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Tuesday" value="2">
+                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="repeatBox" value="2">
                             <label class="form-check-label" for="Tuesday">Every Tuesday</label>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-check mx-2">
-                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Wednesday" value="3">
+                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="repeatBox" value="3">
                             <label class="form-check-label" for="Wednesday">Every Wednesday</label>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-check mx-2 d-flex align-items-center">
-                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Thursday" value="4">
+                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="repeatBox" value="4">
                             <label class="form-check-label" for="Thursday">Every Thursday</label>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-check mx-2 d-flex align-items-center">
-                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Friday" value="5">
+                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="repeatBox" value="5">
                             <label class="form-check-label" for="Friday">Every Friday</label>
                         </div>
                     </div>
                     <div class="col-md-3 ">
                         <div class="form-check mx-2 d-flex align-items-center">
-                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="Saturday" value="6">
+                            <input onchange="menubox()" class="form-check-input Every" disabled type="checkbox" name="repeatBox" value="6">
                             <label class="form-check-label" for="Saturday">Every Saturday</label>
                         </div>
                     </div>
@@ -99,7 +99,7 @@
                 </div>
                 <div class="col-md-12 form-floating  my-2">
                     <select asp-for="Repeatupto" class="form-select form-select-sm mt-3 p-2" id="Refile" disabled data-allow-clear="true" tabindex="-1" data-control="select2" data-placeholder=" ">
-                        <option selected hidden>Reapet End</option>
+                        <option selected hidden>Repeat End</option>
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
@@ -203,4 +203,37 @@
         });
     });
 
+    $('#CreateShift').submit(function (e) {
+        e.preventDefault();
+        var data = new FormData(this);
+        $.ajax({
+            url: "/AdminDashboard/CreateShift",
+            data: data,
+            type: 'POST',
+            processData:false,
+            contentType:false,
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: "Good job!",
+                        text: "Shift created",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).finally(() => {
+                        window.location.reload();
+                    });
+                }
+                else {
+                    Swal.fire({
+                        title: "Oops...",
+                        text: "Slot not available",
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            }
+        });
+    })
 </script>

@@ -3,6 +3,7 @@ using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -348,7 +349,7 @@ namespace HalloDocDAL.Repositories
                 start = new DateTime(e.Shiftdate.Value.Year, e.Shiftdate.Value.Month, e.Shiftdate.Value.Day, e.Starttime.Hour, e.Starttime.Minute, e.Starttime.Second),
                 end = new DateTime(e.Shiftdate.Value.Year, e.Shiftdate.Value.Month, e.Shiftdate.Value.Day, e.Endtime.Hour, e.Endtime.Minute, e.Endtime.Second),
                 ShiftDetailId = e.ShiftDetailId,
-                region = _context.Regions.Where(i => i.Regionid == e.Regionid).ToList(),
+                region = _context.Regions.Where(i => i.Regionid == e.Regionid),
                 status = e.Status
             }).ToList();
 
@@ -375,6 +376,12 @@ namespace HalloDocDAL.Repositories
                  Status = shiftdetails.Status
              }).Where(item => (region == 0 || item.Regionid == region) && item.Status == 1).ToList();
             
+        }
+
+        public List<User> GetUsers()
+        {
+            var users = _context.Users.Include(_ => _.Aspnetuser).ThenInclude(_=>_.Aspnetuserroles).ToList();
+            return users;
         }
     }
 }

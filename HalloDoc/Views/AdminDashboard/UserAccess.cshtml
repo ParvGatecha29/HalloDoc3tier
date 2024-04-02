@@ -1,0 +1,107 @@
+﻿@model HalloDocDAL.Model.Access;
+@{
+    Layout = "_adminDash";
+}
+<div id="accessDiv">
+    <div class="row justify-content-center">
+        <div class="mt-4 col-10 col-xl-9">
+            <p class="fs-4 fw-bold">User Access</p>
+        </div>
+
+        <div class="m-4 mt-0 shadow col-10 col-xl-9">
+             <div class="mx-2">
+                <div class="d-flex justify-content-end mt-2">
+                    <button class="me-1 rounded btn border border-info text-info" onclick="CreateAccess()">
+                        Create Access
+                    </button>
+                </div>
+            </div> 
+
+            <table class="table">
+                <thead>
+                    <tr class="d-none d-xl-table-row d-md-table-row">
+                        <th scope="col" class="bg-transparent"> Account Type </th>
+                        <th scope="col" class="bg-transparent"> Account POC </th>
+                        <th scope="col" class="bg-transparent"> Phone </th>
+                        <th scope="col" class="bg-transparent"> Status </th>
+                        <th scope="col" class="bg-transparent"> Open Requests </th>
+                        <th scope="col" class="bg-transparent"> Actions </th>
+                    </tr>
+                </thead>
+
+                <tbody id="tableBody">
+                    @foreach (var i in Model.Users)
+                    {
+                        <tr class="d-none d-xl-table-row d-md-table-row" data-rid="@i.Aspnetuserid">
+                            <td class="bg-transparent">
+                                @if (i.Aspnetuser != null)
+                                {
+                                    @if (i.Aspnetuser.Aspnetuserroles.Any(x => x.RoleId == "1"))
+                                    {
+                                        <p>Admin</p>
+                                    }
+                                    else if (i.Aspnetuser.Aspnetuserroles.Any(x => x.RoleId == "2"))
+                                    {
+                                        <p>Physician</p>
+                                    }
+                                    else if (i.Aspnetuser.Aspnetuserroles.Any(x => x.RoleId == "3"))
+                                    {
+                                        <p>Patient</p>
+                                    }
+                                    else
+                                    {
+                                        <p>All</p>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>All</p>
+                                }
+                            </td>
+                            <td class="bg-transparent"> @i.Firstname, @i.Lastname </td>
+                            <td class="bg-transparent"> @i.Mobile </td>
+                            <td class="bg-transparent"> @i.Status </td>
+                            <td class="bg-transparent"> @i.Status </td>
+                            <td class="bg-transparent">
+                                <div class="d-flex">
+                                    <button class="btn border border-info text-info me-2" onclick="editRole(@i.Aspnetuserid)">
+                                        Edit
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="mb-4 pb-4"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var dash = document.getElementById("dashboard-tab");
+    var providerLoc = document.getElementById("providerlocation-tab");
+    var profile = document.getElementById("myprofile-tab");
+    var provider = document.getElementById("providers-tab");
+    var partner = document.getElementById("partners-tab");
+    var access = document.getElementById("access-tab");
+    var records = document.getElementById("records-tab");
+
+    dash.classList.remove("active");
+    providerLoc.classList.remove("active");
+    profile.classList.remove("active");
+    provider.classList.remove("active");
+    partner.classList.remove("active");
+    access.classList.add("active");
+    records.classList.remove("active");
+
+    function CreateAccess() {
+        $('#accessDiv').load("/AdminDashboard/CreateAccess");
+    }
+
+    function editRole(id) {
+        console.log(id);
+        $('#accessDiv').load("/AdminDashboard/CreateAccess?id=" + id);
+    }
+</script>

@@ -13,6 +13,7 @@ namespace HalloDocDAL.Model
         public List<Menu> Menus { get; set; }
         public List<Rolemenu> RoleMenus { get; set; }
         public List<int> selectedMenus { get; set; }
+        public List<User> Users { get; set; }
         public string roleName { get; set; }
         public int accountType { get; set; }
         public string userid { get; set; }

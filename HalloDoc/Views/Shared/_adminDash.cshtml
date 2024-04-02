@@ -117,7 +117,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li><button class="dropdown-item" id="account-tab" data-bs-toggle="tab">Account</button></li>
-                                        <li><button class="dropdown-item" data-bs-toggle="tab">User</button></li>
+                                        <li><button class="dropdown-item" id="user-tab" data-bs-toggle="tab">User</button></li>
                                     </ul>
                                 </li>
                                 <li class="nav-item px-3" role="presentation">
@@ -190,6 +190,10 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
 
             $('#account-tab').click(function () {
                 window.location.href = '@Url.Action("Access","AdminDashboard")';
+            })
+
+            $('#user-tab').click(function () {
+                window.location.href = '@Url.Action("UserAccess","AdminDashboard")';
             })
 
             $('#scheduling-tab').click(function () {

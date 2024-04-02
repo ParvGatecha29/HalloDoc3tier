@@ -30,5 +30,6 @@ namespace HalloDocDAL.Model
             public int? Repeatupto { get; set; }
             public short Status { get; set; }
             public List<ScheduleModel> DayList { get; set; }
+            public List<int> repeatBox { get; set; }
     }
 }

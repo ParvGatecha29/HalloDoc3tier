@@ -46,5 +46,6 @@ namespace HalloDocBAL.Interfaces
         List<Menu> GetMenus(int AccountType=0);
         List<Rolemenu> GetRoleMenus(int roleid=0);
         bool CreateAccess(Access model);
+        List<User> GetAllUsers();
     }
 }

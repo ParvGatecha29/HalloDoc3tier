@@ -253,5 +253,11 @@ namespace HalloDocBAL.Services
             bool role = _userRepository.AddRole(model);
             return role;
         }
+
+        public List<User> GetAllUsers()
+        {
+            var role = _userRepository.GetUsers();
+            return role;
+        }
     }
 }
