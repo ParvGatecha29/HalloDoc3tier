@@ -808,24 +808,20 @@ public class AdminDashboardController : Controller
         access.Users = _adminDashboardService.GetAllUsers();
         return View(access);
     }
-
-
-
-
-
-
     public IActionResult Scheduling()
     {
         var region = _adminDashboardService.GetAllRegions();
         ViewBag.regions = region;
-        return View();
+        ScheduleModel model = new ScheduleModel();
+        model.regions = region;
+        return View(model);
     }
 
     public IActionResult CreateShift(ScheduleModel model)
     {
         var user = SessionService.GetLoggedInUser(HttpContext.Session);
         Admin? admin = _adminDashboardService.GetAdminById(user.Id);
-        var events = _userRepository.GetMappedEvents();
+        var events = _userRepository.GetMappedEvents(0);
         bool slotAvailable = true;
         foreach (var e in events)
         {
@@ -928,9 +924,9 @@ public class AdminDashboardController : Controller
     }
 
     [HttpGet]
-    public IActionResult GetEvents()
+    public IActionResult GetEvents(int region)
     {
-        var mappedEvents = _userRepository.GetMappedEvents();
+        var mappedEvents = _userRepository.GetMappedEvents(region);
 
         return Ok(mappedEvents);
     }
@@ -939,7 +935,25 @@ public class AdminDashboardController : Controller
     {
         // Find the shift detail by its ID
         Shiftdetail? shiftdetail = _userRepository.FindShiftDetails(shiftDetailId);
+        var events = _userRepository.GetMappedEvents(0);
+        bool slotAvailable = true;
+        foreach (var e in events)
+        {
 
+
+
+            if (e.resourceId == shiftdetail.Shift.Physicianid)
+            {
+                if (startDate == e.start.Date)
+                    if ((TimeOnly.FromDateTime(e.start) <= startTime && startTime <= TimeOnly.FromDateTime(e.end)) ||
+                 (TimeOnly.FromDateTime(e.start) <= endTime && endTime <= TimeOnly.FromDateTime(e.end)))
+                    {
+                        slotAvailable = false;
+                        return Json(new { error = true });
+                    }
+            }
+
+        }
         // If shift detail is not found, return a 404 Not Found response
         if (shiftdetail == null)
         {
@@ -973,11 +987,10 @@ public class AdminDashboardController : Controller
         }
         shiftdetail.Isdeleted = true;
         _userRepository.UpdateShiftDetails(shiftdetail);
-        var mappedEvents = _userRepository.GetMappedEvents();
+        var mappedEvents = _userRepository.GetMappedEvents(0);
         return RedirectToAction("GetEvents");
 
     }
-
 
     public IActionResult ReturnShift(int shiftDetailId)
     {
@@ -1027,6 +1040,18 @@ public class AdminDashboardController : Controller
         {
             return StatusCode(500, "An error occurred while approving selected shifts: " + ex.Message);
         }
+    }
+
+    public IActionResult ProviderOnCall() 
+    {
+        List<HalloDocDAL.Models.Region> regions = _adminDashboardService.GetAllRegions();
+        return PartialView(regions);
+    }
+
+    public IActionResult MDOnCall(int regionId)
+    {
+        List<Physician> physicians = _adminDashboardService.GetPhysiciansByRegion(regionId);
+        return PartialView(physicians);
     }
 }
 

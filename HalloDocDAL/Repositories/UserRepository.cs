@@ -306,7 +306,7 @@ namespace HalloDocDAL.Repositories
 
         public Shiftdetail FindShiftDetails(int detailId)
         {
-            return _context.Shiftdetails.Find(detailId);
+            return _context.Shiftdetails.Include(_ => _.Shift).FirstOrDefault(x => x.Shiftdetailid == detailId);
         }
 
         public bool UpdateShiftDetails(Shiftdetail details)
@@ -315,7 +315,7 @@ namespace HalloDocDAL.Repositories
             _context.SaveChanges();
             return true;
         }
-        public List<ScheduleModel> GetEvents()
+        public List<ScheduleModel> GetEvents(int region)
         {
             var eventswithoutdelet = (from s in _context.Shifts
                                       join pd in _context.Physicians on s.Physicianid equals pd.Physicianid
@@ -334,13 +334,17 @@ namespace HalloDocDAL.Repositories
                                           ShiftDetailId = sd.Shiftdetailid,
                                           Regionid = sd.Regionid,
                                           ShiftDeleted = sd.Isdeleted
-                                      }).ToList();
+                                      });
+            if(region != 0)
+            {
+                eventswithoutdelet = eventswithoutdelet.Where( _ => _.Regionid == region );
+            }
             var events = eventswithoutdelet.Where(item => !item.ShiftDeleted).ToList();
             return events;
         }
-        public List<MappedEvents> GetMappedEvents()
+        public List<MappedEvents> GetMappedEvents(int region)
         {
-            var events = GetEvents();
+            var events = GetEvents(region);
             var mappedEvents = events.Select(e => new MappedEvents
             {
                 id = e.Shiftid,

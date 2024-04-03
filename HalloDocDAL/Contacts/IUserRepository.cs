@@ -31,7 +31,7 @@ namespace HalloDocDAL.Contacts
         bool AddShiftDetailRegions(Shiftdetailregion shift);
         Shiftdetail FindShiftDetails(int detailid);
         bool UpdateShiftDetails(Shiftdetail details);
-        List<MappedEvents> GetMappedEvents();
+        List<MappedEvents> GetMappedEvents(int region);
         List<ScheduleModel> GetReviewShifts(int region);
         List<User> GetUsers();
     }
