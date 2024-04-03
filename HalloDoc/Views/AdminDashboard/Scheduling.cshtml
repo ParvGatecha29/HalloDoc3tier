@@ -16,7 +16,7 @@
                     <span class="fs-2 text-muted fw-bold">New Request</span>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <a asp-controller="AdminDsahboard" asp-action="Scheduling" asp-area=""
+                    <a asp-controller="AdminDashboard" asp-action="AdminDashboard" asp-area=""
                        class="btn btn-outline-info d-flex align-items-center">
                         <span class="material-symbols-outlined"> chevron_left </span> Back
                     </a>
@@ -172,15 +172,76 @@
                     },
                     resourceTimelineMonth: {
                         buttonText: 'Month'
-                    }
+                    },
+                    
                 },
                 datesSet: function (info) {
                     var title = info.view.title;
                     $("#calendarTitle").html(title);
                 },
+                editable: true,
                 resources: resources,
                 events: events,
-                
+                eventDrop: function (e) { 
+                    console.log(e.event.start);
+                    var shiftDetailId = e.event.extendedProps.ShiftDetailId // Assuming you have an input field with id 'shiftDetailId' in your modal
+                    var startDate = formatDate(e.event.start);
+                    var startTime = formatTime(e.event.start);
+                    var endTime = formatTime(e.event.end);
+                    $.ajax({
+                        url: '/AdminDashboard/SaveShift',
+                        type: 'POST',
+                        data: {
+                            shiftDetailId: shiftDetailId,
+                            startDate: startDate,
+                            startTime: startTime,
+                            endTime: endTime
+                        },
+                        success: function (response) {
+                            if (response.error) {
+                                Swal.fire({
+                                    title: "Oops...",
+                                    text: "Slot not available",
+                                    icon: "error",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                calendar.removeAllEvents(); // Remove existing events
+                                calendar.addEventSource(events); // Add updated events
+                                calendar.refetchEvents();
+                            }
+                            else {
+                                $('#eventModal').modal('hide');
+
+                                const events = response.map(event => ({
+                                    id: event.id,
+                                    resourceId: event.resourceId,
+                                    title: event.title,
+                                    start: event.start,
+                                    end: event.end,
+                                    eventBackgroundColor: event.status == 0 ? '#e39de8' : '#32d97d',
+                                    color: event.status == 0 ? '#e39de8' : '#32d97d',
+                                    ShiftDetailId: event.ShiftDetailId,
+                                    region: event.region,
+                                    status: event.status
+                                }));
+                                calendar.removeAllEvents(); // Remove existing events
+                                calendar.addEventSource(events); // Add updated events
+                                calendar.refetchEvents(); // Refetch events from the event sources
+
+                                // Hide the save button and show the edit button
+                                $('#savebtn').addClass('d-none');
+                                $('#editbtn').removeClass('d-none');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle error
+                            console.log(xhr);
+                            console.log(status);
+                            console.log(error);
+                        }
+                    });
+                },
                 eventClick: function (info) {
                     console.log(events)
                     // Open the modal when an event is clicked
@@ -395,6 +456,8 @@
                 },
 
             });
+            console.log("calendar view ",calendar.view);
+
 
             $("#next-button").click(function () {
                 calendar.next();
