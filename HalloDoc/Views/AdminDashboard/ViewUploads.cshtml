@@ -195,19 +195,18 @@
             }).get();
             console.log(selectedDocuments);
             selectedDocuments.forEach(function (docid) {
-               
-
                 $.ajax({
                     url: '@Url.Action("DeleteFile","AdminDashboard")',
                     type: 'POST',
                     data: { fileid: docid },
                     success: function (response) {
                         if (response.success) {
-                            window.location.reload();
+                            
                         }
                     }
                 });
             })
+            window.location.reload();
         });
 
         $("#sendFiles").click(function () {

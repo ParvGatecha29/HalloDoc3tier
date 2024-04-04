@@ -182,58 +182,71 @@
                 <tbody>
                     <tr>
                         <th scope="row" class="bg-transparent"> 
-                            <input type="checkbox" />
+                            <input type="checkbox" name="files"/>
                         </th>
                         <td class="bg-transparent">
                             <p class="d-inline">Independent Contractor Agreement</p>
                         </td class="bg-transparent">
                         <td class="bg-transparent">
-                            <button type="button" class="btn btn-info text-light">
-                                <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
-                                <span class="d-none d-xl-inline d-lg-inline">Upload</span>
-                            </button>
+
+                            <label for="ICA">
+                                <div type="button" class="btn btn-info text-light">
+                                    <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                                    <span class="d-none d-xl-inline d-lg-inline">Upload</span>    
+                                 </div>
+                                <input type="file" class="form-control-file" id="ICA" name="ICA" hidden />
+                            </label>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row" class="bg-transparent">
-                            <input type="checkbox" />
+                            <input type="checkbox" name="files"/>
                         </th>
                         <td class="bg-transparent">
                             <p class="d-inline">Background Check</p>
                         </td>
                         <td class="bg-transparent">
-                            <button type="button" class="btn btn-info text-light">
+                            <label for="BC">
+                            <div type="button" class="btn btn-info text-light">
                                 <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
                                 <span class="d-none d-xl-inline d-lg-inline">Upload</span>
-                            </button>
+                                <input type="file" class="form-control-file" id="BC" name="BackgroundCheck" hidden />
+                            </div>
+                            </label>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row" class="bg-transparent">
-                            <input type="checkbox" />
+                            <input type="checkbox" name="files"/>
                         </th>
                         <td class="bg-transparent">
                             <p class="d-inline">HIPPA Compliance</p>
                         </td>
                         <td class="bg-transparent">
-                            <button type="button" class="btn btn-info text-light">
+                            <label for="HIPPA">
+                            <div type="button" class="btn btn-info text-light">
                                 <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
                                 <span class="d-none d-xl-inline d-lg-inline">Upload</span>
-                            </button>
+                                <input type="file" class="form-control-file" id="HIPPA" name="Hippa" hidden />
+                            </div>
+                            </label>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row" class="bg-transparent">
-                            <input type="checkbox" />
+                            <input type="checkbox" name="files"/>
                         </th>
                         <td class="bg-transparent">
                             <p class="d-inline">Non disclosure Agreement</p>
                         </td>
                         <td class="bg-transparent">
-                            <button type="button" class="btn btn-info text-light">
+                            <label for="NDA">
+                            <div type="button" class="btn btn-info text-light">
                                 <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
                                 <span class="d-none d-xl-inline d-lg-inline">Upload</span>
-                            </button>
+                                <input type="file" class="form-control-file" id="NDA" name="NDA" hidden />
+                            </div>
+                            </label>
                         </td>
                     </tr>
                 </tbody>
@@ -280,6 +293,10 @@
         const phoneInput = window.intlTelInput(phoneInputField[i], {
             utilsScript:
                 "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                nationalMode: false,
+        showSelectedDialCode: true,
+        autoInsertDialCode: true,
+        formatOnDisplay: false,
         });
     }
 </script>

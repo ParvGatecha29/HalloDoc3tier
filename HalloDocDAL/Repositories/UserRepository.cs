@@ -126,6 +126,7 @@ namespace HalloDocDAL.Repositories
                 admin.Address2 = profile.Address2;
                 admin.City = profile.City;
                 admin.Zip = profile.Zip;
+                admin.Altphone = profile.Phone1;
             }
             else if (profile.formtype == 3)
             {
@@ -218,12 +219,79 @@ namespace HalloDocDAL.Repositories
                 {
                     Directory.CreateDirectory(uploadsFolderPath);
                 }
-                filePath = Path.Combine(uploadsFolderPath, file.FileName);
+                filePath = Path.Combine(uploadsFolderPath, "Sign.png");
+                data.Photo = filePath;
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     file.CopyToAsync(stream);
                 }
             }
+            var ICA = model.ICA;
+            var ICAPath = "";
+            if (ICA.Length > 0)
+            {
+                data.Isagreementdoc = true;
+                var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/documents/Physician", data.Physicianid.ToString());
+                if (!Directory.Exists(uploadsFolderPath))
+                {
+                    Directory.CreateDirectory(uploadsFolderPath);
+                }
+                ICAPath = Path.Combine(uploadsFolderPath, "ICA.png");
+                using (var stream = new FileStream(ICAPath, FileMode.Create))
+                {
+                    ICA.CopyToAsync(stream);
+                }
+            }
+            var BackgroundCheck = model.BackgroundCheck;
+            var BackgroundCheckPath = "";
+            if (BackgroundCheck.Length > 0)
+            {
+                data.Isbackgrounddoc = true;
+                var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/documents/Physician", data.Physicianid.ToString());
+                if (!Directory.Exists(uploadsFolderPath))
+                {
+                    Directory.CreateDirectory(uploadsFolderPath);
+                }
+                BackgroundCheckPath = Path.Combine(uploadsFolderPath, "BackgroundCheck.png");
+                using (var stream = new FileStream(BackgroundCheckPath, FileMode.Create))
+                {
+                    BackgroundCheck.CopyToAsync(stream);
+                }
+            }
+            var Hippa = model.Hippa;
+            var HippaPath = "";
+            if (Hippa.Length > 0)
+            {
+                data.Iscredentialdoc = true;
+                var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/documents/Physician", data.Physicianid.ToString());
+                if (!Directory.Exists(uploadsFolderPath))
+                {
+                    Directory.CreateDirectory(uploadsFolderPath);
+                }
+                HippaPath = Path.Combine(uploadsFolderPath, "ICA.png");
+                using (var stream = new FileStream(HippaPath, FileMode.Create))
+                {
+                    Hippa.CopyToAsync(stream);
+                }
+            }
+            var NDA = model.NDA;
+            var NDAPath = "";
+            if (NDA.Length > 0)
+            {
+                data.Isnondisclosuredoc = true;
+                var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/documents/Physician", data.Physicianid.ToString());
+                if (!Directory.Exists(uploadsFolderPath))
+                {
+                    Directory.CreateDirectory(uploadsFolderPath);
+                }
+                NDAPath = Path.Combine(uploadsFolderPath, "ICA.png");
+                using (var stream = new FileStream(NDAPath, FileMode.Create))
+                {
+                    NDA.CopyToAsync(stream);
+                }
+            }
+            _context.Physicians.Update(data);
+            _context.SaveChanges();
             return true;
 
 

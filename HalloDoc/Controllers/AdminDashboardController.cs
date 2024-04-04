@@ -17,6 +17,7 @@ using System.Drawing;
 using System.Collections;
 using System.Transactions;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Web.Providers.Entities;
 
 namespace HalloDoc.Controllers;
 [AuthManager("1")]
@@ -935,22 +936,25 @@ public class AdminDashboardController : Controller
     {
         // Find the shift detail by its ID
         Shiftdetail? shiftdetail = _userRepository.FindShiftDetails(shiftDetailId);
+        var user = SessionService.GetLoggedInUser(HttpContext.Session);
+        Admin? admin = _adminDashboardService.GetAdminById(user.Id);
+
         var events = _userRepository.GetMappedEvents(0);
         bool slotAvailable = true;
         foreach (var e in events)
         {
-
-
-
-            if (e.resourceId == shiftdetail.Shift.Physicianid)
+            if(shiftDetailId != e.ShiftDetailId)
             {
-                if (startDate == e.start.Date)
-                    if ((TimeOnly.FromDateTime(e.start) <= startTime && startTime <= TimeOnly.FromDateTime(e.end)) ||
-                 (TimeOnly.FromDateTime(e.start) <= endTime && endTime <= TimeOnly.FromDateTime(e.end)))
-                    {
-                        slotAvailable = false;
-                        return Json(new { error = true });
-                    }
+                if (e.resourceId == shiftdetail.Shift.Physicianid)
+                {
+                    if (startDate == e.start.Date)
+                        if ((TimeOnly.FromDateTime(e.start) <= startTime && startTime <= TimeOnly.FromDateTime(e.end)) ||
+                     (TimeOnly.FromDateTime(e.start) <= endTime && endTime <= TimeOnly.FromDateTime(e.end)))
+                        {
+                            slotAvailable = false;
+                            return Json(new { error = true });
+                        }
+                }
             }
 
         }
@@ -966,6 +970,8 @@ public class AdminDashboardController : Controller
             shiftdetail.Shiftdate = startDate;
             shiftdetail.Starttime = startTime;
             shiftdetail.Endtime = endTime;
+            shiftdetail.Modifiedby = user.Id;
+            shiftdetail.Modifieddate = DateTime.Now;
 
             // Update the database
             _userRepository.UpdateShiftDetails(shiftdetail);
@@ -981,15 +987,55 @@ public class AdminDashboardController : Controller
     public IActionResult DeleteShift(int shiftDetailId)
     {
         Shiftdetail? shiftdetail = _userRepository.FindShiftDetails(shiftDetailId);
+        var user = SessionService.GetLoggedInUser(HttpContext.Session);
+        Admin? admin = _adminDashboardService.GetAdminById(user.Id);
+
         if (shiftdetail == null)
         {
             return NotFound("Shift detail not found.");
         }
         shiftdetail.Isdeleted = true;
+        shiftdetail.Modifiedby = user.Id;
+        shiftdetail.Modifieddate = DateTime.Now;
         _userRepository.UpdateShiftDetails(shiftdetail);
         var mappedEvents = _userRepository.GetMappedEvents(0);
         return RedirectToAction("GetEvents");
+    }
 
+    public JsonResult DeleteSelectedShift(int shiftDetailId)
+    {
+        Shiftdetail? shiftdetail = _userRepository.FindShiftDetails(shiftDetailId);
+        var user = SessionService.GetLoggedInUser(HttpContext.Session);
+        Admin? admin = _adminDashboardService.GetAdminById(user.Id);
+
+        if (shiftdetail == null)
+        {
+            return Json(new { success = false });
+        }
+        shiftdetail.Isdeleted = true;
+        shiftdetail.Modifiedby = user.Id;
+        shiftdetail.Modifieddate = DateTime.Now;
+        _userRepository.UpdateShiftDetails(shiftdetail);
+        var mappedEvents = _userRepository.GetMappedEvents(0);
+        return Json(new { success = true });
+    }
+
+    public JsonResult ApproveSelectedShift(int shiftDetailId)
+    {
+        Shiftdetail? shiftdetail = _userRepository.FindShiftDetails(shiftDetailId);
+        var user = SessionService.GetLoggedInUser(HttpContext.Session);
+        Admin? admin = _adminDashboardService.GetAdminById(user.Id);
+
+        if (shiftdetail == null)
+        {
+            return Json(new { success = false });
+        }
+        shiftdetail.Status = 1;
+        shiftdetail.Modifiedby = user.Id;
+        shiftdetail.Modifieddate = DateTime.Now;
+        _userRepository.UpdateShiftDetails(shiftdetail);
+        var mappedEvents = _userRepository.GetMappedEvents(0);
+        return Json(new { success = true });
     }
 
     public IActionResult ReturnShift(int shiftDetailId)
@@ -1008,10 +1054,6 @@ public class AdminDashboardController : Controller
 
     }
 
-    public IActionResult ShiftReview()
-    {
-        return View();
-    }
 
     public IActionResult GetReviewShift(int region)
     {
@@ -1052,6 +1094,20 @@ public class AdminDashboardController : Controller
     {
         List<Physician> physicians = _adminDashboardService.GetPhysiciansByRegion(regionId);
         return PartialView(physicians);
+    }
+
+    public IActionResult ShiftForReview()
+    {
+        ScheduleModel schedule = new ScheduleModel();
+        schedule.regions = _adminDashboardService.GetAllRegions();
+        return PartialView(schedule);
+    }
+
+    public IActionResult RequestedShiftTable(int RegionId)
+    {
+        ScheduleModel schedule = new ScheduleModel();
+        schedule.DayList = _userRepository.GetEvents(RegionId);
+        return PartialView(schedule);
     }
 }
 

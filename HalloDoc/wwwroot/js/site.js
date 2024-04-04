@@ -105,6 +105,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const phoneInput = window.intlTelInput(phoneInputField[i], {
             utilsScript:
                 "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+            nationalMode: false,
+            showSelectedDialCode: true,
+            autoInsertDialCode: true,
+            formatOnDisplay: false,
         })
     };
 });

@@ -1,0 +1,128 @@
+﻿@model HalloDocDAL.Model.ScheduleModel
+
+<div class="row justify-content-center mb-5 pb-5">
+    <div class="row m-4 col-xl-6 col-md-8 col-11">
+        <p class="col fs-4 fw-bold pb-0 mb-0 d-inline">Requested Shifts</p>
+        <div class="col mb-0 text-end">
+            <a class="text-decoration-none text-info rounded border border-info p-2 i-info scheduling-tab">
+                <i class="bi bi-chevron-left i-info"></i>
+                Back
+            </a>
+        </div>
+    </div>
+
+    <div class="m-4 shadow col-xl-6 col-md-8 col-11">
+        <div class="d-flex flex-wrap align-items-center justify-content-between m-1 m-md-3">
+            <div class="d-flex form-group normal-input rounded align-items-center ms-2 position-relative mb-1">
+                <i class="bi bi-search position-absolute" style="left:10px"></i>
+                <select class="form-select ps-5 form-control z-3 bg-transparent" id="SearchRegion" aria-label="Default select example">
+                    <option value="0" selected>All Regions</option>
+                    @foreach (var i in Model.regions)
+                    {
+                        <option value="@i.Regionid">@i.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="d-flex align-items-center">
+                <button type="button" class="btn btn-success text-white me-1" onclick="location.reload()">
+                    View Current Month Shifts
+                </button>
+
+                <button type="button" class="btn btn-success text-white me-1" id="approveShifts">
+                    Approve Selected
+                </button>
+
+                <button type="button" class="btn btn-danger text-white me-1" id="deleteShifts">
+                    Delete Selected
+                </button>
+            </div>
+        </div>
+
+        <div id="TableData"></div>
+
+        <div class="mb-4 pb-4"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var regionId = $('#SearchRegion').val();
+        $("#TableData").load('@Url.Action("RequestedShiftTable", "AdminDashboard")?RegionId=' + regionId);
+    });
+
+    $(document).on('change', '#SearchRegion', function () {
+        var regionId = $(this).val();
+        $("#TableData").load('@Url.Action("RequestedShiftTable", "AdminDashboard")?RegionId=' + regionId);
+    });
+
+    $("#deleteShifts").click(function () {
+        var selectedShifts = $('input[name="selectedShifts"]:checked').map(function () {
+            return this.value;
+        }).get();
+
+        selectedShifts.forEach(function (shiftid) {
+            $.ajax({
+                url: '@Url.Action("DeleteSelectedShift","AdminDashboard")',
+                type: 'POST',
+                data: { shiftDetailId: shiftid },
+                success: function (response) {
+                    if (!response.success) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Shift cannot be deleted",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                }
+            })
+        })
+        Swal.fire({
+            icon: "success",
+            title: "Done",
+            text: "Shifts deleted",
+            showConfirmButton: false,
+            timer: 1500
+        }).finally(() => {
+            var regionId = $(this).val();
+            $("#TableData").load('@Url.Action("RequestedShiftTable", "AdminDashboard")?RegionId=' + regionId);
+        });
+    })
+
+    $("#approveShifts").click(function () {
+        var selectedShifts = $('input[name="selectedShifts"]:checked').map(function () {
+            return this.value;
+        }).get();
+
+        selectedShifts.forEach(function (shiftid) {
+            $.ajax({
+                url: '@Url.Action("ApproveSelectedShift","AdminDashboard")',
+                type: 'POST',
+                data: { shiftDetailId: shiftid },
+                success: function (response) {
+                    if (!response.success) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Shift cannot be approved",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                }
+            })
+        })
+        Swal.fire({
+            icon: "success",
+            title: "Done",
+            text: "Shifts approved",
+            showConfirmButton: false,
+            timer: 1500
+        }).finally(() => {
+            var regionId = $(this).val();
+            $("#TableData").load('@Url.Action("RequestedShiftTable", "AdminDashboard")?RegionId=' + regionId);
+        });
+    })
+</script>

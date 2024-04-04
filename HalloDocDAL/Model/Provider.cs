@@ -18,6 +18,10 @@ namespace HalloDocDAL.Model
 
         public List<int> selectedRegions { get; set; }
         public IFormFile sign { get; set; }
+        public IFormFile ICA { get; set; }
+        public IFormFile BackgroundCheck { get; set; }
+        public IFormFile Hippa { get; set; }
+        public IFormFile NDA { get; set; }
         public int formtype { get; set; }
     }
 }

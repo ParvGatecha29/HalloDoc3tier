@@ -89,7 +89,9 @@
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: result.message
+                            text: result.message,
+                            showConfirmButton: false,
+                            timer: 1500
                         });
                     }
                 }
