@@ -31,9 +31,16 @@ namespace HalloDocDAL.Contacts
         bool AddShiftDetailRegions(Shiftdetailregion shift);
         Shiftdetail FindShiftDetails(int detailid);
         bool UpdateShiftDetails(Shiftdetail details);
-        List<ScheduleModel> GetEvents(int region);
+        List<ScheduleModel> GetEvents(int region,bool currentMonth);
         List<MappedEvents> GetMappedEvents(int region);
         List<ScheduleModel> GetReviewShifts(int region);
         List<User> GetUsers();
+        List<Healthprofessionaltype> GetHealthProfessionalTypes();
+        List<Partner> GetVendors(int Profession, string VendorSearch);
+        string GetStateRegionId(int? regionid);
+        bool AddBusiness(BusinessModel model);
+        public BusinessModel EditBusiness(int vendorid);
+        public bool UpdateBusiness(BusinessModel model);
+        public bool DeleteBusiness(int vendorid);
     }
 }

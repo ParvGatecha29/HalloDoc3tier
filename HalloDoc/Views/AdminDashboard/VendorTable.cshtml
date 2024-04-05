@@ -1,0 +1,33 @@
+﻿@model List<HalloDocDAL.Model.Partner>
+<table id="responsiveTable">
+    <thead class="tab">
+        <tr>
+            <th class="py-3">Profession</th>
+            <th class="py-3">Business Name</th>
+            <th class="py-3">Email</th>
+            <th class="py-3">Fax Number</th>
+            <th class="py-3">Phone Number</th>
+            <th class="py-3">Business Contact</th>
+            <th class="py-3">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="">
+                <td class="py-3">@item.Profession</td>
+                <td class="py-3">@item.VendorName</td>
+                <td class="py-3">@item.Email</td>
+                <td class="py-3">@item.FaxNumber</td>
+                <td class="py-3">@item.PhoneNumber</td>
+                <td class="py-3">@item.BusinessContact</td>
+                <td class="py-3">
+                    <a role="button" class="text-decoration-none form_button px-3 py-2 fw-semibold" onclick="editBusiness(@item.VendorId)">Edit</a>
+                    <a role="button" data-bs-toggle="modal" data-bs-target="#DeleteConfirmationModal" data-bs-vendorid="@item.VendorId" class="text-decoration-none form_button fw-semibold px-3 py-2">Delete</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+

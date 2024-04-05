@@ -1,5 +1,7 @@
 ﻿using HalloDocBAL.Interfaces;
+using HalloDocDAL.Data;
 using HalloDocDAL.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -16,22 +18,31 @@ namespace HalloDocBAL.Services
     public class JwtService : IJwtService
     {
         private readonly IConfiguration _configuration;
-        public JwtService(IConfiguration configuration)
+        private readonly ApplicationDbContext _context;
+        public JwtService(IConfiguration configuration, ApplicationDbContext context)
         {
             _configuration = configuration;
+            _context = context;
         }
 
         public string GenerateToken(Aspnetuser user)
         {
+            Aspnetuserrole role = _context.Aspnetuserroles.FirstOrDefault(x => x.UserId == user.Id);
+            string menu = "";
+            if(role.RoleId == "1")
+            {
+                Admin admin = _context.Admins.FirstOrDefault(x=> x.Aspnetuserid == user.Id);
+                List<string> menus = _context.Rolemenus.Include(_ => _.Menu).Where(x => x.Roleid == admin.Roleid).Select(x=> x.Menu.Name).ToList();
+                menu = String.Join(",", menus);
+            }
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email),
-                
                 new Claim(ClaimTypes.Role, user.Aspnetuserroles.FirstOrDefault().RoleId),
                 new Claim("userId", user.Id),
-                new Claim("username", user.Username)
+                new Claim("username", user.Username),
+                new Claim("Menus", menu)
             };
-
 
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -47,8 +58,6 @@ namespace HalloDocBAL.Services
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-
-
         }
 
         public bool ValidateToken(string token, out JwtSecurityToken jwtSecurityToken)

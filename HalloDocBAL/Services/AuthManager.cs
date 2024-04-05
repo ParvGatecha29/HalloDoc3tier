@@ -21,8 +21,10 @@ namespace HalloDocDAL.Repositories
     public class AuthManager : Attribute, IAuthorizationFilter
     {
         private readonly string _role;
-        public AuthManager(string role="") {
+        private readonly string _access;
+        public AuthManager(string role="",string access="") {
             _role = role;
+            _access = access;
         }
         public void OnAuthorization(AuthorizationFilterContext context)
         {
@@ -64,18 +66,23 @@ namespace HalloDocDAL.Repositories
                     return;
                 }
             }
-            //var user = SessionService.GetLoggedInUser(context.HttpContext.Session);
-            //if (user == null)
-            //{
-            //    context.Result = new RedirectToRouteResult(new RouteValueDictionary ( new { controller = "Home", action = "Index" } ));
-            //    return;
-            //}
-            //if(!string.IsNullOrEmpty(_role))
-            //{
-            //    if(!(user.Role == _role)){
-            //        context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "Index" }));
-            //    }
-            //}
+            var user = SessionService.GetLoggedInUser(context.HttpContext.Session);
+            if (user == null)
+            {
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "Index" }));
+                return;
+            }
+
+            string menus = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Menus").ToString();
+            if(_access != "")
+            {
+                List<string> access = menus.Split(',').ToList();
+                if (!access.Contains(_access))
+                {
+                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "Index" }));
+                    return;
+                }
+            }
         }
     }
 }

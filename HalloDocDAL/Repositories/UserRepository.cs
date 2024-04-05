@@ -383,7 +383,7 @@ namespace HalloDocDAL.Repositories
             _context.SaveChanges();
             return true;
         }
-        public List<ScheduleModel> GetEvents(int region)
+        public List<ScheduleModel> GetEvents(int region, bool currentMonth = false)
         {
             var eventswithoutdelet = (from s in _context.Shifts
                                       join pd in _context.Physicians on s.Physicianid equals pd.Physicianid
@@ -406,6 +406,10 @@ namespace HalloDocDAL.Repositories
             if(region != 0)
             {
                 eventswithoutdelet = eventswithoutdelet.Where( _ => _.Regionid == region );
+            }
+            if (currentMonth)
+            {
+                eventswithoutdelet = eventswithoutdelet.Where(_ => _.Shiftdate.Value.Month == DateTime.Now.Month);
             }
             var events = eventswithoutdelet.Where(item => !item.ShiftDeleted).ToList();
             return events;
@@ -454,6 +458,167 @@ namespace HalloDocDAL.Repositories
         {
             var users = _context.Users.Include(_ => _.Aspnetuser).ThenInclude(_=>_.Aspnetuserroles).ToList();
             return users;
+        }
+
+        public List<Healthprofessionaltype> GetHealthProfessionalTypes()
+        {
+            return _context.Healthprofessionaltypes.ToList();
+        }
+
+        public string GetStateRegionId(int? regionid)
+        {
+            if (regionid.HasValue)
+            {
+                Models.Region region = _context.Regions.FirstOrDefault(x => x.Regionid == regionid);
+                if (region == null)
+                {
+                    return " ";
+                }
+                else
+                {
+                    return region.Name;
+                }
+            }
+            return " ";
+        }
+
+        public List<Partner> GetVendors(int Profession, string VendorSearch)
+        {
+            List<Partner>? result = (from hp in _context.Healthprofessionals
+                                            join hpt in _context.Healthprofessionaltypes on hp.Profession equals hpt.Healthprofessionalid
+                                            where hp.Isdeleted == false
+                                            select new Partner
+                                            {
+                                                VendorId = hp.Vendorid,
+                                                VendorName = hp.Vendorname,
+                                                PhoneNumber = hp.Phonenumber,
+                                                FaxNumber = hp.Faxnumber,
+                                                Email = hp.Email,
+                                                BusinessContact = hp.Businesscontact,
+                                                ProfessionId = hp.Profession,
+                                                Profession = hpt.Professionname
+                                            }).Where(item =>
+                                             (string.IsNullOrEmpty(VendorSearch) || item.VendorName.ToLower().Contains(VendorSearch)) &&
+                                             (Profession == 0 || Profession == item.ProfessionId)
+                                            ).ToList();
+            return result;
+        }
+
+        public bool AddBusiness(BusinessModel model)
+        {
+            Healthprofessional? IsExist = _context.Healthprofessionals.FirstOrDefault(x => x.Email == model.Email);
+            try
+            {
+                if (model != null && IsExist == null)
+                {
+                    Healthprofessional business = new Healthprofessional
+                    {
+                        Profession = model.ProfessionId,
+                        Vendorname = model.BusinessName,
+                        Faxnumber = model.FaxNumber,
+                        Address = model.Street,
+                        City = model.City,
+                        Regionid = model.RegionId,
+                        Zip = model.ZipCode,
+                        Businesscontact = model.BusinessContact,
+                        Phonenumber = model.PhoneNumber,
+                        State = GetStateRegionId(model.RegionId),
+                        Email = model.Email,
+                        Createddate = DateTime.Now,
+                        Isdeleted = false,
+                    };
+                    _context.Healthprofessionals.Add(business);
+                    _context.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Failed to submit Form", ex);
+            }
+        }
+
+        public BusinessModel EditBusiness(int vendorid)
+        {
+            Healthprofessional? vendor = _context.Healthprofessionals.FirstOrDefault(x => x.Vendorid == vendorid);
+            if (vendor != null)
+            {
+                BusinessModel business = new BusinessModel()
+                {
+                    VendorId = vendor.Vendorid,
+                    Email = vendor.Email,
+                    PhoneNumber = vendor.Phonenumber,
+                    FaxNumber = vendor.Faxnumber,
+                    RegionId = vendor.Regionid,
+                    ProfessionId = vendor.Profession,
+                    BusinessContact = vendor.Businesscontact,
+                    BusinessName = vendor.Vendorname,
+                    City = vendor.City,
+                    Street = vendor.Address,
+                    ZipCode = vendor.Zip,
+                };
+                return business;
+            }
+            else
+            {
+                BusinessModel business = new BusinessModel();
+                return business;
+            }
+        }
+
+        public bool UpdateBusiness(BusinessModel model)
+        {
+            Healthprofessional? vendor = _context.Healthprofessionals.FirstOrDefault(x => x.Vendorid == model.VendorId);
+            if (vendor != null)
+            {
+                try
+                {
+                    vendor.Email = model.Email;
+                    vendor.Phonenumber = model.PhoneNumber;
+                    vendor.Businesscontact = model.BusinessContact;
+                    vendor.Vendorname = model.BusinessName;
+                    vendor.Regionid = model.RegionId;
+                    vendor.Faxnumber = model.FaxNumber;
+                    vendor.Address = model.Street;
+                    vendor.City = model.City;
+                    vendor.Zip = model.ZipCode;
+                    vendor.Modifieddate = DateTime.Now;
+                    vendor.State = GetStateRegionId(model.RegionId);
+                    _context.Healthprofessionals.Update(vendor);
+                    _context.SaveChanges();
+                    return true;
+
+                }
+                catch (Exception ex)
+                {
+                    throw new ApplicationException("Failed to submit Form", ex);
+                }
+            }
+            return false;
+
+        }
+
+        public bool DeleteBusiness(int vendorid)
+        {
+            Healthprofessional? vendor = _context.Healthprofessionals.FirstOrDefault(x => x.Vendorid == vendorid);
+            if (vendor != null)
+            {
+                try
+                {
+                    vendor.Isdeleted = true;
+                    vendor.Modifieddate = DateTime.Now;
+                    _context.Healthprofessionals.Update(vendor);
+                    _context.SaveChanges();
+                    return true;
+
+                }
+                catch (Exception ex)
+                {
+                    throw new ApplicationException("Failed to submit Form", ex);
+                }
+            }
+            return false;
         }
     }
 }

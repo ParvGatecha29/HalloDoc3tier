@@ -1,0 +1,150 @@
+﻿@model HalloDocDAL.Model.Partner
+@{
+    Layout = "_adminDash";
+}
+@{
+    ViewData["Title"] = "Vendor";
+}
+
+<div id="partnersDiv">
+    <div class="w-100 p-3 d-flex flex-column align-items-center">
+        <div class="req_form_container w-75 back_div d-flex justify-content-between mb-3">
+            <div class="d-flex align-items-center">
+                <h3 class="m-0 fw-bold">Vendor(s)</h3>
+            </div>
+            <div>
+                <a asp-controller="AdminDashboard" asp-action="AdminDashboard" class="back_btn d-flex align-items-center p-2 px-4 fw-semibold"
+                   role="button">
+                    <p class="m-0"><i class="fa-solid fa-chevron-left"></i> Back</p>
+                </a>
+            </div>
+        </div>
+        <div class="req_form_container w-75 shadow p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <input id="VendorSearch" class="form-control p-2 px-4 mx-2 SearchBg" type="text" placeholder='Search Vendors'>
+                    <select class="p-2 px-4 form-control SearchBg" id="ProfessionSelect">
+                        <option value="0" selected>All Professions</option>
+                        @{
+                            foreach (var item in @Model.Professions)
+                            {
+                                        <option value="@item.Healthprofessionalid">@item.Professionname</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="d-flex align-items-center flex-row-reverse">
+                    <a id="AddBusiness" role="button" class="btn fw-semibold text-light btn-info"><i class="fa-solid fa-plus"></i> Add Business</a>
+                </div>
+            </div>
+            <div id="VendorList">
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="DeleteConfirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h1 class="modal-title text-light  fs-5" id="exampleModalLabel">Confirm Delete</h1>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="DelVendorForm" method="post">
+                        <p>Are you sure want to delete this Vendor??</p>
+                        <div class="modal-footer">
+                            <input id="delvendorid" class="d-none" name="vendorid" />
+                            <button id="closesubmit" type="submit" class="btn btn-info text-light">Confirm</button>
+                            <button type="button" class="btn btn_hover btn-outline-info" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        fetchVendors()
+        $("#ProfessionSelect").on("change", function () {
+            fetchVendors()
+        })
+        $("#VendorSearch").on("input", function () {
+            fetchVendors()
+        })
+
+        $("#DelVendorForm").on("submit", function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: "/Partners/DeleteVendor",
+                data: formData,
+                success: function (response) {
+                    if (response.code == 401) {
+                        location.reload();
+                    }
+                    else {
+                        fetchVendors()
+                        console.log(response)
+                        $('#DeleteConfirmationModal').modal('hide');
+                        if (response == true) {
+                            toastr.success("Vendor deleted Successfully");
+                        }
+                    }
+
+                },
+                error: function () {
+                    console.log("Function Fail")
+                }
+            });
+        })
+    })
+
+    const DeleteConfirmationModal = document.getElementById('DeleteConfirmationModal')
+    if (DeleteConfirmationModal) {
+        DeleteConfirmationModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            var delroleid = document.getElementById("delvendorid");
+            const vendorid = button.getAttribute('data-bs-vendorid')
+            document.getElementById('delvendorid').value = vendorid;
+        })
+    }
+
+    function fetchVendors() {
+        var profession = $("#ProfessionSelect").val()
+        var vendorsearch = $("#VendorSearch").val()
+        if (vendorsearch != null) {
+            vendorsearch = vendorsearch.toLowerCase()
+        }
+        $.ajax({
+            method: "GET",
+            url: "/AdminDashboard/GetVendors",
+            data: { Profession: profession, VendorSearch: vendorsearch },
+            success: function (response) {
+                if (response.code == 401) {
+
+                    location.reload();
+                }
+                else {
+                    console.log("Function Success")
+                    $('#VendorList').html(response)
+                }
+
+            },
+            error: function () {
+                console.log("Function Fail")
+            }
+        })
+
+        $("#AddBusiness").click(function () {
+            $("#partnersDiv").load("AddBusiness", "AdminDashboard")
+        })
+
+        
+    }
+
+    function editBusiness(VendorId) {
+        $("#partnersDiv").load("/AdminDashboard/EditBusiness?vendorid=" + VendorId);
+    }
+</script>

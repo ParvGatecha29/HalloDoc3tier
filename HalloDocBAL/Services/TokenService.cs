@@ -23,7 +23,6 @@ namespace HalloDocBAL.Services
         {
             try
             {
-                
                 var tokenData = Encoding.UTF8.GetString(Convert.FromBase64String(token));
                 var parts = tokenData.Split('|');
                 if (parts.Length == 2)

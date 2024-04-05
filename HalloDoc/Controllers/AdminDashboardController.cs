@@ -753,6 +753,7 @@ public class AdminDashboardController : Controller
         return Json(new { success = true });
     }
 
+    [AuthManager("1","ProviderLocation")]
     public IActionResult ProviderLocation()
     {
         return View();
@@ -1055,11 +1056,11 @@ public class AdminDashboardController : Controller
     }
 
 
-    public IActionResult GetReviewShift(int region)
-    {
-        var shifts = _userRepository.GetReviewShifts(region);
-        return PartialView("RequestedShiftPartial", shifts);
-    }
+    //public IActionResult GetReviewShift(int region)
+    //{
+    //    var shifts = _userRepository.GetReviewShifts(region);
+    //    return PartialView("RequestedShiftPartial", shifts);
+    //}
 
     [HttpPost]
     public IActionResult ApprovedShifts(List<int> selectedIds)
@@ -1103,11 +1104,77 @@ public class AdminDashboardController : Controller
         return PartialView(schedule);
     }
 
-    public IActionResult RequestedShiftTable(int RegionId)
+    public IActionResult RequestedShiftTable(int RegionId, bool currentMonth)
     {
         ScheduleModel schedule = new ScheduleModel();
-        schedule.DayList = _userRepository.GetEvents(RegionId);
+        schedule.DayList = _userRepository.GetEvents(RegionId,currentMonth);
         return PartialView(schedule);
+    }
+
+    public IActionResult Partners()
+    {
+        Partner partner = new Partner();
+        partner.Professions = _userRepository.GetHealthProfessionalTypes();
+        return View(partner);
+    }
+
+    public IActionResult GetVendors(int Profession, string VendorSearch)
+    {
+        List<Partner> vendorList = _userRepository.GetVendors(Profession, VendorSearch);
+        return PartialView("VendorTable", vendorList);
+    }
+
+    public IActionResult AddBusiness()
+    {
+        ViewData["ViewName"] = "Partners";
+        var regions = _adminDashboardService.GetAllRegions();
+        var professions = _userRepository.GetHealthProfessionalTypes();
+        ViewBag.professions = professions;
+        ViewBag.regions = regions;
+        return PartialView();
+    }
+
+    public IActionResult EditBusiness(int vendorid)
+    {
+        ViewData["ViewName"] = "Partners";
+        BusinessModel business = _userRepository.EditBusiness(vendorid);
+        var regions = _adminDashboardService.GetAllRegions();
+        var professions = _userRepository.GetHealthProfessionalTypes();
+        ViewBag.professions = professions;
+        ViewBag.regions = regions;
+        return PartialView(business);
+    }
+
+    public IActionResult CreateBusiness(BusinessModel model)
+    {
+        bool result = _userRepository.AddBusiness(model);
+        if (result)
+        {
+            TempData["success"] = "Business Created successfully";
+        }
+        else
+        {
+            TempData["error"] = "Error creating Business";
+        }
+        return RedirectToAction("Partners", "AdminDashboard");
+    }
+    public IActionResult UpdateBusiness(BusinessModel model)
+    {
+        bool result = _userRepository.UpdateBusiness(model);
+        if (result)
+        {
+            TempData["success"] = "Business Updated successfully";
+        }
+        else
+        {
+            TempData["error"] = "Error Updating Business";
+        }
+        return RedirectToAction("Partners", "AdminDashboard");
+    }
+
+    public bool DeleteVendor(int vendorid)
+    {
+        return _userRepository.DeleteBusiness(vendorid);
     }
 }
 

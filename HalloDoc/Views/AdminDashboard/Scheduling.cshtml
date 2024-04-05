@@ -45,7 +45,7 @@
                     </div>
                 </div>
 
-                <div class="row my-2">
+                <div class="row my-2 mb-5">
                     <div class="col-md-7 mt-2">
                         <div id="calendarTitle" class="calendar-current-date fs-4 fw-bolder"></div>
                         <div class="text-start my-3 calendar-navigation">
@@ -72,7 +72,7 @@
 
                         </div>
                         <div class="d-flex justify-content-end">
-                            <div id="day" class="btn btn-outline-info  mx-2" onclick="calendar.changeView('resourceTimeline')">
+                            <div id="day" class="btn btn-outline-info  mx-2" onclick="calendar.changeView('resourceTimelineDay')">
                                 Day
                             </div>
                             <!-- Button trigger modal -->
@@ -85,7 +85,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="calendar" class="pt-5" style="min-height:38vh">
+                <div id="calendar" class="" style="min-height:38vh">
                 </div>
             </div>
         </div>
@@ -101,7 +101,7 @@
 
         var calendarEl = document.getElementById('calendar');
         var selectedRegion = $('#regionselect').val();
-        console.log(selectedRegion)
+        
         getPhysicianShift(selectedRegion);
 
         function getPhysicianShift(region) {
@@ -118,7 +118,7 @@
                     fetch('/AdminDashboard/GetEvents?region=' + region)
                         .then(response => response.json())
                         .then(data => {
-                            console.log(data)
+                           
                             const events = data.map(event => ({
                                 id: event.id,
                                 resourceId: event.resourceId,
@@ -131,7 +131,7 @@
                                 region: event.region,
                                 status: event.status
                             }));
-                            console.log(events);
+                            
                             initializeCalendar(resources, events);
                         })
                         .catch(error => console.log(error));
@@ -143,23 +143,25 @@
                 const newRegion = $(this).val();
                 getPhysicianShift(newRegion);
             });
-            console.log(resources)
+           
             calendar = new FullCalendar.Calendar(calendarEl, {
                 height: 'auto',
                 resourceAreaWidth: '10%',
                 schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
                 themeSystem: 'bootstrap5',
                 headerToolbar: false,
-                initialView: 'dayGridMonth',
+                initialView: 'resourceTimelineDay',
                 eventMaxStack:1,
                 dayMaxEvents: 4,
                 views: {
                     resourceTimelineDay: {
                         buttonText: 'Day',
-                        slotDuration: '01:00:00',
-                        slotLabelContent: function (arg) {
-                            return (arg.date.getHours() % 12 || 12) + (arg.date.getHours() < 12 ? 'A' : 'P');
-                        },
+                        slotLabelContent: function (slotInfo) {
+                            var hours = slotInfo.date.getHours();
+                            var meridiem = hours >= 12 ? 'P' : 'A';
+                            hours = hours % 12 || 12;
+                            return hours + meridiem;
+                        }
                     },
                     resourceTimelineWeek: {
                         buttonText: 'Week',
@@ -167,13 +169,13 @@
                         slotLabelInterval: { days: 1 },
                         slotMinTime: '00:00:00',
                         slotMaxTime: '23:59:59',
-                        slotLabelFormat: {
-                            omitWeekday: false,
-                            weekday: 'short',
-                            day: '2-digit',
-                            omitCommas: true,
-                            meridiem: 'short'
-                        },
+                        // slotLabelFormat: {
+                        //     omitWeekday: false,
+                        //     weekday: 'short',
+                        //     day: '2-digit',
+                        //     omitCommas: true,
+                        //     meridiem: 'short'
+                        // },
 
                     },
                     resourceTimelineMonth: {
@@ -194,20 +196,20 @@
                 editable: true,
                 resources: resources,
                 events: events,
-                eventDidMount: function (event, element) {
-                    if (calendar.view.type == 'dayGridMonth') {
-                        console.log(element);
-                        // console.log(event);
-                        // var a = event.closest("a.fcevent");
-                        // a.forEach(function (eve) {
+                // eventDidMount: function (event, element) {
+                //     if (calendar.view.type == 'dayGridMonth') {
+                //         console.log(element);
+                //         // console.log(event);
+                //         // var a = event.closest("a.fcevent");
+                //         // a.forEach(function (eve) {
                             
-                        //     eve.style.backgroundColor = event.backgroundColor;
-                        // })
-                    }
-                    return event;
-                },
+                //         //     eve.style.backgroundColor = event.backgroundColor;
+                //         // })
+                //     }
+                //     return event;
+                // },
                 eventDrop: function (e) { 
-                    console.log(e.event.start);
+                    
                     var shiftDetailId = e.event.extendedProps.ShiftDetailId // Assuming you have an input field with id 'shiftDetailId' in your modal
                     var startDate = formatDate(e.event.start);
                     var startTime = formatTime(e.event.start);
@@ -270,7 +272,7 @@
                     // Get the ShiftDetailId from the event's extendedProps
                     var shiftDetailId = info.event.extendedProps.ShiftDetailId;
                     var region = info.event.extendedProps.region;
-                    console.log(info)
+                 
                     // Populate modal content with event details
                     var event = info.event;
                     var modalBody = document.querySelector('#eventModal .modal-body');
@@ -312,7 +314,7 @@
                             </form>
                                             `;
                     modalBody.innerHTML = eventDetails;
-                    console.log(events)
+                  
                     // Open the modal when an event is clicked
                     $('#eventModal').modal('show');
                     $('#eventModal').on('click', '#editbtn', function () {
@@ -324,139 +326,6 @@
                         $('#StartTimeView').prop('disabled', false);
                         $('#EndTimeView').prop('disabled', false);
                     });
-
-                    $('#eventModal').on('click', '#returnshift', function () {
-
-                        // Get the ShiftDetailId from the event
-                        var shiftDetailId = $('#shiftDetailId').val(); // Assuming you have an input field with id 'shiftDetailId' in your modal
-                        // Call AJAX to return
-                        $.ajax({
-                            url: '/AdminDashboard/ReturnShift',
-                            type: 'POST',
-                            data: { shiftDetailId: shiftDetailId },
-                            success: function (response) {
-                                // Handle success
-                                console.log(response);
-                                $('#eventModal').modal('hide');
-
-                                const events = response.map(event => ({
-                                    id: event.id,
-                                    resourceId: event.resourceId,
-                                    title: event.title,
-                                    start: event.start,
-                                    end: event.end,
-                                    eventBackgroundColor: event.status == 0 ? '#e39de8' : '#32d97d',
-                                    color: event.status == 0 ? '#e39de8' : '#32d97d',
-                                    ShiftDetailId: event.ShiftDetailId,
-                                    status: event.status,
-                                    region: event.region,
-                                }));
-                                calendar.removeAllEvents(); // Remove existing events
-                                calendar.addEventSource(events); // Add updated events
-                                calendar.refetchEvents(); // Refetch events from the event sources
-
-                            },
-                            error: function (xhr, status, error) {
-                                console.log(xhr);
-                                console.log(status);
-                                console.log(error);
-                            }
-                        });
-                    });
-
-                    $('#eventModal').on('click', '#deletebtn', function () {
-                        // Get the ShiftId from the event
-
-                        var shiftDetailId = $('#shiftDetailId').val();
-                        $.ajax({
-                            url: '/AdminDashboard/DeleteShift',
-                            type: 'POST',
-                            data: { shiftDetailId: shiftDetailId },
-                            success: function (response) {
-                                $('#eventModal').modal('hide');
-
-                                const events = response.map(event => ({
-                                    id: event.id,
-                                    resourceId: event.resourceId,
-                                    title: event.title,
-                                    start: event.start,
-                                    end: event.end,
-                                    eventBackgroundColor: event.status == 0 ? '#e39de8' : '#32d97d',
-                                    color: event.status == 0 ? '#e39de8' : '#32d97d',
-                                    ShiftDetailId: event.ShiftDetailId,
-                                    region: event.region,
-                                    status: event.status
-                                }));
-                                calendar.removeAllEvents(); // Remove existing events
-                                calendar.addEventSource(events); // Add updated events
-                                calendar.refetchEvents(); // Refetch events from the event sources
-                            },
-                            error: function (xhr, status, error) {
-                                // Handle error
-                            }
-                        });
-                    });
-
-                    $('#eventModal').on('click', '#savebtn', function () {
-                        // Get data to be saved
-                        var shiftDetailId = $('#shiftDetailId').val(); // Assuming you have an input field with id 'shiftDetailId' in your modal
-                        var startDate = $('#StartDateView').val();
-                        var startTime = $('#StartTimeView').val();
-                        var endTime = $('#EndTimeView').val();
-                        console.log(shiftDetailId);
-                        // Call AJAX to save
-                        $.ajax({
-                            url: '/AdminDashboard/SaveShift',
-                            type: 'POST',
-                            data: {
-                                shiftDetailId: shiftDetailId,
-                                startDate: startDate,
-                                startTime: startTime,
-                                endTime: endTime
-                            },
-                            success: function (response) {
-                                if (response.error) {
-                                    Swal.fire({
-                                        title: "Oops...",
-                                        text: "Slot not available",
-                                        icon: "error",
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    });
-                                }
-                                else {
-                                    $('#eventModal').modal('hide');
-
-                                    const events = response.map(event => ({
-                                        id: event.id,
-                                        resourceId: event.resourceId,
-                                        title: event.title,
-                                        start: event.start,
-                                        end: event.end,
-                                        eventBackgroundColor: event.status == 0 ? '#e39de8' : '#32d97d',
-                                        color: event.status == 0 ? '#e39de8' : '#32d97d',
-                                        ShiftDetailId: event.ShiftDetailId,
-                                        region: event.region,
-                                        status: event.status
-                                    }));
-                                    calendar.removeAllEvents(); // Remove existing events
-                                    calendar.addEventSource(events); // Add updated events
-                                    calendar.refetchEvents(); // Refetch events from the event sources
-
-                                    // Hide the save button and show the edit button
-                                    $('#savebtn').addClass('d-none');
-                                    $('#editbtn').removeClass('d-none');
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                // Handle error
-                                console.log(xhr);
-                                console.log(status);
-                                console.log(error);
-                            }
-                        });
-                    });
-                    
                 },
                 eventBackgroundColor: function (event) {
                     return event.eventBackgroundColor;
@@ -465,8 +334,8 @@
                     const img = document.createElement('img');
                     const imgUrl = resourceObj.resource.extendedProps.imageUrl || `/Physician/${resourceObj.el.dataset.resourceId}/photo.png`;
                     img.src = imgUrl;
-                    console.log(imgUrl);
                     img.style.maxHeight = '40px';
+                    img.style.float = 'left';
                     resourceObj.el.querySelector('.fc-datagrid-cell-main').appendChild(img);
                 },
                 dateClick: function (info) {
@@ -480,31 +349,30 @@
                     // Open the create shift modal
                     $('#createShiftModal').modal('show');
                 },
-
-            });
-            console.log("calendar view ",calendar.view);
-
-
-            $("#next-button").click(function () {
-                calendar.next();
             });
 
-            $("#prev-button").click(function () {
-                calendar.prev();
-            });
-
-            $("#day-button").click(function () {
-                calendar.changeView('resourceTimelineDay');
-            });
-
-            $("#week-button").click(function () {
-                calendar.changeView('resourceTimelineWeek');
-            });
-
-            $("#month-button").click(function () {
-                calendar.changeView('dayGridMonth');
-            });
-
+            function switchView() {
+                console.log(calendar.view.type)
+                if (window.screen.width < 700) {
+                    if (calendar.view.type === 'resourceTimelineWeek') {
+                        calendar.changeView('dayGridWeek');
+                    }
+                    if (calendar.view.type === 'resourceTimelineDay') {
+                        $('.fc-daygrid-day-events').text("0/24");
+                        calendar.changeView('timeGridDay');
+                    }
+                } else {
+                    if (calendar.view.type === 'dayGridWeek') {
+                        calendar.changeView('resourceTimelineWeek');
+                    }
+                    if (calendar.view.type === 'timeGridDay') {
+                        calendar.changeView('resourceTimelineDay');
+                    }
+                }
+            }
+            switchView();
+            window.addEventListener('resize', switchView);
+            
             calendar.render();
         }
     });
@@ -545,7 +413,7 @@
     records.classList.remove("active");
     // Function to format date to YYYY-MM-DD
     function formatDate(dateString) {
-        console.log(dateString);
+  
         const date = new Date(dateString);
         const year = date.getFullYear();
         let month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -561,6 +429,137 @@
         let minutes = date.getMinutes().toString().padStart(2, '0');
         return `${hours}:${minutes}`;
     }
+
+    $('#eventModal').on('click', '#returnshift', function () {
+
+        // Get the ShiftDetailId from the event
+        var shiftDetailId = $('#shiftDetailId').val(); // Assuming you have an input field with id 'shiftDetailId' in your modal
+        // Call AJAX to return
+        $.ajax({
+            url: '/AdminDashboard/ReturnShift',
+            type: 'POST',
+            data: { shiftDetailId: shiftDetailId },
+            success: function (response) {
+                // Handle success
+            
+                $('#eventModal').modal('hide');
+
+                const events = response.map(event => ({
+                    id: event.id,
+                    resourceId: event.resourceId,
+                    title: event.title,
+                    start: event.start,
+                    end: event.end,
+                    eventBackgroundColor: event.status == 0 ? '#e39de8' : '#32d97d',
+                    color: event.status == 0 ? '#e39de8' : '#32d97d',
+                    ShiftDetailId: event.ShiftDetailId,
+                    status: event.status,
+                    region: event.region,
+                }));
+                calendar.removeAllEvents(); // Remove existing events
+                calendar.addEventSource(events); // Add updated events
+                calendar.refetchEvents(); // Refetch events from the event sources
+
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr);
+                console.log(status);
+                console.log(error);
+            }
+        });
+    });
+
+    $('#eventModal').on('click', '#deletebtn', function () {
+        // Get the ShiftId from the event
+
+        var shiftDetailId = $('#shiftDetailId').val();
+        $.ajax({
+            url: '/AdminDashboard/DeleteShift',
+            type: 'POST',
+            data: { shiftDetailId: shiftDetailId },
+            success: function (response) {
+                $('#eventModal').modal('hide');
+
+                const events = response.map(event => ({
+                    id: event.id,
+                    resourceId: event.resourceId,
+                    title: event.title,
+                    start: event.start,
+                    end: event.end,
+                    eventBackgroundColor: event.status == 0 ? '#e39de8' : '#32d97d',
+                    color: event.status == 0 ? '#e39de8' : '#32d97d',
+                    ShiftDetailId: event.ShiftDetailId,
+                    region: event.region,
+                    status: event.status
+                }));
+                calendar.removeAllEvents(); // Remove existing events
+                calendar.addEventSource(events); // Add updated events
+                calendar.refetchEvents(); // Refetch events from the event sources
+            },
+            error: function (xhr, status, error) {
+                // Handle error
+            }
+        });
+    });
+
+    $('#eventModal').on('click', '#savebtn', function () {
+        // Get data to be saved
+        var shiftDetailId = $('#shiftDetailId').val(); // Assuming you have an input field with id 'shiftDetailId' in your modal
+        var startDate = $('#StartDateView').val();
+        var startTime = $('#StartTimeView').val();
+        var endTime = $('#EndTimeView').val();
+        // Call AJAX to save
+        $.ajax({
+            url: '/AdminDashboard/SaveShift',
+            type: 'POST',
+            data: {
+                shiftDetailId: shiftDetailId,
+                startDate: startDate,
+                startTime: startTime,
+                endTime: endTime
+            },
+            success: function (response) {
+                if (response.error) {
+                    Swal.fire({
+                        title: "Oops...",
+                        text: "Slot not available",
+                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+                else {
+                    $('#eventModal').modal('hide');
+
+                    const events = response.map(event => ({
+                        id: event.id,
+                        resourceId: event.resourceId,
+                        title: event.title,
+                        start: event.start,
+                        end: event.end,
+                        eventBackgroundColor: event.status == 0 ? '#e39de8' : '#32d97d',
+                        color: event.status == 0 ? '#e39de8' : '#32d97d',
+                        ShiftDetailId: event.ShiftDetailId,
+                        region: event.region,
+                        status: event.status
+                    }));
+                    calendar.removeAllEvents(); // Remove existing events
+                    calendar.addEventSource(events); // Add updated events
+                    calendar.refetchEvents(); // Refetch events from the event sources
+
+                    // Hide the save button and show the edit button
+                    $('#savebtn').addClass('d-none');
+                    $('#editbtn').removeClass('d-none');
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error
+                console.log(xhr);
+                console.log(status);
+                console.log(error);
+            }
+        });
+    });
 
     $('#providerOnCall').click(function () {
         $('#schedulingDiv').load("/AdminDashboard/ProviderOnCall");

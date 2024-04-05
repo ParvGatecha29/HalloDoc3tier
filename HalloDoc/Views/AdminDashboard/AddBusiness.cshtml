@@ -1,0 +1,122 @@
+﻿@model HalloDocDAL.Model.BusinessModel
+
+@{
+    ViewData["Title"] = "Add Business";
+}
+
+<section>
+    <div class="w-100 p-3 d-flex flex-column align-items-center">
+        <div class="req_form_container w-50 back_div d-flex justify-content-between mb-3">
+            <div class="d-flex align-items-center">
+                <h3 class="m-0 fw-bold">Add Business</h3>
+            </div>
+            <div>
+                <a asp-controller="AdminDashboard" asp-action="Partners" class="back_btn d-flex align-items-center p-2 px-4 fw-semibold"
+                   role="button">
+                    <p class="m-0"><i class="fa-solid fa-chevron-left"></i> Back</p>
+                </a>
+            </div>
+        </div>
+        <div class="req_form_container w-50 shadow p-3">
+            <form method="post" asp-controller="AdminDashboard" asp-action="CreateBusiness">
+                <h5 class="mb-3 mt-4 fw-semibold">Submit Information</h5>
+                <div class="row gx-2">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input asp-for=BusinessName type="text" class="form-control" id="Business" placeholder="Business Name">
+                            <label for="Business">Business Name</label>
+                            <span asp-validation-for="BusinessName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <select asp-for="ProfessionId" class="py-2 form-control form-select w-100" id="ProfessionSelect">
+                                <option selected disabled hidden>Select Profession</option>
+                                @{
+                                    foreach (var profession in @ViewBag.professions)
+                                    {
+                                        <option value="@profession.Healthprofessionalid">@profession.Professionname</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="ProfessionId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gx-2">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input asp-for=FaxNumber type="text" class="form-control" id="Fax" placeholder="Fax Number">
+                            <label for="Fax">Fax Number</label>
+                            <span asp-validation-for="FaxNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input asp-for="PhoneNumber" name="PhoneNumber" type="tel" id='patient_phone' class="form-control" placeholder="(201)555-0123">
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gx-2">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input asp-for=Email type="email" class="form-control" id="email" placeholder="Email">
+                            <label for="email">Email</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input asp-for=BusinessContact type="tel" class="form-control" id="BusinessContact" placeholder="Business Contact">
+                            <label for="BusinessContact">Business Contact</label>
+                            <span asp-validation-for="BusinessContact" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gx-2">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input asp-for=Street type="text" class="form-control" id="Street" placeholder="Street">
+                            <label for="Street">Street</label>
+                            <span asp-validation-for="Street" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input asp-for=City type="text" class="form-control" id="City" placeholder="City">
+                            <label for="City">City</label>
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row gx-2">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <select asp-for="RegionId" class="py-2 form-control form-select w-100" id="regionselect">
+                                <option selected disabled hidden>Select Region</option>
+                                @{
+                                    foreach (var region in @ViewBag.regions)
+                                    {
+                                        <option value="@region.Regionid">@region.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input asp-for=ZipCode type="text" class="form-control " id="zip" placeholder="Zip Code">
+                            <label for="zip">Zip Code</label>
+                            <span asp-validation-for="ZipCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-row-reverse">
+                    <button type="reset" class="btn btn-outline-info btn_hover mx-1">Cancel</button>
+                    <button type="submit" class="btn text-white btn-info mx-1">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
