@@ -890,3 +890,9 @@ th[role=columnheader] .fc-datagrid-cell-frame {
 .line-4 {
     top: 80%;
 }
+
+input[type="checkbox"] {
+    accent-color: #01BCE9;
+    color: white !important;
+}
+   

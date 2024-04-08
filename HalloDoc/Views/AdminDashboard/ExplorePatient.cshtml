@@ -1,0 +1,71 @@
+﻿@model List<HalloDocDAL.Model.PatientHistory>
+@{
+    ViewData["Title"] = "Patient Records";
+}
+
+<section>
+    <div class="w-100 p-3 d-flex flex-column align-items-center">
+        <div class="req_form_container w-75 back_div d-flex justify-content-between mb-3">
+            <div class="d-flex align-items-center">
+                <h3 class="m-0 fw-bold">Patient Record</h3>
+            </div>
+            <div>
+                <a asp-controller="Admindashboard" asp-action="PatientHistory" class="back_btn d-flex align-items-center p-2 px-4 fw-semibold"
+                   role="button">
+                    <p class="m-0"><i class="fa-solid fa-chevron-left"></i> Back</p>
+                </a>
+            </div>
+        </div>
+        <div id="PatientRequest" class="req_form_container w-75 shadow p-3">
+            <table class="table my-3 me-0">
+                <thead class="">
+                    <tr class="table_header">
+                        <th class="py-3 fs-6">Client/Member</th>
+                        <th class="py-3 fs-6">Created Date</th>
+                        <th class="py-3 fs-6">Confirmation</th>
+                        <th class="py-3 fs-6">Provider Name</th>
+                        <th class="py-3 fs-6">Concluded Date</th>
+                        <th class="py-3 fs-6">Status</th>
+                        <th class="py-3 fs-6">Final Report</th>
+                        <th class="py-3 fs-6">Actions</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="">
+                            <td class="py-3 fs-6">@item.ClientName</td>
+                            <td class="py-3 fs-6">@item.CreatedDate</td>
+                            <td class="py-3 fs-6">@item.ConfirmationNumber</td>
+                            <td class="py-3 fs-6">@item.ProvideName</td>
+                            <td class="py-3 fs-6">@item.ConcludeDate</td>
+                            <td class="py-3 fs-6">@item.StatusName</td>
+                            <td class="py-3 fs-6 text-center">
+                                @if (item.IsFinalize == true)
+                                {
+                                    <a class="text-decoration-none form_button fw-semibold p-2" role="button" asp-controller="AdminDashboard" asp-action="GeneratePDF" asp-route-requestid="@item.RequestId">View</a>
+                                }
+                                else
+                                {
+                                    <p class="m-0">-</p>
+                                }
+                            </td>
+                            <td class="py-3 fs-6">
+                                <button class="text-decoration-none btn fw-semibold dropdown-toggle" type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="action">
+                                    <li><a class="dropdown-item" href="@Url.Action("Viewcase","AdminDashboard",new{requestid = @item.RequestId})"><i class="fa-regular fa-newspaper"></i> View Case</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @item.RequestId})"><i class="fa-solid fa-upload"></i> View Uploads</a></li>
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>

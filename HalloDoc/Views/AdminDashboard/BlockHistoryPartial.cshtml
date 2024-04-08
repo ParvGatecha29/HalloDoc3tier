@@ -1,0 +1,41 @@
+﻿@model List<HalloDocDAL.Model.PatientHistory>
+<table class="table my-3 me-0">
+    <thead class="">
+        <tr class="bg-secondary-subtle">
+            <th class="py-3">Patient Name</th>
+            <th class="py-3">Phone Number</th>
+            <th class="py-3">Email</th>
+            <th class="py-3">Created date</th>
+            <th class="py-3">Notes</th>
+            <th class="py-3">Is Active</th>
+            <th class="py-3">Actions</th>
+        </tr>
+    </thead>
+
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="data-row">
+                <td class="py-3">@item.FirstName @item.LastName</td>
+                <td class="py-3">@item.PhoneNumber</td>
+                <td class="py-3">@item.Email</td>
+                <td class="py-3">@item.CreatedDate</td>
+                <td class="py-3">Notes</td>
+                
+                <td class="py-3"><input type="checkbox" value="@item.RequestId"
+                    @if ((bool)item.IsActive)
+                    {
+                        <text>
+                            checked
+                        </text>
+                    }
+                    /></td>
+                <td class="py-3">
+                    <a role="button" onclick="unblock(@item.UserId)" class="btn btn-info bg-transparent text-info btn-outline-info px-3 py-2">Unblock</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>

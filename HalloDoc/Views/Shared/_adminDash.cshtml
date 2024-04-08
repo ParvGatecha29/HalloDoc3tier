@@ -121,12 +121,15 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
                                         <li><button class="dropdown-item" id="user-tab" data-bs-toggle="tab">User</button></li>
                                     </ul>
                                 </li>
-                                <li class="nav-item px-3" role="presentation">
-                                    <button class="nav-link layout" id="records-tab" data-bs-toggle="tab" data-bs-target="#records"
-                                            type="button" role="tab" aria-controls="records" aria-selected="false"
-                                            style="color:inherit">
-                                        Records
-                                    </button>
+                                <li class="nav-item dropdown" role="presentation">
+                                    <button class="nav-link dropdown-toggle layout" id="records-tab" data-bs-toggle="dropdown" type="button">Records</button>
+                                    <ul class="dropdown-menu">
+                                        <li><button class="dropdown-item" id="searchrecords-tab" data-bs-toggle="tab">Search Records</button></li>
+                                        <li><button class="dropdown-item" id="email-tab" data-bs-toggle="tab">Email Logs</button></li>
+                                        <li><button class="dropdown-item" data-bs-toggle="tab">SMS Logs</button></li>
+                                        <li><button class="dropdown-item" id="patienthistory-tab" data-bs-toggle="tab">Patient History</button></li>
+                                        <li><button class="dropdown-item" id="blockhistory-tab" data-bs-toggle="tab">Block History</button></li>
+                                    </ul>
                                 </li>
                             </ul>
                         </div>
@@ -205,6 +208,17 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
                 window.location.href = '@Url.Action("Partners","AdminDashboard")';
             })
 
+            $('#searchrecords-tab').click(function () {
+                window.location.href = '@Url.Action("SearchRecords","AdminDashboard")';
+            })
+
+            $('#patienthistory-tab').click(function () {
+                window.location.href = '@Url.Action("PatientHistory","AdminDashboard")';
+            })
+
+            $('#blockhistory-tab').click(function () {
+                window.location.href = '@Url.Action("BlockHistory","AdminDashboard")';
+            })
         });
 
 

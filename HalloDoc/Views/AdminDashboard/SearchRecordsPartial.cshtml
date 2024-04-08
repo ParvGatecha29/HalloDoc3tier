@@ -1,0 +1,61 @@
+﻿@model List<HalloDocDAL.Model.SearchRecord>
+<table class="table my-3 me-0">
+    <thead class="">
+        <tr class="bg-secondary-subtle">
+            <th class="py-3 fs-6">Patient Name</th>
+            <th class="py-3 fs-6">Requestor</th>
+            <th class="py-3 fs-6">Date Of Service</th>
+            <th class="py-3 fs-6">Close Case Date</th>
+            <th class="py-3 fs-6">Email</th>
+            <th class="py-3 fs-6">Phone Number</th>
+            <th class="py-3 fs-6">Address</th>
+            <th class="py-3 fs-6">Zip</th>
+            <th class="py-3 fs-6">Request Status</th>
+            <th class="py-3 fs-6">Physician</th>
+            <th class="py-3 fs-6">Physician Note</th>
+            <th class="py-3 fs-6">Cancelled By Provider Note</th>
+            <th class="py-3 fs-6">Admin Note</th>
+            <th class="py-3 fs-6">Patient Note</th>
+            <th class="py-3 fs-6">Delete Permanently</th>
+        </tr>
+    </thead>
+
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="data-row searchrecords_data_row">
+                <td class="py-3 fs-6">@item.PatientName</td>
+                <td class="py-3 fs-6">@item.Requestor</td>
+                <td class="py-3 fs-6">@item.ServiceDate</td>
+                <td class="py-3 fs-6">@item.DateofClose</td>
+                <td class="py-3 fs-6">@item.Email</td>
+                <td class="py-3 fs-6">@item.PhoneNumber</td>
+                <td class="py-3 fs-6">@item.Address</td>
+                <td class="py-3 fs-6">@item.Zip</td>
+                <td class="py-3 fs-6">@item.StatusName</td>
+                <td class="py-3 fs-6">@item.PhysicianName</td>
+                <td class="py-3 fs-6">@item.PhysicianNote</td>
+                <td class="py-3 fs-6">@item.CancelledByProvidor</td>
+                <td class="py-3 fs-6">@item.AdminNotes</td>
+                <td class="py-3 fs-6">@item.PatientNote</td>
+                <td class="py-3 fs-6 text-center">
+                    <a role="button" onclick="deleterequest(@item.RequestId)" class="btn btn-outline-info btn_hover deleterequest">Delete</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+@if (Model.Count > 10)
+{
+    <div id="pagination" class="d-flex flex-row-reverse p-3">
+        <div class="d-flex">
+            <button id="first-button" class="pagination_btn">First</button>
+            <button id="prev-button" class="pagination_btn" disabled><i class="fa-solid fa-arrow-left"></i></button>
+            <div id="page-buttons"></div>
+            <button id="next-button" class="pagination_btn"><i class="fa-solid fa-arrow-right"></i></button>
+            <button id="last-button" class="pagination_btn">Last</button>
+        </div>
+    </div>
+}

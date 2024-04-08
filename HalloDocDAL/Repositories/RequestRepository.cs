@@ -377,7 +377,21 @@ namespace HalloDocDAL.Repositories
             return _context.EncounterForms.FirstOrDefault(x => x.RequestId == requestId);
         }
 
-        
+        public bool EmailLog(string to, string subject, string body)
+        {
+            Emaillog log = new Emaillog
+            {
+                Emailtemplate = body,
+                Subjectname = subject,
+                Emailid = to,
+                Createdate = DateTime.Now,
+                Sentdate = DateTime.Now,
+                Isemailsent = true
+            };
+            _context.Emaillogs.Add(log);
+            _context.SaveChanges();
+            return true;
+        }
 
     }
 }

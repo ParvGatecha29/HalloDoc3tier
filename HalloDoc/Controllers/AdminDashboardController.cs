@@ -31,13 +31,14 @@ public class AdminDashboardController : Controller
     private readonly IUserService _userService;
     private readonly IRequestService _requestService;
     private readonly IUserRepository _userRepository;
+    private readonly IRecordsRepository _recordsRepository;
     int[] newcase = { 1 };
     int[] pendingcase = { 2 };
     int[] activecase = { 4, 5 };
     int[] concludecase = { 6 };
     int[] toclosecase = { 3, 7, 8 };
     int[] unpaidcase = { 9 };
-    public AdminDashboardController(IUserRepository userRepository, IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService)
+    public AdminDashboardController(IUserRepository userRepository, IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService, IRecordsRepository recordsRepository)
     {
         _adminDashboardService = adminDashboardService;
         _emailService = emailService;
@@ -47,6 +48,7 @@ public class AdminDashboardController : Controller
         _userService = userService;
         _requestService = requestService;
         _userRepository = userRepository;
+        _recordsRepository = recordsRepository;
     }
 
 
@@ -1175,6 +1177,59 @@ public class AdminDashboardController : Controller
     public bool DeleteVendor(int vendorid)
     {
         return _userRepository.DeleteBusiness(vendorid);
+    }
+
+    public IActionResult SearchRecords()
+    {
+        return View();
+    }
+
+    public IActionResult GetSearchRecords(string? Email, DateTime? FromDoS, string? Phone, string? Patient, string? Provider, int RequestStatus, int RequestType, DateTime? ToDoS)
+    {
+        List<SearchRecord> records = new List<SearchRecord>();
+        records = _recordsRepository.GetSearchRecords(Email, FromDoS, Phone, Patient, Provider, RequestStatus, RequestType, ToDoS);
+        return PartialView("SearchRecordsPartial", records);
+    }
+
+    public JsonResult DeletePatientRequest(int requestid)
+    {
+        if (_recordsRepository.DeletePatientRequest(requestid))
+        {
+            return Json(new {success = true});
+        }
+        return Json(new {success = false});
+    }
+
+    public IActionResult PatientHistory()
+    {
+        return View();
+    }
+
+    public IActionResult GetPatientRecords(string? FirstName, string? LastName, string? Phone, string? Email)
+    {
+        List<PatientHistory> records = new List<PatientHistory>();
+        records = _recordsRepository.GetPatients(FirstName, LastName, Phone, Email);
+        return PartialView("PatientHistoryPartial", records);
+    }
+
+    public IActionResult ExplorePatient(int userid)
+    {
+        List<PatientHistory> records = new List<PatientHistory>();
+        records = _recordsRepository.GetPatientRequests(userid);
+        return PartialView("ExplorePatient", records);
+
+    }
+
+    public IActionResult BlockHistory()
+    {
+        return View();
+    }
+
+    public IActionResult GetBlockedPatients(string? FirstName, string? LastName, string? Phone, string? Email)
+    {
+        List<PatientHistory> records = new List<PatientHistory>();
+        records = _recordsRepository.GetBlockedPatients(FirstName, LastName, Phone, Email);
+        return PartialView("BlockHistoryPartial", records);
     }
 }
 

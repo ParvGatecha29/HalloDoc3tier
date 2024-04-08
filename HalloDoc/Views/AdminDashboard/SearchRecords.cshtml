@@ -1,0 +1,248 @@
+﻿@{
+    Layout = "_adminDash";
+}
+@{
+    ViewData["Title"] = "Search Records";
+}
+
+<section>
+    <div class="w-100 p-3 d-flex flex-column align-items-center">
+        <div class="req_form_container w-100 back_div d-flex justify-content-between mb-3">
+            <div class="d-flex align-items-center">
+                <h3 class="m-0 fw-bold">Search Records</h3>
+            </div>
+            <div>
+            </div>
+        </div>
+        <div class="req_form_container w-100 shadow p-3">
+            <div class="row gx-2">
+                <div class="col-md-3">
+                    <div class="form-floating mb-3">
+                        <select class="py-2 form-control form-select w-100" id="RequestStatus">
+                            <option value="0" selected>Select Request Status</option>
+                            <option value="1">Unassigned</option>
+                            <option value="2">Accepted</option>
+                            <option value="3">Cancelled</option>
+                            <option value="4">MDEnRoute</option>
+                            <option value="5">MDONSite</option>
+                            <option value="6">Conclude</option>
+                            <option value="7">CancelledByPatient</option>
+                            <option value="8">Closed</option>
+                            <option value="9">UnPaid</option>
+                            <option value="10">Clear</option>
+                            <option value="11">Blocked</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="PatientName" placeholder="Patient Name">
+                        <label for="PatientName">Patient Name</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating mb-3">
+                        <select class="py-2 form-control form-select w-100" id="RequestType">
+                            <option value="0" selected>Select Request Type</option>
+                            <option value="1">Business</option>
+                            <option value="2">Patient</option>
+                            <option value="3">Family</option>
+                            <option value="4">Concierge</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating mb-3">
+                        <input type="date" id='FromDoS' class="form-control" placeholder="From Date of Service">
+                        <label for="FromDoS">From Date of Service</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row gx-2">
+                <div class="col-md-3">
+                    <div class="form-floating mb-3">
+                        <input type="date" class="form-control" id="ToDoS" placeholder="To Date of Service">
+                        <label for="ToDoS">To Date of Service</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="ProviderName" placeholder="Provider Name">
+                        <label for="ProviderName">Provider Name</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="Email" placeholder="Email">
+                        <label for="email">Email</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating h-100">
+                        <input type="tel" id='Phone' class="form-control h-100" placeholder="Phone Number">
+                        @* <label for="phone">Phone Number</label> *@
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-row-reverse">
+                <button id="SearchFilter" class="btn btn-info text-white mx-1">Search</button>
+                <button id="ClearFilter" class="btn btn_hover btn-outline-info mx-1">Clear</button>
+            </div>
+            <div id="SearchRecords" class="table-responsive">
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="DeleteConfirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h1 class="modal-title text-light  fs-5" id="exampleModalLabel">Confirm Delete</h1>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure want to delete??</p>
+                    <div class="modal-footer">
+                        <input id="DelRequestId" type="text" class="d-none" />
+                        <button id="DeleteSuccess" type="button" class="btn btn-info text-light">Confirm</button>
+                        <button type="button" class="btn btn_hover btn-outline-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    var dash = document.getElementById("dashboard-tab");
+    var providerLoc = document.getElementById("providerlocation-tab");
+    var profile = document.getElementById("myprofile-tab");
+    var provider = document.getElementById("providers-tab");
+    var partner = document.getElementById("partners-tab");
+    var access = document.getElementById("access-tab");
+    var records = document.getElementById("records-tab");
+
+    dash.classList.remove("active");
+    providerLoc.classList.remove("active");
+    profile.classList.remove("active");
+    provider.classList.remove("active");
+    partner.classList.remove("active");
+    access.classList.remove("active");
+    records.classList.add("active");
+
+    $(document).ready(function () {
+        $(".deleterequest").on("click", function () {
+            
+        });
+
+        $("#DeleteSuccess").on("click", function () {
+            var requestid = $("#DelRequestId").val();
+            deletePatientRequest(requestid);
+        });
+
+        $("#SearchFilter").on("click", function () {
+            var email = $("#Email").val();
+            var fromdos = $("#FromDoS").val();
+            var phone = $("#Phone").val();
+            var todos = $("#ToDoS").val();
+            var patient = $("#PatientName").val().toLowerCase();
+            var provider = $("#ProviderName").val().toLowerCase();
+            var status = $("#RequestStatus").val();
+            var type = $("#RequestType").val();
+
+            if (!email && !fromdos && !phone && !todos && !patient && !provider && status == 0 && type == 0) {
+                toastr.error("Please Enter some Search Fields");
+            } else {
+                fetchSearchRecords(email, fromdos, phone, todos, patient, provider, status, type);
+            }
+        });
+
+        $("#ClearFilter").on("click", function () {
+            clearFiltersAndFetchRecords();
+        });
+
+        fetchSearchRecords("", "", "", "", "", "", 0, 0);
+    });
+
+    function deleterequest(RequestId){
+        console.log(RequestId);
+        $("#DelRequestId").val(RequestId);
+        $("#DeleteConfirmationModal").modal('show');
+    }
+    function deletePatientRequest(requestid) {
+        $.ajax({
+            method: "POST",
+            url: "/AdminDashboard/DeletePatientRequest",
+            data: { requestid: requestid },
+            success: function (response) {
+                if (response.code == 401) {
+                    location.reload();
+                } else {
+                    if (response.success == true) {
+                        $("#DeleteConfirmationModal").modal('hide');
+                        Swal.fire({
+                            title: "Done",
+                            text: "Request Deleted",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        fetchSearchRecords();
+                    } else {
+                        Swal.fire({
+                            title: "Oops...",
+                            text: "Failed to delete request",
+                            icon: "error",
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                }
+            },
+            error: function () {
+                toastr.error("Failed to delete request.");
+            }
+        });
+    }
+
+    function fetchSearchRecords(email, fromdos, phone, todos, patient, provider, status, type) {
+        $.ajax({
+            method: "GET",
+            url: "/AdminDashboard/GetSearchRecords",
+            data: {
+                Email: email,
+                FromDoS: fromdos,
+                Phone: phone,
+                Patient: patient,
+                Provider: provider,
+                RequestStatus: status,
+                RequestType: type,
+                ToDoS: todos
+            },
+            success: function (response) {
+                if (response.code == 401) {
+                    location.reload();
+                } else {
+                    console.log("Function Success");
+                    $('#SearchRecords').html(response);
+                    var windowsize = $(window).width();
+                    // if (windowsize > 766) {
+                    //     setupPagination(10, '.data-row');
+                    // }
+                    // else {
+                    //     setupPagination(10, '.data-mobile-row');
+                    // }
+                }
+            },
+            error: function () {
+                toastr.error("Failed to fetch records.");
+            }
+        });
+    }
+
+    function clearFiltersAndFetchRecords() {
+        $("#Email, #Phone, #PatientName, #ProviderName").val("");
+        $("#FromDoS, #ToDoS").val("");
+        $("#RequestStatus, #RequestType").val(0);
+        fetchSearchRecords("", "", "", "", "", "", 0, 0);
+    }
+
+</script>

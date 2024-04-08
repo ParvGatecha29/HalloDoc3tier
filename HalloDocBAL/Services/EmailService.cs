@@ -7,16 +7,19 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using HalloDocBAL.Interfaces;
+using HalloDocDAL.Contacts;
 
 namespace HalloDocBAL.Services
 {
     public class EmailService : IEmailService
     {
         private readonly SmtpSettings _smtpSettings;
+        private readonly IRequestRepository _requestRepository;
 
-        public EmailService(SmtpSettings smtpSettings)
+        public EmailService(SmtpSettings smtpSettings, IRequestRepository requestRepository)
         {
             _smtpSettings = smtpSettings;
+            _requestRepository = requestRepository;
         }
 
         public void SendEmail(string to, string subject, string body)
@@ -35,6 +38,7 @@ namespace HalloDocBAL.Services
                 };
                 mailMessage.To.Add(to);
                 client.Send(mailMessage);
+                _requestRepository.EmailLog(to, subject, body);
             }
         }
 
@@ -59,6 +63,7 @@ namespace HalloDocBAL.Services
                     mailMessage.Attachments.Add(attachment);
                 }
                 client.Send(mailMessage);
+                _requestRepository.EmailLog(to, subject, body);
             }
         }
     }

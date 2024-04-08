@@ -1,0 +1,111 @@
+﻿@{
+    Layout = "_adminDash";
+}
+@{
+    ViewData["Title"] = "Patient Records";
+}
+
+<div id="patientrecordsDiv">
+    <div class="w-100 p-3 d-flex flex-column align-items-center">
+        <div class="req_form_container w-75 back_div d-flex justify-content-between mb-3">
+            <div class="d-flex align-items-center">
+                <h3 class="m-0 fw-bold">Patient History</h3>
+            </div>
+            <div>
+            </div>
+        </div>
+        <div class="req_form_container w-75 shadow p-3">
+            <div class="row gx-2">
+                <div class="col-md-3">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="first_name" placeholder="First Name">
+                        <label for="first_name">First Name</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="last_name" placeholder="Last Name">
+                        <label for="last_name">Last Name</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="email" placeholder="Email">
+                        <label for="email">Email</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-floating mb-3 h-100">
+                        <input type="tel" id='phone' class="form-control h-100" placeholder="Phone Number">
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-row-reverse">
+                <button id="SearchFilter" class="btn btn-info text-white mx-1">Search</button>
+                <button id="ClearFilter" class="btn btn_hover btn-outline-info mx-1">Clear</button>
+            </div>
+            <div id="PatientRecords">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        fetchPatientRecords();
+        $("#SearchFilter").on("click", function () {
+            var FirstName = $("#first_name").val().toLowerCase();
+            var LastName = $("#last_name").val().toLowerCase();
+            var PhoneNumber = $("#phone").val();
+            var Email = $("#email").val();
+            if (FirstName == "" && LastName == "" && PhoneNumber == "" && Email == "") {
+                toastr.error("Please Enter some Search Fields")
+            }
+            else {
+                fetchPatientRecords();
+            }
+        })
+        $("#ClearFilter").on("click", function () {
+            $("#first_name").val("")
+            $("#last_name").val("")
+            $("#phone").val("")
+            $("#email").val("")
+            fetchPatientRecords();
+        })
+    })
+
+    function fetchPatientRecords() {
+        var FirstName = $("#first_name").val().toLowerCase();
+        var LastName = $("#last_name").val().toLowerCase();
+        var PhoneNumber = $("#phone").val();
+        var Email = $("#email").val();
+
+        $.ajax({
+            method: "GET",
+            url: "/AdminDashboard/GetPatientRecords",
+            data: {
+                FirstName: FirstName,
+                LastName: LastName,
+                Phone: PhoneNumber,
+                Email: Email
+            },
+            success: function (response) {
+                if (response.code == 401) {
+                    location.reload();
+                }
+                else {
+                    console.log("Function Success")
+                    $('#PatientRecords').html(response);
+                }
+            },
+            error: function () {
+                console.log("Function Fail")
+            }
+        })
+    }
+
+    function explorePatient(userid) {
+        console.log(userid);
+        $("#patientrecordsDiv").load("/AdminDashboard/ExplorePatient?userid="+userid)
+    }
+</script>
+

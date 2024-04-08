@@ -1,0 +1,31 @@
+﻿@model List<HalloDocDAL.Model.PatientHistory>
+<table class="table my-3 me-0">
+    <thead class="">
+        <tr class="bg-secondary-subtle">
+            <th class="py-3">First Name</th>
+            <th class="py-3">Last Name</th>
+            <th class="py-3">Email</th>
+            <th class="py-3">Phone</th>
+            <th class="py-3">Address</th>
+            <th class="py-3">Actions</th>
+        </tr>
+    </thead>
+
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="data-row">
+                <td class="py-3">@item.FirstName</td>
+                <td class="py-3">@item.LastName</td>
+                <td class="py-3">@item.Email</td>
+                <td class="py-3">@item.PhoneNumber</td>
+                <td class="py-3">@item.Address</td>
+                <td class="py-3">
+                    <a role="button"  onclick="explorePatient(@item.UserId)" class="text-decoration-none form_button fw-semibold px-3 py-2">Explore</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>

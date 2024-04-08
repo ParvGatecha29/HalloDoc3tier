@@ -26,5 +26,6 @@ namespace HalloDocDAL.Contacts
         bool EditCase(AdminDashboard model);
         bool EditEncounterForm(EncounterForm model);
         EncounterForm GetEncounterForm(int requestId);
+        bool EmailLog(string to, string subject, string body);
     }
 }
