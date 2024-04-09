@@ -15,10 +15,10 @@
         <p class="fs-4 fw-bold"> Details </p>
 
         <form id="createAccess">
-            @if(Model.edit == 1)
+            @if (Model.edit == 1)
             {
-                <input hidden type="text" value="1" name="edit"/>
-                <input hidden type="text" value="@Model.roleid" name="roleid"/>
+                <input hidden type="text" value="1" name="edit" />
+                <input hidden type="text" value="@Model.roleid" name="roleid" />
 
             }
             <div class="row g-2">
@@ -69,7 +69,7 @@
             $("#MenuData").load('@Url.Action("AccessMenu", "AdminDashboard")?AccountType=' + accountType);
         });
     }
-    
+
 
     $(document).on('change', '#accountType', function () {
         var accountType = $(this).val();
@@ -112,7 +112,7 @@
                                 window.location.reload();
                             });
                         }
-                        
+
                     }
                     else {
                         Swal.fire({

@@ -44,7 +44,10 @@ builder.Services.AddScoped<IAdminDashboardService, AdminDashboardService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 builder.Services.AddScoped<IRecordsRepository, RecordsRepository>();
-
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
+});
 
 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 var app = builder.Build();

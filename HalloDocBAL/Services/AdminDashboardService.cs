@@ -27,6 +27,7 @@ namespace HalloDocBAL.Services
             _requestWiseFilesRepository = requestWiseFilesRepository;
             _userRepository = userRepository;
         }
+        
         public List<AdminDashboardData> GetRequests()
         {
             var data = _requestRepository.GetAllRequests();
@@ -35,9 +36,10 @@ namespace HalloDocBAL.Services
 
         public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search, bool all)
         {
-            var data = await _requestRepository.GetRequestsByStatus(status, reqtype, pageNumber, region, search,all);
+            var data = await _requestRepository.GetRequestsByStatus(status, reqtype, pageNumber, region, search, all);
             return data;
         }
+      
         public AdminDashboardData GetRequestById(int id)
         {
             var data = _requestRepository.GetRequestById(id);
@@ -47,7 +49,7 @@ namespace HalloDocBAL.Services
         public AdminDashboardData GetNotes(int id)
         {
             var data = _requestRepository.GetNotes(id);
-            if(data == null)
+            if (data == null)
             {
                 data = new AdminDashboardData
                 {
@@ -84,7 +86,7 @@ namespace HalloDocBAL.Services
 
         public bool CancelRequest(AdminDashboardData data)
         {
-            _requestRepository.transferRequest(data,3);
+            _requestRepository.transferRequest(data, 3);
             return true;
         }
 
@@ -195,6 +197,7 @@ namespace HalloDocBAL.Services
         {
             return _userRepository.GetAdminById(id);
         }
+
         public bool UpdateProfile(AdminProfile model)
         {
             _userRepository.UpdateAdminProfile(model);

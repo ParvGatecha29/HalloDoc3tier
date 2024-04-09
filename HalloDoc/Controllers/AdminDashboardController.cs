@@ -51,7 +51,6 @@ public class AdminDashboardController : Controller
         _recordsRepository = recordsRepository;
     }
 
-
     public IActionResult AdminDashboard()
     {
         var dash = new AdminDashboard();
@@ -115,6 +114,7 @@ public class AdminDashboardController : Controller
         HttpContext.Session.SetString("state", state.ToString());
         return PartialView("_CaseTable", dash);
     }
+
     public string FilterRequest(int reqtype)
     {
         HttpContext.Session.SetString("reqtype", reqtype.ToString());
@@ -136,6 +136,7 @@ public class AdminDashboardController : Controller
 
         return HttpContext.Session.GetString("state");
     }
+
     public string ChangePage(int pageNumber)
     {
         HttpContext.Session.SetString("pageNumber", pageNumber.ToString());
@@ -155,11 +156,13 @@ public class AdminDashboardController : Controller
         dash.request = _adminDashboardService.GetRequestById(requestid);
         return View("ViewCase", dash);
     }
+
     public IActionResult ViewNotes(int requestid)
     {
         var dash = _adminDashboardService.GetNotes(requestid);
         return PartialView("ViewNotes", dash);
     }
+
     public JsonResult UpdateNotes(int requestid, string notes)
     {
         var dash = _adminDashboardService.UpdateNotes(requestid, notes);
@@ -246,6 +249,7 @@ public class AdminDashboardController : Controller
         viewUploads.Requestwisefiles = _dashboardService.ViewDocument(requestid);
         return View(viewUploads);
     }
+
     public JsonResult DeleteFile(int fileid)
     {
         _adminDashboardService.DeleteFile(fileid);
@@ -282,6 +286,7 @@ public class AdminDashboardController : Controller
         var vendors = _orderService.GetVendorsByProfessions(profession);
         return vendors;
     }
+
     public ActionResult<Healthprofessional> GetVendorById(int vendorid)
     {
         var vendor = _orderService.GetVendorById(vendorid);
@@ -755,7 +760,7 @@ public class AdminDashboardController : Controller
         return Json(new { success = true });
     }
 
-    [AuthManager("1","ProviderLocation")]
+    [AuthManager("1", "ProviderLocation")]
     public IActionResult ProviderLocation()
     {
         return View();
@@ -792,6 +797,7 @@ public class AdminDashboardController : Controller
         access.RoleMenus = _adminDashboardService.GetRoleMenus(roleid);
         return PartialView(access);
     }
+
     public JsonResult CreateAccessRole(Access model)
     {
         var user = SessionService.GetLoggedInUser(HttpContext.Session);
@@ -812,6 +818,7 @@ public class AdminDashboardController : Controller
         access.Users = _adminDashboardService.GetAllUsers();
         return View(access);
     }
+
     public IActionResult Scheduling()
     {
         var region = _adminDashboardService.GetAllRegions();
@@ -934,6 +941,7 @@ public class AdminDashboardController : Controller
 
         return Ok(mappedEvents);
     }
+
     [HttpPost]
     public IActionResult SaveShift(int shiftDetailId, DateTime startDate, TimeOnly startTime, TimeOnly endTime)
     {
@@ -946,7 +954,7 @@ public class AdminDashboardController : Controller
         bool slotAvailable = true;
         foreach (var e in events)
         {
-            if(shiftDetailId != e.ShiftDetailId)
+            if (shiftDetailId != e.ShiftDetailId)
             {
                 if (e.resourceId == shiftdetail.Shift.Physicianid)
                 {
@@ -964,7 +972,7 @@ public class AdminDashboardController : Controller
         // If shift detail is not found, return a 404 Not Found response
         if (shiftdetail == null)
         {
-            return Json(new { success = false });
+            return Json(new { error = true });
         }
 
         try
@@ -973,7 +981,7 @@ public class AdminDashboardController : Controller
             shiftdetail.Shiftdate = startDate;
             shiftdetail.Starttime = startTime;
             shiftdetail.Endtime = endTime;
-            shiftdetail.Modifiedby = user.Id;
+            shiftdetail.Modifiedby = user.aspId;
             shiftdetail.Modifieddate = DateTime.Now;
 
             // Update the database
@@ -1087,7 +1095,7 @@ public class AdminDashboardController : Controller
         }
     }
 
-    public IActionResult ProviderOnCall() 
+    public IActionResult ProviderOnCall()
     {
         List<HalloDocDAL.Models.Region> regions = _adminDashboardService.GetAllRegions();
         return PartialView(regions);
@@ -1109,7 +1117,7 @@ public class AdminDashboardController : Controller
     public IActionResult RequestedShiftTable(int RegionId, bool currentMonth)
     {
         ScheduleModel schedule = new ScheduleModel();
-        schedule.DayList = _userRepository.GetEvents(RegionId,currentMonth);
+        schedule.DayList = _userRepository.GetEvents(RegionId, currentMonth);
         return PartialView(schedule);
     }
 
@@ -1150,27 +1158,12 @@ public class AdminDashboardController : Controller
     public IActionResult CreateBusiness(BusinessModel model)
     {
         bool result = _userRepository.AddBusiness(model);
-        if (result)
-        {
-            TempData["success"] = "Business Created successfully";
-        }
-        else
-        {
-            TempData["error"] = "Error creating Business";
-        }
         return RedirectToAction("Partners", "AdminDashboard");
     }
+
     public IActionResult UpdateBusiness(BusinessModel model)
     {
         bool result = _userRepository.UpdateBusiness(model);
-        if (result)
-        {
-            TempData["success"] = "Business Updated successfully";
-        }
-        else
-        {
-            TempData["error"] = "Error Updating Business";
-        }
         return RedirectToAction("Partners", "AdminDashboard");
     }
 
@@ -1184,10 +1177,15 @@ public class AdminDashboardController : Controller
         return View();
     }
 
-    public IActionResult GetSearchRecords(string? Email, DateTime? FromDoS, string? Phone, string? Patient, string? Provider, int RequestStatus, int RequestType, DateTime? ToDoS)
+    public void ChangePageSearch(int pageNumber)
     {
-        List<SearchRecord> records = new List<SearchRecord>();
-        records = _recordsRepository.GetSearchRecords(Email, FromDoS, Phone, Patient, Provider, RequestStatus, RequestType, ToDoS);
+        HttpContext.Session.SetString("pagesearch", pageNumber.ToString());
+    }
+
+    public async Task<IActionResult> GetSearchRecords(string? Email, DateTime? FromDoS, string? Phone, string? Patient, string? Provider, int RequestStatus, int RequestType, DateTime? ToDoS)
+    {
+        int pageNumber = int.Parse(HttpContext.Session.GetString("pagesearch") ?? "1");
+        PagedList<SearchRecord> records = await _recordsRepository.GetSearchRecords(Email, FromDoS, Phone, Patient, Provider, RequestStatus, RequestType, ToDoS, pageNumber);
         return PartialView("SearchRecordsPartial", records);
     }
 
@@ -1195,9 +1193,14 @@ public class AdminDashboardController : Controller
     {
         if (_recordsRepository.DeletePatientRequest(requestid))
         {
-            return Json(new {success = true});
+            return Json(new { success = true });
         }
-        return Json(new {success = false});
+        return Json(new { success = false });
+    }
+
+    public void ChangePagePatient(int pageNumber)
+    {
+        HttpContext.Session.SetString("pagepatient", pageNumber.ToString());
     }
 
     public IActionResult PatientHistory()
@@ -1205,10 +1208,11 @@ public class AdminDashboardController : Controller
         return View();
     }
 
-    public IActionResult GetPatientRecords(string? FirstName, string? LastName, string? Phone, string? Email)
+    public async Task<IActionResult> GetPatientRecords(string? FirstName, string? LastName, string? Phone, string? Email)
     {
         List<PatientHistory> records = new List<PatientHistory>();
-        records = _recordsRepository.GetPatients(FirstName, LastName, Phone, Email);
+        int pageNumber = int.Parse(HttpContext.Session.GetString("pagepatient") ?? "1");
+        records = await _recordsRepository.GetPatients(FirstName, LastName, Phone, Email, pageNumber);
         return PartialView("PatientHistoryPartial", records);
     }
 
@@ -1230,6 +1234,64 @@ public class AdminDashboardController : Controller
         List<PatientHistory> records = new List<PatientHistory>();
         records = _recordsRepository.GetBlockedPatients(FirstName, LastName, Phone, Email);
         return PartialView("BlockHistoryPartial", records);
+    }
+
+    public IActionResult ExportRecords()
+    {
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        List<SearchRecord> records =  _recordsRepository.GetSearchRecordsAll();
+
+
+        // Create a new Excel package
+        using (var package = new ExcelPackage())
+        {
+            var worksheet = package.Workbook.Worksheets.Add("Sheet1");
+            int row = 2;
+
+            worksheet.Cells[1, 1].Value = "Patient Name";
+            worksheet.Cells[1, 2].Value = "Requestor";
+            worksheet.Cells[1, 3].Value = "Date of Service";
+            worksheet.Cells[1, 4].Value = "Close Case Date";
+            worksheet.Cells[1, 5].Value = "Email";
+            worksheet.Cells[1, 6].Value = "Phone Number";
+            worksheet.Cells[1, 7].Value = "Address";
+            worksheet.Cells[1, 8].Value = "ZipCode";
+            worksheet.Cells[1, 9].Value = "Request Status";
+            worksheet.Cells[1, 10].Value = "Physician";
+            worksheet.Cells[1, 11].Value = "Physician Notes";
+            worksheet.Cells[1, 12].Value = "Cancelled by Provider Notes";
+            worksheet.Cells[1, 13].Value = "Admin Notes";
+            worksheet.Cells[1, 14].Value = "Patient Notes";
+
+            foreach (var data in records)
+            {
+                worksheet.Cells[row, 1].Value = data.PatientName;
+                worksheet.Cells[row, 2].Value = data.Requestor;
+                worksheet.Cells[row, 3].Value = data.DateOfService;
+                worksheet.Cells[row, 4].Value = data.DateofClose;
+                worksheet.Cells[row, 5].Value = data.Email;
+                worksheet.Cells[row, 6].Value = data.PhoneNumber;
+                worksheet.Cells[row, 7].Value = data.Address;
+                worksheet.Cells[row, 8].Value = data.Zip;
+                worksheet.Cells[row, 9].Value = data.StatusName;
+                worksheet.Cells[row, 10].Value = data.PhysicianName;
+                worksheet.Cells[row, 11].Value = data.PhysicianNote;
+                worksheet.Cells[row, 12].Value = data.CancelledByProvidor;
+                worksheet.Cells[row, 13].Value = data.AdminNotes;
+                worksheet.Cells[row, 14].Value = data.PatientNote;
+                row++;
+            }
+
+
+            // Populate Excel sheet with data
+
+
+            // Convert package to a byte array
+            var excelBytes = package.GetAsByteArray();
+
+            // Return Excel file as a download
+            return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Export.xlsx");
+        }
     }
 }
 

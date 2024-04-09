@@ -29,10 +29,10 @@ namespace HalloDocBAL.Services
         {
             Aspnetuserrole role = _context.Aspnetuserroles.FirstOrDefault(x => x.UserId == user.Id);
             string menu = "";
-            if(role.RoleId == "1")
+            if (role.RoleId == "1")
             {
-                Admin admin = _context.Admins.FirstOrDefault(x=> x.Aspnetuserid == user.Id);
-                List<string> menus = _context.Rolemenus.Include(_ => _.Menu).Where(x => x.Roleid == admin.Roleid).Select(x=> x.Menu.Name).ToList();
+                Admin admin = _context.Admins.FirstOrDefault(x => x.Aspnetuserid == user.Id);
+                List<string> menus = _context.Rolemenus.Include(_ => _.Menu).Where(x => x.Roleid == admin.Roleid).Select(x => x.Menu.Name).ToList();
                 menu = String.Join(",", menus);
             }
             var claims = new List<Claim>

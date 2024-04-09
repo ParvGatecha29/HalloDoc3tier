@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = "_none";
 }
 <div class="container-fluid d-flex p-0">
@@ -61,7 +60,7 @@
             var data = {
                 Email: $('#user').val(),
                 Password: $('#pass').val(),
-                ConfirmPassword:$('#conpass').val()
+                ConfirmPassword: $('#conpass').val()
             };
 
             $.ajax({
@@ -87,7 +86,7 @@
                         });
                     }
                 },
-                error: function(){
+                error: function () {
                     alert('An error occured');
                 }
             })

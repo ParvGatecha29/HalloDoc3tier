@@ -19,16 +19,17 @@ namespace HalloDocDAL.Repositories
         {
             _context = context;
         }
+
         public List<Physician> GetPhysicians(int region)
         {
-            if(region == 0)
+            if (region == 0)
                 return _context.Physicians.Include(_ => _.Physicianlocations).ToList();
             return _context.Physicians.Where(p => p.Regionid == region).ToList();
         }
 
         public Physician GetPhysicianById(int id)
         {
-            var data = _context.Physicians.Include(x => x.Physicianregions).AsQueryable() ;
+            var data = _context.Physicians.Include(x => x.Physicianregions).AsQueryable();
 
             return data.FirstOrDefault(x => x.Physicianid == id);
         }
@@ -40,7 +41,7 @@ namespace HalloDocDAL.Repositories
 
         public List<Physicianregion> GetPhysicianRegions(int id)
         {
-            return _context.Physicianregions.Where(x=> x.Physicianid==id).ToList();
+            return _context.Physicianregions.Where(x => x.Physicianid == id).ToList();
         }
 
         public bool EditPhysician(Provider model)
@@ -70,7 +71,7 @@ namespace HalloDocDAL.Repositories
                 List<Physicianregion> remove = _context.Physicianregions.Where(x => !model.selectedRegions.Contains(x.Regionid)).ToList();
                 _context.Physicianregions.RemoveRange(remove);
             }
-            else if(model.formtype == 3)
+            else if (model.formtype == 3)
             {
                 p.Address1 = model.physician.Address1;
                 p.Address2 = model.physician.Address2;

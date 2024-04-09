@@ -46,8 +46,7 @@
 <div class="container" id="divdiv">
     <div class=" mt-5 d-flex justify-content-between align-items-center">
         <h4>@okok(Convert.ToInt32(@Model.request.status)) Profile <span class="badge rounded-5 Reqtyp" style="background-color:@GetTableColorClass(@Model.request.requesttype)">@GetReqType(Model.request.requesttype) </span></h4>
-
-        <a asp-controller="AdminDashboard" asp-action="AdminDashboard"
+        <a onclick="history.back()"
            class="btn shadow  btn-outline-secondary border-info text-info px-3 ">
             <i class="fa-solid fa-angle-left"></i> Back
         </a>

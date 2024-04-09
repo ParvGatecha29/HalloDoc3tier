@@ -4,7 +4,7 @@
     Layout = "_adminDash";
 }
 <style>
-    
+
 
 
 </style>
@@ -52,11 +52,11 @@
                             <span id="calendar-prev" class="btn btn-info text-white rounded-circle" onclick="calendar.prev()">❮</span>
                             <span class="mx-1">
                                 <label for="datejump">
-                                <input type="date" id="datejump" hidden />
+                                    <input type="date" id="datejump" hidden />
                                     <i class="bi bi-calendar-day-fill fs-3"></i>
                                 </label>
                             </span>
-                            
+
                             <span id="calendar-next" class="btn btn-info text-white rounded-circle" onclick="calendar.next()">❯</span>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
 
         var calendarEl = document.getElementById('calendar');
         var selectedRegion = $('#regionselect').val();
-        
+
         getPhysicianShift(selectedRegion);
 
         function getPhysicianShift(region) {
@@ -118,7 +118,7 @@
                     fetch('/AdminDashboard/GetEvents?region=' + region)
                         .then(response => response.json())
                         .then(data => {
-                           
+
                             const events = data.map(event => ({
                                 id: event.id,
                                 resourceId: event.resourceId,
@@ -131,7 +131,7 @@
                                 region: event.region,
                                 status: event.status
                             }));
-                            
+
                             initializeCalendar(resources, events);
                         })
                         .catch(error => console.log(error));
@@ -143,7 +143,7 @@
                 const newRegion = $(this).val();
                 getPhysicianShift(newRegion);
             });
-           
+
             calendar = new FullCalendar.Calendar(calendarEl, {
                 height: 'auto',
                 resourceAreaWidth: '10%',
@@ -151,7 +151,7 @@
                 themeSystem: 'bootstrap5',
                 headerToolbar: false,
                 initialView: 'resourceTimelineDay',
-                eventMaxStack:1,
+                eventMaxStack: 1,
                 dayMaxEvents: 4,
                 views: {
                     resourceTimelineDay: {
@@ -181,7 +181,7 @@
                     resourceTimelineMonth: {
                         buttonText: 'Month'
                     },
-                    
+
                 },
                 datesSet: function (info) {
                     var title = info.view.title;
@@ -202,14 +202,14 @@
                 //         // console.log(event);
                 //         // var a = event.closest("a.fcevent");
                 //         // a.forEach(function (eve) {
-                            
+
                 //         //     eve.style.backgroundColor = event.backgroundColor;
                 //         // })
                 //     }
                 //     return event;
                 // },
-                eventDrop: function (e) { 
-                    
+                eventDrop: function (e) {
+
                     var shiftDetailId = e.event.extendedProps.ShiftDetailId // Assuming you have an input field with id 'shiftDetailId' in your modal
                     var startDate = formatDate(e.event.start);
                     var startTime = formatTime(e.event.start);
@@ -237,6 +237,7 @@
                                 calendar.refetchEvents();
                             }
                             else {
+                                console.log(response);
                                 $('#eventModal').modal('hide');
 
                                 const events = response.map(event => ({
@@ -272,49 +273,49 @@
                     // Get the ShiftDetailId from the event's extendedProps
                     var shiftDetailId = info.event.extendedProps.ShiftDetailId;
                     var region = info.event.extendedProps.region;
-                 
+
                     // Populate modal content with event details
                     var event = info.event;
                     var modalBody = document.querySelector('#eventModal .modal-body');
                     var eventDetails = `
-                                        <form asp-action="viewshift">
-                                        <input class="d-none" id="shiftDetailId" value="${shiftDetailId}">
-                                           <div class="form-floating mb-3 mt-3">
-                                    <select class="form-control" aria-label="Default select example" id="selectregion" disabled>
-                                        <option value="">${region[0].Name}</option>
+                                            <form asp-action="viewshift">
+                                            <input class="d-none" id="shiftDetailId" value="${shiftDetailId}">
+                                               <div class="form-floating mb-3 mt-3">
+                                        <select class="form-control" aria-label="Default select example" id="selectregion" disabled>
+                                            <option value="">${region[0].Name}</option>
 
-                                    </select>
-                                        <label>Region</label>
+                                        </select>
+                                            <label>Region</label>
+                                    </div>
+                                            <div class="form-floating mb-3 mt-3">
+                                                            <select class="form-select pt-4 physicianDropdown" asp-for="Physicianid" id="physicianSelect" aria-label="Default select example" disabled>
+                                                            <option value="" selected disabled>${event.title}</option>
+                                                        </select>
+                                                            <label>Physician</label>
+                                                    </div>
+                                                            <div class="col-md-12 form-floating mb-3">
+                                            <input id="StartDateView" class="form-control rounded vcs" name="Startdate" type="date" placeholder="Suchtext" autocomplete="off" value="${formatDate(event.start)}" disabled>
+                                    <label for="StartDate">Shifted Date</label>
+                                    <div class="d-flex gap-2 mt-3">
+                                    <div class="col-md-6 form-floating mb-3">
+                                            <input id="StartTimeView" asp-for="Starttime" disabled class="form-control rounded vcs" name="Starttime" type="time" placeholder="Suchtext" autocomplete="off" value="${formatTime(event.start)}" >
+                                    <label for="StartTime">Start</label>
                                 </div>
-                                        <div class="form-floating mb-3 mt-3">
-                                                        <select class="form-select pt-4 physicianDropdown" asp-for="Physicianid" id="physicianSelect" aria-label="Default select example" disabled>
-                                                        <option value="" selected disabled>${event.title}</option>
-                                                    </select>
-                                                        <label>Physician</label>
-                                                </div>
-                                                        <div class="col-md-12 form-floating mb-3">
-                                        <input id="StartDateView" class="form-control rounded vcs" name="Startdate" type="date" placeholder="Suchtext" autocomplete="off" value="${formatDate(event.start)}" disabled>
-                                <label for="StartDate">Shifted Date</label>
-                                <div class="d-flex gap-2 mt-3">
                                 <div class="col-md-6 form-floating mb-3">
-                                        <input id="StartTimeView" asp-for="Starttime" disabled class="form-control rounded vcs" name="Starttime" type="time" placeholder="Suchtext" autocomplete="off" value="${formatTime(event.start)}" >
-                                <label for="StartTime">Start</label>
-                            </div>
-                            <div class="col-md-6 form-floating mb-3">
-                                        <input id="EndTimeView" asp-for="Endtime" disabled	 class="form-control rounded vcs" name="Endtime" type="time" placeholder="Suchtext" autocomplete="off" value="${formatTime(event.end)}" >
-                                <label for="EndTime">End</label>
-                            </div>
-                            </div>
-                                <div class="d-flex justify-content-end gap-2">
-                            <button class="btn btn-info" id="returnshift"  type="button">Return</button>
-                        <button class="btn btn-info" id="editbtn" type="button">Edit</button>
-                            <button class="btn btn-success d-none" id="savebtn"  type="button">Save</button>
-                        <button class="btn btn-danger" id="deletebtn" type="button">Delete</button>
-                    </div>
-                            </form>
-                                            `;
+                                            <input id="EndTimeView" asp-for="Endtime" disabled	 class="form-control rounded vcs" name="Endtime" type="time" placeholder="Suchtext" autocomplete="off" value="${formatTime(event.end)}" >
+                                    <label for="EndTime">End</label>
+                                </div>
+                                </div>
+                                    <div class="d-flex justify-content-end gap-2">
+                                <button class="btn btn-info" id="returnshift"  type="button">Return</button>
+                            <button class="btn btn-info" id="editbtn" type="button">Edit</button>
+                                <button class="btn btn-success d-none" id="savebtn"  type="button">Save</button>
+                            <button class="btn btn-danger" id="deletebtn" type="button">Delete</button>
+                        </div>
+                                </form>
+                                                `;
                     modalBody.innerHTML = eventDetails;
-                  
+
                     // Open the modal when an event is clicked
                     $('#eventModal').modal('show');
                     $('#eventModal').on('click', '#editbtn', function () {
@@ -372,7 +373,7 @@
             }
             switchView();
             window.addEventListener('resize', switchView);
-            
+
             calendar.render();
         }
     });
@@ -413,7 +414,7 @@
     records.classList.remove("active");
     // Function to format date to YYYY-MM-DD
     function formatDate(dateString) {
-  
+
         const date = new Date(dateString);
         const year = date.getFullYear();
         let month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -441,7 +442,7 @@
             data: { shiftDetailId: shiftDetailId },
             success: function (response) {
                 // Handle success
-            
+
                 $('#eventModal').modal('hide');
 
                 const events = response.map(event => ({

@@ -55,5 +55,6 @@ namespace HalloDocDAL.Model
 
         public IFormFileCollection? document { get; set; }
         public string? symptoms { get; set; }
+        public int? createduserid { get; set; }
     }
 }

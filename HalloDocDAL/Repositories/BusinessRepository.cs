@@ -12,6 +12,7 @@ namespace HalloDocDAL.Repositories
     public class BusinessRepository : IBusinessRepository
     {
         private readonly ApplicationDbContext _context;
+
         public BusinessRepository(ApplicationDbContext context)
         {
             _context = context;

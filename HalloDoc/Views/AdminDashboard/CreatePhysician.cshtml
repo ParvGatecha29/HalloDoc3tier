@@ -24,17 +24,19 @@
                 </div>
 
                 <div class="col-md-4 col-12 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating requiredPhysician">
                         <input type="text" class="form-control" id="password" placeholder="Password" asp-for="aspphy.Passwordhash">
                         <label for="password" class="floating-label">Password</label>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
 
                 <div class="col-md-4 col-12 mb-3">
-                    <div class="form-group mb-3">
+                    <div class="form-group mb-3 requiredPhysician">
                         <select class="form-select form-control" id="Physicianstatus" style="height: 58px;" asp-for="physician.Roleid">
                             <option value="">Role</option>
                         </select>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
             </div>
@@ -43,39 +45,45 @@
             <p class="fs-5 fw-bold">Physician Information</p>
             <div class="row g-2">
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating requiredPhysician">
                         <input type="text" class="form-control PhysicianInput" id="PhysicianFirstname" placeholder="First Name" asp-for="physician.Firstname">
                         <label for="PhysicianFirstname" class="floating-label">First Name</label>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                  
                 </div>
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating requiredPhysician">
                         <input type="text" class="form-control PhysicianInput" id="PhysicianLastname" placeholder="Last Name" asp-for="physician.Lastname">
                         <label for="PhysicianLastname" class="floating-label">Last Name</label>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
                 <div class="col-12 col-md-6 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating requiredPhysician">
                         <input type="email" class="form-control PhysicianInput" id="PhysicianEmail" placeholder="Email" asp-for="physician.Email">
                         <label for="PhysicianEmail" class="floating-label">Email</label>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
                 <div class="col-12 col-md-6 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating requiredPhysician">
                         <input type="tel" class="form-control p-3 ps-5 PhysicianInput" id="PhysicianMobile" placeholder="(201) 555-0123" asp-for="physician.Mobile">
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
                 <div class="col-12 col-md-6 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating requiredPhysician">
                         <input type="text" class="form-control PhysicianInput" id="PhysicianMedicalLicense" placeholder="Confirm Email" asp-for="physician.Medicallicense">
                         <label for="PhysicianMedicalLicense" class="floating-label">Medical Liccense#</label>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
                 <div class="col-12 col-md-6 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating requiredPhysician">
                         <input type="text" class="form-control PhysicianInput" id="PhysicianNPI" placeholder="Email" asp-for="physician.Npinumber">
                         <label for="PhysicianNPI" class="floating-label">NPI Number</label>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
                 
@@ -100,40 +108,46 @@
             <p class="fs-5 fw-bold">Mailing & Billing Information</p>
             <div class="row g-2">
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating requiredPhysician">
                         <input type="text" class="form-control mailingInput" id="MailingAddress1" placeholder="Address1" asp-for="physician.Address1">
                         <label for="MailingAddress1" class="floating-label">Address1</label>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating requiredPhysician">
                         <input type="text" class="form-control mailingInput" id="MailingAddress2" placeholder="Address2" asp-for="physician.Address2">
                         <label for="MailingAddress2" class="floating-label">Address2</label>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating requiredPhysician">
                         <input type="text" class="form-control mailingInput" id="MailingCity" placeholder="City" asp-for="physician.City">
                         <label for="MailingCity" class="floating-label">City</label>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-group mb-3">
+                    <div class="form-group mb-3 requiredPhysician">
                         <select class="form-select form-control" id="Physicianstatus" style="height: 58px;" >
                             <option value="">State</option>
                             
                         </select>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating requiredPhysician">
                         <input type="text" class="form-control mailingInput" id="MailingZipcode" placeholder="Zip" asp-for="physician.Zip">
                         <label for="MailingZipcode" class="floating-label">Zip</label>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
-                <div class="col-12 col-md-6 mb-3">
-                    <div class="form-floating">
+                <div class="col-12 col-md-6 mb-3 ">
+                    <div class="form-floating requiredPhysician">
                         <input type="tel" class="form-control p-3 ps-5 mailingInput" id="MailingMobile" asp-for="physician.Altphone" placeholder="(201) 555-0123">
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
             </div>
@@ -142,15 +156,17 @@
             <p class="fs-5 fw-bold">Provider Profile</p>
             <div class="row g-2">
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating requiredPhysician">
                         <input type="text" class="form-control mailingInput" id="ProfileBusinessName" placeholder="Business Name" asp-for="physician.Businessname">
                         <label for="ProfileBusinessName" class="floating-label">Business Name</label>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
                 <div class="col-md-6 col-12 mb-3">
-                    <div class="form-floating">
+                    <div class="form-floating requiredPhysician">
                         <input type="text" class="form-control mailingInput" id="ProfileBusinesswebsite" placeholder="Business Website" asp-for="physician.Businesswebsite">
                         <label for="ProfileBusinesswebsite" class="floating-label">Business Website</label>
+                        <span style="display:none" class="text-danger">Required!</span>
                     </div>
                 </div>
                 <div class="col-md-6 col-12 mb-3">
@@ -264,8 +280,34 @@
     $('#CreateProvider').on('submit', function (e) {
         e.preventDefault();
         var data = new FormData(this);
-        console.log(data["selectedRegions"]);
-        $.ajax({
+        var validate = true;
+                $('.requiredPhysician').each(function () {
+                    var div = $(this);
+                    if ($(div).find('input').val() == "") {
+                        Swal.fire({
+                            title: "Information required",
+                            text: "Please enter all the details",
+                            icon: "error"
+                        });
+                        var span = $(div).children('span');
+                        span.show();
+
+                        validate = false;
+                    }
+                    if ($(div).find('select').val() == "") {
+                        Swal.fire({
+                            title: "Information required",
+                            text: "Please enter all the details",
+                            icon: "error"
+                        });
+                        var span = $(div).children('span');
+                        span.show();
+
+                        validate = false;
+                    }
+                })
+        if (validate) {
+            $.ajax({
             url: "SaveProvider",
             type: "Post",
             data: data,
@@ -285,6 +327,8 @@
                 }
             }
         });
+        }
+        
     });
 
     // script for phone number

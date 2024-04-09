@@ -4,6 +4,7 @@ using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using HalloDocDAL.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -25,8 +26,6 @@ namespace HalloDocBAL.Services
         private readonly IRequestBusinessRepository _requestBusinessRepository;
         private readonly IRequestWiseFilesRepository _requestWiseFilesRepository;
         private readonly ApplicationDbContext _context;
-
-
 
         public RequestService(ApplicationDbContext context, IRequestRepository requestRepository,IRequestClientRepository requestClientRepository, IConciergeRepository conciergeRepository, IRequestConciergeRepository requestConciergeRepository, IBusinessRepository businessRepository, IRequestBusinessRepository requestBusinessRepository, IRequestWiseFilesRepository requestWiseFilesRepository)
         {

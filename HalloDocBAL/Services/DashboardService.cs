@@ -43,7 +43,7 @@ namespace HalloDocBAL.Services
                 var filePath = "";
                 if (file.Length > 0)
                 {
-                    var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot","documents", rid.ToString());
+                    var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "documents", rid.ToString());
                     if (!Directory.Exists(uploadsFolderPath))
                     {
                         Directory.CreateDirectory(uploadsFolderPath);

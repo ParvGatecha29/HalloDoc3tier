@@ -12,6 +12,7 @@ namespace HalloDocBAL.Services
         {
             _userRepository = userRepository;
         }
+
         public string GenerateToken(string userEmail)
         {
             var expireTime = DateTime.UtcNow.AddHours(1);
@@ -19,7 +20,7 @@ namespace HalloDocBAL.Services
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(tokenData));
         }
 
-        public (string email, bool isValid) ValidateToken (string token)
+        public (string email, bool isValid) ValidateToken(string token)
         {
             try
             {

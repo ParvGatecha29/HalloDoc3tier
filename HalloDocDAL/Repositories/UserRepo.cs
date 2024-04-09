@@ -12,6 +12,7 @@ namespace HalloDocDAL.Repositories
     public class UserRepo : IUserRepo
     {
         private readonly ApplicationDbContext _context;
+
         public UserRepo(ApplicationDbContext context)
         {
             _context = context;

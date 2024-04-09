@@ -18,7 +18,7 @@
         </div>
     </div>
     <div class="container mb-5 pb-5 request_form shadow-lg px-4">
-        
+
         <div class="row">
             <h3 class="mt-4">Account Information</h3>
         </div>
@@ -42,18 +42,18 @@
             <div class="row">
                 <div class="col-lg-6 col-12 form-floating mt-3 temp">
                     <div class="form-floating mb-3">
-                    <select asp-for="Status" disabled class="adminInfoInput form-select inputs">
-                        <option value="0" selected>--- Select Status ---</option>
-                    </select>
+                        <select asp-for="Status" disabled class="adminInfoInput form-select inputs">
+                            <option value="0" selected>--- Select Status ---</option>
+                        </select>
                         <label for="" class="input_labels floating-label">Status</label>
                     </div>
                 </div>
                 <div class="col-lg-6 col-12 form-floating mt-3 temp">
                     <div class="form-floating mb-3">
-                    <select asp-for="Role" disabled class="adminInfoInput form-select inputs">
-                        <option value="0" selected>--- Select Role ---</option>
+                        <select asp-for="Role" disabled class="adminInfoInput form-select inputs">
+                            <option value="0" selected>--- Select Role ---</option>
 
-                    </select>
+                        </select>
                         <label for="" class="input_labels floating-label">Role</label>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
         </div>
         <form method="post" asp-controller="AdminDashboard" asp-action="EditProfile" id="profileEdit">
             <input asp-for="adminId" hidden />
-            <input asp-for="formtype" type="number" hidden value="1"/>
+            <input asp-for="formtype" type="number" hidden value="1" />
             <div class="row">
                 <div class="col-lg-6 col-12 form-floating temp mt-4">
                     <div class="form-floating mb-3 requiredprofile">
@@ -256,7 +256,7 @@
         }
     }
 
- 
+
 
 
     function InfoEdit() {
@@ -306,8 +306,8 @@
                 validate = false;
             }
         })
-        
-        if(validate){
+
+        if (validate) {
             Swal.fire({
                 title: "Information Updated",
                 icon: "success",

@@ -22,17 +22,19 @@
                 <td class="py-3">@item.Email</td>
                 <td class="py-3">@item.CreatedDate</td>
                 <td class="py-3">Notes</td>
-                
-                <td class="py-3"><input type="checkbox" value="@item.RequestId"
+
+                <td class="py-3">
+                    <input type="checkbox" value="@item.RequestId"
                     @if ((bool)item.IsActive)
                     {
                         <text>
                             checked
                         </text>
                     }
-                    /></td>
+                    />
+                </td>
                 <td class="py-3">
-                    <a role="button" onclick="unblock(@item.UserId)" class="btn btn-info bg-transparent text-info btn-outline-info px-3 py-2">Unblock</a>
+                    <button role="button" onclick="unblock(@item.UserId)" class="btn btn-outline-info">Unblock</button>
                 </td>
             </tr>
         }

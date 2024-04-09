@@ -13,7 +13,7 @@
     <form action="" class="shadow border rounded my-3" method="post" id="formorder">
         <div class="mx-3 my-4 ">
             <div class="mt-3">
-                <input hidden value="@Model.requestid" id="requestid" name="requestid"/>
+                <input hidden value="@Model.requestid" id="requestid" name="requestid" />
                 <div class="row">
                     <div class=" col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-3 ">
                         <select class="form-select text-secondary" id="professiontype" style="height: 58px;">
@@ -22,7 +22,7 @@
                             {
                                 <option value="@profession.Healthprofessionalid">@profession.Professionname</option>
                             }
-                            
+
                         </select>
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  ">
@@ -107,7 +107,7 @@
 
         $('#business').change(function () {
             var selectedVendor = $(this).val();
-            
+
             $.ajax({
                 url: '@Url.Action("GetVendorByid","AdminDashboard")',
                 type: 'POST',
@@ -171,7 +171,7 @@
                     }
                 });
             }
-            
+
         });
     })
 </script>

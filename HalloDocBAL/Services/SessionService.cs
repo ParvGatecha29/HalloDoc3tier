@@ -13,6 +13,7 @@ namespace HalloDocBAL.Services
             if (!string.IsNullOrEmpty(session.GetString("userId")))
             {
                 userInfo = new UserInfo();
+                userInfo.aspId = session.GetString("aspuserId");
                 userInfo.Id = session.GetString("userId");
                 userInfo.Email = session.GetString("Email");
                 userInfo.Role = session.GetString("Role");
@@ -22,14 +23,15 @@ namespace HalloDocBAL.Services
             return userInfo;
         }
 
-        public static void SetLoggedInUser(ISession session, Aspnetuser user)
+        public static void SetLoggedInUser(ISession session, User user)
         {
             if (user != null)
             {
-                session.SetString("userId", user.Id);
+                session.SetString("aspuserId", user.Aspnetuserid);
+                session.SetString("userId", user.Userid.ToString());
                 session.SetString("Email", user.Email);
-                session.SetString("Role", user.Aspnetuserroles.FirstOrDefault().RoleId);
-                session.SetString("Name", user.Username);
+                session.SetString("Role", user.Aspnetuser.Aspnetuserroles.FirstOrDefault().RoleId);
+                session.SetString("Name", user.Aspnetuser.Username);
             }
         }
     }

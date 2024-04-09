@@ -82,9 +82,10 @@
         <div class="">
             <div class="mx-3">
                 <p class="text-secondary" id="name">Patient Name</p>
-                <p class="fs-4 fw-semibold text-info"> @foreach(var item in Model.dashboards)
+                <p class="fs-4 fw-semibold text-info">
+                    @foreach (var item in Model.dashboards)
                     {
-                        @if(Model.requests[0].Requestid == item.Requestid)
+                        @if (Model.requests[0].Requestid == item.Requestid)
                         {
                             <span>@item.confirmationNo</span>
                         }
@@ -160,9 +161,9 @@
     </div>
 </div>
 <script>
-$("#selectAll").change(function () {
-    $(".checkbox").prop('checked', $(this).prop("checked"));
-});
+    $("#selectAll").change(function () {
+        $(".checkbox").prop('checked', $(this).prop("checked"));
+    });
 </script>
 <script>
     $('#welcome').html('@Model.user.Firstname');
@@ -206,12 +207,12 @@ $("#selectAll").change(function () {
             var selectedDocuments = $('input[name="selectedDocuments"]:checked').map(function () {
                 return this.value;
             }).get();
-            
+
 
             if (selectedDocuments.length > 0) {
                 $.ajax({
                     url: '@Url.Action("DownDoc","PatientDashboard")',
-                    type:"post",
+                    type: "post",
                     data: JSON.stringify(selectedDocuments),
                     contentType: "application/json; charset=utf-8",
                     success: function (response) {

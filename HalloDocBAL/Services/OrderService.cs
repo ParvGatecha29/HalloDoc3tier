@@ -17,6 +17,7 @@ namespace HalloDocBAL.Services
         {
             _ordersRepository = ordersRepository;
         }
+
         public List<Healthprofessionaltype> GetAllPrfessions()
         {
             return _ordersRepository.GetAllProfessions();
@@ -26,6 +27,7 @@ namespace HalloDocBAL.Services
         {
             return _ordersRepository.GetVendorsByProfession(professionid);
         }
+
         public Healthprofessional GetVendorById(int vendorid)
         {
             return _ordersRepository.GetVendorById(vendorid);

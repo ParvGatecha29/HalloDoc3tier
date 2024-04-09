@@ -18,10 +18,12 @@ namespace HalloDocDAL.Repositories
     public class RequestRepository : IRequestRepository
     {
         private readonly ApplicationDbContext _context;
+
         public RequestRepository(ApplicationDbContext context)
         {
             _context = context;
         }
+
         public async Task<bool> CreateRequest(Request model)
         {
             Debug.WriteLine(model.Email);
@@ -54,7 +56,6 @@ namespace HalloDocDAL.Repositories
                 }).ToList();
             return data;
         }
-
 
         public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search, bool all)
         {
@@ -116,7 +117,7 @@ namespace HalloDocDAL.Repositories
             {
                 reqclnt = reqclnt.Where(_ => _.Regionid == region).AsQueryable();
             }
-            if(search.Length > 0)
+            if (search.Length > 0)
             {
                 reqclnt = reqclnt.Where(_ => _.Firstname.ToLower().Contains(search) || _.Lastname.ToLower().Contains(search) || _.Request.Firstname.ToLower().Contains(search)).AsQueryable();
 
@@ -130,7 +131,7 @@ namespace HalloDocDAL.Repositories
                 req = reqclnt.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             }
             List<AdminDashboardData> abc = new List<AdminDashboardData>();
-                         
+
             foreach (var item in req)
             {
                 AdminDashboardData def = new AdminDashboardData
@@ -138,7 +139,7 @@ namespace HalloDocDAL.Repositories
                     requestId = item.Requestid,
                     firstName = item.Firstname,
                     lastName = item.Lastname ?? "",
-                    email = item.Email ?? "",   
+                    email = item.Email ?? "",
                     requestor = item.Request.Firstname ?? "",
                     status = item.Request.Status,
                     pname = item.Request.Physician != null ? item.Request.Physician.Firstname : "",
@@ -160,8 +161,9 @@ namespace HalloDocDAL.Repositories
                 abc.Add(def);
             }
             PagedList<AdminDashboardData> result;
-            if (all) {
-                 result = await PagedList<AdminDashboardData>.CreateAsync(abc, reqclnt.Count(), 1, reqclnt.Count());
+            if (all)
+            {
+                result = await PagedList<AdminDashboardData>.CreateAsync(abc, reqclnt.Count(), 1, reqclnt.Count());
             }
             else
             {
@@ -226,6 +228,7 @@ namespace HalloDocDAL.Repositories
 
             return requestData;
         }
+
         public AdminDashboardData GetNotes(int id)
         {
             Requestnote rn = _context.Requestnotes.Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).FirstOrDefault(x => x.Requestid == id);
@@ -239,13 +242,14 @@ namespace HalloDocDAL.Repositories
                 adminNotes = rn.Adminnotes,
                 physicianNotes = rn.Physiciannotes,
             };
-            
+
             foreach (var item in rn.Request.Requeststatuslogs)
             {
                 data.transferNotes.Add(item.Notes);
             }
             return data;
         }
+
         public bool AddNotes(AdminDashboardData data)
         {
             var note = new Requestnote
@@ -259,6 +263,7 @@ namespace HalloDocDAL.Repositories
             _context.SaveChanges();
             return true;
         }
+
         public bool UpdateNotes(AdminDashboardData data)
         {
             var note = _context.Requestnotes.FirstOrDefault(x => x.Requestid == data.requestId);
@@ -268,6 +273,7 @@ namespace HalloDocDAL.Repositories
             _context.SaveChanges();
             return true;
         }
+
         public bool transferRequest(AdminDashboardData data, int newstatus)
         {
             var request = _context.Requests.FirstOrDefault(x => x.Requestid == data.requestId);
@@ -372,6 +378,7 @@ namespace HalloDocDAL.Repositories
             _context.SaveChanges();
             return true;
         }
+
         public EncounterForm GetEncounterForm(int requestId)
         {
             return _context.EncounterForms.FirstOrDefault(x => x.RequestId == requestId);
@@ -392,6 +399,5 @@ namespace HalloDocDAL.Repositories
             _context.SaveChanges();
             return true;
         }
-
     }
 }

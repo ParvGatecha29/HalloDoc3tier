@@ -1,5 +1,4 @@
-﻿
-@model HalloDoc.Views.Home.FamilyRequestModel
+﻿@model HalloDoc.Views.Home.FamilyRequestModel
 @{
     ViewData["Title"] = "Family/Friend Request";
 }
@@ -32,167 +31,167 @@
         </div>
     </div>
     <form enctype="multipart/form-data" id="form" method="post">
-    <div class="row justify-content-center">
-        
-        <div class="col-10 col-md-8 rounded" style="box-shadow: 2px 2px 20px rgb(179, 177, 177);">
-            <h6 class="py-3">Family/Friend Information</h6>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-floating mb-3 required">
-                        <input type="text" class="form-control" id="cfname" name="cfname" placeholder=" ">
-                        <label for="fname" class=" floating-label">First Name</label>
+        <div class="row justify-content-center">
+
+            <div class="col-10 col-md-8 rounded" style="box-shadow: 2px 2px 20px rgb(179, 177, 177);">
+                <h6 class="py-3">Family/Friend Information</h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3 required">
+                            <input type="text" class="form-control" id="cfname" name="cfname" placeholder=" ">
+                            <label for="fname" class=" floating-label">First Name</label>
                             <span style="color:red; display:none">Required!</span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-floating mb-3 required">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3 required">
                             <input type="text" class="form-control" id="clname" name="clname" placeholder=" ">
-                        <label for="lname" class=" floating-label">Last Name</label>
+                            <label for="lname" class=" floating-label">Last Name</label>
                             <span style="color:red; display:none">Required!</span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6 z-3">
-                    <div class="form-floating mb-3 h-100 required">
+                    <div class="col-md-6 z-3">
+                        <div class="form-floating mb-3 h-100 required">
                             <input type="tel" class="form-control w-100 h-100" id="ctel" name="ctel" placeholder="Phone Number">
                             <span style="color:red; display:none">Required!</span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-floating mb-3 required">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3 required">
                             <input type="email" class="form-control" id="cemail" name="cemail" placeholder=" ">
-                        <label for="patientEmail" class=" floating-label">Email address</label>
-                            <span style="color:red; display:none">Required!</span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-floating mb-3 required">
-                            <input type="text" class="form-control" id="relation" name="relation" placeholder=" ">
-                        <label for="relation" class=" floating-label">Relation with Patient</label>
-                            <span style="color:red; display:none">Required!</span>
-                    </div>
-                </div>
-            </div>
-            <h6 class="py-3">Patient Information</h6>
-            <div class="form-floating">
-                    <textarea class="form-control" placeholder=" " id="symptoms" name="symptoms" style="height: 15vh;"></textarea>
-                <label for="symptoms" class=" floating-label d-flex d-inline">
-                    Enter Brief Details of Symptoms
-                    <span class="d-none d-md-block">(Optional)</span>
-                </label>
-            </div>
-            <div class="container-fluid mt-3 p-0">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3 required">
-                            <input type="text" class="form-control" id="fname" name="fname" placeholder=" ">
-                            <label for="fname" class=" floating-label">First Name</label>
-                                <span style="color:red; display:none">Required!</span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3 required">
-                                <input type="text" class="form-control" id="lname" name="lname" placeholder=" ">
-                            <label for="lname" class=" floating-label">Last Name</label>
-                                <span style="color:red; display:none">Required!</span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3 required">
-                                <input type="date" class="form-control" id="dob" name="dob" placeholder=" ">
-                            <label for="dob" class=" floating-label">Date of Birth</label>
-                                <span style="color:red; display:none">Required!</span>
-                        </div>
-                        <h6 class="py-3">Patient Contact Information</h6>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3 required">
-                                <input type="email" class="form-control" id="patientEmail" name="patientEmail" placeholder=" ">
                             <label for="patientEmail" class=" floating-label">Email address</label>
-                                <span style="color:red; display:none">Required!</span>
+                            <span style="color:red; display:none">Required!</span>
                         </div>
-
                     </div>
                     <div class="col-md-6">
-                        <div class="form-floating mb-3 h-100 z-3 required">
+                        <div class="form-floating mb-3 required">
+                            <input type="text" class="form-control" id="relation" name="relation" placeholder=" ">
+                            <label for="relation" class=" floating-label">Relation with Patient</label>
+                            <span style="color:red; display:none">Required!</span>
+                        </div>
+                    </div>
+                </div>
+                <h6 class="py-3">Patient Information</h6>
+                <div class="form-floating">
+                    <textarea class="form-control" placeholder=" " id="symptoms" name="symptoms" style="height: 15vh;"></textarea>
+                    <label for="symptoms" class=" floating-label d-flex d-inline">
+                        Enter Brief Details of Symptoms
+                        <span class="d-none d-md-block">(Optional)</span>
+                    </label>
+                </div>
+                <div class="container-fluid mt-3 p-0">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 required">
+                                <input type="text" class="form-control" id="fname" name="fname" placeholder=" ">
+                                <label for="fname" class=" floating-label">First Name</label>
+                                <span style="color:red; display:none">Required!</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 required">
+                                <input type="text" class="form-control" id="lname" name="lname" placeholder=" ">
+                                <label for="lname" class=" floating-label">Last Name</label>
+                                <span style="color:red; display:none">Required!</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 required">
+                                <input type="date" class="form-control" id="dob" name="dob" placeholder=" ">
+                                <label for="dob" class=" floating-label">Date of Birth</label>
+                                <span style="color:red; display:none">Required!</span>
+                            </div>
+                            <h6 class="py-3">Patient Contact Information</h6>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 required">
+                                <input type="email" class="form-control" id="patientEmail" name="patientEmail" placeholder=" ">
+                                <label for="patientEmail" class=" floating-label">Email address</label>
+                                <span style="color:red; display:none">Required!</span>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 h-100 z-3 required">
                                 <input type="tel" class="form-control h-100" id="patientTel" name="patientTel" placeholder="Phone Number">
                                 <span style="color:red; display:none">Required!</span>
+                            </div>
                         </div>
+                        <h6 class="py-3">Patient Location</h6>
                     </div>
-                    <h6 class="py-3">Patient Location</h6>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3 required">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 required">
                                 <input type="text" class="form-control" id="street" name="street" placeholder=" ">
-                            <label for="street" class=" floating-label">Street</label>
+                                <label for="street" class=" floating-label">Street</label>
                                 <span style="color:red; display:none">Required!</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3 required">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 required">
                                 <input type="text" class="form-control" id="city" name="city" placeholder=" ">
-                            <label for="city" class="floating-label">City</label>
+                                <label for="city" class="floating-label">City</label>
                                 <span style="color:red; display:none">Required!</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3 required">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 required">
                                 <input type="text" class="form-control" id="state" name="state" placeholder=" ">
-                            <label for="state" class=" floating-label">State</label>
+                                <label for="state" class=" floating-label">State</label>
                                 <span style="color:red; display:none">Required!</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3 required">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 required">
                                 <input type="number" class="form-control" id="zip" name="zip" placeholder=" ">
-                            <label for="zip" class=" floating-label">Zip Code</label>
+                                <label for="zip" class=" floating-label">Zip Code</label>
                                 <span style="color:red; display:none">Required!</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
                                 <input type="number" class="form-control" id="roomNum" name="roomNum" placeholder=" ">
-                            <label for="roomNum" class=" floating-label">Room #/ Suite (Optional)</label>
+                                <label for="roomNum" class=" floating-label">Room #/ Suite (Optional)</label>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6 class="py-3">(Optional) Upload Photo or Document</h6>
-                    </div>
-                    <div class="d-flex">
-                        <label for="document" class="col d-flex">
-                            <div class="col p-1 ps-3 border border-dark-subtle">
-                                <span id="upload">Select</span>
-                            </div>
-                            <div id="btn" class="p-1 btn btn-info w-auto px-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="py-3">(Optional) Upload Photo or Document</h6>
+                        </div>
+                        <div class="d-flex">
+                            <label for="document" class="col d-flex">
+                                <div class="col p-1 ps-3 border border-dark-subtle">
+                                    <span id="upload">Select</span>
+                                </div>
+                                <div id="btn" class="p-1 btn btn-info w-auto px-3">
 
-                                <i class="bi bi-cloud-arrow-up" style="color:white !important;"></i>
-                                <span style="color:white;" class="ps-1 d-none d-md-block">Upload</span>
+                                    <i class="bi bi-cloud-arrow-up" style="color:white !important;"></i>
+                                    <span style="color:white;" class="ps-1 d-none d-md-block">Upload</span>
 
-                            </div>
+                                </div>
                                 <input type="file" class="form-control-file" id="document" name="document" hidden
-                                   onchange="upload(this)">
-                        </label>
+                                       onchange="upload(this)">
+                            </label>
+                        </div>
                     </div>
-                </div>
-                <div class="row my-3">
-                    <div class="text-end">
-                        <button class="btn btn-info" style="color:white" id="btnsubmit" type="submit">
-                            Submit
-                        </button>
-                        <button class="btn btn-info bg-light text-info">
-                            Cancel
-                        </button>
-                    </div>
+                    <div class="row my-3">
+                        <div class="text-end">
+                            <button class="btn btn-info" style="color:white" id="btnsubmit" type="submit">
+                                Submit
+                            </button>
+                            <button class="btn btn-info bg-light text-info">
+                                Cancel
+                            </button>
+                        </div>
 
+                    </div>
                 </div>
             </div>
+
         </div>
-        
-    </div>
     </form>
 </div>
 <script>

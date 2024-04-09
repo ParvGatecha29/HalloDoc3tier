@@ -22,15 +22,17 @@ namespace HalloDocDAL.Repositories
     {
         private readonly string _role;
         private readonly string _access;
-        public AuthManager(string role="",string access="") {
+        public AuthManager(string role = "", string access = "")
+        {
             _role = role;
             _access = access;
         }
+
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var jwtService = context.HttpContext.RequestServices.GetService<IJwtService>();
 
-            if(jwtService == null)
+            if (jwtService == null)
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "PatientLogin" }));
                 return;
@@ -39,7 +41,7 @@ namespace HalloDocDAL.Repositories
             var request = context.HttpContext.Request;
             var token = request.Cookies["jwt"];
 
-            if(token == null || !jwtService.ValidateToken(token,out JwtSecurityToken jwtToken))
+            if (token == null || !jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
             {
                 if (context.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
@@ -52,7 +54,7 @@ namespace HalloDocDAL.Repositories
 
             var roleClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role);
 
-            if(roleClaim == null)
+            if (roleClaim == null)
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "PatientLogin" }));
                 return;
@@ -74,7 +76,7 @@ namespace HalloDocDAL.Repositories
             }
 
             string menus = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "Menus").ToString();
-            if(_access != "")
+            if (_access != "")
             {
                 List<string> access = menus.Split(',').ToList();
                 if (!access.Contains(_access))

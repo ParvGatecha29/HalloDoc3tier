@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -53,7 +55,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
                             <div class="d-inline d-flex align-items-center justify-content-center">
                                 <div class=" d-inline justify-content-center align-items-center d-none d-md-flex">
                                     <p class="mx-3 my-0">
-                                        Welcome <strong id="welcome"></strong>
+                                        Welcome <strong id="welcome">@Accessor.HttpContext.Session.GetString("Name")</strong>
                                     </p>
                                     <button id="logout" class="btn btn-outline-info ms-auto my-auto darkBtn mx-3" type="button">
                                         Logout
@@ -98,7 +100,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
                                     </button>
                                 </li>
                                 <li class="nav-item dropdown" role="presentation">
-                                    <button class="nav-link dropdown-toggle layout" id="providers-tab" data-bs-toggle="dropdown" type="button">Providers</button>
+                                    <button class="nav-link layout" id="providers-tab" data-bs-toggle="dropdown" type="button">Providers</button>
                                     <ul class="dropdown-menu">
                                         <li><button class="dropdown-item" id="provider-tab" data-bs-toggle="tab">Provider</button></li>
                                         <li><button class="dropdown-item" id="scheduling-tab" data-bs-toggle="tab">Scheduling</button></li>
@@ -113,7 +115,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
                                     </button>
                                 </li>
                                 <li class="nav-item dropdown px-3" role="presentation">
-                                    <button class="nav-link dropdown-toggle layout" id="access-tab" data-bs-toggle="dropdown" type="button">
+                                    <button class="nav-link layout" id="access-tab" data-bs-toggle="dropdown" type="button">
                                         Access
                                     </button>
                                     <ul class="dropdown-menu">
@@ -122,7 +124,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
                                     </ul>
                                 </li>
                                 <li class="nav-item dropdown" role="presentation">
-                                    <button class="nav-link dropdown-toggle layout" id="records-tab" data-bs-toggle="dropdown" type="button">Records</button>
+                                    <button class="nav-link layout" id="records-tab" data-bs-toggle="dropdown" type="button">Records</button>
                                     <ul class="dropdown-menu">
                                         <li><button class="dropdown-item" id="searchrecords-tab" data-bs-toggle="tab">Search Records</button></li>
                                         <li><button class="dropdown-item" id="email-tab" data-bs-toggle="tab">Email Logs</button></li>

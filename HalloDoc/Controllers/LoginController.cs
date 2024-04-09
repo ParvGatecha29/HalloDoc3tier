@@ -63,6 +63,7 @@ public class LoginController : Controller
     {
         return View();
     }
+
     public IActionResult PatientCreate()
     {
         return View();
@@ -88,7 +89,6 @@ public class LoginController : Controller
                     role = "PatientDashboard";
                     break;
             }
-            TempData["email"] = result.Email;
             return Json(new { success = true, redirectUrl = Url.Action(role, role) });
         }
         else
@@ -149,8 +149,8 @@ public class LoginController : Controller
         if (isValid && model.password == model.confirmpassword)
         {
             var user = await _userService.CheckUser(email);
-            user.Passwordhash = model.confirmpassword;
-            await _userService.EditAspNetUser(user);
+            user.Aspnetuser.Passwordhash = model.confirmpassword;
+            await _userService.EditAspNetUser(user.Aspnetuser);
             return Json(new { success = true, redirectUrl = @Url.Action("PatientLogin", "Login") });
         }
 

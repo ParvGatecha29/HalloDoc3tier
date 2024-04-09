@@ -13,6 +13,7 @@ namespace HalloDocDAL.Repositories
     public class RequestWiseFilesRepository : IRequestWiseFilesRepository
     {
         private readonly ApplicationDbContext _context;
+
         public RequestWiseFilesRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -33,7 +34,7 @@ namespace HalloDocDAL.Repositories
 
         public async Task<Requestwisefile> GetFile(string id)
         {
-            return await _context.Requestwisefiles.FirstOrDefaultAsync(u=> u.Requestwisefileid.ToString() == id);
+            return await _context.Requestwisefiles.FirstOrDefaultAsync(u => u.Requestwisefileid.ToString() == id);
         }
 
         public bool DeleteFile(int id)

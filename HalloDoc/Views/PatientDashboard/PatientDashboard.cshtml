@@ -1,6 +1,5 @@
-﻿
-@* @model List<HalloDocDAL.Model.Dashboard> *@
-    @model HalloDocDAL.Model.CustomModel
+﻿@* @model List<HalloDocDAL.Model.Dashboard> *@
+@model HalloDocDAL.Model.CustomModel
 @{
     Layout = "_none";
 }
@@ -121,7 +120,7 @@
                     {
                         <tr class="table-row">
                             <td data-label="Created Date">@item.Createddate</td>
-                            @if(item.Status == 1)
+                            @if (item.Status == 1)
                             {
                                 <td class="mobile-hide" data-label="Current Status">Active</td>
                             }
@@ -129,7 +128,7 @@
                             {
                                 <td class="mobile-hide" data-label="Current Status">Inactive</td>
                             }
-                            @if(item.Filename != null)
+                            @if (item.Filename != null)
                             {
                                 <td class="mobile-hide" data-label="Document">
                                     <button type="button" class="btn btn-outline-info" onclick="location.href='@Url.Action("ViewDocument", "Patientdashboard",new {id = item.Requestid })'">

@@ -38,6 +38,7 @@ public class PatientDashboardController : Controller
         model.dashboards = _dashboardService.PatientDashboard(email);
         return View(model);
     }
+
     public async Task<IActionResult> Patientmerequest()
     {
         var email = HttpContext.Session.GetString("email");
@@ -70,6 +71,7 @@ public class PatientDashboardController : Controller
         }
         return Json(new { success = false });
     }
+
     [HttpPost]
     public async Task<ActionResult> DownDoc([FromBody] string[] selectedDocuments)
     {

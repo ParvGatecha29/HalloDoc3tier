@@ -42,7 +42,7 @@
             </div>
             <div class="d-flex flex-row-reverse">
                 <button id="SearchFilter" class="btn btn-info text-white mx-1">Search</button>
-                <button id="ClearFilter" class="btn btn_hover btn-outline-info mx-1">Clear</button>
+                <button id="ClearFilter" class="btn btn-outline-info mx-1">Clear</button>
             </div>
             <div id="PatientRecords">
             </div>
@@ -50,6 +50,22 @@
     </div>
 </div>
 <script>
+    var dash = document.getElementById("dashboard-tab");
+    var providerLoc = document.getElementById("providerlocation-tab");
+    var profile = document.getElementById("myprofile-tab");
+    var provider = document.getElementById("providers-tab");
+    var partner = document.getElementById("partners-tab");
+    var access = document.getElementById("access-tab");
+    var records = document.getElementById("records-tab");
+
+    dash.classList.remove("active");
+    providerLoc.classList.remove("active");
+    profile.classList.remove("active");
+    provider.classList.remove("active");
+    partner.classList.remove("active");
+    access.classList.remove("active");
+    records.classList.add("active");
+
     $(document).ready(function () {
         fetchPatientRecords();
         $("#SearchFilter").on("click", function () {
@@ -105,7 +121,17 @@
 
     function explorePatient(userid) {
         console.log(userid);
-        $("#patientrecordsDiv").load("/AdminDashboard/ExplorePatient?userid="+userid)
+        $("#patientrecordsDiv").load("/AdminDashboard/ExplorePatient?userid=" + userid)
+    }
+
+    function changepage(pageNumber) {
+        $.ajax({
+            url: '@Url.Action("ChangePagePatient", "AdminDashboard")',
+            data: { pageNumber: pageNumber },
+            success: function () {
+                fetchPatientRecords();
+            }
+        });
     }
 </script>
 

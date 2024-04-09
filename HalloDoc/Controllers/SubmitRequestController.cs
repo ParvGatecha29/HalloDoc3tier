@@ -22,15 +22,12 @@ public class SubmitRequestController : Controller
     private readonly IRequestService _requestService;
     private readonly IEmailService _emailService;
 
-
-
     public SubmitRequestController(IUserService userService, IRequestService requestService, IEmailService emailService)
     {
         _userService = userService;
         _requestService = requestService;
         _emailService = emailService;
     }
-
 
     public IActionResult SubmitRequest()
     {
@@ -58,14 +55,14 @@ public class SubmitRequestController : Controller
     }
 
     [HttpPost]
-    public async Task<JsonResult> CheckEmailExists(string email)
+    public async Task<bool> CheckEmailExists(string email)
     {
         var emailExists = await _userService.CheckUser(email);
         if (emailExists != null)
         {
-            return Json(true);
+            return true;
         }
-        return Json(false);
+        return false;
     }
 
     [HttpPost]
@@ -93,11 +90,11 @@ public class SubmitRequestController : Controller
         model.room = formcollection["roomNum"];
         model.typeid = 1;
         model.document = formcollection.Files;
-        if(!_userService.IsUserBlocked(model.email, model.phone))
+        if (!_userService.IsUserBlocked(model.email, model.phone))
         {
-            var aspuser = new Aspnetuser();
+            var aspuser = new User();
             var user = new User();
-            if (!(await CheckEmailExists(model.email) == Json(false)))
+            if (!(await CheckEmailExists(model.email)))
             {
                 var reg = new Register
                 {
@@ -110,14 +107,15 @@ public class SubmitRequestController : Controller
                 user.Email = model.email;
                 user.Firstname = model.firstName;
                 user.Lastname = model.lastName;
-                user.Aspnetuserid = aspuser.Id;
+                user.Aspnetuserid = aspuser.Aspnetuserid;
                 user.Street = model.street;
                 user.City = model.city;
                 user.State = model.state;
                 user.Mobile = model.phone;
                 await _userService.AddUser(user);
             }
-            model.userid = user.Userid;
+                aspuser = await _userService.CheckUser(model.email);
+            model.userid = aspuser.Userid;
             await _requestService.PatientRequest(model);
 
             return Json(new { success = true, redirectUrl = Url.Action("SubmitRequest", "SubmitRequest") });
@@ -127,7 +125,7 @@ public class SubmitRequestController : Controller
     }
 
     [HttpPost]
-    public async Task<JsonResult> FamRequest(IFormCollection formcollection,Req model)
+    public async Task<JsonResult> FamRequest(IFormCollection formcollection, Req model)
     {
         model.email = formcollection["patientEmail"];
         model.cfirstName = formcollection["cfname"];
@@ -161,6 +159,8 @@ public class SubmitRequestController : Controller
 
                 _emailService.SendEmail(model.email, subject, body);
             }
+            user = await _userService.CheckUser(model.cemail);
+            model.userid = user.Userid;
             await _requestService.PatientRequest(model);
 
             return Json(new { success = true, redirectUrl = Url.Action("SubmitRequest", "SubmitRequest") });
@@ -184,6 +184,8 @@ public class SubmitRequestController : Controller
 
                     _emailService.SendEmail(model.email, subject, body);
                 }
+                user = await _userService.CheckUser(model.cemail);
+                model.userid = user.Userid;
                 await _requestService.ConciergeRequest(model);
 
                 return Json(new { success = true, redirectUrl = Url.Action("SubmitRequest", "SubmitRequest") });
@@ -210,6 +212,8 @@ public class SubmitRequestController : Controller
 
                     _emailService.SendEmail(model.email, subject, body);
                 }
+                user = await _userService.CheckUser(model.cemail);
+                model.userid = user.Userid;
                 await _requestService.BusinessRequest(model);
 
                 return Json(new { success = true, redirectUrl = Url.Action("SubmitRequest", "SubmitRequest") });
@@ -220,7 +224,6 @@ public class SubmitRequestController : Controller
         return Json(new { success = false, message = "Invalid Input" });
     }
 
-  
     public async Task<IActionResult> OtherRequest()
     {
         var email = HttpContext.Session.GetString("email");

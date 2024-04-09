@@ -12,6 +12,7 @@ namespace HalloDocDAL.Repositories
     public class ConciergeRepository : IConciergeRepository
     {
         private readonly ApplicationDbContext _context;
+
         public ConciergeRepository(ApplicationDbContext context)
         {
             _context = context;

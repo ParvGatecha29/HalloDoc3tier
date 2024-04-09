@@ -10,108 +10,108 @@
     </button>
 </div>
 <form id="form2" enctype="multipart/form-data" method="post">
-<div class="shadow-lg">
-    <h5>
-        General Information
-    </h5>
-    <div>
-        <div class="row">
-            <div class="col-11 mt-4 col-md-6 form-floating ">
-                <input type="text" class="t  form-control" id="fname" name="fname" disabled placeholder=" ">
-                <label for="fname" class="ms-2 floating-label">First Name</label>
+    <div class="shadow-lg">
+        <h5>
+            General Information
+        </h5>
+        <div>
+            <div class="row">
+                <div class="col-11 mt-4 col-md-6 form-floating ">
+                    <input type="text" class="t  form-control" id="fname" name="fname" disabled placeholder=" ">
+                    <label for="fname" class="ms-2 floating-label">First Name</label>
+                </div>
+                <div class="col-11 mt-4 col-md-6 form-floating ">
+                    <input type="text" class="t  form-control" id="lname" name="lname" disabled placeholder=" ">
+                    <label for="lname" class="ms-2 floating-label">Last Name</label>
+                </div>
             </div>
-            <div class="col-11 mt-4 col-md-6 form-floating ">
-                <input type="text" class="t  form-control" id="lname" name="lname" disabled placeholder=" ">
-                <label for="lname" class="ms-2 floating-label">Last Name</label>
+            <div class="row">
+                <div class="col-11 mt-4 col-md-6 form-floating ">
+                    <input type="date" class="t  form-control" id="dob" name="dob" disabled placeholder=" ">
+                    <label for="dob" class="ms-2 floating-label">Date of Birth</label>
+                </div>
             </div>
         </div>
+        <h5 class="mt-4">
+            Contact Information
+        </h5>
         <div class="row">
-            <div class="col-11 mt-4 col-md-6 form-floating ">
-                <input type="date" class="t  form-control" id="dob" name="dob" disabled placeholder=" ">
-                <label for="dob" class="ms-2 floating-label">Date of Birth</label>
-            </div>
-        </div>
-    </div>
-    <h5 class="mt-4">
-        Contact Information
-    </h5>
-    <div class="row">
-        <div class="col-11 mt-4 col-md-2 form-floating ">
-            <div class="form-floating">
-                <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
-                    <option selected>Select</option>
-                    <option value="1">Email</option>
-                    <option value="2">Mobile</option>
+            <div class="col-11 mt-4 col-md-2 form-floating ">
+                <div class="form-floating">
+                    <select class="form-select" id="floatingSelect" aria-label="Floating label select example" disabled>
+                        <option selected>Select</option>
+                        <option value="1">Email</option>
+                        <option value="2">Mobile</option>
 
-                </select>
-                <label for="floatingSelect floating-label">Works with selects</label>
+                    </select>
+                    <label for="floatingSelect floating-label">Works with selects</label>
+                </div>
             </div>
-        </div>
-        <div class="col-11 mt-4 col-md-4 form-floating ">
+            <div class="col-11 mt-4 col-md-4 form-floating ">
                 <input type="text" class="t  form-control" id="patientTel" name="patientTel" disabled placeholder=" ">
-            <label for="patientTel" class="ms-2 floating-label">Phone Number</label>
-        </div>
-        <div class="col-11 mt-4 col-md-6 form-floating ">
+                <label for="patientTel" class="ms-2 floating-label">Phone Number</label>
+            </div>
+            <div class="col-11 mt-4 col-md-6 form-floating ">
                 <input type="email" class="t  form-control" id="patientEmail" name="patientEmail" disabled placeholder=" ">
-            <label for="patientEmail" class="ms-2 floating-label">Email</label>
+                <label for="patientEmail" class="ms-2 floating-label">Email</label>
+            </div>
         </div>
-    </div>
-    <div class="row mt-4">
-        <h5>Patient Location</h5>
-    </div>
-    <div class="row ">
-        <div class="col-11 col-md-6 mt-4">
-            <div class="form-floating">
-                <input type="text" class="t form-control" id="street" name="street" disabled placeholder=" ">
-                <label for="street" class="floating-label">Street</label>
+        <div class="row mt-4">
+            <h5>Patient Location</h5>
+        </div>
+        <div class="row ">
+            <div class="col-11 col-md-6 mt-4">
+                <div class="form-floating">
+                    <input type="text" class="t form-control" id="street" name="street" disabled placeholder=" ">
+                    <label for="street" class="floating-label">Street</label>
+                </div>
+
+            </div>
+            <div class="col-11 col-md-6 mt-4">
+                <div class="form-floating">
+                    <input type="text" class="t  form-control" id="city" name="city" disabled placeholder=" ">
+                    <label for="city" class="floating-label">City</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row ">
+            <div class="col-11 col-md-6 mt-4">
+                <div class="form-floating">
+                    <input type="text" class="t  form-control" id="state" name="state" disabled placeholder=" ">
+                    <label for="state" class="floating-label">State</label>
+                </div>
+            </div>
+            <div class="col-11 col-md-4 mt-4">
+                <div class="form-floating">
+                    <input type="number" class="t  form-control" id="zip" name="zip" disabled placeholder=" ">
+                    <label for="zip" class="floating-label">Zip Code</label>
+                </div>
+            </div>
+            <div class="col-2 mt-4 mr-auto">
+                <button class="btn btn-outline-info " onclick='@Url.Action("https://maps.app.goo.gl/ESACrXuWD9ojL2CL9")'>
+                    Map
+                </button>
             </div>
 
         </div>
-        <div class="col-11 col-md-6 mt-4">
-            <div class="form-floating">
-                <input type="text" class="t  form-control" id="city" name="city" disabled placeholder=" ">
-                <label for="city" class="floating-label">City</label>
+        <div class="row">
+
+            <div class="d-flex justify-content-end">
+
+                <button id="editBtn" type="button" onclick="editDetails()" class="btn my-4 py-2 px-4" style="background-color: #10bce9; color: white;">
+                    Edit
+                </button>
+
+                <button id="saveBtn" type="button" class="btn my-4 py-2 px-4" style="background-color: #10bce9; color: white; display:none;">
+                    Save
+                </button>
+
             </div>
+
+
         </div>
     </div>
-
-    <div class="row ">
-        <div class="col-11 col-md-6 mt-4">
-            <div class="form-floating">
-                <input type="text" class="t  form-control" id="state" name="state" disabled placeholder=" ">
-                <label for="state" class="floating-label">State</label>
-            </div>
-        </div>
-        <div class="col-11 col-md-4 mt-4">
-            <div class="form-floating">
-                <input type="number" class="t  form-control" id="zip" name="zip" disabled placeholder=" ">
-                <label for="zip" class="floating-label">Zip Code</label>
-            </div>
-        </div>
-        <div class="col-2 mt-4 mr-auto">
-            <button class="btn btn-outline-info " onclick='@Url.Action("https://maps.app.goo.gl/ESACrXuWD9ojL2CL9")'>
-                Map
-            </button>
-        </div>
-
-    </div>
-    <div class="row">
-
-        <div class="d-flex justify-content-end">
-
-            <button id="editBtn" type="button" onclick="editDetails()" class="btn my-4 py-2 px-4" style="background-color: #10bce9; color: white;">
-                Edit
-            </button>
-
-            <button id="saveBtn" type="button" class="btn my-4 py-2 px-4" style="background-color: #10bce9; color: white; display:none;">
-                Save
-            </button>
-
-        </div>
-
-        
-    </div>
-</div>
 </form>
 
 

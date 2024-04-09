@@ -28,7 +28,7 @@
                         @{
                             foreach (var item in @Model.Professions)
                             {
-                                        <option value="@item.Healthprofessionalid">@item.Professionname</option>
+                                <option value="@item.Healthprofessionalid">@item.Professionname</option>
                             }
                         }
                     </select>
@@ -156,7 +156,7 @@
             $("#partnersDiv").load("AddBusiness", "AdminDashboard")
         })
 
-        
+
     }
 
     function editBusiness(VendorId) {

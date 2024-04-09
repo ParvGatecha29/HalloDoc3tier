@@ -22,12 +22,12 @@ namespace HalloDocDAL.Repositories
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
             PageSize = pageSize;
             TotalCount = count;
-            if(pageNumber > 1)
+            if (pageNumber > 1)
             {
                 hasPrevious = true;
             }
 
-            if(pageNumber < TotalPages)
+            if (pageNumber < TotalPages)
             {
                 hasNext = true;
             }
@@ -35,7 +35,7 @@ namespace HalloDocDAL.Repositories
             AddRange(currentPage);
         }
 
-        public static async Task<PagedList<T>> CreateAsync(List<T> source,int count, int pageNumber, int pageSize)
+        public static async Task<PagedList<T>> CreateAsync(List<T> source, int count, int pageNumber, int pageSize)
         {
 
             return new PagedList<T>(source, count, pageNumber, pageSize);

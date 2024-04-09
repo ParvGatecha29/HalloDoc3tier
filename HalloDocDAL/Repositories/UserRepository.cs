@@ -20,6 +20,7 @@ namespace HalloDocDAL.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _context;
+
         public UserRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -32,10 +33,11 @@ namespace HalloDocDAL.Repositories
             return result > 0;
         }
 
-        public async Task<Aspnetuser> FindByEmail(string email)
+        public async Task<User> FindByEmail(string email)
         {
-            return await _context.Aspnetusers.Include(x => x.Aspnetuserroles).FirstOrDefaultAsync(x => x.Email == email);
+            return await _context.Users.Include(x => x.Aspnetuser).ThenInclude(_ => _.Aspnetuserroles).FirstOrDefaultAsync(x => x.Email == email);
         }
+
         public async Task<User> GetByEmail(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
@@ -47,6 +49,7 @@ namespace HalloDocDAL.Repositories
             var result = await _context.SaveChangesAsync();
             return result > 0;
         }
+
         public bool storeToken(string email, string token)
         {
             var em = _context.Tokens.FirstOrDefault(x => x.Email == email);
@@ -67,6 +70,7 @@ namespace HalloDocDAL.Repositories
                 return _context.SaveChanges() > 0;
             }
         }
+
         public string GetToken(string email)
         {
             var tokens = _context.Tokens.FirstOrDefault(x => x.Email == email);
@@ -296,15 +300,17 @@ namespace HalloDocDAL.Repositories
 
 
         }
+
         public List<Role> GetRoles()
         {
             return _context.Roles.ToList();
         }
+
         public List<Menu> GetMenus(int AccountType)
         {
-            
+
             var menu = _context.Menus.AsQueryable();
-            if(AccountType != 0)
+            if (AccountType != 0)
             {
                 menu = menu.Where(x => x.Accounttype == AccountType).AsQueryable();
             }
@@ -321,7 +327,7 @@ namespace HalloDocDAL.Repositories
 
         public bool AddRole(Access model)
         {
-            if(model.edit != 1)
+            if (model.edit != 1)
             {
                 Role role = new Role
                 {
@@ -365,6 +371,7 @@ namespace HalloDocDAL.Repositories
             _context.SaveChanges();
             return true;
         }
+
         public bool AddShiftDetailRegions(Shiftdetailregion shiftdetailregion)
         {
             _context.Shiftdetailregions.Add(shiftdetailregion);
@@ -383,6 +390,7 @@ namespace HalloDocDAL.Repositories
             _context.SaveChanges();
             return true;
         }
+
         public List<ScheduleModel> GetEvents(int region, bool currentMonth = false)
         {
             var eventswithoutdelet = (from s in _context.Shifts
@@ -403,9 +411,9 @@ namespace HalloDocDAL.Repositories
                                           Regionid = sd.Regionid,
                                           ShiftDeleted = sd.Isdeleted
                                       });
-            if(region != 0)
+            if (region != 0)
             {
-                eventswithoutdelet = eventswithoutdelet.Where( _ => _.Regionid == region );
+                eventswithoutdelet = eventswithoutdelet.Where(_ => _.Regionid == region);
             }
             if (currentMonth)
             {
@@ -414,6 +422,7 @@ namespace HalloDocDAL.Repositories
             var events = eventswithoutdelet.Where(item => !item.ShiftDeleted).ToList();
             return events;
         }
+
         public List<MappedEvents> GetMappedEvents(int region)
         {
             var events = GetEvents(region);
@@ -431,32 +440,33 @@ namespace HalloDocDAL.Repositories
 
             return mappedEvents;
         }
+
         public List<ScheduleModel> GetReviewShifts(int region)
         {
-             return (from shiftis in _context.Shifts
-             join shiftdetails in _context.Shiftdetails
-             on shiftis.Shiftid equals shiftdetails.Shiftid
-             join regionis in _context.Regions
-             on shiftdetails.Regionid equals regionis.Regionid
-             select new ScheduleModel
-             {
-                 Shiftid =  shiftis.Shiftid,
-                 ShiftDetailId = shiftdetails.Shiftdetailid,
-                 PhysicianName =  shiftis.Physician.Firstname+ shiftis.Physician.Lastname,
+            return (from shiftis in _context.Shifts
+                    join shiftdetails in _context.Shiftdetails
+                    on shiftis.Shiftid equals shiftdetails.Shiftid
+                    join regionis in _context.Regions
+                    on shiftdetails.Regionid equals regionis.Regionid
+                    select new ScheduleModel
+                    {
+                        Shiftid = shiftis.Shiftid,
+                        ShiftDetailId = shiftdetails.Shiftdetailid,
+                        PhysicianName = shiftis.Physician.Firstname + shiftis.Physician.Lastname,
 
-                 Shiftdate = shiftdetails.Shiftdate,
-                 Starttime = shiftdetails.Starttime,
-                 Endtime = shiftdetails.Endtime,
-                 Regionid = shiftdetails.Regionid,
-                 RegionName = regionis.Name,
-                 Status = shiftdetails.Status
-             }).Where(item => (region == 0 || item.Regionid == region) && item.Status == 1).ToList();
-            
+                        Shiftdate = shiftdetails.Shiftdate,
+                        Starttime = shiftdetails.Starttime,
+                        Endtime = shiftdetails.Endtime,
+                        Regionid = shiftdetails.Regionid,
+                        RegionName = regionis.Name,
+                        Status = shiftdetails.Status
+                    }).Where(item => (region == 0 || item.Regionid == region) && item.Status == 1).ToList();
+
         }
 
         public List<User> GetUsers()
         {
-            var users = _context.Users.Include(_ => _.Aspnetuser).ThenInclude(_=>_.Aspnetuserroles).ToList();
+            var users = _context.Users.Include(_ => _.Aspnetuser).ThenInclude(_ => _.Aspnetuserroles).ToList();
             return users;
         }
 
@@ -485,21 +495,21 @@ namespace HalloDocDAL.Repositories
         public List<Partner> GetVendors(int Profession, string VendorSearch)
         {
             List<Partner>? result = (from hp in _context.Healthprofessionals
-                                            join hpt in _context.Healthprofessionaltypes on hp.Profession equals hpt.Healthprofessionalid
-                                            where hp.Isdeleted == false
-                                            select new Partner
-                                            {
-                                                VendorId = hp.Vendorid,
-                                                VendorName = hp.Vendorname,
-                                                PhoneNumber = hp.Phonenumber,
-                                                FaxNumber = hp.Faxnumber,
-                                                Email = hp.Email,
-                                                BusinessContact = hp.Businesscontact,
-                                                ProfessionId = hp.Profession,
-                                                Profession = hpt.Professionname
-                                            }).Where(item =>
-                                             (string.IsNullOrEmpty(VendorSearch) || item.VendorName.ToLower().Contains(VendorSearch)) &&
-                                             (Profession == 0 || Profession == item.ProfessionId)
+                                     join hpt in _context.Healthprofessionaltypes on hp.Profession equals hpt.Healthprofessionalid
+                                     where hp.Isdeleted == false
+                                     select new Partner
+                                     {
+                                         VendorId = hp.Vendorid,
+                                         VendorName = hp.Vendorname,
+                                         PhoneNumber = hp.Phonenumber,
+                                         FaxNumber = hp.Faxnumber,
+                                         Email = hp.Email,
+                                         BusinessContact = hp.Businesscontact,
+                                         ProfessionId = hp.Profession,
+                                         Profession = hpt.Professionname
+                                     }).Where(item =>
+                                      (string.IsNullOrEmpty(VendorSearch) || item.VendorName.ToLower().Contains(VendorSearch)) &&
+                                      (Profession == 0 || Profession == item.ProfessionId)
                                             ).ToList();
             return result;
         }

@@ -61,7 +61,7 @@
 
     $(document).on('click', '#currentMonth', function () {
         var regionId = $(this).val();
-        $("#TableData").load('@Url.Action("RequestedShiftTable", "AdminDashboard")?RegionId=' + regionId+"&currentMonth=true");
+        $("#TableData").load('@Url.Action("RequestedShiftTable", "AdminDashboard")?RegionId=' + regionId + "&currentMonth=true");
         $("#currentMonth").hide();
         $("#allMonths").show();
     });

@@ -86,7 +86,7 @@
             </div>
             <div class="modal-body">
                 <form method="post" id="ContactProviderForm">
-                    <input type="hidden" id="CPPhysicianID"/>
+                    <input type="hidden" id="CPPhysicianID" />
                     <p> Choose Communication to send message </p>
 
                     <div class="form-check">
@@ -156,7 +156,7 @@
         var physicianid = $(this).closest('.tr').data('pid');
         $.ajax({
             url: '@Url.Action("EditProvider","AdminDashboard")',
-            data: { physicianid: physicianid},
+            data: { physicianid: physicianid },
             success: function (result) {
                 $('#providerdiv').html(result);
             }
@@ -164,9 +164,9 @@
     })
 
     $(".createProvider").click(function () {
-        
-                $('#providerdiv').load("/AdminDashboard/CreateProvider");
-            
+
+        $('#providerdiv').load("/AdminDashboard/CreateProvider");
+
     })
 
     $(document).on("click", ".contactProvider", function () {

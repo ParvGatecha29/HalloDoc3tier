@@ -1,5 +1,4 @@
-﻿
-@model HalloDocDAL.Model.Login
+﻿@model HalloDocDAL.Model.Login
 @{
     Layout = "_none";
 }
@@ -21,26 +20,26 @@
                     <p class="fs-2 pb-3 fw-semibold">Login To Your Account</p>
                 </div>
                 <div class="form-style">
-                        <div class="form-group pb-3 form-floating d-flex d-inline">
-                            <input type="text" placeholder="Email" class="form-control" id="email"
-                                   aria-describedby="emailHelp" name="Username" asp-for=Email>
-                            <span asp-validation-for="Email"></span>
-                            <span class="photo">
-                                <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-                            </span>
-                            <label for="user" class="floating-label">Username</label>
-                        </div>
-                        <div class="form-group pb-3 form-floating d-flex d-inline">
-                            <input type="password" placeholder="Password" class="form-control"
-                                   id="pass" name="Password">
-                            <span class="photo" onclick="pass()">
-                                <i class="bi bi-eye" aria-hidden="true" id="eye"></i>
-                            </span>
-                            <label for="pass" class="floating-label">Password</label>
-                        </div>
-                        <div class="pb-2">
-                            <button id="btnlogin" class="btn btn-info w-100 font-weight-bold mt-2">Submit</button>
-                        </div>
+                    <div class="form-group pb-3 form-floating d-flex d-inline">
+                        <input type="text" placeholder="Email" class="form-control" id="email"
+                               aria-describedby="emailHelp" name="Username" asp-for=Email>
+                        <span asp-validation-for="Email"></span>
+                        <span class="photo">
+                            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                        </span>
+                        <label for="user" class="floating-label">Username</label>
+                    </div>
+                    <div class="form-group pb-3 form-floating d-flex d-inline">
+                        <input type="password" placeholder="Password" class="form-control"
+                               id="pass" name="Password">
+                        <span class="photo" onclick="pass()">
+                            <i class="bi bi-eye" aria-hidden="true" id="eye"></i>
+                        </span>
+                        <label for="pass" class="floating-label">Password</label>
+                    </div>
+                    <div class="pb-2">
+                        <button id="btnlogin" class="btn btn-info w-100 font-weight-bold mt-2">Submit</button>
+                    </div>
                     <div class="d-flex align-items-center justify-content-center">
                         <div><a class="redirect-to" data-page="PatientCreate" data-controller="Login">Create New Account</a></div>
                     </div>
@@ -63,9 +62,9 @@
             var review = params.get('review');
             var requestid = params.get('RequestId');
             $.ajax({
-                url:'@Url.Action("PatientLogin","Login")',
-                type:'POST',
-                contentType:'application/json',
+                url: '@Url.Action("PatientLogin","Login")',
+                type: 'POST',
+                contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function (result) {
                     if (result.success) {
@@ -82,7 +81,7 @@
                             else {
                                 window.location.href = result.redirectUrl;
                             }
-                           
+
                         });
                     }
                     else {

@@ -32,19 +32,16 @@ namespace HalloDocBAL.Interfaces
         bool DeleteFile(int fileid);
         bool UpdateEncounterForm(ViewEncounterForm model);
         EncounterForm GetEncounterForm(int requestId);
-
         bool EditCase(AdminDashboard model);
         Admin GetAdminById(string id);
         List<int> GetAdminRegions(string id);
-
         bool UpdateProfile(AdminProfile model);
-
         bool AddProvider(Provider model, string adminId);
         bool EditPhysician(Provider model);
         List<Physicianlocation> GetProviders();
         List<Role> GetRoles();
-        List<Menu> GetMenus(int AccountType=0);
-        List<Rolemenu> GetRoleMenus(int roleid=0);
+        List<Menu> GetMenus(int AccountType = 0);
+        List<Rolemenu> GetRoleMenus(int roleid = 0);
         bool CreateAccess(Access model);
         List<User> GetAllUsers();
     }

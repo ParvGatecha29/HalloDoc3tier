@@ -3,7 +3,7 @@
     Layout = "_adminDash";
 }
 <div class="d-flex justify-content-center mt-2">
-    <div class="col-10" >
+    <div class="col-10">
         <div class="row d-flex align-items-center justify-content-center">
             <p class="col fs-4 fw-bold ms-5 pb-0 mb-0 d-inline">Documents</p>
             <div class="col me-5 mb-0 text-end">
@@ -21,10 +21,10 @@
             <div class="theme-background navBar p-3">
                 <p class="text-secondary" id="name">Patient Name</p>
                 <p class="fs-4 fw-semibold">
-                     
+
                     <span class="text-info">@Model.Request.firstName@Model.Request.lastName</span>
                     <span>(@Model.Request.confirmationNo)</span>
-                    
+
                 </p>
                 <p class="text-secondary"> Click here to review and add files that you or the Client/Member has attached to the request. </p>
                 <form enctype="multipart/form-data" id="form">
@@ -88,7 +88,7 @@
 
                                 <td class="mobile-hide" data-label="Created Date"> @item.Createddate </td>
                                 <td class="mobile-hide" data-label="Actions">
-                                    <button type="button"  class="btn btn-outline-info" onclick="location.href='@Url.Action("DownloadOne", "PatientDashboard",new {id = item.Requestwisefileid})'">
+                                    <button type="button" class="btn btn-outline-info" onclick="location.href='@Url.Action("DownloadOne", "PatientDashboard",new {id = item.Requestwisefileid})'">
                                         <span class="material-symbols-outlined">
                                             cloud_download
                                         </span>
@@ -104,14 +104,14 @@
                     </tbody>
                 </table>
             </div>
-            
+
         </div>
     </div>
 </div>
-    
 
 
-        
+
+
 <script>
     $("#selectAll").change(function () {
         $(".checkbox").prop('checked', $(this).prop("checked"));
@@ -138,7 +138,7 @@
                             icon: "success",
                             showConfirmButton: false,
                             timer: 1500
-                        }).finally(()=> {
+                        }).finally(() => {
                             window.location.reload();
                         })
                     }
@@ -201,7 +201,7 @@
                     data: { fileid: docid },
                     success: function (response) {
                         if (response.success) {
-                            
+
                         }
                     }
                 });

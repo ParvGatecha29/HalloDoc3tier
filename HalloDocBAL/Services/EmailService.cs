@@ -57,7 +57,7 @@ namespace HalloDocBAL.Services
                     IsBodyHtml = true,
                 };
                 mailMessage.To.Add(to);
-                foreach(var file in filesToSend)
+                foreach (var file in filesToSend)
                 {
                     var attachment = new Attachment(file);
                     mailMessage.Attachments.Add(attachment);

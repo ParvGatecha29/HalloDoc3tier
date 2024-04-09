@@ -46,10 +46,10 @@
 <script>
     $(document).on("click", ".cancelcase", function () {
         $("#cancelcaseModal").modal('show');
-        
-       
+
+
     });
-    $(document).ready(function(){
+    $(document).ready(function () {
         let params = new URLSearchParams(location.search);
         var rid = params.get('RequestId');
 
@@ -84,7 +84,7 @@
             $.ajax({
                 url: '@Url.Action("CancelCase","AdminDashboard")',
                 type: 'POST',
-                data: { Requestid: params.get('RequestId'), info : $("#info").val()},
+                data: { Requestid: params.get('RequestId'), info: $("#info").val() },
                 success: function (result) {
                     if (result.success) {
                         Swal.fire({

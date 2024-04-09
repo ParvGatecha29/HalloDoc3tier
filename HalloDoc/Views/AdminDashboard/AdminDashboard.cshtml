@@ -161,7 +161,7 @@
         <div class="d-flex align-items-center">
             <button type="button" class="btn btn-info text-white me-1" data-bs-toggle="modal" data-bs-target="#sendLinkModal">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
-                    <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"></path>
+                    <path d="m15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995l.643 7.184a.75.75 0 0 1 .124-1.33l15.314.037a.5.5 0 0 1 .54.11zm6.636 10.07l2.761 4.338l14.13 2.576zm6.787-8.201l1.591 6.602l4.339 2.76z"></path>
                 </svg>
                 <span class="d-none d-md-inline"> Send Link </span>
             </button>
@@ -200,7 +200,7 @@
                         </path>
                     </svg>
                 </label>
-                <input type="text" class="form-control ps-5" placeholder="Search Patients" value="@Accessor.HttpContext.Session.GetString("search")"id="search" onkeyup="search()">
+                <input type="text" class="form-control ps-5" placeholder="Search Patients" value="@Accessor.HttpContext.Session.GetString("search")" id="search" onkeyup="search()">
             </div>
 
             <div class="d-flex form-group normal-input rounded align-items-center ms-2 position-relative">
@@ -216,7 +216,7 @@
                     {
                         <option value="@region.Regionid">@region.Name</option>
                     }
-                    
+
                 </select>
             </div>
         </div>
@@ -589,7 +589,6 @@
                 });
             }
         });
-        $('#welcome').text("@TempData["email"]");
     });
 </script>
 
