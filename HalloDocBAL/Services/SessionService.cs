@@ -1,6 +1,8 @@
 ﻿using HalloDocDAL.Models;
 using HalloDocDAL.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using HalloDocDAL.Data;
 
 namespace HalloDocBAL.Services
 {
@@ -23,15 +25,15 @@ namespace HalloDocBAL.Services
             return userInfo;
         }
 
-        public static void SetLoggedInUser(ISession session, User user)
+        public static void SetLoggedInUser(ISession session, Aspnetuser user)
         {
+            
             if (user != null)
             {
-                session.SetString("aspuserId", user.Aspnetuserid);
-                session.SetString("userId", user.Userid.ToString());
+                session.SetString("userId", user.Id);
                 session.SetString("Email", user.Email);
-                session.SetString("Role", user.Aspnetuser.Aspnetuserroles.FirstOrDefault().RoleId);
-                session.SetString("Name", user.Aspnetuser.Username);
+                session.SetString("Role", user.Aspnetuserroles.FirstOrDefault().RoleId);
+                session.SetString("Name", user.Username);
             }
         }
     }

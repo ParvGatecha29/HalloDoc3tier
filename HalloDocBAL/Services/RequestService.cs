@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -218,5 +219,25 @@ namespace HalloDocBAL.Services
             _requestRepository.AddNotes(data);
             return true;
         }
+        public bool AcceptCase(int requestid)
+        {
+            var dash = new AdminDashboardData
+            {
+                requestId = requestid,
+            };
+            _requestRepository.transferRequest(dash, 2);
+            return true;
+        }
+        public bool TransferCase(int requestid, string description)
+        {
+            var dash = new AdminDashboardData
+            {
+                requestId = requestid,
+                notes = description
+            };
+            _requestRepository.transferRequest(dash, 1);
+            return true;
+        }
+
     }
 }

@@ -51,6 +51,9 @@ public class LoginController : Controller
                     case "2":
                         role = "PatientDashboard";
                         break;
+                    case "3":
+                        role = "ProviderDashboard";
+                        break;
                 }
                 SessionService.SetLoggedInUser(HttpContext.Session, user);
                 return RedirectToAction(role, role);
@@ -87,6 +90,9 @@ public class LoginController : Controller
                     break;
                 case "2":
                     role = "PatientDashboard";
+                    break;
+                case "3":
+                    role = "ProviderDashboard";
                     break;
             }
             return Json(new { success = true, redirectUrl = Url.Action(role, role) });
@@ -149,8 +155,8 @@ public class LoginController : Controller
         if (isValid && model.password == model.confirmpassword)
         {
             var user = await _userService.CheckUser(email);
-            user.Aspnetuser.Passwordhash = model.confirmpassword;
-            await _userService.EditAspNetUser(user.Aspnetuser);
+            user.Passwordhash = model.confirmpassword;
+            await _userService.EditAspNetUser(user);
             return Json(new { success = true, redirectUrl = @Url.Action("PatientLogin", "Login") });
         }
 

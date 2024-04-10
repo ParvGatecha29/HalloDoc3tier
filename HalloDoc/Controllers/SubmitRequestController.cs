@@ -92,7 +92,7 @@ public class SubmitRequestController : Controller
         model.document = formcollection.Files;
         if (!_userService.IsUserBlocked(model.email, model.phone))
         {
-            var aspuser = new User();
+            var aspuser = new Aspnetuser();
             var user = new User();
             if (!(await CheckEmailExists(model.email)))
             {
@@ -107,15 +107,14 @@ public class SubmitRequestController : Controller
                 user.Email = model.email;
                 user.Firstname = model.firstName;
                 user.Lastname = model.lastName;
-                user.Aspnetuserid = aspuser.Aspnetuserid;
+                user.Aspnetuserid = aspuser.Id;
                 user.Street = model.street;
                 user.City = model.city;
                 user.State = model.state;
                 user.Mobile = model.phone;
                 await _userService.AddUser(user);
             }
-                aspuser = await _userService.CheckUser(model.email);
-            model.userid = aspuser.Userid;
+            aspuser = await _userService.CheckUser(model.email);
             await _requestService.PatientRequest(model);
 
             return Json(new { success = true, redirectUrl = Url.Action("SubmitRequest", "SubmitRequest") });
@@ -160,7 +159,6 @@ public class SubmitRequestController : Controller
                 _emailService.SendEmail(model.email, subject, body);
             }
             user = await _userService.CheckUser(model.cemail);
-            model.userid = user.Userid;
             await _requestService.PatientRequest(model);
 
             return Json(new { success = true, redirectUrl = Url.Action("SubmitRequest", "SubmitRequest") });
@@ -185,7 +183,6 @@ public class SubmitRequestController : Controller
                     _emailService.SendEmail(model.email, subject, body);
                 }
                 user = await _userService.CheckUser(model.cemail);
-                model.userid = user.Userid;
                 await _requestService.ConciergeRequest(model);
 
                 return Json(new { success = true, redirectUrl = Url.Action("SubmitRequest", "SubmitRequest") });
@@ -213,7 +210,6 @@ public class SubmitRequestController : Controller
                     _emailService.SendEmail(model.email, subject, body);
                 }
                 user = await _userService.CheckUser(model.cemail);
-                model.userid = user.Userid;
                 await _requestService.BusinessRequest(model);
 
                 return Json(new { success = true, redirectUrl = Url.Action("SubmitRequest", "SubmitRequest") });

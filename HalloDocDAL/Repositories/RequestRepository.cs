@@ -52,12 +52,12 @@ namespace HalloDocDAL.Repositories
                     requestId = r.Requestid,
                     requestDate = r.Createddate,
                     regionId = rc.Regionid,
-
+                    physicianId = r.Physicianid ?? 0
                 }).ToList();
             return data;
         }
 
-        public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search, bool all)
+        public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search, bool all,int physicianid)
         {
             int pageSize = 10;
             //        var data = _context.Requests
@@ -120,7 +120,10 @@ namespace HalloDocDAL.Repositories
             if (search.Length > 0)
             {
                 reqclnt = reqclnt.Where(_ => _.Firstname.ToLower().Contains(search) || _.Lastname.ToLower().Contains(search) || _.Request.Firstname.ToLower().Contains(search)).AsQueryable();
-
+            }
+            if(physicianid != 0)
+            {
+                reqclnt = reqclnt.Where(_ => _.Request.Physicianid == physicianid).AsQueryable();
             }
             if (all)
             {
@@ -268,7 +271,8 @@ namespace HalloDocDAL.Repositories
         {
             var note = _context.Requestnotes.FirstOrDefault(x => x.Requestid == data.requestId);
             note.Adminnotes = data.adminNotes;
-
+            note.Physiciannotes = data.physicianNotes;
+            note.Modifieddate = DateTime.Now;
             _context.Requestnotes.Update(note);
             _context.SaveChanges();
             return true;
@@ -286,10 +290,15 @@ namespace HalloDocDAL.Repositories
                 Notes = data.notes,
                 Createddate = DateTime.Now
             };
-            if (newstatus == 2)
+            if (newstatus == 2 && data.physicianId != 0)
             {
+                request.Status = 1;
                 rsl.Transtophysicianid = data.physicianId;
                 request.Physicianid = data.physicianId;
+            }
+            if (newstatus == 1)
+            {
+                request.Physicianid = null;
             }
             _context.Requests.Update(request);
             _context.Requeststatuslogs.Add(rsl);

@@ -12,7 +12,7 @@ namespace HalloDocBAL.Interfaces
     {
         Task<Aspnetuser> Login(Login model);
         Task<bool> SignUp(Register model);
-        Task<User> CheckUser(string email);
+        Task<Aspnetuser> CheckUser(string email);
         Task<User> GetUser(string email);
         Task<bool> AddUser(User model);
         Task<bool> EditUser(User model);

@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12 d-flex justify-content-between my-3">
             <h4>Notes</h4>
-            <a onclick="history.back()" class="btn btn-outline-info">
+            <a asp-action="ProviderDashboard" asp-controller="ProviderDashboard" class="btn btn-outline-info">
                 <i class="bi bi-chevron-left"></i>
                 Back
             </a>
@@ -69,7 +69,7 @@
         $('#save').click(function () {
             var notes = $('#floatingTextarea2').val();
             $.ajax({
-                url: '@Url.Action("UpdateNotes","AdminDashboard")',
+                url: '@Url.Action("UpdateNotes","ProviderDashboard")',
                 type: 'POST',
                 data: { notes: notes, requestid: @Model.requestId},
                 success: function (result) {
@@ -77,10 +77,12 @@
                         Swal.fire({
                             title: "Good job!",
                             text: "Notes Updated",
-                            icon: "success"
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
                         })
                         $.ajax({
-                            url: '@Url.Action("ViewNotes","AdminDashboard")',
+                            url: '@Url.Action("ViewNotes","ProviderDashboard")',
                             type: 'POST',
                             data: { requestid: @Model.requestId },
                             success: function (data) {

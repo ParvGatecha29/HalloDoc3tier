@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing.Printing;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.EntityFrameworkCore;
 
 namespace HalloDocDAL.Repositories
 {
@@ -159,58 +160,58 @@ namespace HalloDocDAL.Repositories
 
         public async Task<PagedList<SearchRecord>> GetSearchRecords(string? Email, DateTime? FromDoS, string? Phone, string? Patient, string? Provider, int RequestStatus, int RequestType, DateTime? ToDoS, int pageNumber)
         {
-            var data = (from r in _context.Requests
-                        join rc in _context.Requestclients on r.Requestid equals rc.Requestid
-                        join p in _context.Physicians on r.Physicianid equals p.Physicianid into prJoin
-                        from p in prJoin.DefaultIfEmpty()
-                        join rn in _context.Requestnotes on r.Requestid equals rn.Requestid into rrnJoin
-                        from rn in rrnJoin.DefaultIfEmpty()
-                        where r.Isdeleted != true
-                        select new
-                        {
-                            Request = r,
-                            RequestClient = rc,
-                            Physician = p,
-                            RequestNote = rn
-                        }).ToList();
+                var data = _context.Requests
+                    .Include(r => r.Requestclients)
+                    .Include(r => r.Requestnotes)
+                    .Where(r => r.Isdeleted != true)
+                    .Select(r => new SearchRecord
+                    {
+                        RequestId = r.Requestid,
+                        Requestor = r.Firstname+r.Lastname,
+                        PatientName = r.Requestclients.FirstOrDefault().Firstname + " " + r.Requestclients.FirstOrDefault().Lastname,
+                        Email = r.Requestclients.FirstOrDefault().Email,
+                        PhoneNumber = r.Requestclients.FirstOrDefault().Phonenumber,
+                        Address = r.Requestclients.FirstOrDefault().Address,
+                        Zip = r.Requestclients.FirstOrDefault().Zipcode,
+                        RequestStatus = r.Status,
+                        PhysicianName = _context.Physicians.FirstOrDefault(n => n.Physicianid == r.Physicianid).Firstname != null ? _context.Physicians.FirstOrDefault(n => n.Physicianid == r.Physicianid).Firstname : "",
+                        PhysicianNote = r.Requestnotes.FirstOrDefault().Physiciannotes,
+                        AdminNotes = r.Requestnotes.FirstOrDefault().Adminnotes,
+                        PatientNote = r.Requestclients.FirstOrDefault().Notes,
+                        RequestTypeId = r.Requesttypeid
+                    }).AsQueryable();
 
+                if (RequestStatus != 0)
+                {
+                    data = data.Where(r => r.RequestStatus == RequestStatus);
+                }
+                if (Patient != null)
+                {
+                    data = data.Where(r => r.PatientName.Contains(Patient));
+                }
+                if (RequestType != 0)
+                {
+                    data = data.Where(r => r.RequestTypeId == RequestType);
+                }
+                if (Provider != null)
+                {
+                    data = data.Where(r => r.PhysicianName.Contains(Provider));
+                }
+                if (Email != null)
+                {
+                    data = data.Where(r => r.Email == Email);
+                }
+                if (Phone != null)
+                {
+                    data = data.Where(r => r.PhoneNumber == Phone);
+                }
 
+                List<SearchRecord> list = data.ToList();
 
-            var result = data.Select(item => new SearchRecord
-            {
-                RequestId = item.Request.Requestid,
-                PatientName = $"{item.RequestClient.Firstname} {item.RequestClient.Lastname}",
-                Requestor = $"{item.Request.Firstname} {item.Request.Lastname}",
-                DateOfService = GetDateofService(item.Request.Requestid),
-                ServiceDate = GetDateofService(item.Request.Requestid)?.ToString("MMMM dd, yyyy") ?? "",
-                DateofClose = GetCloseDate(item.Request.Requestid)?.ToString("MMMM dd, yyyy") ?? "",
-                CloseDate = GetCloseDate(item.Request.Requestid),
-                Email = item.RequestClient.Email,
-                PhoneNumber = item.RequestClient.Phonenumber,
-                Address = item.RequestClient.Location,
-                Zip = item.RequestClient.Zipcode,
-                RequestStatus = item.Request.Status,
-                PhysicianName = item.Physician != null ? $"{item.Physician.Firstname} {item.Physician.Lastname}" : "", // Handle null Physician
-                PhysicianNote = item.RequestNote?.Physiciannotes,
-                CancelledByProvidor = GetPatientCancellationNotes(item.Request.Requestid),
-                PatientNote = item.RequestClient.Notes,
-                RequestTypeId = item.Request.Requesttypeid,
-                AdminNotes = item.RequestNote?.Adminnotes
-            }).Where(item =>
-                (string.IsNullOrEmpty(Email) || item.Email.Contains(Email)) &&
-                (string.IsNullOrEmpty(Phone) || item.PhoneNumber.Contains(Phone)) &&
-                (string.IsNullOrEmpty(Patient) || item.PatientName.ToLower().Contains(Patient)) &&
-                (string.IsNullOrEmpty(Provider) || item.PhysicianName.ToLower().Contains(Provider)) &&
-                (RequestStatus == 0 || item.RequestStatus == RequestStatus) &&
-                (RequestType == 0 || item.RequestTypeId == RequestType) &&
-                (FromDoS == null || item.DateOfService?.Date >= FromDoS.Value.Date) &&
-                (ToDoS == null || item.DateOfService?.Date <= ToDoS.Value.Date)
-            ).ToList();
+                list = list.Skip((pageNumber - 1) * 10).Take(10).ToList();
 
-            var resultl = result.Skip((pageNumber - 1) * 10).Take(10).ToList();
-            PagedList<SearchRecord> resultlist;
-            resultlist = await PagedList<SearchRecord>.CreateAsync(resultl, result.Count(), pageNumber, 10);
-            return resultlist;
+                PagedList<SearchRecord> pageList = await PagedList<SearchRecord>.CreateAsync(list, data.Count(), pageNumber, 10);
+                return pageList;
         }
 
         public bool DeletePatientRequest(int requestid)

@@ -192,68 +192,27 @@
     {
         <div class="tablediv d-none d-md-flex table-responsive">
             <table class="table w-100 caseTable" id="adminTable">
-                <thead class="w-100">
+                <thead class="">
                     <tr>
                         <th scope="col" class="bg-secondary bg-opacity-25 ps-4" colspan="2">Name</th>
-
-                        @if (Model.state != 6)
-                        {
-                            <th scope="col" class="bg-secondary bg-opacity-25">Date Of Birth</th>
-                        }
-
-
-                        @if (Model.state == 1 || Model.state == 2 || Model.state == 3)
-                        {
-                            <th scope="col" class="bg-secondary bg-opacity-25">Requestor</th>
-                        }
-
-                        @if (Model.state == 5)
-                        {
-                            <th scope="col" class="bg-secondary bg-opacity-25">Region</th>
-                        }
-
-                        @if (Model.state == 1)
-                        {
-                            <th scope="col" class="bg-secondary bg-opacity-25">Requested Date</th>
-                        }
-
-                        @if (Model.state != 1)
-                        {
-                            <th scope="col" class="bg-secondary bg-opacity-25">Physician Name</th>
-                            <th scope="col" class="bg-secondary bg-opacity-25">Date Of Service</th>
-                        }
-
-                        @if (Model.state == 1 || Model.state == 2 || Model.state == 3 || Model.state == 4 || Model.state == 6)
-                        {
-                            <th scope="col" class="bg-secondary bg-opacity-25">Phone</th>
-                        }
-
+                        <th scope="col" class="bg-secondary bg-opacity-25">Phone</th>
                         <th scope="col" class="bg-secondary bg-opacity-25">Address</th>
-
-                        @if (Model.state != 6 && Model.state != 4)
+                        @if (Model.state == 3)
                         {
-                            <th scope="col" class="bg-secondary bg-opacity-25">Notes</th>
+                            <th scope="col" class="bg-secondary bg-opacity-25">Status</th>
                         }
                         <th scope="col" class="bg-secondary bg-opacity-25">Actions</th>
 
-
                     </tr>
                 </thead>
-                <tbody class="w-100">
+                <tbody class="">
 
                     @foreach (var obj in Model.pagedList)
                     {
                         <tr style="color:white !important" data-rid="@obj.requestId" class="tr-@obj.requesttype align-middle tr">
 
                             <td class="td" name="reqtype" hidden>@obj.requesttype</td>
-
-                            <td style="background:none;" class="td ps-4" name="Name">@obj.firstName @obj.lastName <br /> 
-                                @if(obj.pname != "" && obj.status == 1)
-                                {
-                                    <span class="bg-danger p-1">Assigned to @obj.pname</span>
-                                }
-                                
-                            </td>
+                            <td style="background:none;" class="td ps-4" name="Name">@obj.firstName @obj.lastName</td>
 
                             <td>
                                 <a type="button" name="email" class="btn border border-light text-light" href="mailto:@obj.email">
@@ -266,147 +225,69 @@
 
                                 </a>
                             </td>
-                            @if (obj.status == 1 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 7 || obj.status == 8)
-                            {
-                                <td>@obj.dobdate/@obj.dobmonth/@obj.dobyear</td>
-                            }
 
-                            @if (obj.status == 1 || obj.status == 2 || obj.status == 4 || obj.status == 5)
-                            {
-                                <td>@obj.requestor</td>
-                            }
+                            <td>
+                                <button type="button" class="btn btn-outline-light phone"><i class="bi bi-telephone text-white"></i>@obj.phone</button><br>(Patient)
+                                @if (obj.cphone != null && obj.requesttype != 1)
+                                {
+                                    <br>
 
-                            @if (obj.status == 3 || obj.status == 7 || obj.status == 8)
-                            {
-                                <td>@obj.regionId</td>
-                            }
+                                    <button type="button" class="btn btn-outline-light"><i class="bi bi-telephone text-white"></i>@obj.cphone</button>
 
-                            @if (obj.status == 1)
-                            {
-                                <td>@obj.requestDate</td>
-                            }
-
-                            @if (obj.status == 9 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 7 || obj.status == 8)
-                            {
-                                <td>@obj.pname</td>
-                                <td>DateOfService</td>
-                            }
-
-                            @if (obj.status == 1 || obj.status == 2 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 9)
-                            {
-                                <td>
-                                    <button type="button" class="btn btn-outline-light phone"><i class="bi bi-telephone text-white"></i>@obj.phone</button><br>(Patient)
-                                    @if (obj.cphone != null && obj.requesttype != 1)
+                                    <br>
+                                    @if (obj.requesttype == 2)
                                     {
-                                        <br>
-
-                                        <button type="button" class="btn btn-outline-light"><i class="bi bi-telephone text-white"></i>@obj.cphone</button>
-
-                                        <br>
-                                        @if (obj.requesttype == 2)
-                                        {
-                                            <span>(Family/Friend)</span>
-                                        }
-                                        else if (obj.requesttype == 3)
-                                        {
-                                            <span>(Concierge)</span>
-                                        }
-                                        else
-                                        {
-                                            <span>(Business)</span>
-                                        }
+                                        <span>(Family/Friend)</span>
                                     }
+                                    else if (obj.requesttype == 3)
+                                    {
+                                        <span>(Concierge)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>(Business)</span>
+                                    }
+                                }
 
-                                </td>
-                            }
+                            </td>
 
                             <td>@obj.address</td>
 
-                            @if (obj.status == 1 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 7 || obj.status == 8)
+                            @if (Model.state == 3)
                             {
-                                <td>@obj.notes</td>
+                                <td>
+                                </td>
                             }
+
 
                             <td>
                                 @if (@obj.status == 1)
                                 {
-                                    
-                                        <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Actions
-                                        </button>
-                                        <ul class="dropdown-menu z-3" aria-labelledby="action">
-                                            <li><a class="dropdown-item theme-color assigncase"><i class="fa-regular fa-clipboard p-2"></i>Assign Case</a></li>
-                                            <li><a class="dropdown-item theme-color cancelcase"><i class="fa-regular fa-circle-xmark p-2"></i> Cancel case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
-                                            <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
-                                            <li><a class="dropdown-item theme-color blockcase" href="#"><i class="fa-solid fa-ban p-2"></i> Block Patient</a></li>
-                                        </ul>
-                                    
-                                }
-                                else if (@obj.status == 2)
-                                {
-                                    
-                                        <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Actions
-                                        </button>
-                                        <ul class="dropdown-menu z-3" aria-labelledby="action">
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload p-2"></i> View Uploads</a></li>
-                                            <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical"></i> View Notes</a></li>
-                                            <li><a class="dropdown-item theme-color transferCase" href="#"><i class="fa-regular fa-note-sticky p-2"></i> Transfer</a></li>
-                                            <li><a class="dropdown-item theme-color clearCase" href="#"><i class="fa-regular fa-circle-xmark p-2"></i> Clear Case</a></li>
-                                            <li><a class="dropdown-item theme-color sendAgreement" href="#"><i class="fa-solid fa-file-lines p-2"></i> Send Agreement</a></li>
-                                        </ul>
-                                   
-                                }
-                                else if (@obj.status == 4 || @obj.status == 5 || @obj.status == 6)
-                                {
-                                    
-                                        <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Actions
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="action">
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload p-2"></i> View Uploads</a></li>
-                                            <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-cart-plus p-2"></i> Orders</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky p-2"></i> Doctors Note</a></li>
-                                            <li><a class="dropdown-item theme-color" onclick="Encounter(@obj.requestId,@obj.isFinalized.ToString().ToLower())"><i class="fa-regular fa-note-sticky p-2"></i> Encounter</a></li>
-                                        </ul>
-                                   
-                                }
-                                else if (@obj.status == 3 || @obj.status == 7 || @obj.status == 8)
-                                {
-                                    
-                                        <button class="btn btn-outline-light  " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Actions
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="action">
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload p-2"></i> View Uploads</a></li>
-                                            <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-cart-plus p-2"></i> Orders</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("CloseCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-circle-xmark p-2"></i> Close Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky p-2"></i> Doctors Note</a></li>
-                                            <li><a class="dropdown-item theme-color clearCase" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky p-2"></i> Encounter</a></li>
-                                        </ul>
-                                   
-                                }
-                                else
-                                {
-                                 
-                                        <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Actions
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="action">
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload p-2"></i> View Uploads</a></li>
-                                            <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
-                                        </ul>
-                                
+
+                                    <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu z-3" aria-labelledby="action">
+                                        <li><a class="dropdown-item theme-color acceptcase"><i class="fa-regular fa-clipboard p-2"></i>Accept</a></li>
+                                        <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","ProviderDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
+                                    </ul>
                                 }
 
+                                else if (@obj.status == 2)
+                                {
+
+                                    <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu z-3" aria-labelledby="action">
+                                        <li><a class="dropdown-item theme-color sendAgreement" href="#"><i class="fa-solid fa-file-lines p-2"></i> Send Agreement</a></li>
+                                        <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","ProviderDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","ProviderDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload p-2"></i> View Uploads</a></li>
+                                        <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
+                                        <li><a class="dropdown-item theme-color transferCase" href="#"><i class="fa-regular fa-note-sticky p-2"></i> Transfer</a></li>
+                                    </ul>
+                                }
                             </td>
 
                         </tr>
@@ -491,47 +372,15 @@
     </div>
 </div>
 
-<div class="modal fade" id="assignCaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="acceptCaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h5 class="modal-title text-white" id="exampleModalLongTitle">Assign Request</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="formassign" method="post">
-                    <p class="text-secondary"> To assign the request, search and select another physician </p>
-                    <input type="hidden" class="requestId" value="" name="requestId" id="requestId" />
-                    <div class="form-group mb-3">
-                        <select class="form-control regionSelect" id="regionSelect" name="regionSelect" placeholder=" " required>
-                            <option hidden value="">Region</option>
-                            @foreach (var region in Model.regions)
-                            {
-                                <option value="@region.Regionid">@region.Name</option>
-                            }
-
-                        </select>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <select class="form-control physicianSelect" id="physicianSelect" name="physicianSelect" placeholder=" " required>
-                            <option hidden value="">Physician</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <div class="mb-3 form-floating requiredac">
-                            <textarea class="form-control" placeholder="" id="info" style="height: 100px" name="info" required></textarea>
-                            <label for="info" class="floating-label"> Provide additional information </label>
-                            <span style="color:red; display:none">Required!</span>
-                        </div>
-                    </div>
-
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-info text-white">Confirm</button>
-                        <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
-                    </div>
-                </form>
+        <div class="modal-content text-center">
+            <div class="modal-body p-5">
+                <h3>Confirmation for accept Request</h3>
+                <p>Are sure you want to accept this Request?</p>
+                <input type="hidden" id="acceptRequestid" />
+                <button type="button" class="btn btn-info text-light" id="acceptCase" data-bs-dismiss="modal">Accept</button>
+                <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -545,36 +394,19 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="formassign" method="post">
-                    <p class="text-secondary"> To transfer the request, search and select another physician </p>
-                    <input type="hidden" class="requestId" value="" name="requestId" id="requestId" />
-                    <div class="form-group mb-3">
-                        <select class="form-control regionSelect" id="regionSelect" name="regionSelect" placeholder=" " required>
-                            <option hidden value="">Region</option>
-                            @foreach (var region in Model.regions)
-                            {
-                                <option value="@region.Regionid">@region.Name</option>
-                            }
-
-                        </select>
-                    </div>
+                <form method="post" id="formtransfer">
+                    <p class="text-secondary"> This request will be transferd to Admin. </p>
+                    <input type="hidden" id="Transfercaseid" name="Requestid">
 
                     <div class="form-group mb-3">
-                        <select class="form-control physicianSelect" id="physicianSelect" name="physicianSelect" placeholder=" " required>
-                            <option hidden value="">Physician</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <div class="mb-3 form-floating requiredtc">
-                            <textarea class="form-control" placeholder="" id="info" style="height: 100px" name="info" required></textarea>
-                            <label for="info" class="floating-label"> Provide additional information </label>
-                            <span style="color:red; display:none">Required!</span>
+                        <div class="mb-3 form-floating">
+                            <textarea class="form-control" placeholder="" id="TransfercaseDescription" style="height: 100px" name="description" required></textarea>
+                            <label for="TransfercaseDescription" class="floatingLabel"> Description </label>
                         </div>
                     </div>
 
                     <div class="text-end">
-                        <button type="submit" class="btn btn-info text-white">Confirm</button>
+                        <button type="submit" class="btn btn-info text-white">Submit</button>
                         <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
@@ -747,10 +579,33 @@
             }
         });
 
+        $("#formtransfer").on('submit', function(e){
+            e.preventDefault();
+            var requestid = $("#Transfercaseid").val();
+            var description = $("#TransfercaseDescription").val();
+            $.ajax({
+                url: "/ProviderDashboard/TransferCase",
+                data: {requestid : requestid, description: description},
+                success:function(response){
+                    if(response.success){
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Request cancelled succesfully",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).finally(() => {
+                            window.location.reload();
+                        });
+                    }
+                }
+            })
+        })
+
         $('.viewnotes').click(function () {
             var rid = $(this).closest('.tr').data('rid');
             $.ajax({
-                url: '@Url.Action("ViewNotes","AdminDashboard")',
+                url: '@Url.Action("ViewNotes","ProviderDashboard")',
                 type: 'POST',
                 data: { requestid: rid },
                 success: function (data) {
@@ -784,118 +639,18 @@
             });
         });
 
-        $('#formassign').on('submit', function (e) {
-            e.preventDefault();
-            var data = new FormData(this)
-            var validate = true;
-            $('.requiredac').each(function () {
-                var div = $(this);
-                if ($(div).find('input').val() == "" || $(div).find('textarea').val() == "") {
-                    Swal.fire({
-                        title: "Information required",
-                        text: "Please enter all the details",
-                        icon: "error"
-
-                    });
-                    var span = $(div).children('span');
-                    span.show();
-
-                    validate = false;
-                }
-            })
-            if (validate) {
-                $.ajax({
-                    url: '@Url.Action("AssignCase","AdminDashboard")',
-                    type: 'POST',
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    success: function (result) {
-                        if (result.success) {
-                            Swal.fire({
-                                title: "Good job!",
-                                text: "Request assigned succesfully",
-                                icon: "success"
-                            }).finally(() => {
-                                window.location.reload();
-                            });
-
-                        }
-                        else {
-                            alert(result.message);
-                        }
-                    },
-                    error: function () {
-                        alert('An error occured');
-                    }
-                });
-            }
-
-        });
-
-
-        $('#formblock').on('submit', function (e) {
-            e.preventDefault();
-            var data = new FormData(this)
-            var validate = true;
-            $('.requiredbc').each(function () {
-                var div = $(this);
-                if ($(div).find('input').val() == "" || $(div).find('textarea').val() == "") {
-                    Swal.fire({
-                        title: "Information required",
-                        text: "Please enter all the details",
-                        icon: "error"
-
-                    });
-                    var span = $(div).children('span');
-                    span.show();
-
-                    validate = false;
-                }
-            })
-            if (validate) {
-                $.ajax({
-                    url: '@Url.Action("BlockCase","AdminDashboard")',
-                    type: 'POST',
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    success: function (result) {
-                        if (result.success) {
-                            Swal.fire({
-                                title: "Good job!",
-                                text: "Request blocked",
-                                icon: "success"
-                            }).finally(() => {
-                                window.location.reload();
-                            });
-
-                        }
-                        else {
-                            alert(result.message);
-                        }
-                    },
-                    error: function () {
-                        alert('An error occured');
-                    }
-                });
-            }
-
-        });
-
-        $('#clearCase').on('click', function () {
-
-            var id = $(".requestId").val();
-            console.log();
+        $("#acceptCase").click(function () {
+            var requestid = $("#acceptRequestid").val();
+            console.log(requestid);
             $.ajax({
-                url: '@Url.Action("ClearCase","AdminDashboard")',
+                url: '@Url.Action("AcceptCase","ProviderDashboard")',
                 type: 'POST',
-                data: { requestid: id },
+                data: { requestid: requestid },
                 success: function (result) {
                     if (result.success) {
                         Swal.fire({
                             title: "Good job!",
-                            text: "Request cleared",
+                            text: "Request accepted succesfully",
                             icon: "success"
                         }).finally(() => {
                             window.location.reload();
@@ -910,66 +665,146 @@
                     alert('An error occured');
                 }
             });
-        });
+        })
 
-        $('#sendAgreementForm').on('submit', function (e) {
-            e.preventDefault();
-            var data = new FormData(this)
-            var validate = true;
-            $('.requiredsa').each(function () {
-                var div = $(this);
-                if ($(div).find('input').val() == "" || $(div).find('textarea').val() == "") {
-                    Swal.fire({
-                        title: "Information required",
-                        text: "Please enter all the details",
-                        icon: "error"
+    });
 
-                    });
-                    var span = $(div).children('span');
-                    span.show();
 
-                    validate = false;
-                }
-            })
-            if (validate) {
-                $.ajax({
-                    url: '@Url.Action("SendAgreement","AdminDashboard")',
-                    type: 'POST',
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    success: function (result) {
-                        if (result.success) {
-                            $("#sendAgreementModal").modal('hide');
-                            Swal.fire({
-                                title: "Success!",
-                                text: "Email Sent",
-                                icon: "success",
-                                showConfirmButton: false,
-                                timer: 1500
-                            })
+    $('#formblock').on('submit', function (e) {
+        e.preventDefault();
+        var data = new FormData(this)
+        var validate = true;
+        $('.requiredbc').each(function () {
+            var div = $(this);
+            if ($(div).find('input').val() == "" || $(div).find('textarea').val() == "") {
+                Swal.fire({
+                    title: "Information required",
+                    text: "Please enter all the details",
+                    icon: "error"
 
-                        }
-                        else {
-                            alert(result.message);
-                        }
-                    },
-                    error: function () {
-                        alert('An error occured');
-                    }
                 });
-            }
+                var span = $(div).children('span');
+                span.show();
 
-        });
-        $("#downenc").click(function () {
-            var rid = $('.requestId').val();
+                validate = false;
+            }
+        })
+        if (validate) {
             $.ajax({
-                url: '@Url.Action("GeneratePDF","AdminDashboard")',
-                data: { requestid: rid },
-                success: function () {
-                    window.location.href = '@Url.Action("GeneratePDF","AdminDashboard")' + "?requestid=" + rid;
+                url: '@Url.Action("BlockCase","AdminDashboard")',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Request blocked",
+                            icon: "success"
+                        }).finally(() => {
+                            window.location.reload();
+                        });
+
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
                 }
-            })
+            });
+        }
+
+    });
+
+    $('#clearCase').on('click', function () {
+
+        var id = $(".requestId").val();
+        console.log();
+        $.ajax({
+            url: '@Url.Action("ClearCase","AdminDashboard")',
+            type: 'POST',
+            data: { requestid: id },
+            success: function (result) {
+                if (result.success) {
+                    Swal.fire({
+                        title: "Good job!",
+                        text: "Request cleared",
+                        icon: "success"
+                    }).finally(() => {
+                        window.location.reload();
+                    });
+
+                }
+                else {
+                    alert(result.message);
+                }
+            },
+            error: function () {
+                alert('An error occured');
+            }
+        });
+    });
+
+    $('#sendAgreementForm').on('submit', function (e) {
+        e.preventDefault();
+        var data = new FormData(this)
+        var validate = true;
+        $('.requiredsa').each(function () {
+            var div = $(this);
+            if ($(div).find('input').val() == "" || $(div).find('textarea').val() == "") {
+                Swal.fire({
+                    title: "Information required",
+                    text: "Please enter all the details",
+                    icon: "error"
+
+                });
+                var span = $(div).children('span');
+                span.show();
+
+                validate = false;
+            }
+        })
+        if (validate) {
+            $.ajax({
+                url: '@Url.Action("SendAgreement","ProviderDashboard")',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        $("#sendAgreementModal").modal('hide');
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Email Sent",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        }
+
+    });
+    $("#downenc").click(function () {
+        var rid = $('.requestId').val();
+        $.ajax({
+            url: '@Url.Action("GeneratePDF","AdminDashboard")',
+            data: { requestid: rid },
+            success: function () {
+                window.location.href = '@Url.Action("GeneratePDF","AdminDashboard")' + "?requestid=" + rid;
+            }
         })
     });
 
@@ -983,9 +818,9 @@
         $(".requestId").val($(this).closest('.tr').data('rid'));
     });
 
-    $(document).on("click", ".assigncase", function () {
-        $("#assignCaseModal").modal('show');
-        $(".requestId").val($(this).closest('.tr').data('rid'));
+    $(document).on("click", ".acceptcase", function () {
+        $("#acceptCaseModal").modal('show');
+        $("#acceptRequestid").val($(this).closest('.tr').data('rid'));
     });
 
     $(document).on("click", ".blockcase", function () {
@@ -996,7 +831,7 @@
 
     $(document).on("click", ".transferCase", function () {
         $("#transferCaseModal").modal('show');
-        $(".requestId").val($(this).closest('.tr').data('rid'));
+        $("#Transfercaseid").val($(this).closest('.tr').data('rid'));
     });
 
     $(document).on("click", ".clearCase", function () {

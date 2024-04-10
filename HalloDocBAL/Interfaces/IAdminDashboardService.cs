@@ -14,10 +14,10 @@ namespace HalloDocBAL.Interfaces
     public interface IAdminDashboardService
     {
         List<AdminDashboardData> GetRequests();
-        Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype = 0, int pageNumber = 1, int region = 0, string search = "", bool all = false);
+        Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype = 0, int pageNumber = 1, int region = 0, string search = "", bool all = false, int physicianid = 0);
         AdminDashboardData GetRequestById(int id);
         AdminDashboardData GetNotes(int id);
-        bool UpdateNotes(int id, string notes);
+        bool UpdateNotes(int id, string notes, bool physician = false);
         bool CancelRequest(AdminDashboardData data);
         bool AssignRequest(AdminDashboardData data);
         bool AgreeRequest(AdminDashboardData data);

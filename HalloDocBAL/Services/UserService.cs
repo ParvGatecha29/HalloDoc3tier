@@ -49,15 +49,15 @@ namespace HalloDocBAL.Services
             var user = await _userRepository.FindByEmail(model.Email);
             if (user != null)
             {
-                if (model.Password == user.Aspnetuser.Passwordhash)
+                if (model.Password == user.Passwordhash)
                 {
-                    return user.Aspnetuser;
+                    return user;
                 }
             }
             return null;
         }
 
-        public async Task<User> CheckUser(string email)
+        public async Task<Aspnetuser> CheckUser(string email)
         {
             var user = await _userRepository.FindByEmail(email);
             Debug.WriteLine(user);
@@ -113,8 +113,8 @@ namespace HalloDocBAL.Services
         {
             Debug.WriteLine(model.Email);
             var user = await _userRepository.FindByEmail(model.Email);
-            user.Aspnetuser.Passwordhash = model.Passwordhash;
-            return await _userRepository.EditAspUser(user.Aspnetuser);
+            user.Passwordhash = model.Passwordhash;
+            return await _userRepository.EditAspUser(user);
         }
 
         public bool IsUserBlocked(string email, string phone)

@@ -10,7 +10,7 @@ namespace HalloDocDAL.Contacts
     public interface IUserRepository
     {
         Task<bool> AddUser(Aspnetuser user);
-        Task<User> FindByEmail(string email);
+        Task<Aspnetuser> FindByEmail(string email);
         bool IsUserBlocked(string email, string phone);
         Task<User> GetByEmail(string email);
         Task<bool> EditAspUser(Aspnetuser user);

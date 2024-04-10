@@ -68,6 +68,7 @@ namespace HalloDocDAL.Repositories
                     return;
                 }
             }
+
             var user = SessionService.GetLoggedInUser(context.HttpContext.Session);
             if (user == null)
             {

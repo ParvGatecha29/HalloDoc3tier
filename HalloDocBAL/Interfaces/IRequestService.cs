@@ -13,5 +13,7 @@ namespace HalloDocBAL.Interfaces
         Task<bool> ConciergeRequest(Req model);
         Task<bool> BusinessRequest(Req model);
         bool AddNotes(AdminDashboardData data);
+        bool AcceptCase(int requestid);
+        bool TransferCase(int requestid, string description);
     }
 }

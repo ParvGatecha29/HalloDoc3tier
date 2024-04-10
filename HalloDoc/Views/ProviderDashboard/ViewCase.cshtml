@@ -1,0 +1,408 @@
+﻿@model HalloDocDAL.Model.AdminDashboard
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "View Case";
+    Layout = "_adminDash";
+}
+
+@functions {
+    public string GetReqType(int RequstTypeId)
+    {
+        switch (RequstTypeId)
+        {
+            case 1: return "Patient";
+            case 2: return "Family";
+            case 3: return "Concierge";
+            case 4: return "Business";
+            default: return "Unknown";
+        }
+    }
+    public string GetTableColorClass(int RequstTypeId)
+    {
+        switch (RequstTypeId)
+        {
+            case 1: return "green";
+            case 2: return "orange";
+            case 3: return "blue";
+            case 4: return "pink";
+            default: return "green";
+        }
+    }
+    public string okok(int Status)
+    {
+        switch (Status)
+        {
+            case 1: return "New";
+            case 2: return "Pending";
+            case 3: return "Active";
+            case 4: return "Conclude";
+            case 5: return "To Close";
+            case 6: return "Unpaid";
+            default: return "New";
+        }
+    }
+}
+
+<div class="container" id="divdiv">
+    <div class=" mt-5 d-flex justify-content-between align-items-center">
+        <h4>@okok(Convert.ToInt32(@Model.request.status)) Profile <span class="badge rounded-5 Reqtyp" style="background-color:@GetTableColorClass(@Model.request.requesttype)">@GetReqType(Model.request.requesttype) </span></h4>
+        <a onclick="history.back()"
+           class="btn shadow  btn-outline-secondary border-info text-info px-3 ">
+            <i class="fa-solid fa-angle-left"></i> Back
+        </a>
+    </div>
+    <form id="editform" class="shadow border rounded my-3" method="post">
+        <div class="mx-3 my-4 ">
+            <div class="mt-3">
+                <h4 class="ms-auto me-auto mb-4">Patient Information</h4>
+                <h6 style="font-size: 14px">Confirmation Number</h6>
+                <p class="text-info fs-5 mb-3">@Model.request.confirmationNo</p>
+
+                <div class="row">
+                    <div class=" col-12 form-floating mb-3 ">
+                        <textarea class="form-control h-100" id="floatingInput" placeholder=" " rows="3"
+                                  disabled asp-for="@Model.request.notes"></textarea>
+                        <label for="floatingInput" class="floating-label text-wrap ms-2">Patient Notes</label>
+                    </div>
+                </div>
+                <hr />
+                <div class="mt-1">
+                    <div class="row">
+
+                        <div class="form-floating mb-3 col-12 col-sm-6">
+                            <input type="text" class="form-control dclass" id="firstname" placeholder="John"
+                                   required disabled asp-for="@Model.request.firstName">
+                            <label for="firstName" class="floating-label ms-2 ">First Name</label>
+                        </div>
+
+                        <div class="form-floating mb-3 col-12 col-sm-6">
+                            <input type="text" class="form-control dclass" id="lastName" placeholder="Wick"
+                                   disabled asp-for="@Model.request.lastName">
+                            <label for="lastName" class="floating-label ms-2 ">Last Name</label>
+                        </div>
+
+                        <div class="form-floating mb-3 col-12 col-sm-6">
+                            <input type="date" class="form-control dclass" id="dob" placeholder="02-10-2002"
+                                   disabled />
+                            <label for="dob" class="floating-label ms-2 ">Date of Birth</label>
+                        </div>
+                        <div class="col-12 col-sm-5 z-3">
+                            <div class="form-floating mb-3  h-100 ">
+                                <input type="tel" class="phone form-control h-100" id="floatingInput"
+                                       placeholder=" " disabled asp-for="@Model.request.phone">
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-floating mb-3 col-12 col-sm-1 ">
+                            <button type="button" class="btn btn-outline-dark border-info p-3 text-info w-100" style="height: 100%;">
+                                <i class="bi bi-telephone"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-floating mb-3 col-12 col-sm-6">
+                        <input type="email" class="form-control emailInp" id="floatingInput1"
+                               mailto:placeholder="test@google.com" disabled asp-for="@Model.request.email">
+                        <label for="floatingInput" class="floating-label ms-2 ">Email</label>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <h4 class="ms-auto me-auto">Location Information</h4>
+
+
+                    <div class="form-floating mb-3 col-12 col-sm-6">
+                        <input type="text" class="form-control " id="floatingInput" placeholder="Maryland"
+                               disabled>
+                        <label for="floatingInput" class="floating-label ms-2 ">Region</label>
+                    </div>
+
+                    <div class="form-floating mb-3 col-12 col-sm-5">
+                        <input type="text" class="form-control " id="floatingInput" placeholder="Maryland"
+                               disabled asp-for="@Model.request.address">
+                        <label for="floatingInput" class="ms-2 floating-label">Business Name / Address</label>
+                    </div>
+
+
+                    <div class="form-floating mb-3 col-12 col-sm-1 ">
+                        <button type="button" class="dclass btn btn-outline-dark border-info p-3 text-info w-100 " style="height: 100%;">
+                            <i class="bi bi-geo-alt"></i>
+                        </button>
+                    </div>
+
+                    <div class="form-floating mb-3 col-12 col-sm-6">
+                        <input type="text" class="form-control " id="floatingInput" placeholder="007" disabled>
+                        <label for="floatingInput" class="floating-label ms-2 ">Room #</label>
+                    </div>
+
+                </div>
+                <div class="d-grid gap-2 d-flex justify-content-center  justify-content-md-end mt-4 pt-4 mb-3">
+
+                    <button type="button" class="btn text-white btn-info viewnotes">View Notes</button>
+
+                    <button type="button" class="btn text-white btn-danger cancelcase">Cancel</button>
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal fade" id="cancelcaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle">Confirm Cancellation</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form" method="post">
+                    <p class="text-secondary"> Patient Name : <span class="text-info" id="cancelcaseName"> @Model.request.firstName @Model.request.lastName</span> </p>
+                    <input type="hidden" value="@Model.request.requestId" name="requestId" id="requestId" />
+                    <div class="form-group mb-3">
+                        <select class="form-control" id="reason" name="reason" placeholder=" " required>
+                            <option hidden value="">Reason for cancellation</option>
+                            <option>No Response to call or text</option>
+                            <option>Cost Issue</option>
+                            <option>Insurance Issue</option>
+                            <option>Out of service area</option>
+                            <option>Not appropriate for service</option>
+                            <option>Referral to Clinic or Hospital</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <div class="mb-3 form-floating">
+                            <textarea class="form-control" placeholder="" id="info" style="height: 100px" name="info" required></textarea>
+                            <label for="info" class="floating-label"> Provide additional information </label>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-info text-white">Confirm</button>
+                        <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="assignCaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle">Assign Request</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formassign" method="post">
+                    <p class="text-secondary"> To assign the request, search and select another physician </p>
+                    <input type="hidden" class="requestId" value="" name="requestId" id="requestId" />
+                    <div class="form-group mb-3">
+                        <select class="form-control" id="regionSelect" name="regionSelect" placeholder=" " required>
+                            <option hidden value="">Region</option>
+                            @foreach (var region in Model.regions)
+                            {
+                                <option value="@region.Regionid">@region.Name</option>
+                            }
+
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <select class="form-control" id="physicianSelect" name="physicianSelect" placeholder=" " required>
+                            <option hidden value="">Physician</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <div class="mb-3 form-floating">
+                            <textarea class="form-control" placeholder="" id="info" style="height: 100px" name="info" required></textarea>
+                            <label for="info" class="floating-label"> Provide additional information </label>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-info text-white">Confirm</button>
+                        <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+
+        $('#form').on('submit', function (e) {
+            e.preventDefault();
+            var data = new FormData(this)
+
+            $.ajax({
+                url: '@Url.Action("CancelCase","AdminDashboard")',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Request cancelled succesfully",
+                            icon: "success"
+                        }).finally(() => {
+                            window.location.reload();
+                        });
+
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
+
+        $('#regionSelect').change(function () {
+            var selectedRegion = $(this).val();
+            $.ajax({
+                url: '@Url.Action("GetPhysiciansByRegion","AdminDashboard")',
+                type: 'POST',
+                data: { region: selectedRegion },
+                success: function (data) {
+                    var physicianSelect = $('#physicianSelect');
+                    physicianSelect.empty().append('<option value="">Select Physician</option>');
+                    $.each(data, function (i, physician) {
+                        physicianSelect.append($('<option>', {
+                            value: physician.Physicianid,
+                            text: physician.Firstname
+                        }));
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching Physicians:', error)
+                }
+            });
+        });
+
+        $('#formassign').on('submit', function (e) {
+            e.preventDefault();
+            var data = new FormData(this)
+
+            $.ajax({
+                url: '@Url.Action("AssignCase","AdminDashboard")',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Request assigned succesfully",
+                            icon: "success"
+                        }).finally(() => {
+                            window.location.reload();
+                        });
+
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
+
+        $('#editform').on('submit', function (e) {
+            e.preventDefault();
+            var data = new FormData(this)
+
+            $.ajax({
+                url: '@Url.Action("EditCase","AdminDashboard")',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+
+                        window.location.reload();
+
+
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
+
+        $('.viewnotes').click(function () {
+            var rid = @Model.request.requestId;
+            $.ajax({
+                url: '@Url.Action("ViewNotes","AdminDashboard")',
+                type: 'POST',
+                data: { requestid: rid },
+                success: function (data) {
+                    $('#divdiv').html(data);
+                },
+                error: function (error) {
+
+                }
+            });
+        })
+    });
+</script>
+
+<script>
+    $(document).on("click", ".cancelcase", function () {
+        $("#cancelcaseModal").modal('show');
+        $("#cancelcaseName").text(@Model.request.firstName + @Model.request.lastName);
+        $("#requestId").val(@Model.request.requestId);
+    });
+
+    $(document).on("click", ".assigncase", function () {
+        $("#assignCaseModal").modal('show');
+        $(".requestId").val(@Model.request.requestId);
+    });
+
+</script>
+<script>
+    function disableFields() {
+        document.querySelectorAll('.dclass').forEach(function (element) {
+            element.disabled = true;
+        });
+        // Hide the submit and cancel buttons, show the edit button
+        document.getElementById('submitBtn').style.display = 'none';
+        document.getElementById('cancelBtn').style.display = 'none';
+        document.getElementById('editBtn').style.display = 'block';
+    }
+
+    function enableFields() {
+        document.querySelectorAll('.dclass').forEach(function (element) {
+            element.disabled = false;
+        });
+        // Show the submit and cancel buttons, hide the edit button
+        document.getElementById('submitBtn').style.display = 'block';
+        document.getElementById('cancelBtn').style.display = 'block';
+        document.getElementById('editBtn').style.display = 'none';
+    }
+    disableFields();
+</script> 

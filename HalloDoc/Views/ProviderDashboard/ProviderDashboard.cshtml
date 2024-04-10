@@ -1,0 +1,491 @@
+﻿@model HalloDocDAL.Model.AdminDashboard
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+@{
+    Layout = "_providerDash";
+    int newCase = 0;
+    int pendingCase = 0;
+    int activeCase = 0;
+    int concludeCase = 0;
+    int toCloseCase = 0;
+    int unpaidCase = 0;
+
+    ;
+
+    foreach (var req in Model.Data)
+    {
+        if (req.status == 1)
+        {
+            newCase++;
+        }
+        else if (req.status == 2)
+        {
+            pendingCase++;
+        }
+        else if (req.status == 4 || req.status == 5)
+        {
+            activeCase++;
+        }
+        else if (req.status == 6)
+        {
+            concludeCase++;
+        }
+        else if (req.status == 3 || req.status == 7 || req.status == 8)
+        {
+            toCloseCase++;
+        }
+        else if (req.status == 9)
+        {
+            unpaidCase++;
+        }
+    }
+}
+<div id="divdiv">
+    <div class="row w-100">
+        <div class="col-12">
+            <ul class="nav m-2 g-2 " id="dashboard_tab" role="tablist">
+                <li class="nav-item col-6 col-md-4 col-lg-2 p-1">
+                    <button class="nav-link nav-button new-tab mb-0 rounded w-100" id="new-tab" data-bs-toggle="tab" data-bs-target="#new" type="button" role="tab" aria-controls="home" aria-selected="true">
+                        <div class="py-2 ps-2 ">
+                            <div class="d-flex">
+                                <span></span>
+                                <span class="ms-2 fw-bold">NEW</span>
+                            </div>
+                            <div class="text-start fs-3 fw-bold">
+                                @newCase
+                            </div>
+                        </div>
+                    </button>
+                    <div class=" d-none d-md-flex justify-content-center text-align-center w-100 align-items-center">
+                        <div class="arrow-down text-opacity-25" style="color:#1f1f8c"></div>
+                    </div>
+                </li>
+
+                <li class="nav-item col-6 col-md-4 col-lg-2 p-1">
+                    <button class="nav-link nav-button pending-tab rounded w-100" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab" aria-controls="home" aria-selected="true">
+                        <div class="py-2 ps-2">
+                            <div class="d-flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"></path>
+                                </svg>
+                                <span class="ms-2 fw-bold">PENDING</span>
+                            </div>
+                            <div class="text-start fs-3 fw-bold">@pendingCase</div>
+                        </div>
+                    </button>
+                    <div class="justify-content-center text-align-center w-100 d-none d-md-flex align-items-center">
+                        <div class="arrow-down text-opacity-25" style="color:#0dcaf0"></div>
+                    </div>
+                </li>
+
+                <li class="nav-item col-6 col-md-4 col-lg-2 p-1">
+                    <button class="nav-link nav-button active-tab rounded w-100" id="active-tab" data-bs-toggle="tab" data-bs-target="#active" type="button" role="tab" aria-controls="home" aria-selected="true">
+                        <div class="py-2 ps-2">
+                            <div class="d-flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right-circle" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.854 10.803a.5.5 0 1 1-.708-.707L9.243 6H6.475a.5.5 0 1 1 0-1h3.975a.5.5 0 0 1 .5.5v3.975a.5.5 0 1 1-1 0V6.707z"></path>
+                                </svg>
+                                <span class="ms-2 fw-bold">ACTIVE</span>
+                            </div>
+                            <div class="text-start fs-3 fw-bold">@activeCase</div>
+                        </div>
+                    </button>
+                    <div class="justify-content-center text-align-center w-100 d-none d-md-flex align-items-center">
+                        <div class="arrow-down text-opacity-25" style="color:#05a339"></div>
+                    </div>
+                </li>
+
+                <li class="nav-item col-6 col-md-4 col-lg-2 p-1">
+                    <button class="nav-link nav-button conclude-tab rounded w-100" id="conclude-tab" data-bs-toggle="tab" data-bs-target="#conclude" type="button" role="tab" aria-controls="home" aria-selected="true">
+                        <div class="py-2 ps-2">
+                            <div class="d-flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"></path>
+                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"></path>
+                                </svg>
+                                <span class="ms-2 fw-bold">CONCLUDE</span>
+                            </div>
+                            <div class="text-start fs-3 fw-bold">@concludeCase</div>
+                        </div>
+                    </button>
+                    <div class="justify-content-center text-align-center w-100 d-none d-md-flex align-items-center">
+                        <div class="arrow-down text-opacity-25" style="color:#cb1766"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between m-1 m-md-3 p-first-part">
+        <div class="d-flex align-items-center fw-semibold fs-5">
+            <h3>
+                Patients <span style="font-size: 20px;" id="statusof">  </span>
+            </h3>
+        </div>
+
+        <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-info text-white me-1" data-bs-toggle="modal" data-bs-target="#sendLinkModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                    <path d="m15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995l.643 7.184a.75.75 0 0 1 .124-1.33l15.314.037a.5.5 0 0 1 .54.11zm6.636 10.07l2.761 4.338l14.13 2.576zm6.787-8.201l1.591 6.602l4.339 2.76z"></path>
+                </svg>
+                <span class="d-none d-md-inline"> Send Link </span>
+            </button>
+
+            <button type="button" id="createRequest" class="btn btn-info text-white me-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">
+                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
+                    <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8m0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5" />
+                </svg>
+                <span class="d-none d-md-inline"> Create Request </span>
+            </button>
+        </div>
+    </div>
+
+    <div class="d-inline d-md-flex mt-3 align-items-center justify-content-between m-3">
+        <div class="d-inline d-md-flex form-group">
+            <div class="d-flex normal-input rounded align-items-center ps-2 position-relative">
+                <label for="search" class="position-absolute" style="bottom:30px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="position-absolute theme-color" style="left:15px" width="20" height="20" viewBox="0 0 50 50">
+                        <path d="M 21 3 C 11.654545 3 4 10.654545 4 20 C 4 29.345455 11.654545 37 21 37 C 24.701287 37 28.127393 35.786719 30.927734 33.755859 L 44.085938 46.914062 L 46.914062 44.085938 L 33.875 31.046875 C 36.43682 28.068316 38 24.210207 38 20 C 38 10.654545 30.345455 3 21 3 z M 21 5 C 29.254545 5 36 11.745455 36 20 C 36 28.254545 29.254545 35 21 35 C 12.745455 35 6 28.254545 6 20 C 6 11.745455 12.745455 5 21 5 z">
+                        </path>
+                    </svg>
+                </label>
+                <input type="text" class="form-control ps-5" placeholder="Search Patients" value="@Accessor.HttpContext.Session.GetString("search")" id="search" onkeyup="search()">
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center">
+            <button onclick="allrequests()" class="reqtype rounded theme-color border bg-transparent d-flex align-items-center justify-content-center ms-0 ms-md-2 d-none d-md-block" style="font-size: 13px;">
+                <span>All</span>
+            </button>
+
+            <button onclick="filterrequests(1)" class="reqtype rounded theme-color border border-0 justify-content-center bg-transparent d-flex align-items-center ms-0 ms-md-2" style="font-size: 13px;">
+                <div class="d-inline d-md-flex">
+                    <svg height="15" width="15" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle fill="#5fbc61" r="45" cx="50" cy="50" stroke="grey" stroke-width="3" />
+                    </svg>
+                    <span class="ms-2">Patient</span>
+                </div>
+            </button>
+
+            <button onclick="filterrequests(2)" class="reqtype rounded theme-color border border-0 bg-transparent d-flex align-items-center ms-0 ms-md-2" style="font-size: 13px;">
+                <div class="d-inline d-md-flex">
+                    <svg height="15" width="15" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle fill="#ed9124" r="45" cx="50" cy="50" stroke="grey" stroke-width="3" />
+                    </svg>
+                    <span class="ms-2">Family/Friend</span>
+                </div>
+            </button>
+
+            <button onclick="filterrequests(3)" class="reqtype rounded theme-color border border-0 bg-transparent d-flex align-items-center ms-0 ms-md-2" style="font-size: 13px;">
+                <div class="d-inline d-md-flex">
+                    <svg height="15" width="15" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle fill="#007fc6" r="45" cx="50" cy="50" stroke="grey" stroke-width="3" />
+                    </svg>
+                    <span class="ms-2">Concierge</span>
+                </div>
+            </button>
+
+            <button onclick="filterrequests(4)" class="reqtype rounded theme-color border border-0 bg-transparent d-flex align-items-center ms-0 ms-md-2" style="font-size: 13px;">
+                <div class="d-inline d-md-flex">
+                    <svg height="15" width="15" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle fill="#e26277" r="45" cx="50" cy="50" stroke="grey" stroke-width="3" />
+                    </svg>
+                    <span class="ms-2">Business</span>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <div id="partial-load">
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="sendLinkModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle">Send Mail to Patient for submitting request</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formSendLink" method="post">
+                    <div class="form-floating required mb-3">
+                        <input type="text" class=" form-control" id="fname" name="fname" placeholder=" ">
+                        <label for="fname" class=" floating-label">First Name</label>
+                        <span style="color:red; display:none">Required!</span>
+                    </div>
+                    <div class="form-floating required mb-3">
+                        <input type="text" class=" form-control" id="lname" name="lname" placeholder=" ">
+                        <label for="fname" class=" floating-label">Last Name</label>
+                        <span style="color:red; display:none">Required!</span>
+                    </div>
+                    <div class="form-floating mb-3 h-100 z-3 required">
+                        <input type="tel" class=" form-control h-100" id="tel" name="tel" placeholder="Phone Number">
+                        <span style="color:red; display:none">Required!</span>
+                    </div>
+                    <div class="form-floating mb-3 required">
+                        <input type="email" class=" form-control" id="email" name="email" placeholder=" ">
+                        <label for="email" class=" floating-label">Email address</label>
+                        <span style="color:red; display:none">Required!</span>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-info text-white">Confirm</button>
+                        <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.nav-button');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+
+                const arrowDown = this.nextElementSibling.querySelector('.arrow-down');
+                document.querySelectorAll('.arrow-down').forEach(arrow => arrow.style.display = 'none');
+                arrowDown.style.display = this.classList.contains('active') ? 'block' : 'none';
+            });
+        });
+    });
+
+
+    function changepage(pageNumber) {
+        $.ajax({
+            url: '@Url.Action("ChangePage", "ProviderDashboard")',
+            data: { pageNumber: pageNumber },
+            success: function (state) {
+                if (state == "2") {
+                    $('#pending-tab').click();
+                }
+                else if (state == "3") {
+                    $('#active-tab').click();
+                }
+                else if (state == "4") {
+                    $('#conclude-tab').click();
+                }
+                else {
+                    $('#new-tab').click();
+                }
+            }
+        });
+    }
+    function filterrequests(reqtype) {
+
+        var reqs = document.getElementsByClassName("reqtype");
+        for (i = 0; i < reqs.length; i++) {
+            reqs[i].classList.add("border-0")
+        }
+        switch (reqtype) {
+            case 1:
+                reqs[1].classList.remove("border-0");
+                break;
+            case 2:
+                reqs[2].classList.remove("border-0");
+                break;
+            case 3:
+                reqs[3].classList.remove("border-0");
+                break;
+            case 4:
+                reqs[4].classList.remove("border-0");
+                break;
+            case 5:
+                reqs[5].classList.remove("border-0");
+                break;
+        }
+        $.ajax({
+            url: '@Url.Action("FilterRequest", "ProviderDashboard")',
+            data: { reqtype: reqtype },
+            success: function (state) {
+                if (state == "2") {
+                    $('#pending-tab').click();
+                }
+                else if (state == "3") {
+                    $('#active-tab').click();
+                }
+                else if (state == "4") {
+                    $('#conclude-tab').click();
+                }
+                else {
+                    $('#new-tab').click();
+                }
+            }
+        });
+    }
+
+    function allrequests() {
+
+        var reqs = document.getElementsByClassName("reqtype");
+        for (i = 0; i < reqs.length; i++) {
+            reqs[i].classList.add("border-0")
+        }
+        reqs[0].classList.remove("border-0");
+
+        $.ajax({
+            url: '@Url.Action("FilterRequest", "ProviderDashboard")',
+            data: { reqtype: 0 },
+            success: function (state) {
+                if (state == "2") {
+                    $('#pending-tab').click();
+                }
+                else if (state == "3") {
+                    $('#active-tab').click();
+                }
+                else if (state == "4") {
+                    $('#conclude-tab').click();
+                }
+                else {
+                    $('#new-tab').click();
+                }
+            }
+        });
+    }
+
+    function search() {
+        var input;
+        input = document.getElementById("search").value.toLowerCase();
+        $.ajax({
+            url: '@Url.Action("Search","ProviderDashboard")',
+            data: { search: input },
+            success: function (state) {
+                if (state == "2") {
+                    $('#pending-tab').click();
+                }
+                else if (state == "3") {
+                    $('#active-tab').click();
+                }
+                else if (state == "4") {
+                    $('#conclude-tab').click();
+                }
+                else {
+                    $('#new-tab').click();
+                }
+            }
+        });
+    }
+
+    function regionFilter() {
+        var region = document.getElementById("region").value;
+        $.ajax({
+            url: '@Url.Action("RegionFilter","ProviderDashboard")',
+            data: { region: region },
+            success: function (state) {
+                if (state == "2") {
+                    $('#pending-tab').click();
+                }
+                else if (state == "3") {
+                    $('#active-tab').click();
+                }
+                else if (state == "4") {
+                    $('#conclude-tab').click();
+                }
+                else if (state == "5") {
+                    $('#toclose-tab').click();
+                }
+                else if (state == "6") {
+                    $('#unpaid-tab').click();
+                }
+                else {
+                    $('#new-tab').click();
+                }
+            }
+        });
+
+    }
+
+    $(document).ready(function () {
+        $('#new-tab').click(function () {
+            $('#statusof').html('(New)');
+            $('#partial-load').load('/ProviderDashboard/CaseTable?state=1');
+        });
+        $('#pending-tab').click(function () {
+            $('#statusof').html('(Pending)');
+            $('#partial-load').load('/ProviderDashboard/CaseTable?state=2');
+        });
+        $('#active-tab').click(function () {
+            $('#statusof').html('(Active)');
+            $('#partial-load').load('/ProviderDashboard/CaseTable?state=3');
+        });
+        $('#conclude-tab').click(function () {
+            $('#statusof').html('(Conclude)');
+            $('#partial-load').load('/ProviderDashboard/CaseTable?state=4');
+        });
+
+        $('#createRequest').click(function () {
+            $('#divdiv').load('/ProviderDashboard/CreateRequest');
+        });
+
+        $("#region").val(@Accessor.HttpContext.Session.GetString("region"))
+
+        var state = @Accessor.HttpContext.Session.GetString("state");
+        if (state == "2") {
+            $('#pending-tab').click();
+        }
+        else if (state == "3") {
+            $('#active-tab').click();
+        }
+        else if (state == "4") {
+            $('#conclude-tab').click();
+        }
+        else {
+            $('#new-tab').click();
+        }
+
+        $('#formSendLink').on('submit', function (e) {
+            e.preventDefault();
+            var data = new FormData(this)
+            var validate = true;
+            $('.required').each(function () {
+                var div = $(this);
+                if ($(div).find('input').val() == "") {
+                    Swal.fire({
+                        title: "Information required",
+                        text: "Please enter all the details",
+                        icon: "error"
+                    });
+                    var span = $(div).children('span');
+                    span.show();
+
+                    validate = false;
+                }
+            })
+
+            if (validate) {
+                $('#sendLinkModal').hide();
+                $.ajax({
+                    url: '@Url.Action("SendLink","ProviderDashboard")',
+                    type: 'POST',
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        if (result.success) {
+                            Swal.fire({
+                                title: "Good job!",
+                                text: "Email sent",
+                                icon: "success"
+                            }).finally(() => {
+                                $('#sendLinkModal').modal('hide');
+                            })
+                        }
+                        else {
+                            alert(result.message);
+                        }
+                    },
+                    error: function () {
+                        alert('An error occured');
+                    }
+                });
+            }
+        });
+    });
+</script>
+

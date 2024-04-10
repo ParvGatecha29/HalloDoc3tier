@@ -34,9 +34,9 @@ namespace HalloDocBAL.Services
             return data;
         }
 
-        public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search, bool all)
+        public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search, bool all, int physicianid)
         {
-            var data = await _requestRepository.GetRequestsByStatus(status, reqtype, pageNumber, region, search, all);
+            var data = await _requestRepository.GetRequestsByStatus(status, reqtype, pageNumber, region, search, all,physicianid);
             return data;
         }
       
@@ -64,22 +64,42 @@ namespace HalloDocBAL.Services
             return data;
         }
 
-        public bool UpdateNotes(int id, string notes)
+        public bool UpdateNotes(int id, string notes, bool physician)
         {
             var data = _requestRepository.GetNotes(id);
             if (data == null)
             {
-                data = new AdminDashboardData
+                if (physician)
                 {
-                    requestId = id,
-                    adminNotes = notes,
-                    physicianNotes = "",
-                    transferNotes = null
-                };
+                    data = new AdminDashboardData
+                    {
+                        requestId = id,
+                        adminNotes = "",
+                        physicianNotes = notes,
+                        transferNotes = null
+                    };
+                }
+                else
+                {
+                    data = new AdminDashboardData
+                    {
+                        requestId = id,
+                        adminNotes = notes,
+                        physicianNotes = "",
+                        transferNotes = null
+                    };
+                }
                 _requestRepository.AddNotes(data);
                 return true;
             }
-            data.adminNotes = notes;
+            if (physician)
+            {
+                data.physicianNotes = notes;
+            }
+            else
+            {
+                data.adminNotes = notes;
+            }
             _requestRepository.UpdateNotes(data);
             return true;
         }
