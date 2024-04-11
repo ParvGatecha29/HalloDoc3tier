@@ -28,7 +28,7 @@ namespace HalloDocBAL.Services
         private readonly IRequestWiseFilesRepository _requestWiseFilesRepository;
         private readonly ApplicationDbContext _context;
 
-        public RequestService(ApplicationDbContext context, IRequestRepository requestRepository,IRequestClientRepository requestClientRepository, IConciergeRepository conciergeRepository, IRequestConciergeRepository requestConciergeRepository, IBusinessRepository businessRepository, IRequestBusinessRepository requestBusinessRepository, IRequestWiseFilesRepository requestWiseFilesRepository)
+        public RequestService(ApplicationDbContext context, IRequestRepository requestRepository, IRequestClientRepository requestClientRepository, IConciergeRepository conciergeRepository, IRequestConciergeRepository requestConciergeRepository, IBusinessRepository businessRepository, IRequestBusinessRepository requestBusinessRepository, IRequestWiseFilesRepository requestWiseFilesRepository)
         {
             _requestRepository = requestRepository;
             _requestClientRepository = requestClientRepository;
@@ -42,7 +42,7 @@ namespace HalloDocBAL.Services
 
         public async Task<bool> PatientRequest(Req model)
         {
-            int count = _context.Requests.Where(x=> x.Createddate.Date == DateTime.Now.Date).Count() + 1;
+            int count = _context.Requests.Where(x => x.Createddate.Date == DateTime.Now.Date).Count() + 1;
             var request = new Request
             {
                 Userid = model.userid,
@@ -53,7 +53,7 @@ namespace HalloDocBAL.Services
                 Email = model.email,
                 Createddate = DateTime.Now,
                 Confirmationnumber = "MD" + DateTime.Now.Day.ToString("D2") + DateTime.Now.Month.ToString("D2") + DateTime.Now.Year.ToString().Substring(2, 2) + model.lastName.Remove(2).ToUpper() + model.firstName.Remove(2).ToUpper() + count.ToString("D4")
-        };
+            };
             await _requestRepository.CreateRequest(request);
             var requestclient = new Requestclient
             {
@@ -71,7 +71,7 @@ namespace HalloDocBAL.Services
                 Strmonth = model.month
             };
             await _requestClientRepository.AddRequestClient(requestclient);
-            if(model.document != null)
+            if (model.document != null)
             {
                 foreach (var file in model.document)
                 {
@@ -228,14 +228,38 @@ namespace HalloDocBAL.Services
             _requestRepository.transferRequest(dash, 2);
             return true;
         }
-        public bool TransferCase(int requestid, string description)
+        public bool TransferCase(int requestid, string description, int status = 0)
         {
             var dash = new AdminDashboardData
             {
                 requestId = requestid,
                 notes = description
             };
-            _requestRepository.transferRequest(dash, 1);
+            if(status == 0)
+            {
+                _requestRepository.transferRequest(dash, 1);
+            }
+            else
+            {
+                _requestRepository.transferRequest(dash, status);
+            }
+            return true;
+        }
+
+        public bool UnblockRequest(int requestid)
+        {
+            Blockrequest blockreq = _context.Blockrequests.FirstOrDefault(x => x.Requestid == requestid);
+            if (blockreq != null)
+            {
+                _context.Blockrequests.Remove(blockreq);
+            }
+            Request req = _context.Requests.FirstOrDefault(x => x.Requestid == requestid);
+            if (req != null)
+            {
+                req.Status = 1;
+                _context.Requests.Update(req);
+            }
+            _context.SaveChanges();
             return true;
         }
 

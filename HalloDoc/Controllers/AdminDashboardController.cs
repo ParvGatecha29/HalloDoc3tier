@@ -1293,5 +1293,16 @@ public class AdminDashboardController : Controller
             return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Export.xlsx");
         }
     }
+
+    public JsonResult UnblockRequest(int requestid)
+    {
+
+        _requestService.UnblockRequest(requestid);
+            
+
+           
+        
+        return Json(new { success = true });
+    } 
 }
 

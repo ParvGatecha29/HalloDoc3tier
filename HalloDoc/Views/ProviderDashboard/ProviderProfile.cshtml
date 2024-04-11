@@ -1,5 +1,7 @@
 ﻿@model HalloDocDAL.Model.Provider
-
+@{
+    Layout = "_providerDash";
+}
 <div class="row justify-content-center mb-5 pb-5">
     <div class="m-4 me-5 mb-0 text-end col-xl-6 col-md-8 col-11">
         <a class="text-decoration-none text-info rounded border border-info p-2 i-info provider-tab" asp-action="Provider" asp-controller="AdminDashboard">
@@ -354,7 +356,7 @@
     </div>
 </div>
 <script>
-    
+    document.getElementById("myprofile-tab").classList.add("active");
     $(document).on('click', '#editPhysicianAccount', function () {
         let input = document.getElementsByClassName('physicianAccountInput');
         for (var i = 0; i < input.length; i++) {

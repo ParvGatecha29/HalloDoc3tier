@@ -4,6 +4,8 @@ using HalloDocDAL.Contacts;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using Microsoft.AspNetCore.Mvc;
+using Rotativa.AspNetCore;
+using System.Globalization;
 
 namespace HalloDoc.Controllers
 {
@@ -35,9 +37,9 @@ namespace HalloDoc.Controllers
         public IActionResult ProviderDashboard()
         {
             UserInfo user = SessionService.GetLoggedInUser(HttpContext.Session);
+            Physician physician = _adminDashboardService.GetPhysiciansByEmail(user.Email);
             var dash = new AdminDashboard();
             dash.Data = _adminDashboardService.GetRequests();
-            Physician physician = _adminDashboardService.GetPhysiciansByEmail(user.Email);
             dash.Data = dash.Data.Where(x => x.physicianId == physician.Physicianid).ToList();
             dash.regions = _adminDashboardService.GetAllRegions();
             if (HttpContext.Session.GetString("state") == null)
@@ -182,6 +184,195 @@ namespace HalloDoc.Controllers
         {
             _requestService.TransferCase(requestid, description);
             return Json(new { success = true });
+        }
+
+        public IActionResult Orders(int requestid)
+        {
+            var orders = new Orders();
+            orders.requestid = requestid;
+            orders.healthprofessionaltypes = _orderService.GetAllPrfessions();
+            return View(orders);
+        }
+
+        public ActionResult<IEnumerable<Healthprofessional>> GetVendorsByProfession(int profession)
+        {
+            var vendors = _orderService.GetVendorsByProfessions(profession);
+            return vendors;
+        }
+
+        public ActionResult<Healthprofessional> GetVendorById(int vendorid)
+        {
+            var vendor = _orderService.GetVendorById(vendorid);
+            return vendor;
+        }
+
+        public JsonResult CreateOrder(IFormCollection formcollection)
+        {
+            var user = SessionService.GetLoggedInUser(HttpContext.Session);
+            var od = new Orderdetail
+            {
+                Vendorid = int.Parse(formcollection["business"]),
+                Requestid = int.Parse(formcollection["requestid"]),
+                Faxnumber = formcollection["fax"],
+                Email = formcollection["email"],
+                Businesscontact = formcollection["contact"],
+                Prescription = formcollection["prescription"],
+                Noofrefill = int.Parse(formcollection["noofrefill"]),
+                Createddate = DateTime.Now,
+                Createdby = user.Name
+            };
+            _orderService.CreateOrder(od);
+            return Json(new { success = true });
+        }
+
+        public JsonResult ChangeStatus(int Requestid, int status)
+        {
+            _requestService.TransferCase(Requestid, "", status);
+            return Json(new { success = true, });
+        }
+
+        public IActionResult Encounter(int requestid)
+        {
+            string[] format = { "dd/MMMM/yyyy", "d/MMMM/yyyy" };
+            AdminDashboardData ad = _adminDashboardService.GetRequestById(requestid);
+            EncounterForm ef = _adminDashboardService.GetEncounterForm(requestid);
+            if (ef != null)
+            {
+                var data = new ViewEncounterForm
+                {
+                    FirstName = ad.firstName,
+                    LastName = ad.lastName,
+                    Location = ad.address,
+                    DateOfBirth = DateTime.ParseExact(ad.dobdate + "/" + ad.dobmonth + "/" + ad.dobyear, format, CultureInfo.InvariantCulture),
+                    DateOfService = ad.reqdate.ToString(),
+                    Email = ad.email,
+                    PhoneNumber = ad.phone,
+                    HistoryOfPresentIllness = ef.HistoryOfPresentIllnessOrInjury,
+                    MedicalHistory = ef.MedicalHistory,
+                    Medications = ef.Medications,
+                    Allergies = ef.Allergies,
+                    Temperature = ef.Temp,
+                    HR = ef.Hr,
+                    RR = ef.Rr,
+                    BPSystolic = ef.BloodPressureSystolic,
+                    BPDiastolic = ef.BloodPressureDiastolic,
+                    O2 = ef.O2,
+                    Pain = ef.Pain,
+                    Heent = ef.Heent,
+                    CV = ef.Cv,
+                    Chest = ef.Chest,
+                    ABD = ef.Abd,
+                    Extr = ef.Extremeties,
+                    Skin = ef.Skin,
+                    Neuro = ef.Neuro,
+                    Other = ef.Other,
+                    Diagnosis = ef.Diagnosis,
+                    TreatmentPlan = ef.TreatmentPlan,
+                    MedicationDispensed = ef.MedicationsDispensed,
+                    Procedures = ef.Procedures,
+                    FollowUp = ef.FollowUp
+                };
+                return View(data);
+
+            }
+            else
+            {
+                var data = new ViewEncounterForm
+                {
+                    FirstName = ad.firstName,
+                    LastName = ad.lastName,
+                    Location = ad.address,
+                    DateOfBirth = DateTime.ParseExact(ad.dobdate + "/" + ad.dobmonth + "/" + ad.dobyear, format, CultureInfo.InvariantCulture),
+                    DateOfService = ad.reqdate.ToString(),
+                    Email = ad.email,
+                    PhoneNumber = ad.phone,
+                };
+                return View(data);
+            }
+
+        }
+
+        public JsonResult EditEncounterForm(ViewEncounterForm model)
+        {
+            _adminDashboardService.UpdateEncounterForm(model);
+            return Json(new { success = true });
+        }
+
+        public IActionResult GeneratePDF(int requestid)
+        {
+            string[] format = { "dd/MMMM/yyyy", "d/MMMM/yyyy" };
+            AdminDashboardData ad = _adminDashboardService.GetRequestById(requestid);
+            EncounterForm ef = _adminDashboardService.GetEncounterForm(requestid);
+            var encounterFormView = new ViewEncounterForm
+            {
+                FirstName = ad.firstName,
+                LastName = ad.lastName,
+                Location = ad.address,
+                DateOfBirth = DateTime.ParseExact(ad.dobdate + "/" + ad.dobmonth + "/" + ad.dobyear, format, CultureInfo.InvariantCulture),
+                DateOfService = ad.reqdate.ToString(),
+                Email = ad.email,
+                PhoneNumber = ad.phone,
+                HistoryOfPresentIllness = ef.HistoryOfPresentIllnessOrInjury,
+                MedicalHistory = ef.MedicalHistory,
+                Medications = ef.Medications,
+                Allergies = ef.Allergies,
+                Temperature = ef.Temp,
+                HR = ef.Hr,
+                RR = ef.Rr,
+                BPSystolic = ef.BloodPressureSystolic,
+                BPDiastolic = ef.BloodPressureDiastolic,
+                O2 = ef.O2,
+                Pain = ef.Pain,
+                Heent = ef.Heent,
+                CV = ef.Cv,
+                Chest = ef.Chest,
+                ABD = ef.Abd,
+                Extr = ef.Extremeties,
+                Skin = ef.Skin,
+                Neuro = ef.Neuro,
+                Other = ef.Other,
+                Diagnosis = ef.Diagnosis,
+                TreatmentPlan = ef.TreatmentPlan,
+                MedicationDispensed = ef.MedicationsDispensed,
+                Procedures = ef.Procedures,
+                FollowUp = ef.FollowUp
+            };
+
+            if (encounterFormView == null)
+            {
+                return NotFound();
+            }
+            //return View("EncounterFormDetails", encounterFormView);
+            return new ViewAsPdf("EncounterFormDetails", encounterFormView)
+            {
+                FileName = "Encounter_Form.pdf"
+            };
+
+        }
+
+        public IActionResult ProviderProfile()
+        {
+            Provider prov = new Provider();
+            UserInfo user = SessionService.GetLoggedInUser(HttpContext.Session);
+            Physician physician = _adminDashboardService.GetPhysiciansByEmail(user.Email);
+            prov.physician = _adminDashboardService.GetPhysiciansById(physician.Physicianid);
+            prov.regions = _adminDashboardService.GetAllRegions();
+            prov.phyregions = _adminDashboardService.GetPhysicianRegions(physician.Physicianid);
+            return View(prov);
+        }
+
+        public IActionResult ConcludeCare(int requestid)
+        {
+            ViewUploads viewUploads = new ViewUploads();
+            viewUploads.Request = _adminDashboardService.GetRequestById(requestid);
+            viewUploads.Requestwisefiles = _dashboardService.ViewDocument(requestid);
+            return PartialView(viewUploads);
+        }
+
+        public JsonResult ConcludeRequest(int Requestid)
+        {
+            _requestService.TransferCase(Requestid, "", 8);
+            return Json(new { success = true});
         }
     }
 }

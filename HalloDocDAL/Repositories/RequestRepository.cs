@@ -197,7 +197,8 @@ namespace HalloDocDAL.Repositories
                     requestId = r.Requestid,
                     requestDate = r.Createddate,
                     regionId = rc.Regionid,
-                    confirmationNo = r.Confirmationnumber
+                    confirmationNo = r.Confirmationnumber,
+                    isFinalized = _context.EncounterForms.FirstOrDefault(x => x.RequestId == id).IsFinalize,
 
                 }).FirstOrDefault(req => req.requestId == id);
             return data;

@@ -123,5 +123,25 @@
         console.log(userid);
         $("#patientrecordsDiv").load("/AdminDashboard/ExplorePatient?userid=" + userid)
     }
+
+    function unblock(id) {
+        $.ajax({
+            url : "/AdminDashboard/UnblockRequest",
+            data: {requestid: id},
+            success: function(response){
+                if(response.success){
+                    Swal.fire({
+                        title: "Success!",
+                        text: "Request Unblocked",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).finally(() => {
+                        fetchPatientRecords();
+                    });
+                }
+            }
+        })
+    }
 </script>
 

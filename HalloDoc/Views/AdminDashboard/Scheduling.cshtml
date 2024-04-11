@@ -397,21 +397,9 @@
     </div>
 </div>
 <script>
-    var dash = document.getElementById("dashboard-tab");
-    var providerLoc = document.getElementById("providerlocation-tab");
-    var profile = document.getElementById("myprofile-tab");
-    var provider = document.getElementById("providers-tab");
-    var partner = document.getElementById("partners-tab");
-    var access = document.getElementById("access-tab");
-    var records = document.getElementById("records-tab");
+    var provider = document.getElementById("providers-tab").classList.add("active");
 
-    dash.classList.remove("active");
-    providerLoc.classList.remove("active");
-    profile.classList.remove("active");
-    provider.classList.add("active");
-    partner.classList.remove("active");
-    access.classList.remove("active");
-    records.classList.remove("active");
+   
     // Function to format date to YYYY-MM-DD
     function formatDate(dateString) {
 

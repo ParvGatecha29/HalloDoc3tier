@@ -25,21 +25,7 @@
 
 </section>
 <script>
-    var dash = document.getElementById("dashboard-tab");
-    var providerLoc = document.getElementById("providerlocation-tab");
-    var profile = document.getElementById("myprofile-tab");
-    var provider = document.getElementById("providers-tab");
-    var partner = document.getElementById("partners-tab");
-    var access = document.getElementById("access-tab");
-    var records = document.getElementById("records-tab");
-
-    dash.classList.remove("active");
-    providerLoc.classList.add("active");
-    profile.classList.remove("active");
-    provider.classList.remove("active");
-    partner.classList.remove("active");
-    access.classList.remove("active");
-    records.classList.remove("active");
+    document.getElementById("providerlocation-tab").classList.add("active");
 
 
     var map = L.map('map').setView([21, 78], 5);

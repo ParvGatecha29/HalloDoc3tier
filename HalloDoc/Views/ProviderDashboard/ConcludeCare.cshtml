@@ -1,0 +1,189 @@
+﻿@model HalloDocDAL.Model.ViewUploads
+@{
+    var reqName = Model.Request.firstName;
+    var conNo = Model.Request.confirmationNo;
+}
+
+<div class="row justify-content-center">
+    <div class="row m-4 col-10 col-xl-9">
+        <p class="col fs-4 fw-bold pb-0 mb-0 d-inline">Conclude Care</p>
+        <div class="col mb-0 text-end">
+            <a class="text-decoration-none text-info rounded border border-info p-2 i-info" onclick="LoadDashboard()">
+                <i class="bi bi-chevron-left i-info"></i>
+                Back
+            </a>
+        </div>
+    </div>
+
+    <div class="m-4 shadow col-10 col-xl-9">
+        <div class="mx-3">
+            <p class="text-secondary">Patient Name</p>
+            <p class="fs-4 fw-semibold text-info"> @reqName <span> [@conNo] </span> </p>
+
+            <div class="row my-4 mx-0 mx-md-3">
+                <div class="col d-inline fs-4 fw-semibold m-0 p-0"><p>Encounter Forms</p></div>
+
+                <form enctype="multipart/form-data" id="form">
+                    <div class="d-flex">
+                        <label for="document" class="col d-flex">
+                            <div class="col p-1 ps-3 border border-dark-subtle ">
+                                <span id="upload">Select</span>
+                            </div>
+                            <input type="file" class="form-control-file" name="document" id="document" hidden
+                                   onchange="upload(this)" multiple>
+                        </label>
+                        <button class="btn p-0 m-0" type="submit">
+                            <div id="btn" class="p-1 btn btn-info w-auto px-3">
+
+                                <i class="bi bi-cloud-arrow-up" style="color:white !important;"></i>
+                                <span style="color:white;" class="ps-1 d-none d-md-block">Upload</span>
+
+                            </div>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" class="bg-transparent"> <p>Document</p> </th>
+                    <th scope="col" class="bg-transparent"> <p>Actions</p> </th>
+                </tr>
+            </thead>
+
+            <tbody id="tableBody">
+                @foreach (var item in Model.Requestwisefiles)
+                {
+
+                    <tr class="table-row">
+                        <td class="mobile-hide"> <input type="checkbox" class="checkbox" name="selectedDocuments" value="@item.Requestwisefileid" /> </td>
+                        <td class="" data-label="File Name"> @item.Filename </td>
+
+                        <td class="mobile-hide" data-label="Created Date"> @item.Createddate </td>
+                        <td class="mobile-hide" data-label="Actions">
+                            <button type="button" class="btn btn-outline-info" onclick="location.href='@Url.Action("DownloadOne", "PatientDashboard",new {id = item.Requestwisefileid})'">
+                                <span class="material-symbols-outlined">
+                                    cloud_download
+                                </span>
+                            </button>
+                            <button type="button" data-fileid="@item.Requestwisefileid" class="btn btn-outline-info delete">
+                                <span class="material-symbols-outlined">
+                                    delete
+                                </span>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="form-floating">
+            <textarea class="form-control" id="physicianNote" placeholder="Physician Note" disabled></textarea>
+            <label for="physicianNote" class="floatingLabel">Physician Note</label>
+        </div>
+
+        <div class="d-block text-end">
+            @if((bool)Model.Request.isFinalized)
+            {
+                <button type="button" class="btn btn-info text-light my-2 concludeCare">Conclude Care</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-info text-light my-2 finalizeForm">Conclude Care</button>
+            } 
+        </div>        
+    </div>
+</div>
+
+<div class="pb-5 mb-5"></div>
+
+
+<div class="modal fade" id="concludeCare" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-body p-5">
+                <h3>Confirmation for conclude care</h3>
+                <p>Are sure you want to conclude this Request?</p>
+
+                <button type="button" class="btn btn-info text-light" id="concludeRequest" data-bs-dismiss="modal">Conclude Request</button>
+                <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#sort").click(function () {
+        var icon = $(this);
+        var isReversed = icon.hasClass('bi-arrow-up');
+    
+        $('#tableBody').html($('#tableBody tr').get().reverse());
+    
+        icon.toggleClass('bi-arrow-down', isReversed);
+        icon.toggleClass('bi-arrow-up', !isReversed);
+    });
+    
+    $(document).on('click', '.concludeCare', function () {
+        $('#concludeCare').modal("show");
+    });
+
+    $(document).ready(function () {
+        $('#form').submit(function (e) {
+            e.preventDefault();
+            var data = new FormData(this);
+            data.append('rid', '@Model.Request.requestId');
+
+            $.ajax({
+                url: '@Url.Action("UploadDocument","PatientDashboard")',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Good job!",
+                            text: "Documents Uploaded",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).finally(() => {
+                            $.ajax({
+                                url: '@Url.Action("ConcludeCare","ProviderDashboard")',
+                                type: 'POST',
+                                data: { requestid: @Model.Request.requestId },
+                                success: function (data) {
+                                    $('#divdiv').html(data);
+                                },
+                                error: function (error) {
+
+                                }
+                            });
+                        });
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occured');
+                }
+            });
+        });
+    });
+    $(document).on('click', '#concludeRequest', function () {
+        $.ajax({
+            url: 'ConcludeRequest',
+            type: 'POST',
+            data: { Requestid: @Model.Request.requestId },
+            success: function (result) {
+                if (result.success) {
+                    window.location.reload();
+                }
+            },
+        });
+    });
+</script>

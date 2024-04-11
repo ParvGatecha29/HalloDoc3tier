@@ -256,6 +256,10 @@
                             @if (Model.state == 3)
                             {
                                 <td>
+                                    @if (obj.status == 5)
+                                    {
+                                        <button class="btn btn-info" onclick="conclude(@obj.requestId)">House Call</button>
+                                    }
                                 </td>
                             }
 
@@ -286,6 +290,34 @@
                                         <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","ProviderDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload p-2"></i> View Uploads</a></li>
                                         <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
                                         <li><a class="dropdown-item theme-color transferCase" href="#"><i class="fa-regular fa-note-sticky p-2"></i> Transfer</a></li>
+                                    </ul>
+                                }
+                                else if (@obj.status == 4 || @obj.status == 5)
+                                {
+
+                                    <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="action">
+                                        <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","ProviderDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","ProviderDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload p-2"></i> View Uploads</a></li>
+                                        <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
+                                        <li><a class="dropdown-item theme-color" href="@Url.Action("Orders","ProviderDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-cart-plus p-2"></i> Orders</a></li>
+                                        <li><a class="dropdown-item theme-color" onclick="Encounter(@obj.requestId,@obj.isFinalized.ToString().ToLower(),@obj.status)"><i class="fa-regular fa-note-sticky p-2"></i> Encounter</a></li>
+                                    </ul>
+
+                                }
+                                else if (@obj.status == 6)
+                                {
+                                    <button class="btn btn-outline-light " type="button" id="action" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="action">
+                                        <li><a class="dropdown-item theme-color concludeCare"><i class="fa-solid fa-cart-plus p-2"></i> Conclude care</a></li>
+                                        <li><a class="dropdown-item theme-color" href="@Url.Action("ViewCase","ProviderDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-newspaper p-2"></i> View Case</a></li>
+                                        <li><a class="dropdown-item theme-color" href="@Url.Action("ViewUploads","ProviderDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-upload p-2"></i> View Uploads</a></li>
+                                        <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
+                                        <li><a class="dropdown-item theme-color" onclick="Encounter(@obj.requestId,@obj.isFinalized.ToString().ToLower(),@obj.status)"><i class="fa-regular fa-note-sticky p-2"></i> Encounter</a></li>
                                     </ul>
                                 }
                             </td>
@@ -523,6 +555,28 @@
     </div>
 </div>
 
+<div class="modal fade" id="typeOfCare" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle">Select Type Of Care</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="typeOfCareRequestId" />
+                <div class="d-flex justify-content-center align-items-center">
+                    <button class="btn mx-3 border border-info rounded-1 text-info" id="housecall" type="button" onclick="HouseCall()">Housecall</button>
+                    <button class="btn border border-info rounded-1 text-info" id="consult" onclick="Consult()">Consult</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info text-white" onclick="typeOfCareSaveBtn()" data-bs-dismiss="modal">Save</button>
+                <button type="button" class="btn border border-info text-info" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
 
@@ -579,15 +633,15 @@
             }
         });
 
-        $("#formtransfer").on('submit', function(e){
+        $("#formtransfer").on('submit', function (e) {
             e.preventDefault();
             var requestid = $("#Transfercaseid").val();
             var description = $("#TransfercaseDescription").val();
             $.ajax({
                 url: "/ProviderDashboard/TransferCase",
-                data: {requestid : requestid, description: description},
-                success:function(response){
-                    if(response.success){
+                data: { requestid: requestid, description: description },
+                success: function (response) {
+                    if (response.success) {
                         Swal.fire({
                             title: "Good job!",
                             text: "Request cancelled succesfully",
@@ -606,6 +660,21 @@
             var rid = $(this).closest('.tr').data('rid');
             $.ajax({
                 url: '@Url.Action("ViewNotes","ProviderDashboard")',
+                type: 'POST',
+                data: { requestid: rid },
+                success: function (data) {
+                    $('#divdiv').html(data);
+                },
+                error: function (error) {
+
+                }
+            });
+        })
+
+        $('.concludeCare').click(function () {
+            var rid = $(this).closest('.tr').data('rid');
+            $.ajax({
+                url: '@Url.Action("ConcludeCare","ProviderDashboard")',
                 type: 'POST',
                 data: { requestid: rid },
                 success: function (data) {
@@ -797,17 +866,17 @@
         }
 
     });
+
     $("#downenc").click(function () {
         var rid = $('.requestId').val();
         $.ajax({
-            url: '@Url.Action("GeneratePDF","AdminDashboard")',
+            url: '@Url.Action("GeneratePDF","ProviderDashboard")',
             data: { requestid: rid },
             success: function () {
-                window.location.href = '@Url.Action("GeneratePDF","AdminDashboard")' + "?requestid=" + rid;
+                window.location.href = '@Url.Action("GeneratePDF","ProviderDashboard")' + "?requestid=" + rid;
             }
         })
     });
-
 
 </script>
 
@@ -839,9 +908,6 @@
         $(".requestId").val($(this).closest('.tr').data('rid'));
     });
 
-
-
-
     $(document).on("click", ".sendAgreement", function () {
         $("#sendAgreementModal").modal('show');
         $(".requestId").val($(this).closest('.tr').data('rid'));
@@ -871,15 +937,117 @@
         }
     });
 
-    function Encounter(rid, isFinalized) {
-        if (isFinalized) {
-            $("#encounterModal").modal('show');
-            $(".requestId").val(rid);
+    function Encounter(rid, isFinalized, status) {
+
+        if (status == 4) {
+            $("#typeOfCare").modal('show');
+            $("#typeOfCareRequestId").val(rid);
         }
         else {
-            location.href = "/AdminDashboard/Encounter?requestid=" + rid;
+            if (isFinalized) {
+                $("#encounterModal").modal('show');
+                $(".requestId").val(rid);
+            }
+            else {
+                location.href = "/ProviderDashboard/Encounter?requestid=" + rid;
+            }
+        }
+
+    }
+
+    var housecall = 0;
+    var consult = 0;
+
+    function HouseCall() {
+        housecall = 1;
+        consult = 0;
+        var c = document.getElementById("housecall");
+        c.classList.remove("border");
+        c.classList.remove("border-info");
+        c.classList.remove("rounded-1");
+        c.classList.remove("text-info");
+        c.classList.add("mx-3");
+        c.classList.add("border");
+        c.classList.add("btn-info");
+        c.classList.add("text-white");
+
+        var someoneelse = document.getElementById("consult");
+        someoneelse.classList.add("border");
+        someoneelse.classList.add("border-info");
+        someoneelse.classList.add("rounded-1");
+        someoneelse.classList.add("text-info");
+        someoneelse.classList.remove("mx-3");
+        someoneelse.classList.remove("border");
+        someoneelse.classList.remove("btn-info");
+        someoneelse.classList.remove("text-white");
+    }
+
+    function Consult() {
+        consult = 1;
+        housecall = 0;
+        var c = document.getElementById("consult");
+        c.classList.remove("border");
+        c.classList.remove("border-info");
+        c.classList.remove("rounded-1");
+        c.classList.remove("text-info");
+        c.classList.add("mx-3");
+        c.classList.add("border");
+        c.classList.add("btn-info");
+        c.classList.add("text-white");
+
+        var me = document.getElementById("housecall");
+        me.classList.add("border");
+        me.classList.add("border-info");
+        me.classList.add("rounded-1");
+        me.classList.add("text-info");
+        me.classList.remove("mx-3");
+        me.classList.remove("border");
+        me.classList.remove("btn-info");
+        me.classList.remove("text-white");
+    }
+
+    function typeOfCareSaveBtn() {
+        if (housecall == 1) {
+            var id = $('#typeOfCareRequestId').val();
+
+            $.ajax({
+                url: '/ProviderDashboard/ChangeStatus',
+                type: 'POST',
+                data: { Requestid: id, status: 5 },
+                success: function (result) {
+                    if (result.success) {
+                        window.location.reload();
+                    }
+                },
+            });
+        }
+
+        if (consult == 1) {
+            var id = $('#typeOfCareRequestId').val();
+
+            $.ajax({
+                url: '/ProviderDashboard/ChangeStatus',
+                type: 'POST',
+                data: { Requestid: id, status: 6 },
+                success: function (result) {
+                    if (result.success) {
+                        window.location.reload();
+                    }
+                },
+            });
         }
     }
 
-
+    function conclude(requestid) {
+        $.ajax({
+            url: '/ProviderDashboard/ChangeStatus',
+            type: 'POST',
+            data: { Requestid: requestid, status: 6 },
+            success: function (result) {
+                if (result.success) {
+                    window.location.reload();
+                }
+            },
+        });
+    }
 </script>

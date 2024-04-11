@@ -282,5 +282,8 @@ namespace HalloDocBAL.Services
             var role = _userRepository.GetUsers();
             return role;
         }
+
+        
+
     }
 }
