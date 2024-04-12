@@ -102,8 +102,13 @@
                     <span style="color:red; display:none">Required!</span>
                 </div>
                 <div class="col-md-6 col-12 mb-3 form-floating required">
-                    <input type="text" class="form-control" id="state" name="state" placeholder="State">
-                    <label for="State" class="floating-label">State</label>
+                    <select class="p-2 px-3 form-control w-100 regionDropdown" id="state" name="state">
+                        <option value="0" selected disabled>State</option>
+                        @foreach (var region in ViewBag.regions)
+                        {
+                            <option value="@region.Regionid">@region.Name - (@region.Abbreviation)</option>
+                        }
+                    </select>
                     <span style="color:red; display:none">Required!</span>
                 </div>
                 <div class="col-md-6 col-12 mb-3 form-floating required">
@@ -159,6 +164,13 @@
 </div>
 <script>
     $(document).ready(function () {
+        $('.required').change(function () {
+            var div = $(this);
+            if ($(div).find('input').val() != "") {
+                var span = $(div).children('span');
+                span.hide();
+            }
+        })
         $('#cfname').val('@Model.Firstname');
         $('#clname').val('@Model.Lastname');
         $('#cemail').val('@Model.Email');

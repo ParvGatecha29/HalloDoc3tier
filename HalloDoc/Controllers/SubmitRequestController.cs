@@ -21,12 +21,14 @@ public class SubmitRequestController : Controller
     private readonly IUserService _userService;
     private readonly IRequestService _requestService;
     private readonly IEmailService _emailService;
+    private readonly IAdminDashboardService _adminDashboardService;
 
-    public SubmitRequestController(IUserService userService, IRequestService requestService, IEmailService emailService)
+    public SubmitRequestController(IUserService userService, IRequestService requestService, IEmailService emailService, IAdminDashboardService adminDasbhoardService)
     {
         _userService = userService;
         _requestService = requestService;
         _emailService = emailService;
+        _adminDashboardService = adminDasbhoardService;
     }
 
     public IActionResult SubmitRequest()
@@ -36,21 +38,29 @@ public class SubmitRequestController : Controller
 
     public IActionResult PatientRequest()
     {
+        var region = _adminDashboardService.GetAllRegions();
+        ViewBag.regions = region;
         return View();
     }
 
     public IActionResult ConciergeRequest()
     {
+        var region = _adminDashboardService.GetAllRegions();
+        ViewBag.regions = region;
         return View();
     }
 
     public IActionResult BusinessRequest()
     {
+        var region = _adminDashboardService.GetAllRegions();
+        ViewBag.regions = region;
         return View();
     }
 
     public IActionResult FamilyRequest()
     {
+        var region = _adminDashboardService.GetAllRegions();
+        ViewBag.regions = region;
         return View();
     }
 

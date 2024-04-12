@@ -88,8 +88,13 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3 required">
-                            <input type="text" class="form-control" id="state" placeholder=" ">
-                            <label for="state" class=" floating-label">State</label>
+                            <select class="p-2 px-3 form-control w-100 regionDropdown" id="state" name="state">
+                                <option value="0" selected disabled>State</option>
+                                @foreach (var region in ViewBag.regions)
+                                {
+                                    <option value="@region.Regionid">@region.Name - (@region.Abbreviation)</option>
+                                }
+                            </select>
                             <span style="color:red; display:none">Required!</span>
                         </div>
                     </div>
@@ -165,7 +170,7 @@
                         <button class="btn btn-info" style="color:white;" id="btnsubmit">
                             Submit
                         </button>
-                        <button class="btn btn-info bg-light text-info">
+                        <button type="button" class="btn btn-info bg-light text-info redirect-to" data-page="SubmitRequest" data-controller="SubmitRequest">
                             Cancel
                         </button>
                     </div>
@@ -217,6 +222,13 @@
 
 <script>
     $(document).ready(function () {
+        $('.required').change(function () {
+            var div = $(this);
+            if ($(div).find('input').val() != "") {
+                var span = $(div).children('span');
+                span.hide();
+            }
+        })
         $('#btnsubmit').click(function () {
             var data = {
                 cfirstName: $('#cfname').val(),

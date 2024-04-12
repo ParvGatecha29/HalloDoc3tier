@@ -274,78 +274,104 @@
         <div class="mb-1 py-2"></div>
 
         <p class="fs-5 fw-bold">Onboarding</p>
-        <table class="table table-borderless w-100 w-md-75">
-            <tbody>
-                <tr>
-                    <th scope="row" class="bg-transparent"> 
-                        <input type="checkbox" />
-                    </th>
-                    <td class="bg-transparent">
-                        <p class="d-inline">Independent Contractor Agreement</p>
-                    </td class="bg-transparent">
-                    <td class="bg-transparent">
-                        <button type="button" class="btn btn-info text-light">
-                            <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
-                            <span class="d-none d-xl-inline d-lg-inline">Upload</span>
-                        </button>
-                    </td>
-                    <td class="bg-transparent">
-                        <button type="button" class="btn btn-info text-light">
-                            <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
-                            <span class="d-none d-xl-inline d-lg-inline">View</span>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="bg-transparent">
-                        <input type="checkbox" />
-                    </th>
-                    <td class="bg-transparent">
-                        <p class="d-inline">Background Check</p>
-                    </td>
-                    <td class="bg-transparent">
-                        <button type="button" class="btn btn-info text-light">
-                            <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
-                            <span class="d-none d-xl-inline d-lg-inline">Upload</span>
-                        </button>
-                    </td>
-                    <td class="bg-transparent">
-                        <button type="button" class="btn btn-info text-light">
-                            <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
-                            <span class="d-none d-xl-inline d-lg-inline">View</span>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="bg-transparent">
-                        <input type="checkbox" />
-                    </th>
-                    <td class="bg-transparent">
-                        <p class="d-inline">HIPPA Compliance</p>
-                    </td>
-                    <td class="bg-transparent">
-                        <button type="button" class="btn btn-info text-light">
-                            <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
-                            <span class="d-none d-xl-inline d-lg-inline">Upload</span>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" class="bg-transparent">
-                        <input type="checkbox" />
-                    </th>
-                    <td class="bg-transparent">
-                        <p class="d-inline">Non disclosure Agreement</p>
-                    </td>
-                    <td class="bg-transparent">
-                        <button type="button" class="btn btn-info text-light">
-                            <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
-                            <span class="d-none d-xl-inline d-lg-inline">Upload</span>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <table class="table table-borderless">
+                <tbody>
+                    <tr>
+                        <th scope="row" class="bg-transparent"> 
+                            <input type="checkbox" name="files"/>
+                        </th>
+                        <td class="bg-transparent">
+                            <p class="d-inline">Independent Contractor Agreement</p>
+                        </td class="bg-transparent">
+                        <td class="bg-transparent">
+
+                            <label for="ICA">
+                                <div type="button" class="btn btn-info text-light">
+                                    <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                                    <span class="d-none d-xl-inline d-lg-inline">Upload</span>    
+                                 </div>
+                                <input type="file" class="form-control-file" id="ICA" name="ICA" hidden />
+                            </label>
+                        </td>
+                    @if ((bool)Model.physician.Isagreementdoc)
+                    {
+                        <td>
+                            <a class="btn btn-info text-light" href="~/Physician/@Model.physician.Physicianid/ICA.pdf">View</a>
+                        </td>
+                    }
+                    
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-transparent">
+                            <input type="checkbox" name="files"/>
+                        </th>
+                        <td class="bg-transparent">
+                            <p class="d-inline">Background Check</p>
+                        </td>
+                        <td class="bg-transparent">
+                            <label for="BC">
+                            <div type="button" class="btn btn-info text-light">
+                                <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                                <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                                <input type="file" class="form-control-file" id="BC" name="BackgroundCheck" hidden />
+                            </div>
+                            </label>
+                        </td>
+                        @if ((bool)Model.physician.Isbackgrounddoc)
+                    {
+                        <td>
+                            <a class="btn btn-info text-light" href="~/Physician/@Model.physician.Physicianid/BC.pdf">View</a>
+                        </td>
+                    }
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-transparent">
+                            <input type="checkbox" name="files"/>
+                        </th>
+                        <td class="bg-transparent">
+                            <p class="d-inline">HIPPA Compliance</p>
+                        </td>
+                        <td class="bg-transparent">
+                            <label for="HIPPA">
+                            <div type="button" class="btn btn-info text-light">
+                                <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                                <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                                <input type="file" class="form-control-file" id="HIPPA" name="Hippa" hidden />
+                            </div>
+                            </label>
+                        </td>
+                        @if ((bool)Model.physician.Iscredentialdoc)
+                    {
+                        <td>
+                            <a class="btn btn-info text-light" href="~/Physician/@Model.physician.Physicianid/CRED.pdf">View</a>
+                        </td>
+                    }
+                    </tr>
+                    <tr>
+                        <th scope="row" class="bg-transparent">
+                            <input type="checkbox" name="files"/>
+                        </th>
+                        <td class="bg-transparent">
+                            <p class="d-inline">Non disclosure Agreement</p>
+                        </td>
+                        <td class="bg-transparent">
+                            <label for="NDA">
+                            <div type="button" class="btn btn-info text-light">
+                                <i class="bi bi-cloud-arrow-up pe-1 text-light"></i>
+                                <span class="d-none d-xl-inline d-lg-inline">Upload</span>
+                                <input type="file" class="form-control-file" id="NDA" name="NDA" hidden />
+                            </div>
+                            </label>
+                        </td>
+                        @if ((bool)Model.physician.Isnondisclosuredoc)
+                    {
+                        <td>
+                            <a class="btn btn-info text-light" href="~/Physician/@Model.physician.Physicianid/NDA.pdf">View</a>
+                        </td>
+                    }
+                    </tr>
+                </tbody>
+            </table>
 
         <div class="d-flex justify-content-end">
             <button type="button" class="btn btn-info text-light me-2">Save</button>

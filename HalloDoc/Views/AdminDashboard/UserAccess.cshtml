@@ -32,7 +32,7 @@
                 <tbody id="tableBody">
                     @foreach (var i in Model.Users)
                     {
-                        <tr class="d-none d-xl-table-row d-md-table-row" data-rid="@i.Aspnetuserid">
+                        <tr class="d-none d-xl-table-row d-md-table-row" data-pid="@i.Aspnetuser?.PhysicianAspnetusers.FirstOrDefault()?.Physicianid">
                             <td class="bg-transparent">
                                 @if (i.Aspnetuser != null)
                                 {
@@ -64,7 +64,7 @@
                             <td class="bg-transparent"> @i.Status </td>
                             <td class="bg-transparent">
                                 <div class="d-flex">
-                                    <button class="btn border border-info text-info me-2" onclick="editRole(@i.Aspnetuserid)">
+                                    <button class="btn border border-info text-info me-2 editProvider">
                                         Edit
                                     </button>
                                 </div>
@@ -80,21 +80,7 @@
 </div>
 
 <script>
-    var dash = document.getElementById("dashboard-tab");
-    var providerLoc = document.getElementById("providerlocation-tab");
-    var profile = document.getElementById("myprofile-tab");
-    var provider = document.getElementById("providers-tab");
-    var partner = document.getElementById("partners-tab");
-    var access = document.getElementById("access-tab");
-    var records = document.getElementById("records-tab");
-
-    dash.classList.remove("active");
-    providerLoc.classList.remove("active");
-    profile.classList.remove("active");
-    provider.classList.remove("active");
-    partner.classList.remove("active");
-    access.classList.add("active");
-    records.classList.remove("active");
+    document.getElementById("access-tab").classList.add("active");;
 
     function CreateAccess() {
         $('#accessDiv').load("/AdminDashboard/CreateAccess");
@@ -104,4 +90,15 @@
         console.log(id);
         $('#accessDiv').load("/AdminDashboard/CreateAccess?id=" + id);
     }
+
+    $(".editProvider").click(function () {
+        var physicianid = $(this).closest('.tr').data('pid');
+        $.ajax({
+            url: '@Url.Action("EditProvider","AdminDashboard")',
+            data: { physicianid: physicianid },
+            success: function (result) {
+                $('#providerdiv').html(result);
+            }
+        });
+    })
 </script>

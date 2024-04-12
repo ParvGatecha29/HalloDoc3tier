@@ -33,5 +33,6 @@ namespace HalloDocDAL.Model
             public List<ScheduleModel> DayList { get; set; }
             public List<int> repeatBox { get; set; }
             public List<Region> regions { get; set; }
+            public List<Physician> physicians { get; set; }
     }
 }

@@ -816,6 +816,7 @@ public class AdminDashboardController : Controller
     {
         Access access = new Access();
         access.Users = _adminDashboardService.GetAllUsers();
+        access.Users = access.Users.Where(x=> (x.Aspnetuser != null ? x.Aspnetuser.Aspnetuserroles.Any(y => y.RoleId == "1") : false) || (x.Aspnetuser != null ? x.Aspnetuser.Aspnetuserroles.Any(y => y.RoleId == "2") : false)).ToList();
         return View(access);
     }
 

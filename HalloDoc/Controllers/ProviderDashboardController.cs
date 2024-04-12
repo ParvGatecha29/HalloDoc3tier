@@ -6,6 +6,7 @@ using HalloDocDAL.Models;
 using Microsoft.AspNetCore.Mvc;
 using Rotativa.AspNetCore;
 using System.Globalization;
+using System.Transactions;
 
 namespace HalloDoc.Controllers
 {
@@ -32,7 +33,6 @@ namespace HalloDoc.Controllers
             _requestService = requestService;
             _userRepository = userRepository;
             _recordsRepository = recordsRepository;
-            
         }
         public IActionResult ProviderDashboard()
         {
@@ -373,6 +373,257 @@ namespace HalloDoc.Controllers
         {
             _requestService.TransferCase(Requestid, "", 8);
             return Json(new { success = true});
+        }
+
+        public IActionResult MySchedule()
+        {
+            UserInfo user = SessionService.GetLoggedInUser(HttpContext.Session);
+            Physician physician = _adminDashboardService.GetPhysiciansByEmail(user.Email);
+            var region = _adminDashboardService.GetAllRegions();
+            ViewBag.regions = region;
+            ScheduleModel model = new ScheduleModel();
+            model.Physicianid = physician.Physicianid;
+            model.Regionid = physician.Regionid;
+            model.regions = region;
+            model.physicians = _adminDashboardService.GetPhysiciansByRegion((int)model.Regionid);
+            return View(model);
+        }
+
+        public IActionResult CreateShift(ScheduleModel model)
+        {
+            var admin = SessionService.GetLoggedInUser(HttpContext.Session);
+            Physician physician = _adminDashboardService.GetPhysiciansByEmail(admin.Email);
+            model.Physicianid = physician.Physicianid;
+            model.Regionid = physician.Regionid;
+            var events = _userRepository.GetMappedEvents(0);
+            bool slotAvailable = true;
+            foreach (var e in events)
+            {
+
+
+
+                if (e.resourceId == model.Physicianid)
+                {
+                    if (model.Startdate == DateOnly.FromDateTime(e.start.Date))
+                        if ((TimeOnly.FromDateTime(e.start) <= model.Starttime && model.Starttime <= TimeOnly.FromDateTime(e.end)) ||
+                     (TimeOnly.FromDateTime(e.start) <= model.Endtime && model.Endtime <= TimeOnly.FromDateTime(e.end)))
+                        {
+                            slotAvailable = false;
+                            return Json(new { success = false });
+                        }
+                }
+
+            }
+            using (var transaction = new TransactionScope())
+            {
+                Shift shift = new Shift();
+                shift.Physicianid = model.Physicianid;
+                shift.Repeatupto = model.Repeatupto;
+                shift.Startdate = model.Startdate;
+                shift.Createdby = admin.Id;
+                shift.Createddate = DateTime.Now;
+                shift.Isrepeat = model.Isrepeat;
+                shift.Repeatupto = model.Repeatupto;
+                _userRepository.AddShift(shift);
+
+                Shiftdetail sd = new Shiftdetail();
+                sd.Shiftid = shift.Shiftid;
+                sd.Shiftdate = new DateTime(model.Startdate.Year, model.Startdate.Month, model.Startdate.Day);
+                sd.Starttime = model.Starttime;
+                sd.Endtime = model.Endtime;
+                sd.Regionid = model.Regionid;
+                sd.Status = model.Status;
+                sd.Isdeleted = false;
+
+
+                _userRepository.AddShiftDetails(sd);
+
+                Shiftdetailregion sr = new Shiftdetailregion();
+                sr.Shiftdetailid = sd.Shiftdetailid;
+                sr.Regionid = (int)model.Regionid;
+                sr.Isdeleted = false;
+                _userRepository.AddShiftDetailRegions(sr);
+
+                if (model.checkWeekday != null)
+                {
+
+                    List<int> day = model.checkWeekday.Split(',').Select(int.Parse).ToList();
+
+                    foreach (int d in day)
+                    {
+                        DayOfWeek desiredDayOfWeek = (DayOfWeek)d;
+                        DateTime today = DateTime.Today;
+                        DateTime nextOccurrence = new DateTime(model.Startdate.Year, model.Startdate.Month, model.Startdate.Day);
+                        int occurrencesFound = 0;
+                        while (occurrencesFound < model.Repeatupto)
+                        {
+                            if (nextOccurrence.DayOfWeek == desiredDayOfWeek)
+                            {
+
+                                Shiftdetail sdd = new Shiftdetail();
+                                sdd.Shiftid = shift.Shiftid;
+                                sdd.Shiftdate = nextOccurrence;
+                                sdd.Starttime = model.Starttime;
+                                sdd.Endtime = model.Endtime;
+                                sdd.Regionid = model.Regionid;
+                                sdd.Status = (short)model.Status;
+                                sdd.Isdeleted = false;
+                                _userRepository.AddShiftDetails(sdd);
+
+                                Shiftdetailregion srr = new Shiftdetailregion();
+                                srr.Shiftdetailid = sdd.Shiftdetailid;
+                                srr.Regionid = (int)model.Regionid;
+                                srr.Isdeleted = false;
+                                _userRepository.AddShiftDetailRegions(srr);
+                                occurrencesFound++;
+                            }
+                            nextOccurrence = nextOccurrence.AddDays(1);
+                        }
+                    }
+                }
+
+                transaction.Complete();
+            }
+            return Json(new { success = true });
+        }
+        [HttpGet]
+        public IActionResult GetPhysicianShift(int region)
+        {
+            // Retrieve physicians associated with the specified region
+            var physicians = _adminDashboardService.GetPhysiciansByRegion(region);
+
+            return Ok(physicians);
+        }
+
+        [HttpGet]
+        public IActionResult GetEvents(int region,int Physicianid)
+        {
+            var mappedEvents = _userRepository.GetMappedEvents(region);
+            mappedEvents = mappedEvents.Where(x => x.resourceId == Physicianid).ToList();
+            return Ok(mappedEvents);
+        }
+
+        [HttpPost]
+        public IActionResult SaveShift(int shiftDetailId, DateTime startDate, TimeOnly startTime, TimeOnly endTime)
+        {
+            // Find the shift detail by its ID
+            Shiftdetail? shiftdetail = _userRepository.FindShiftDetails(shiftDetailId);
+            var admin = SessionService.GetLoggedInUser(HttpContext.Session);
+            Physician physician = _adminDashboardService.GetPhysiciansByEmail(admin.Email);
+
+            var events = _userRepository.GetMappedEvents(0);
+            bool slotAvailable = true;
+            foreach (var e in events)
+            {
+                if (shiftDetailId != e.ShiftDetailId)
+                {
+                    if (e.resourceId == shiftdetail.Shift.Physicianid)
+                    {
+                        if (startDate == e.start.Date)
+                            if ((TimeOnly.FromDateTime(e.start) <= startTime && startTime <= TimeOnly.FromDateTime(e.end)) ||
+                         (TimeOnly.FromDateTime(e.start) <= endTime && endTime <= TimeOnly.FromDateTime(e.end)))
+                            {
+                                slotAvailable = false;
+                                return Json(new { error = true });
+                            }
+                    }
+                }
+
+            }
+            // If shift detail is not found, return a 404 Not Found response
+            if (shiftdetail == null)
+            {
+                return Json(new { error = true });
+            }
+
+            try
+            {
+                // Update the shift detail properties
+                shiftdetail.Shiftdate = startDate;
+                shiftdetail.Starttime = startTime;
+                shiftdetail.Endtime = endTime;
+                shiftdetail.Modifiedby = admin.Id;
+                shiftdetail.Modifieddate = DateTime.Now;
+
+                // Update the database
+                _userRepository.UpdateShiftDetails(shiftdetail);
+                return RedirectToAction("GetEvents", new { Physicianid = shiftdetail.Shift.Physicianid });
+            }
+            catch (Exception ex)
+            {
+                // Return a 400 Bad Request response with the error message
+                return Json(new { success = false });
+            }
+        }
+
+        public IActionResult DeleteShift(int shiftDetailId)
+        {
+            Shiftdetail? shiftdetail = _userRepository.FindShiftDetails(shiftDetailId);
+            var user = SessionService.GetLoggedInUser(HttpContext.Session);
+            Admin? admin = _adminDashboardService.GetAdminById(user.Id);
+
+            if (shiftdetail == null)
+            {
+                return NotFound("Shift detail not found.");
+            }
+            shiftdetail.Isdeleted = true;
+            shiftdetail.Modifiedby = user.Id;
+            shiftdetail.Modifieddate = DateTime.Now;
+            _userRepository.UpdateShiftDetails(shiftdetail);
+            var mappedEvents = _userRepository.GetMappedEvents(0);
+            return RedirectToAction("GetEvents");
+        }
+
+        public JsonResult DeleteSelectedShift(int shiftDetailId)
+        {
+            Shiftdetail? shiftdetail = _userRepository.FindShiftDetails(shiftDetailId);
+            var user = SessionService.GetLoggedInUser(HttpContext.Session);
+            Admin? admin = _adminDashboardService.GetAdminById(user.Id);
+
+            if (shiftdetail == null)
+            {
+                return Json(new { success = false });
+            }
+            shiftdetail.Isdeleted = true;
+            shiftdetail.Modifiedby = user.Id;
+            shiftdetail.Modifieddate = DateTime.Now;
+            _userRepository.UpdateShiftDetails(shiftdetail);
+            var mappedEvents = _userRepository.GetMappedEvents(0);
+            return Json(new { success = true });
+        }
+
+        public JsonResult ApproveSelectedShift(int shiftDetailId)
+        {
+            Shiftdetail? shiftdetail = _userRepository.FindShiftDetails(shiftDetailId);
+            var user = SessionService.GetLoggedInUser(HttpContext.Session);
+            Admin? admin = _adminDashboardService.GetAdminById(user.Id);
+
+            if (shiftdetail == null)
+            {
+                return Json(new { success = false });
+            }
+            shiftdetail.Status = 1;
+            shiftdetail.Modifiedby = user.Id;
+            shiftdetail.Modifieddate = DateTime.Now;
+            _userRepository.UpdateShiftDetails(shiftdetail);
+            var mappedEvents = _userRepository.GetMappedEvents(0);
+            return Json(new { success = true });
+        }
+
+        public IActionResult ReturnShift(int shiftDetailId)
+        {
+            Shiftdetail? shiftdetail = _userRepository.FindShiftDetails(shiftDetailId);
+
+            // If shift detail is not found, return a 404 Not Found response
+            if (shiftdetail == null)
+            {
+                return NotFound("Shift detail not found.");
+            }
+            shiftdetail.Status = (short)((shiftdetail.Status == 0) ? 1 : 0);
+
+            _userRepository.UpdateShiftDetails(shiftdetail);
+            return RedirectToAction("GetEvents",new { Physicianid = shiftdetail.Shift.Physicianid});
+
         }
     }
 }

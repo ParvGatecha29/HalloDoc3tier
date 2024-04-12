@@ -93,7 +93,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
                                     </button>
                                 </li>
                                 <li class="nav-item px-3" role="presentation">
-                                    <button class="nav-link layout" id="schedule-tab" data-bs-toggle="tab"
+                                    <button class="nav-link layout" id="myschedule-tab" data-bs-toggle="tab"
                                             data-bs-target="#dashboard" type="button" role="tab" aria-controls="schedule"
                                             aria-selected="true" style="color:inherit">
                                         My Schedule
@@ -155,45 +155,13 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css
                 window.location.href = '@Url.Action("ProviderDashboard","ProviderDashboard")';
             })
 
-            // $('#providerlocation-tab').click(function () {
-            //     window.location.href = '@Url.Action("ProviderLocation","AdminDashboard")';
-            // })
-
             $('#myprofile-tab').click(function () {
                 window.location.href = '@Url.Action("ProviderProfile","ProviderDashboard")';
             })
 
-            // $('#provider-tab').click(function () {
-            //     window.location.href = '@Url.Action("Provider","AdminDashboard")';
-            // })
-
-            // $('#account-tab').click(function () {
-            //     window.location.href = '@Url.Action("Access","AdminDashboard")';
-            // })
-
-            // $('#user-tab').click(function () {
-            //     window.location.href = '@Url.Action("UserAccess","AdminDashboard")';
-            // })
-
-            // $('#scheduling-tab').click(function () {
-            //     window.location.href = '@Url.Action("Scheduling","AdminDashboard")';
-            // })
-
-            // $('#partners-tab').click(function () {
-            //     window.location.href = '@Url.Action("Partners","AdminDashboard")';
-            // })
-
-            // $('#searchrecords-tab').click(function () {
-            //     window.location.href = '@Url.Action("SearchRecords","AdminDashboard")';
-            // })
-
-            // $('#patienthistory-tab').click(function () {
-            //     window.location.href = '@Url.Action("PatientHistory","AdminDashboard")';
-            // })
-
-            // $('#blockhistory-tab').click(function () {
-            //     window.location.href = '@Url.Action("BlockHistory","AdminDashboard")';
-            // })
+            $('#myschedule-tab').click(function () {
+                window.location.href = '@Url.Action("MySchedule","ProviderDashboard")';
+            })
         });
 
 

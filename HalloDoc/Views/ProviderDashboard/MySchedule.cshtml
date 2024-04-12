@@ -1,49 +1,25 @@
 ﻿@model HalloDocDAL.Model.ScheduleModel;
 @{
     ViewData["Title"] = "Scheduling";
-    Layout = "_adminDash";
+    Layout = "_providerDash";
 }
-<style>
 
-
-
-</style>
 <div class="" id="schedulingDiv">
     <div class="row justify-content-between  ">
         <div class="">
             <div class="d-flex justify-content-between my-3 container">
                 <div class="d-flex">
-                    <span class="fs-2 text-muted fw-bold">New Request</span>
+                    <span class="fs-2 text-muted fw-bold">My Schedule</span>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <a asp-controller="AdminDashboard" asp-action="AdminDashboard" asp-area=""
+                    <a asp-controller="ProviderDashboard" asp-action="ProviderDashboard" asp-area=""
                        class="btn btn-outline-info d-flex align-items-center">
                         <span class="material-symbols-outlined"> chevron_left </span> Back
                     </a>
                 </div>
             </div>
             <div class="container d-flex flex-column  shadow">
-                <div class="row mb-0 py-2 pe-2 rounded-3">
-                    <div class="d-lg-flex  justify-content-between pe-1 pt-3">
-                        <div class="col-xl-3  col-lg-3 col-md-12 col-sm-12 col-xs-12 col-12">
-                            <select class="form-select" aria-label="Default select example" id="regionselect">
-                                <option value="0" selected>All Regions</option>
-                                @foreach (var i in Model.regions)
-                                {
-                                    <option value="@i.Regionid">@i.Name</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="mt-3">
-                            <a class="btn btn-info rounded-2 p-2 text-white" id="providerOnCall">Provider On Call</a>
-                            <a class="btn btn-info rounded-2 p-2 text-white" id="shiftForReview">Shift For Review</a>
-                            <a data-bs-toggle="modal" data-bs-target="#createShiftModal" class="btn btn-info mx-1 p-2 text-white">
-                                Add New Shift
-                            </a>
-
-                        </div>
-                    </div>
-                </div>
+                
 
                 <div class="row my-2 mb-5">
                     <div class="col-md-7 mt-2">
@@ -72,16 +48,9 @@
 
                         </div>
                         <div class="d-flex justify-content-end">
-                            <div id="day" class="btn btn-outline-info  mx-2" onclick="calendar.changeView('resourceTimelineDay')">
-                                Day
-                            </div>
-                            <!-- Button trigger modal -->
-                            <div id="week" class="btn btn-outline-info mx-2" onclick="calendar.changeView('resourceTimelineWeek')">
-                                Week
-                            </div>
-                            <div id="month" class="btn btn-outline-info mx-2" onclick="calendar.changeView('dayGridMonth')">
-                                Month
-                            </div>
+                            <a data-bs-toggle="modal" data-bs-target="#createShiftModal" class="btn btn-info mx-1 p-2 text-white">
+                                Add New Shift
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -105,7 +74,7 @@
         getPhysicianShift(selectedRegion);
 
         function getPhysicianShift(region) {
-            fetch('/AdminDashboard/GetPhysicianShift?region=' + region)
+            fetch('/ProviderDashboard/GetPhysicianShift?region=' + region)
                 .then(response => response.json())
                 .then(data => {
                     const resources = data.map(physician => ({
@@ -115,7 +84,7 @@
                     }));
 
                     // Fetch events from the server
-                    fetch('/AdminDashboard/GetEvents?region=' + region)
+                    fetch('/ProviderDashboard/GetEvents?region=' + region + "&Physicianid="+@Model.Physicianid)
                         .then(response => response.json())
                         .then(data => {
 
@@ -150,7 +119,7 @@
                 schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
                 themeSystem: 'bootstrap5',
                 headerToolbar: false,
-                initialView: 'resourceTimelineDay',
+                initialView: 'dayGridMonth',
                 eventMaxStack: 1,
                 dayMaxEvents: 4,
                 views: {
@@ -215,7 +184,7 @@
                     var startTime = formatTime(e.event.start);
                     var endTime = formatTime(e.event.end);
                     $.ajax({
-                        url: '/AdminDashboard/SaveShift',
+                        url: '/ProviderDashboard/SaveShift',
                         type: 'POST',
                         data: {
                             shiftDetailId: shiftDetailId,
@@ -278,42 +247,42 @@
                     var event = info.event;
                     var modalBody = document.querySelector('#eventModal .modal-body');
                     var eventDetails = `
-                                            <form asp-action="viewshift">
-                                            <input class="d-none" id="shiftDetailId" value="${shiftDetailId}">
-                                               <div class="form-floating mb-3 mt-3">
-                                        <select class="form-control" aria-label="Default select example" id="selectregion" disabled>
-                                            <option value="">${region[0].Name}</option>
+                                                <form asp-action="viewshift">
+                                                <input class="d-none" id="shiftDetailId" value="${shiftDetailId}">
+                                                   <div class="form-floating mb-3 mt-3">
+                                            <select class="form-control" aria-label="Default select example" id="selectregion" disabled>
+                                                <option value="">${region[0].Name}</option>
 
-                                        </select>
-                                            <label>Region</label>
+                                            </select>
+                                                <label>Region</label>
+                                        </div>
+                                                <div class="form-floating mb-3 mt-3">
+                                                                <select class="form-select pt-4 physicianDropdown" asp-for="Physicianid" id="physicianSelect" aria-label="Default select example" disabled>
+                                                                <option value="" selected disabled>${event.title}</option>
+                                                            </select>
+                                                                <label>Physician</label>
+                                                        </div>
+                                                                <div class="col-md-12 form-floating mb-3">
+                                                <input id="StartDateView" class="form-control rounded vcs" name="Startdate" type="date" placeholder="Suchtext" autocomplete="off" value="${formatDate(event.start)}" disabled>
+                                        <label for="StartDate">Shifted Date</label>
+                                        <div class="d-flex gap-2 mt-3">
+                                        <div class="col-md-6 form-floating mb-3">
+                                                <input id="StartTimeView" asp-for="Starttime" disabled class="form-control rounded vcs" name="Starttime" type="time" placeholder="Suchtext" autocomplete="off" value="${formatTime(event.start)}" >
+                                        <label for="StartTime">Start</label>
                                     </div>
-                                            <div class="form-floating mb-3 mt-3">
-                                                            <select class="form-select pt-4 physicianDropdown" asp-for="Physicianid" id="physicianSelect" aria-label="Default select example" disabled>
-                                                            <option value="" selected disabled>${event.title}</option>
-                                                        </select>
-                                                            <label>Physician</label>
-                                                    </div>
-                                                            <div class="col-md-12 form-floating mb-3">
-                                            <input id="StartDateView" class="form-control rounded vcs" name="Startdate" type="date" placeholder="Suchtext" autocomplete="off" value="${formatDate(event.start)}" disabled>
-                                    <label for="StartDate">Shifted Date</label>
-                                    <div class="d-flex gap-2 mt-3">
                                     <div class="col-md-6 form-floating mb-3">
-                                            <input id="StartTimeView" asp-for="Starttime" disabled class="form-control rounded vcs" name="Starttime" type="time" placeholder="Suchtext" autocomplete="off" value="${formatTime(event.start)}" >
-                                    <label for="StartTime">Start</label>
-                                </div>
-                                <div class="col-md-6 form-floating mb-3">
-                                            <input id="EndTimeView" asp-for="Endtime" disabled	 class="form-control rounded vcs" name="Endtime" type="time" placeholder="Suchtext" autocomplete="off" value="${formatTime(event.end)}" >
-                                    <label for="EndTime">End</label>
-                                </div>
-                                </div>
-                                    <div class="d-flex justify-content-end gap-2">
-                                <button class="btn btn-info" id="returnshift"  type="button">Return</button>
-                            <button class="btn btn-info" id="editbtn" type="button">Edit</button>
-                                <button class="btn btn-success d-none" id="savebtn"  type="button">Save</button>
-                            <button class="btn btn-danger" id="deletebtn" type="button">Delete</button>
-                        </div>
-                                </form>
-                                                `;
+                                                <input id="EndTimeView" asp-for="Endtime" disabled	 class="form-control rounded vcs" name="Endtime" type="time" placeholder="Suchtext" autocomplete="off" value="${formatTime(event.end)}" >
+                                        <label for="EndTime">End</label>
+                                    </div>
+                                    </div>
+                                        <div class="d-flex justify-content-end gap-2">
+                                    <button class="btn btn-info" id="returnshift"  type="button">Return</button>
+                                <button class="btn btn-info" id="editbtn" type="button">Edit</button>
+                                    <button class="btn btn-success d-none" id="savebtn"  type="button">Save</button>
+                                <button class="btn btn-danger" id="deletebtn" type="button">Delete</button>
+                            </div>
+                                    </form>
+                                                    `;
                     modalBody.innerHTML = eventDetails;
 
                     // Open the modal when an event is clicked
@@ -397,9 +366,9 @@
     </div>
 </div>
 <script>
-    var provider = document.getElementById("providers-tab").classList.add("active");
+    var provider = document.getElementById("myschedule-tab").classList.add("active");
 
-   
+
     // Function to format date to YYYY-MM-DD
     function formatDate(dateString) {
 
@@ -425,7 +394,7 @@
         var shiftDetailId = $('#shiftDetailId').val(); // Assuming you have an input field with id 'shiftDetailId' in your modal
         // Call AJAX to return
         $.ajax({
-            url: '/AdminDashboard/ReturnShift',
+            url: '/ProviderDashboard/ReturnShift',
             type: 'POST',
             data: { shiftDetailId: shiftDetailId },
             success: function (response) {
@@ -463,7 +432,7 @@
 
         var shiftDetailId = $('#shiftDetailId').val();
         $.ajax({
-            url: '/AdminDashboard/DeleteShift',
+            url: '/ProviderDashboard/DeleteShift',
             type: 'POST',
             data: { shiftDetailId: shiftDetailId },
             success: function (response) {
@@ -499,7 +468,7 @@
         var endTime = $('#EndTimeView').val();
         // Call AJAX to save
         $.ajax({
-            url: '/AdminDashboard/SaveShift',
+            url: '/ProviderDashboard/SaveShift',
             type: 'POST',
             data: {
                 shiftDetailId: shiftDetailId,
@@ -551,10 +520,11 @@
     });
 
     $('#providerOnCall').click(function () {
-        $('#schedulingDiv').load("/AdminDashboard/ProviderOnCall");
+        $('#schedulingDiv').load("/ProviderDashboard/ProviderOnCall");
     })
 
     $('#shiftForReview').click(function () {
-        $('#schedulingDiv').load("/AdminDashboard/ShiftForReview");
+        $('#schedulingDiv').load("/ProviderDashboard/ShiftForReview");
     })
-</script>zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+</script>
+

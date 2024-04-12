@@ -240,7 +240,7 @@ namespace HalloDocDAL.Repositories
                 {
                     Directory.CreateDirectory(uploadsFolderPath);
                 }
-                ICAPath = Path.Combine(uploadsFolderPath, "ICA.png");
+                ICAPath = Path.Combine(uploadsFolderPath, "ICA.pdf");
                 using (var stream = new FileStream(ICAPath, FileMode.Create))
                 {
                     ICA.CopyToAsync(stream);
@@ -256,7 +256,7 @@ namespace HalloDocDAL.Repositories
                 {
                     Directory.CreateDirectory(uploadsFolderPath);
                 }
-                BackgroundCheckPath = Path.Combine(uploadsFolderPath, "BackgroundCheck.png");
+                BackgroundCheckPath = Path.Combine(uploadsFolderPath, "BC.pdf");
                 using (var stream = new FileStream(BackgroundCheckPath, FileMode.Create))
                 {
                     BackgroundCheck.CopyToAsync(stream);
@@ -272,7 +272,7 @@ namespace HalloDocDAL.Repositories
                 {
                     Directory.CreateDirectory(uploadsFolderPath);
                 }
-                HippaPath = Path.Combine(uploadsFolderPath, "ICA.png");
+                HippaPath = Path.Combine(uploadsFolderPath, "CRED.pdf");
                 using (var stream = new FileStream(HippaPath, FileMode.Create))
                 {
                     Hippa.CopyToAsync(stream);
@@ -288,7 +288,7 @@ namespace HalloDocDAL.Repositories
                 {
                     Directory.CreateDirectory(uploadsFolderPath);
                 }
-                NDAPath = Path.Combine(uploadsFolderPath, "ICA.png");
+                NDAPath = Path.Combine(uploadsFolderPath, "NDA.pdf");
                 using (var stream = new FileStream(NDAPath, FileMode.Create))
                 {
                     NDA.CopyToAsync(stream);
@@ -466,8 +466,15 @@ namespace HalloDocDAL.Repositories
 
         public List<User> GetUsers()
         {
-            var users = _context.Users.Include(_ => _.Aspnetuser).ThenInclude(_ => _.Aspnetuserroles).ToList();
-            return users;
+            var users = _context.Users.Include(_ => _.Aspnetuser).ThenInclude(_ => _.Aspnetuserroles);
+            if(users.Any(x => x.Aspnetuser != null ? x.Aspnetuser.Aspnetuserroles.Any(y => y.RoleId == "1") : false)){
+                users.Include(x => x.Aspnetuser).ThenInclude(x => x.Admins);
+            }
+            if (users.Any(x => x.Aspnetuser != null ? x.Aspnetuser.Aspnetuserroles.Any(y => y.RoleId == "2") : false))
+            {
+                users.Include(x => x.Aspnetuser).ThenInclude(x => x.PhysicianAspnetusers);
+            }
+            return users.ToList();
         }
 
         public List<Healthprofessionaltype> GetHealthProfessionalTypes()

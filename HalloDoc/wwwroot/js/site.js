@@ -5,12 +5,21 @@
 const btn1 = document.querySelector(".btn-toggle");
 const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
 
+var linkdark = document.createElement('link');
+linkdark.rel = "stylesheet";
+linkdark.href = "//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css";
+var linklight = document.createElement('link');
+linklight.rel = "stylesheet";
+linklight.href = "//cdn.jsdelivr.net/npm/@sweetalert2/theme-minimal/minimal.css";
+
 const currentTheme = localStorage.getItem("theme");
 document.documentElement.setAttribute("data-bs-theme", currentTheme);
 if (currentTheme == "dark") {
     document.body.classList.toggle("dark-theme");
+    document.head.appendChild(linkdark);
 } else if (currentTheme == "light") {
     document.body.classList.toggle("light-theme");
+    document.head.appendChild(linklight);
 }
 
 btn1.addEventListener("click", function () {
@@ -24,6 +33,14 @@ btn1.addEventListener("click", function () {
         var theme = document.body.classList.contains("dark-theme")
             ? "dark"
             : "light";
+    }
+    if (theme == "light") {
+        document.head.appendChild(linklight);
+        document.head.removeChild(linkdark);
+    }
+    else {
+        document.head.removeChild(linklight);
+        document.head.appendChild(linkdark);
     }
     localStorage.setItem("theme", theme);
     document.documentElement.setAttribute("data-bs-theme", theme);
@@ -47,12 +64,11 @@ if (element != null) {
 }
 
 
-
-function upload(file){
+function upload(file) {
     var name = file.files[0].name;
     var span = document.getElementById("upload");
     span.innerHTML = name;
-} 
+}
 
 function pass() {
     var x = document.getElementById("pass");
