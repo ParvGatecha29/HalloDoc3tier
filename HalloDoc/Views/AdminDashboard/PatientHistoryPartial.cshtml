@@ -25,15 +25,15 @@
         last = first + Model.PageSize - 1;
     }
 }
-<table class="table my-3 me-0">
+<table class="table my-3 me-0" id="responsiveTable">
     <thead class="">
         <tr class="bg-secondary-subtle">
             <th class="py-3">First Name</th>
             <th class="py-3">Last Name</th>
-            <th class="py-3">Email</th>
-            <th class="py-3">Phone</th>
-            <th class="py-3">Address</th>
-            <th class="py-3">Actions</th>
+            <th class="py-3 mobile-hide">Email</th>
+            <th class="py-3 mobile-hide">Phone</th>
+            <th class="py-3 mobile-hide">Address</th>
+            <th class="py-3 mobile-hide">Actions</th>
         </tr>
     </thead>
 
@@ -41,13 +41,13 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr class="data-row">
-                <td class="py-3">@item.FirstName</td>
-                <td class="py-3">@item.LastName</td>
-                <td class="py-3">@item.Email</td>
-                <td class="py-3">@item.PhoneNumber</td>
-                <td class="py-3">@item.Address</td>
-                <td class="py-3">
+            <tr class="data-row table-row">
+                <td class="py-3" data-label="First Name">@item.FirstName</td>
+                <td class="py-3" data-label="Last Name">@item.LastName</td>
+                <td class="py-3 mobile-hide" data-label="Email">@item.Email</td>
+                <td class="py-3 mobile-hide" data-label="Phone Number">@item.PhoneNumber</td>
+                <td class="py-3 mobile-hide" data-label="Address">@item.Address</td>
+                <td class="py-3 mobile-hide" data-label="Actions">
                     <button role="button" onclick="explorePatient(@item.UserId)" class="btn btn-outline-info ">Explore</button>
                 </td>
             </tr>
@@ -87,3 +87,24 @@
         </li>
     </ul>
 </div>
+<script>
+    var tableRows = document.querySelectorAll('#responsiveTable tbody .table-row');
+    if (window.innerWidth <= 600) {
+        var details = document.querySelectorAll('.mobile-hide');
+        details.forEach(function (detail) {
+            detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+        });
+    }
+    function toggleDetails() {
+        if (window.innerWidth <= 600) {
+            var details = this.querySelectorAll('.mobile-hide');
+            details.forEach(function (detail) {
+                detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+            });
+        }
+    }
+
+    tableRows.forEach(function (row) {
+        row.addEventListener('click', toggleDetails);
+    });
+</script>

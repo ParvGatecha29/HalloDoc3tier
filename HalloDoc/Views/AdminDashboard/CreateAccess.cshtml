@@ -4,10 +4,10 @@
     <div class="row m-4 col-xl-6 col-md-8 col-11">
         <p class="col fs-4 fw-bold pb-0 mb-0 d-inline">Create Role</p>
         <div class="col mb-0 text-end">
-            <a class="text-decoration-none text-info rounded border border-info p-2 i-info access-tab">
-                <i class="bi bi-chevron-left i-info"></i>
+            <button onclick="location.href='@Url.Action("Access","AdminDashboard")'" class="btn btn-outline-info rounded border border-info p-2 i-info access-tab">
+                <i class="bi bi-chevron-left text-info i-info"></i>
                 Back
-            </a>
+            </button>
         </div>
     </div>
 
@@ -46,7 +46,7 @@
 
             <div class="text-end">
                 <button class="btn btn-info text-light" type="submit">Save</button>
-                <button class="btn border border-info text-info access-tab">Cancel</button>
+                <button type="reset" class="btn border border-info text-info access-tab">Cancel</button>
             </div>
         </form>
 
@@ -56,7 +56,6 @@
 
 <script>
     if (@Model.edit == 1) {
-        console.log("edit")
         $(document).ready(function () {
             var accountType = $('#accountType').val();
             $("#MenuData").load('@Url.Action("AccessMenu", "AdminDashboard")?AccountType=' + accountType + "&roleid=" + @Model.roleid);

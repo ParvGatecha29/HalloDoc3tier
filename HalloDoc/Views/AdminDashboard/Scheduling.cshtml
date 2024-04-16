@@ -1,4 +1,6 @@
 ﻿@model HalloDocDAL.Model.ScheduleModel;
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
 @{
     ViewData["Title"] = "Scheduling";
     Layout = "_adminDash";
@@ -72,14 +74,14 @@
 
                         </div>
                         <div class="d-flex justify-content-end">
-                            <div id="day" class="btn btn-outline-info  mx-2" onclick="calendar.changeView('resourceTimelineDay')">
+                            <div id="resourceTimelineDay" class="btn btn-outline-info viewbtn mx-2" onclick="changeview('resourceTimelineDay',this)">
                                 Day
                             </div>
                             <!-- Button trigger modal -->
-                            <div id="week" class="btn btn-outline-info mx-2" onclick="calendar.changeView('resourceTimelineWeek')">
+                            <div id="resourceTimelineWeek" class="btn btn-outline-info viewbtn mx-2" onclick="changeview('resourceTimelineWeek',this)">
                                 Week
                             </div>
-                            <div id="month" class="btn btn-outline-info mx-2" onclick="calendar.changeView('dayGridMonth')">
+                            <div id="resourceTimelineWeek" class="btn btn-outline-info viewbtn mx-2" onclick="changeview('resourceTimelineWeek',this)">
                                 Month
                             </div>
                         </div>
@@ -95,9 +97,30 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.11/index.global.min.js"></script>
 <script>
     var calendar;
-
+    function changeview(view,btnc) {
+        var btn = document.querySelectorAll(".viewbtn");
+        btn.forEach(function (btn) {
+            btn.classList.remove("btn-info")
+        })
+        btnc.classList.add("btn-info")
+        $.ajax({
+            url: "/AdminDashboard/CurrentView",
+            data: { view: view }
+        })
+        calendar.changeView(view);
+        
+    }
     document.addEventListener('DOMContentLoaded', function () {
-
+        
+        var view = "@Accessor.HttpContext.Session.GetString("view")";
+        
+        if(view!=null){
+            $("#"+view).addClass("btn-info")
+        }
+        else{
+            $("#resourceTimelineDay").addClass("btn-info")
+        }
+        
 
         var calendarEl = document.getElementById('calendar');
         var selectedRegion = $('#regionselect').val();
@@ -111,7 +134,7 @@
                     const resources = data.map(physician => ({
                         id: physician.Physicianid,
                         title: physician.Firstname,
-                        avatar: `<img src="/physician/${physician.Physicianid}/photo.png" class="avatar" />`
+                        avatar: `<img src="~/documents/Physician/${physician.Physicianid}/photo.png" class="avatar" />`
                     }));
 
                     // Fetch events from the server
@@ -150,7 +173,7 @@
                 schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
                 themeSystem: 'bootstrap5',
                 headerToolbar: false,
-                initialView: 'resourceTimelineDay',
+                initialView: "@Accessor.HttpContext.Session.GetString("view")",
                 eventMaxStack: 1,
                 dayMaxEvents: 4,
                 views: {
@@ -237,7 +260,7 @@
                                 calendar.refetchEvents();
                             }
                             else {
-                                console.log(response);
+                                
                                 $('#eventModal').modal('hide');
 
                                 const events = response.map(event => ({
@@ -294,7 +317,7 @@
                                                             <label>Physician</label>
                                                     </div>
                                                             <div class="col-md-12 form-floating mb-3">
-                                            <input id="StartDateView" class="form-control rounded vcs" name="Startdate" type="date" placeholder="Suchtext" autocomplete="off" value="${formatDate(event.start)}" disabled>
+                                                    <input id="StartDateView" class="form-control rounded vcs" name="Startdate" type="date" placeholder="Suchtext" autocomplete="off" min="@DateTime.Now.Date.ToString("yyyy-MM-dd")" value="${formatDate(event.start)}" disabled>
                                     <label for="StartDate">Shifted Date</label>
                                     <div class="d-flex gap-2 mt-3">
                                     <div class="col-md-6 form-floating mb-3">
@@ -315,7 +338,6 @@
                                 </form>
                                                 `;
                     modalBody.innerHTML = eventDetails;
-
                     // Open the modal when an event is clicked
                     $('#eventModal').modal('show');
                     $('#eventModal').on('click', '#editbtn', function () {
@@ -333,10 +355,11 @@
                 },
                 resourceLabelDidMount: function (resourceObj) {
                     const img = document.createElement('img');
-                    const imgUrl = resourceObj.resource.extendedProps.imageUrl || `/Physician/${resourceObj.el.dataset.resourceId}/photo.png`;
+                    const imgUrl = resourceObj.resource.extendedProps.imageUrl || `/documents/Physician/${resourceObj.el.dataset.resourceId}/photo.png`;
                     img.src = imgUrl;
                     img.style.maxHeight = '40px';
                     img.style.float = 'left';
+                    img.style.clear = 'right';
                     resourceObj.el.querySelector('.fc-datagrid-cell-main').appendChild(img);
                 },
                 dateClick: function (info) {
@@ -353,7 +376,6 @@
             });
 
             function switchView() {
-                console.log(calendar.view.type)
                 if (window.screen.width < 700) {
                     if (calendar.view.type === 'resourceTimelineWeek') {
                         calendar.changeView('dayGridWeek');
@@ -557,4 +579,4 @@
     $('#shiftForReview').click(function () {
         $('#schedulingDiv').load("/AdminDashboard/ShiftForReview");
     })
-</script>zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+</script>

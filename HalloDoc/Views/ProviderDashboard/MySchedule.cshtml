@@ -206,7 +206,6 @@
                                 calendar.refetchEvents();
                             }
                             else {
-                                console.log(response);
                                 $('#eventModal').modal('hide');
 
                                 const events = response.map(event => ({
@@ -322,7 +321,6 @@
             });
 
             function switchView() {
-                console.log(calendar.view.type)
                 if (window.screen.width < 700) {
                     if (calendar.view.type === 'resourceTimelineWeek') {
                         calendar.changeView('dayGridWeek');

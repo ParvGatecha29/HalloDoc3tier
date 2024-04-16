@@ -1,14 +1,14 @@
 ﻿@model List<HalloDocDAL.Model.PatientHistory>
-<table class="table my-3 me-0">
+<table class="table my-3 me-0" id="responsiveTable">
     <thead class="">
         <tr class="bg-secondary-subtle">
             <th class="py-3">Patient Name</th>
-            <th class="py-3">Phone Number</th>
-            <th class="py-3">Email</th>
-            <th class="py-3">Created date</th>
-            <th class="py-3">Notes</th>
-            <th class="py-3">Is Active</th>
-            <th class="py-3">Actions</th>
+            <th class="py-3 mobile-hide">Phone Number</th>
+            <th class="py-3 mobile-hide">Email</th>
+            <th class="py-3 mobile-hide">Created date</th>
+            <th class="py-3 mobile-hide">Notes</th>
+            <th class="py-3 mobile-hide">Is Active</th>
+            <th class="py-3 mobile-hide">Actions</th>
         </tr>
     </thead>
 
@@ -16,14 +16,14 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr class="data-row">
-                <td class="py-3">@item.FirstName @item.LastName</td>
-                <td class="py-3">@item.PhoneNumber</td>
-                <td class="py-3">@item.Email</td>
-                <td class="py-3">@item.CreatedDate</td>
-                <td class="py-3">Notes</td>
+            <tr class="data-row table-row">
+                <td class="py-3" data-label="Patient Name">@item.FirstName @item.LastName</td>
+                <td class="py-3 mobile-hide" data-label="Phone Number">@item.PhoneNumber</td>
+                <td class="py-3 mobile-hide" data-label="email">@item.Email</td>
+                <td class="py-3 mobile-hide" data-label="Created Date">@item.CreatedDate</td>
+                <td class="py-3 mobile-hide" data-label="Notes">Notes</td>
 
-                <td class="py-3">
+                <td class="py-3 mobile-hide" data-label="Is Active">
                     <input type="checkbox" value="@item.RequestId"
                     @if ((bool)item.IsActive)
                     {
@@ -33,7 +33,7 @@
                     }
                     />
                 </td>
-                <td class="py-3">
+                <td class="py-3 mobile-hide" data-label="Actions">
                     <button role="button" onclick="unblock(@item.RequestId)" class="btn btn-outline-info">Unblock</button>
                 </td>
             </tr>
@@ -41,3 +41,24 @@
 
     </tbody>
 </table>
+<script>
+    var tableRows = document.querySelectorAll('#responsiveTable tbody .table-row');
+    if (window.innerWidth <= 600) {
+        var details = document.querySelectorAll('.mobile-hide');
+        details.forEach(function (detail) {
+            detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+        });
+    }
+    function toggleDetails() {
+        if (window.innerWidth <= 600) {
+            var details = this.querySelectorAll('.mobile-hide');
+            details.forEach(function (detail) {
+                detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+            });
+        }
+    }
+
+    tableRows.forEach(function (row) {
+        row.addEventListener('click', toggleDetails);
+    });
+</script>

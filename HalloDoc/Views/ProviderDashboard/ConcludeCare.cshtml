@@ -8,7 +8,7 @@
     <div class="row m-4 col-10 col-xl-9">
         <p class="col fs-4 fw-bold pb-0 mb-0 d-inline">Conclude Care</p>
         <div class="col mb-0 text-end">
-            <a class="text-decoration-none text-info rounded border border-info p-2 i-info" onclick="LoadDashboard()">
+            <a class="text-decoration-none text-info rounded border border-info p-2 i-info" asp-action="ProviderDashboard" asp-controller="ProviderDashboard">
                 <i class="bi bi-chevron-left i-info"></i>
                 Back
             </a>
@@ -115,6 +115,19 @@
     </div>
 </div>
 
+<div class="modal fade" id="finalizeForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+            <div class="modal-body p-5">
+                <h3>Cannot conclude</h3>
+                <p>Please finalize the request first</p>
+
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $("#sort").click(function () {
         var icon = $(this);
@@ -128,6 +141,10 @@
     
     $(document).on('click', '.concludeCare', function () {
         $('#concludeCare').modal("show");
+    });
+
+    $(document).on('click', '.finalizeForm', function () {
+        $('#finalizeForm').modal("show");
     });
 
     $(document).ready(function () {

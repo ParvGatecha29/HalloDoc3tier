@@ -262,6 +262,7 @@ public partial class ApplicationDbContext : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("ip");
             entity.Property(e => e.Isactive)
+                .IsRequired()
                 .HasDefaultValueSql("true")
                 .HasColumnName("isactive");
             entity.Property(e => e.Modifieddate)
@@ -407,7 +408,8 @@ public partial class ApplicationDbContext : DbContext
             entity.ToTable("emaillog");
 
             entity.Property(e => e.Emaillogid)
-                .HasPrecision(9)
+                .UseIdentityAlwaysColumn()
+                .HasIdentityOptions(4L, null, null, 9999999999L, null, null)
                 .HasColumnName("emaillogid");
             entity.Property(e => e.Action).HasColumnName("action");
             entity.Property(e => e.Adminid).HasColumnName("adminid");
@@ -621,7 +623,9 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Isdeleted).HasColumnName("isdeleted");
             entity.Property(e => e.Islicensedoc).HasColumnName("islicensedoc");
             entity.Property(e => e.Isnondisclosuredoc).HasColumnName("isnondisclosuredoc");
-            entity.Property(e => e.Istokengenerate).HasColumnName("istokengenerate");
+            entity.Property(e => e.Istokengenerate)
+                .HasDefaultValueSql("false")
+                .HasColumnName("istokengenerate");
             entity.Property(e => e.Istrainingdoc).HasColumnName("istrainingdoc");
             entity.Property(e => e.Lastname)
                 .HasMaxLength(100)

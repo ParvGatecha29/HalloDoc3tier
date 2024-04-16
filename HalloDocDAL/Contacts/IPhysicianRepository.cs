@@ -12,6 +12,7 @@ namespace HalloDocDAL.Contacts
     {
         List<Physician> GetPhysicians(int region);
         Physician GetPhysicianById(int id);
+        Physician GetPhysicianByAspId(string id);
         Physician GetPhysicianByEmail(string email);
         List<Physicianregion> GetPhysicianRegions(int id);
         bool EditPhysician(Provider model);

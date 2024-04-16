@@ -2,10 +2,10 @@
 
 <div class="row justify-content-center mb-5 pb-5">
     <div class="m-4 me-5 mb-0 text-end col-xl-6 col-md-8 col-11">
-        <a class="text-decoration-none text-info rounded border border-info p-2 i-info provider-tab" asp-action="Provider" asp-controller="AdminDashboard">
+        <button class="text-decoration-none text-info rounded border border-info p-2 i-info provider-tab" onclick="history.back()">
             <i class="bi bi-chevron-left i-info"></i>
             Back
-        </a>
+        </button>
     </div>
 
     <div class="m-4 shadow col-xl-6 col-md-8 col-11 pb-3">
@@ -398,7 +398,7 @@
     });
 
     $(document).on('click', '#cancelPhysicianAccount', function () {
-        $("#dashboard").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
+        $("#dashboard").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
     });
 
     $(document).on('click', '#editPhysician', function () {
@@ -462,70 +462,70 @@
                 $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
     });
 
-    // Reset Password
-    $(document).on('click', '#PhysicianResetPassword', function () {
-        var Password = $('#PhysicianPassword').val();
-        var phyid = $('#adminID').val();
+    // // Reset Password
+    // $(document).on('click', '#PhysicianResetPassword', function () {
+    //     var Password = $('#PhysicianPassword').val();
+    //     var phyid = $('#adminID').val();
 
-        $.ajax({
-            url: '/Admin/ResetPassword',
-            type: 'POST',
-            data: { Password: Password, adminID: phyid },
-            success: function (result) {
-                if (result.success) {
-                    $("#providerdiv").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
-                    toastr.success("Password Updated!");
-                }
-                else {
-                    $('#resetpassword').text("Password is required!");
-                }
-            },
-        });
-    });
+    //     $.ajax({
+    //         url: '/AdminDashboard/EditPhysician',
+    //         type: 'POST',
+    //         data: { Password: Password, adminID: phyid },
+    //         success: function (result) {
+    //             if (result.success) {
+    //                 $("#providerdiv").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
+    //                 toastr.success("Password Updated!");
+    //             }
+    //             else {
+    //                 $('#resetpassword').text("Password is required!");
+    //             }
+    //         },
+    //     });
+    // });
 
-    // Save Physician Account
-    $(document).on('click', '#savePhysicianAccount', function () {
-        var phyid = $('#adminID').val();
-        var username = $('#PhysicianUsername').val();
-        var Status = 1;
-        var Role = 1;
+    // // Save Physician Account
+    // $(document).on('click', '#savePhysicianAccount', function () {
+    //     var phyid = $('#adminID').val();
+    //     var username = $('#PhysicianUsername').val();
+    //     var Status = 1;
+    //     var Role = 1;
 
-        var count = 3;
+    //     var count = 3;
 
-        if(username == null)
-        {
-             $('#username').text("Username is required!");
-             count--;
-        }
-        if(Status == null)
-        {
-             $('#status').text("Status is required!");
-             count--;
-        }
-        if(Role == null)
-        {
-             $('#role').text("Role is required!");
-             count--;
-        }
+    //     if(username == null)
+    //     {
+    //          $('#username').text("Username is required!");
+    //          count--;
+    //     }
+    //     if(Status == null)
+    //     {
+    //          $('#status').text("Status is required!");
+    //          count--;
+    //     }
+    //     if(Role == null)
+    //     {
+    //          $('#role').text("Role is required!");
+    //          count--;
+    //     }
 
-        if (count == 3) { 
-            $.ajax({
-                url: '/Admin/SavePhysicianAccountData',
-                type: 'POST',
-                data: { Password: Password, adminID: phyid },
-                success: function (result) {
-                    if (result.success) {
-                        $("#dashboard").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
-                        toastr.success("Account Data Updated!");
-                    }
-                }
-            });
-        }
-        else
-        {
-            toastr.error("Please provide valid data!");
-        }
-    });
+    //     if (count == 3) { 
+    //         $.ajax({
+    //             url: '/AdminDashboard/EditPhysician',
+    //             type: 'POST',
+    //             data: { Password: Password, adminID: phyid },
+    //             success: function (result) {
+    //                 if (result.success) {
+    //                     $("#dashboard").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
+    //                     toastr.success("Account Data Updated!");
+    //                 }
+    //             }
+    //         });
+    //     }
+    //     else
+    //     {
+    //         toastr.error("Please provide valid data!");
+    //     }
+    // });
 
     $('#PhysicianInfo').submit(function(e) {       
         e.preventDefault();
@@ -538,7 +538,6 @@
                 
                 var span = $(div).children('span');
                 span.show();
-                console.log(span);
 
                 validate = false;
             }
@@ -577,7 +576,6 @@
                 
                 var span = $(div).children('span');
                 span.show();
-                console.log(span);
 
                 validate = false;
             }
@@ -616,7 +614,6 @@
                 
                 var span = $(div).children('span');
                 span.show();
-                console.log(span);
 
                 validate = false;
             }

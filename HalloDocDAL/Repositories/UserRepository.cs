@@ -179,6 +179,7 @@ namespace HalloDocDAL.Repositories
                 Businesswebsite = model.physician.Businesswebsite,
                 Roleid = 1,
                 Status = 1,
+                Regionid = model.physician.Regionid,
                 Isdeleted = false,
                 Npinumber = model.physician.Npinumber,
                 //Syncemailaddress = model.Syncemailaddress,

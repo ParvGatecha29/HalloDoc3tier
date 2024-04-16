@@ -34,6 +34,13 @@ namespace HalloDocDAL.Repositories
             return data.FirstOrDefault(x => x.Physicianid == id);
         }
 
+        public Physician GetPhysicianByAspId(string id)
+        {
+            var data = _context.Physicians.Include(x => x.Physicianregions).AsQueryable();
+
+            return data.FirstOrDefault(x => x.Aspnetuserid == id);
+        }
+
         public Physician GetPhysicianByEmail(string email)
         {
             return _context.Physicians.Include(x => x.Physicianregions).FirstOrDefault(p => p.Email == email);

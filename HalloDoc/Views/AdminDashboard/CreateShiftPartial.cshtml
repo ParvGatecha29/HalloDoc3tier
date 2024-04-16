@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="col-md-12 form-floating mb-3">
-                    <input id="StartDate" asp-for="Startdate" class="form-control rounded vcs" name="Startdate" type="date" placeholder=Suchtext autocomplete=off>
+                    <input id="StartDate" asp-for="Startdate" class="form-control rounded vcs" name="Startdate" type="date" min="@DateTime.Now.Date" placeholder=Suchtext >
                     <label for="floatingInput">Starting Date</label>
                 </div>
                 <div class="col-md-6 form-floating mb-3">
@@ -179,7 +179,6 @@
             repeatDays.push(checkbox.value);
         });
         document.querySelector('#checkWeekday').value = repeatDays.join(',');
-        console.log(document.querySelector('#checkWeekday').value);
     };
     $('#selectregion').change(function () {
         var selectedRegion = $(this).val();

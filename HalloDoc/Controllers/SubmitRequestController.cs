@@ -100,6 +100,7 @@ public class SubmitRequestController : Controller
         model.room = formcollection["roomNum"];
         model.typeid = 1;
         model.document = formcollection.Files;
+       
         if (!_userService.IsUserBlocked(model.email, model.phone))
         {
             var aspuser = new Aspnetuser();

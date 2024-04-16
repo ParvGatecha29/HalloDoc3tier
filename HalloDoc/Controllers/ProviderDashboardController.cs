@@ -129,6 +129,12 @@ namespace HalloDoc.Controllers
             return Json(new { success = true });
         }
 
+        public bool CurrentView(string view)
+        {
+            HttpContext.Session.SetString("view", view);
+            return true;
+        }
+
         public IActionResult ViewCase(int requestid)
         {
             var dash = new AdminDashboard();

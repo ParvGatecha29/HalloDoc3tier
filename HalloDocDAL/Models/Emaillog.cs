@@ -5,7 +5,7 @@ namespace HalloDocDAL.Models;
 
 public partial class Emaillog
 {
-    public decimal Emaillogid { get; set; }
+    public long Emaillogid { get; set; }
 
     public string? Emailtemplate { get; set; }
 

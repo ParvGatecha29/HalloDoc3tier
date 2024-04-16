@@ -26,6 +26,7 @@ namespace HalloDocBAL.Interfaces
         bool CloseRequest(AdminDashboardData data);
         List<Physician> GetPhysiciansByRegion(int regionid);
         Physician GetPhysiciansById(int id);
+        Physician GetPhysiciansByAspId(string id);
         Physician GetPhysiciansByEmail(string email);
         List<Physicianregion> GetPhysicianRegions(int id);
         List<Region> GetAllRegions();

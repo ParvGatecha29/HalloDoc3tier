@@ -130,9 +130,14 @@
                 </div>
                 <div class="col-md-6 col-12 mb-3">
                     <div class="form-group mb-3 requiredPhysician">
-                        <select class="form-select form-control" id="Physicianstatus" style="height: 58px;" >
+                        <select class="form-select form-control" id="Physicianstatus" style="height: 58px;" asp-for="physician.Regionid">
                             <option value="">State</option>
-                            
+                            @for (int i = 0; i < Model.regions.Count; i++)
+                    {
+                        <option value="@Model.regions[i].Regionid">
+                            @Model.regions[i].Name
+                        </option>
+                    }
                         </select>
                         <span style="display:none" class="text-danger">Required!</span>
                     </div>

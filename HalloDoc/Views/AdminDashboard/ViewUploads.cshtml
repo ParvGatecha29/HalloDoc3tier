@@ -193,7 +193,6 @@
             var selectedDocuments = $('input[name="selectedDocuments"]:checked').map(function () {
                 return this.value;
             }).get();
-            console.log(selectedDocuments);
             selectedDocuments.forEach(function (docid) {
                 $.ajax({
                     url: '@Url.Action("DeleteFile","AdminDashboard")',

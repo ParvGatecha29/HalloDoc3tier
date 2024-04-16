@@ -11,10 +11,10 @@
                 <h3 class="m-0 fw-bold">Add Business</h3>
             </div>
             <div>
-                <a asp-controller="AdminDashboard" asp-action="Partners" class="back_btn d-flex align-items-center p-2 px-4 fw-semibold"
+                <button onclick="location.href='@Url.Action("Partners","AdminDashboard")'" class="btn-outline-info btn d-flex align-items-center p-2 px-4 fw-semibold"
                    role="button">
-                    <p class="m-0"><i class="fa-solid fa-chevron-left"></i> Back</p>
-                </a>
+                    <i class="text-info fa-solid fa-chevron-left"></i> Back
+                </button>
             </div>
         </div>
         <div class="req_form_container w-50 shadow p-3">

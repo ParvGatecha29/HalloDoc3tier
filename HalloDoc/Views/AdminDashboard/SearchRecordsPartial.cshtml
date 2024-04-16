@@ -25,24 +25,24 @@
         last = first + Model.PageSize - 1;
     }
 }
-<table class="table my-3 me-0">
+<table class="table my-3 me-0" id="responsiveTable">
     <thead class="">
-        <tr class="bg-secondary-subtle">
+        <tr class="bg-secondary-subtle table-row">
             <th class="py-3 fs-6">Patient Name</th>
-            <th class="py-3 fs-6">Requestor</th>
-            <th class="py-3 fs-6">Date Of Service</th>
-            <th class="py-3 fs-6">Close Case Date</th>
-            <th class="py-3 fs-6">Email</th>
-            <th class="py-3 fs-6">Phone Number</th>
-            <th class="py-3 fs-6">Address</th>
-            <th class="py-3 fs-6">Zip</th>
-            <th class="py-3 fs-6">Request Status</th>
-            <th class="py-3 fs-6">Physician</th>
-            <th class="py-3 fs-6">Physician Note</th>
-            <th class="py-3 fs-6">Cancelled By Provider Note</th>
-            <th class="py-3 fs-6">Admin Note</th>
-            <th class="py-3 fs-6">Patient Note</th>
-            <th class="py-3 fs-6">Delete Permanently</th>
+            <th class="py-3 fs-6 mobile-hide">Requestor</th>
+            <th class="py-3 fs-6 mobile-hide">Date Of Service</th>
+            <th class="py-3 fs-6 mobile-hide">Close Case Date</th>
+            <th class="py-3 fs-6 mobile-hide">Email</th>
+            <th class="py-3 fs-6 mobile-hide">Phone Number</th>
+            <th class="py-3 fs-6 mobile-hide">Address</th>
+            <th class="py-3 fs-6 mobile-hide">Zip</th>
+            <th class="py-3 fs-6 mobile-hide">Request Status</th>
+            <th class="py-3 fs-6 mobile-hide">Physician</th>
+            <th class="py-3 fs-6 mobile-hide">Physician Note</th>
+            <th class="py-3 fs-6 mobile-hide">Cancelled By Provider Note</th>
+            <th class="py-3 fs-6 mobile-hide">Admin Note</th>
+            <th class="py-3 fs-6 mobile-hide">Patient Note</th>
+            <th class="py-3 fs-6 mobile-hide">Delete Permanently</th>
         </tr>
     </thead>
 
@@ -50,22 +50,22 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr class="data-row searchrecords_data_row">
-                <td class="py-3 fs-6">@item.PatientName</td>
-                <td class="py-3 fs-6">@item.Requestor</td>
-                <td class="py-3 fs-6">@item.ServiceDate</td>
-                <td class="py-3 fs-6">@item.DateofClose</td>
-                <td class="py-3 fs-6">@item.Email</td>
-                <td class="py-3 fs-6">@item.PhoneNumber</td>
-                <td class="py-3 fs-6">@item.Address</td>
-                <td class="py-3 fs-6">@item.Zip</td>
-                <td class="py-3 fs-6">@item.StatusName</td>
-                <td class="py-3 fs-6">@item.PhysicianName</td>
-                <td class="py-3 fs-6">@item.PhysicianNote</td>
-                <td class="py-3 fs-6">@item.CancelledByProvidor</td>
-                <td class="py-3 fs-6">@item.AdminNotes</td>
-                <td class="py-3 fs-6">@item.PatientNote</td>
-                <td class="py-3 fs-6 text-center">
+            <tr class="table-row">
+                <td class="py-3 fs-6" data-label="Patient Name">@item.PatientName</td>
+                <td class="py-3 fs-6 mobile-hide" data-label="Requestor">@item.Requestor</td>
+                <td class="py-3 fs-6 mobile-hide" data-label="Date of Service">@item.ServiceDate</td>
+                <td class="py-3 fs-6 mobile-hide" data-label="Close Case Date">@item.DateofClose</td>
+                <td class="py-3 fs-6 mobile-hide" data-label="Email">@item.Email</td>
+                <td class="py-3 fs-6 mobile-hide" data-label="Phone Number">@item.PhoneNumber</td>
+                <td class="py-3 fs-6 mobile-hide" data-label="Address">@item.Address</td>
+                <td class="py-3 fs-6 mobile-hide" data-label="Zip">@item.Zip</td>
+                <td class="py-3 fs-6 mobile-hide" data-label="Request Status">@item.StatusName</td>
+                <td class="py-3 fs-6 mobile-hide" data-label="Physician">@item.PhysicianName</td>
+                <td class="py-3 fs-6 mobile-hide" data-label="Physician Notes">@item.PhysicianNote</td>
+                <td class="py-3 fs-6 mobile-hide" data-label="Cancelled By Provider Note">@item.CancelledByProvidor</td>
+                <td class="py-3 fs-6 mobile-hide" data-label="Admin Notes">@item.AdminNotes</td>
+                <td class="py-3 fs-6 mobile-hide" data-label="Patient Notes">@item.PatientNote</td>
+                <td class="py-3 fs-6 mobile-hide text-center" data-label="Delete Permanently">
                     <button role="button" onclick="deleterequest(@item.RequestId)" class="btn btn-outline-info deleterequest">Delete</button>
                 </td>
             </tr>
@@ -105,3 +105,24 @@
         </li>
     </ul>
 </div>
+<script>
+    var tableRows = document.querySelectorAll('#responsiveTable tbody .table-row');
+    if (window.innerWidth <= 600) {
+        var details = document.querySelectorAll('.mobile-hide');
+        details.forEach(function (detail) {
+            detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+        });
+    }
+    function toggleDetails() {
+        if (window.innerWidth <= 600) {
+            var details = this.querySelectorAll('.mobile-hide');
+            details.forEach(function (detail) {
+                detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+            });
+        }
+    }
+
+    tableRows.forEach(function (row) {
+        row.addEventListener('click', toggleDetails);
+    });
+</script>

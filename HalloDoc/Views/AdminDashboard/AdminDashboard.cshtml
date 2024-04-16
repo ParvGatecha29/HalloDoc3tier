@@ -279,21 +279,21 @@
             </div>
             <div class="modal-body">
                 <form id="formSendLink" method="post">
-                    <div class="form-floating required mb-3">
+                    <div class="form-floating requiredsl mb-3">
                         <input type="text" class=" form-control" id="fname" name="fname" placeholder=" ">
                         <label for="fname" class=" floating-label">First Name</label>
                         <span style="color:red; display:none">Required!</span>
                     </div>
-                    <div class="form-floating required mb-3">
+                    <div class="form-floating requiredsl mb-3">
                         <input type="text" class=" form-control" id="lname" name="lname" placeholder=" ">
                         <label for="fname" class=" floating-label">Last Name</label>
                         <span style="color:red; display:none">Required!</span>
                     </div>
-                    <div class="form-floating mb-3 h-100 z-3 required">
+                    <div class="form-floating mb-3 h-100 z-3 requiredsl">
                         <input type="tel" class=" form-control h-100" id="tel" name="tel" placeholder="Phone Number">
                         <span style="color:red; display:none">Required!</span>
                     </div>
-                    <div class="form-floating mb-3 required">
+                    <div class="form-floating mb-3 requiredsl">
                         <input type="email" class=" form-control" id="email" name="email" placeholder=" ">
                         <label for="email" class=" floating-label">Email address</label>
                         <span style="color:red; display:none">Required!</span>
@@ -548,7 +548,7 @@
             e.preventDefault();
             var data = new FormData(this)
             var validate = true;
-            $('.required').each(function () {
+            $('.requiredsl').each(function () {
                 var div = $(this);
                 if ($(div).find('input').val() == "") {
                     Swal.fire({

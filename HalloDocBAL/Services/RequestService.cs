@@ -66,6 +66,7 @@ namespace HalloDocBAL.Services
                 City = model.city,
                 State = model.state,
                 Zipcode = model.zipcode,
+                Regionid = int.Parse(model.state),
                 Intdate = model.date,
                 Intyear = model.year,
                 Strmonth = model.month
@@ -141,6 +142,7 @@ namespace HalloDocBAL.Services
                 Zipcode = model.zipcode,
                 Intdate = model.dob.Day,
                 Intyear = model.dob.Year,
+                Regionid = int.Parse(model.state),
                 Strmonth = model.dob.ToString("MMMM")
             };
             await _requestClientRepository.AddRequestClient(requestclient);
@@ -191,6 +193,7 @@ namespace HalloDocBAL.Services
                 Zipcode = model.zipcode,
                 Intdate = model.dob.Day,
                 Intyear = model.dob.Year,
+                Regionid = int.Parse(model.state),
                 Strmonth = model.dob.ToString("MMMM")
             };
             await _requestClientRepository.AddRequestClient(requestclient);

@@ -107,7 +107,7 @@ namespace HalloDocDAL.Repositories
             //    }).Where(req => status.Contains(req.status)).ToList();
             IQueryable<Requestclient> reqclnt;
             List<Requestclient> req;
-            reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Where(_ => status.Contains(_.Request.Status)).AsQueryable();
+            reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Include(_ => _.Region).Where(_ => status.Contains(_.Request.Status)).AsQueryable();
 
             if (reqtype != 0)
             {
@@ -155,6 +155,7 @@ namespace HalloDocDAL.Repositories
                     cphone = item.Request.Phonenumber ?? "",
                     phone = item.Phonenumber ?? "",
                     regionId = item.Regionid,
+                    region = item.Region != null ? item.Region.Name : "",
                     isFinalized = item.Request.EncounterForms.FirstOrDefault(x => x.RequestId == item.Requestid) != null ? item.Request.EncounterForms.FirstOrDefault(x => x.RequestId == item.Requestid).IsFinalize : false
                 };
                 foreach (var item1 in item.Request.Requeststatuslogs)
@@ -198,7 +199,7 @@ namespace HalloDocDAL.Repositories
                     requestDate = r.Createddate,
                     regionId = rc.Regionid,
                     confirmationNo = r.Confirmationnumber,
-                    isFinalized = _context.EncounterForms.FirstOrDefault(x => x.RequestId == id).IsFinalize,
+                    isFinalized = _context.EncounterForms.FirstOrDefault(x => x.RequestId == id) != null ? _context.EncounterForms.FirstOrDefault(x => x.RequestId == id).IsFinalize  :  false,
 
                 }).FirstOrDefault(req => req.requestId == id);
             return data;
@@ -296,6 +297,7 @@ namespace HalloDocDAL.Repositories
                 request.Status = 1;
                 rsl.Transtophysicianid = data.physicianId;
                 request.Physicianid = data.physicianId;
+                request.Accepteddate = DateTime.Now;
             }
             if (newstatus == 1)
             {

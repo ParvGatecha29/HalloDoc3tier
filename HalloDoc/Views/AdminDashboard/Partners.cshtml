@@ -13,10 +13,10 @@
                 <h3 class="m-0 fw-bold">Vendor(s)</h3>
             </div>
             <div>
-                <a asp-controller="AdminDashboard" asp-action="AdminDashboard" class="back_btn d-flex align-items-center p-2 px-4 fw-semibold"
+                <button onclick="location.href='@Url.Action("AdminDashboard","AdminDashboard")'" class="btn btn-outline-info d-flex align-items-center p-2 px-4 fw-semibold"
                    role="button">
-                    <p class="m-0"><i class="fa-solid fa-chevron-left"></i> Back</p>
-                </a>
+                    <i class="text-info fa-solid fa-chevron-left"></i> Back
+                </button>
             </div>
         </div>
         <div class="req_form_container w-75 shadow p-3">
@@ -88,7 +88,6 @@
                     }
                     else {
                         fetchVendors()
-                        console.log(response)
                         $('#DeleteConfirmationModal').modal('hide');
                         if (response == true) {
                             toastr.success("Vendor deleted Successfully");
@@ -129,7 +128,6 @@
                     location.reload();
                 }
                 else {
-                    console.log("Function Success")
                     $('#VendorList').html(response)
                 }
 

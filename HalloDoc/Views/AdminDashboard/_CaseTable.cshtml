@@ -278,7 +278,7 @@
 
                             @if (obj.status == 3 || obj.status == 7 || obj.status == 8)
                             {
-                                <td>@obj.regionId</td>
+                                <td>@obj.region</td>
                             }
 
                             @if (obj.status == 1)
@@ -415,39 +415,45 @@
                 </tbody>
             </table>
         </div>
-        <div class="d-flex justify-content-center">
-            <p>
-                @first - @last of @Model.pagedList.TotalCount
-            </p>
-        </div>
-        <div class="pb-5">
-            <ul class="pagination justify-content-center mt-2 mb-4 ">
-                <li class="page-item mx-1 ">
-                    <a class="page-link border-secondary-subtle rounded theme-color theme-background" onclick="changepage(@previousPage)">&laquo;</a>
-                </li>
-                @if (Model.pagedList.hasPrevious)
-                {
-                    <li class="page-item mx-1"><a class="page-link border-secondary-subtle rounded theme-color theme-background" onclick="changepage(@previousPage)"> @previousPage </a></li>
-                }
+        @if (Model.pagedList.Count > 0)
+        {
+            <div class="d-flex justify-content-center">
+                <p>
+                    @first - @last of @Model.pagedList.TotalCount
+                </p>
+            </div>
+            <div class="pb-5">
+                <ul class="pagination justify-content-center mt-2 mb-4 ">
+                    <li class="page-item mx-1 ">
+                        <a class="page-link border-secondary-subtle rounded theme-color theme-background" onclick="changepage(@previousPage)">&laquo;</a>
+                    </li>
+                    @if (Model.pagedList.hasPrevious)
+                    {
+                        <li class="page-item mx-1"><a class="page-link border-secondary-subtle rounded theme-color theme-background" onclick="changepage(@previousPage)"> @previousPage </a></li>
+                    }
 
-                <li class="page-item active mx-1">
-                    <span class="page-link  bg-info border-info rounded">
-                        @Model.pagedList.CurrentPage
-                        <span class="sr-only">(current)</span>
-                    </span>
-                </li>
+                    <li class="page-item active mx-1">
+                        <span class="page-link  bg-info border-info rounded">
+                            @Model.pagedList.CurrentPage
+                            <span class="sr-only">(current)</span>
+                        </span>
+                    </li>
 
-                @if (Model.pagedList.hasNext)
-                {
-                    <li class="page-item mx-1"><a class="page-link theme-color theme-background border-secondary-subtle rounded" onclick="changepage(@nextPage)"> @nextPage </a></li>
-                }
+                    @if (Model.pagedList.hasNext)
+                    {
+                        <li class="page-item mx-1"><a class="page-link theme-color theme-background border-secondary-subtle rounded" onclick="changepage(@nextPage)"> @nextPage </a></li>
+                    }
 
-                <li class="page-item mx-1">
-                    <a class="page-link border-secondary-subtle rounded theme-color theme-background" onclick="changepage(@nextPage)">&raquo;</a>
-                </li>
-            </ul>
-        </div>
-
+                    <li class="page-item mx-1">
+                        <a class="page-link border-secondary-subtle rounded theme-color theme-background" onclick="changepage(@nextPage)">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        }
+        else
+        {
+            <p class="fw-bold align-items-center d-flex justify-content-center">No Requests to display</p>
+        }
     }
 }
 <div class="modal fade" id="cancelcaseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -886,7 +892,6 @@
         $('#clearCase').on('click', function () {
 
             var id = $(".requestId").val();
-            console.log();
             $.ajax({
                 url: '@Url.Action("ClearCase","AdminDashboard")',
                 type: 'POST',

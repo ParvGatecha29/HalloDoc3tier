@@ -18,6 +18,7 @@ using System.Collections;
 using System.Transactions;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Web.Providers.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace HalloDoc.Controllers;
 [AuthManager("1")]
@@ -719,7 +720,11 @@ public class AdminDashboardController : Controller
         prov.physicians = _adminDashboardService.GetPhysiciansByRegion(regionid);
         return PartialView("ProviderTable", prov);
     }
-
+    public bool CurrentView(string view)
+    {
+        HttpContext.Session.SetString("view", view);
+        return true;
+    }
     public IActionResult EditProvider(int physicianid)
     {
         Provider prov = new Provider();
@@ -816,12 +821,16 @@ public class AdminDashboardController : Controller
     {
         Access access = new Access();
         access.Users = _adminDashboardService.GetAllUsers();
-        access.Users = access.Users.Where(x=> (x.Aspnetuser != null ? x.Aspnetuser.Aspnetuserroles.Any(y => y.RoleId == "1") : false) || (x.Aspnetuser != null ? x.Aspnetuser.Aspnetuserroles.Any(y => y.RoleId == "2") : false)).ToList();
+        access.Users = access.Users.Where(x => (x.Aspnetuser != null ? x.Aspnetuser.Aspnetuserroles.Any(y => y.RoleId == "1") : false) || (x.Aspnetuser != null ? x.Aspnetuser.Aspnetuserroles.Any(y => y.RoleId == "2") : false)).ToList();
         return View(access);
     }
 
     public IActionResult Scheduling()
     {
+        if (HttpContext.Session.GetString("view") == null)
+        {
+            HttpContext.Session.SetString("view", "resourceTimelineDay");
+        }
         var region = _adminDashboardService.GetAllRegions();
         ViewBag.regions = region;
         ScheduleModel model = new ScheduleModel();
@@ -1237,11 +1246,34 @@ public class AdminDashboardController : Controller
         return PartialView("BlockHistoryPartial", records);
     }
 
-    public IActionResult ExportRecords()
+    public IActionResult ExportRecords(string? Email, DateTime? FromDoS, string? Phone, string? Patient, string? Provider, int RequestStatus, int RequestType, DateTime? ToDoS)
     {
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-        List<SearchRecord> records =  _recordsRepository.GetSearchRecordsAll();
-
+        List<SearchRecord> records = _recordsRepository.GetSearchRecordsAll();
+        if (RequestStatus != 0)
+        {
+            records = records.Where(r => r.RequestStatus == RequestStatus).ToList();
+        }
+        if (Patient != null)
+        {
+            records = records.Where(r => r.PatientName.Contains(Patient)).ToList();
+        }
+        if (RequestType != 0)
+        {
+            records = records.Where(r => r.RequestTypeId == RequestType).ToList();
+        }
+        if (Provider != null)
+        {
+            records = records.Where(r => r.PhysicianName.Contains(Provider)).ToList();
+        }
+        if (Email != null)
+        {
+            records = records.Where(r => r.Email == Email).ToList();
+        }
+        if (Phone != null)
+        {
+            records = records.Where(r => r.PhoneNumber == Phone).ToList();
+        }
 
         // Create a new Excel package
         using (var package = new ExcelPackage())
@@ -1299,11 +1331,11 @@ public class AdminDashboardController : Controller
     {
 
         _requestService.UnblockRequest(requestid);
-            
 
-           
-        
+
+
+
         return Json(new { success = true });
-    } 
+    }
 }
 

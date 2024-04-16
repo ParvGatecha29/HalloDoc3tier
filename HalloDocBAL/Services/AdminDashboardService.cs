@@ -120,6 +120,11 @@ namespace HalloDocBAL.Services
             return _physicianRepository.GetPhysicianById(id);
         }
 
+        public Physician GetPhysiciansByAspId(string id)
+        {
+            return _physicianRepository.GetPhysicianByAspId(id);
+        }
+
         public Physician GetPhysiciansByEmail(string email)
         {
             return _physicianRepository.GetPhysicianByEmail(email);

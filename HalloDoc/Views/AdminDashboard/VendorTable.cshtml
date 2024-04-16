@@ -1,33 +1,54 @@
 ﻿@model List<HalloDocDAL.Model.Partner>
+
 <table id="responsiveTable">
     <thead class="tab">
         <tr>
             <th class="py-3">Profession</th>
             <th class="py-3">Business Name</th>
-            <th class="py-3">Email</th>
-            <th class="py-3">Fax Number</th>
-            <th class="py-3">Phone Number</th>
-            <th class="py-3">Business Contact</th>
-            <th class="py-3">Actions</th>
+            <th class="py-3 mobile-hide">Email</th>
+            <th class="py-3 mobile-hide">Fax Number</th>
+            <th class="py-3 mobile-hide">Phone Number</th>
+            <th class="py-3 mobile-hide">Business Contact</th>
+            <th class="py-3 mobile-hide">Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr class="">
-                <td class="py-3">@item.Profession</td>
-                <td class="py-3">@item.VendorName</td>
-                <td class="py-3">@item.Email</td>
-                <td class="py-3">@item.FaxNumber</td>
-                <td class="py-3">@item.PhoneNumber</td>
-                <td class="py-3">@item.BusinessContact</td>
-                <td class="py-3">
-                    <a role="button" class="text-decoration-none form_button px-3 py-2 fw-semibold" onclick="editBusiness(@item.VendorId)">Edit</a>
-                    <a role="button" data-bs-toggle="modal" data-bs-target="#DeleteConfirmationModal" data-bs-vendorid="@item.VendorId" class="text-decoration-none form_button fw-semibold px-3 py-2">Delete</a>
+            <tr class="table-row">
+                <td class="py-3" data-label="Profession">@item.Profession</td>
+                <td class="py-3" data-label="Business Name">@item.VendorName</td>
+                <td class="py-3 mobile-hide" data-label="Email">@item.Email</td>
+                <td class="py-3 mobile-hide" data-label="Fax Number">@item.FaxNumber</td>
+                <td class="py-3 mobile-hide" data-label="Phone Number">@item.PhoneNumber</td>
+                <td class="py-3 mobile-hide" data-label="Business Contact">@item.BusinessContact</td>
+                <td class="py-3 mobile-hide" data-label="Actions">
+                    <button role="button" class="btn btn-outline-info px-3 py-2 fw-semibold" onclick="editBusiness(@item.VendorId)">Edit</button>
+                    <button role="button" data-bs-toggle="modal" data-bs-target="#DeleteConfirmationModal" data-bs-vendorid="@item.VendorId" class="btn btn-outline-info fw-semibold px-3 py-2">Delete</button>
                 </td>
             </tr>
         }
 
     </tbody>
 </table>
+<script>
+    var tableRows = document.querySelectorAll('#responsiveTable tbody .table-row');
+    if (window.innerWidth <= 600) {
+        var details = document.querySelectorAll('.mobile-hide');
+        details.forEach(function (detail) {
+            detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+        });
+    }
+    function toggleDetails() {
+        if (window.innerWidth <= 600) {
+            var details = this.querySelectorAll('.mobile-hide');
+            details.forEach(function (detail) {
+                detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+            });
+        }
+    }
 
+    tableRows.forEach(function (row) {
+        row.addEventListener('click', toggleDetails);
+    });
+</script>

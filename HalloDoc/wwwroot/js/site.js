@@ -85,7 +85,13 @@ function pass() {
 
 document.addEventListener('DOMContentLoaded', function () {
     var tableRows = document.querySelectorAll('#responsiveTable tbody .table-row');
-
+    if (window.innerWidth <= 600) {
+        var details = document.querySelectorAll('.mobile-hide');
+        details.forEach(function (detail) {
+            detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+        });
+    }
+    
     function toggleDetails() {
         if (window.innerWidth <= 600) {
             var details = this.querySelectorAll('.mobile-hide');
@@ -116,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const phoneInputField = document.querySelectorAll("input[type='tel']");
-    console.log(phoneInputField);
     for (var i = 0; i < phoneInputField.length; i++) {
         const phoneInput = window.intlTelInput(phoneInputField[i], {
             utilsScript:

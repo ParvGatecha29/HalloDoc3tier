@@ -44,7 +44,7 @@
                 <button id="SearchFilter" class="btn btn-info text-white mx-1">Search</button>
                 <button id="ClearFilter" class="btn btn-outline-info mx-1">Clear</button>
             </div>
-            <div id="PatientRecords">
+            <div id="PatientRecords" class="table-responsive">
             </div>
         </div>
     </div>
@@ -109,7 +109,6 @@
                     location.reload();
                 }
                 else {
-                    console.log("Function Success")
                     $('#PatientRecords').html(response);
                 }
             },
@@ -120,7 +119,6 @@
     }
 
     function explorePatient(userid) {
-        console.log(userid);
         $("#patientrecordsDiv").load("/AdminDashboard/ExplorePatient?userid=" + userid)
     }
 

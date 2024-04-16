@@ -25,6 +25,7 @@ namespace HalloDocDAL.Model
         public string email { get; set; }
         public DateTime requestDate { get; set; }
         public int? regionId { get; set; }
+        public string? region { get; set; }
         public string physician { get; set; }
         public string notes { get; set; }
         public string confirmationNo { get; set; }
@@ -37,6 +38,6 @@ namespace HalloDocDAL.Model
         public int physicianId { get; set; }
         public string pname { get; set; }
         public List<string> tnotes { get; set; }
-        public bool? isFinalized { get; set; }
+        public bool isFinalized { get; set; } = false;
     }
 }

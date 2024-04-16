@@ -35,6 +35,7 @@ namespace HalloDocDAL.Model
         public string? city { get; set; }
 
         public string? state { get; set; }
+        public int? region { get; set; }
 
         public string? zipcode { get; set; }
 

@@ -11,27 +11,27 @@
         <div class="m-4 mt-0 shadow col-10 col-xl-9">
             <div class="mx-2">
                 <div class="d-flex justify-content-end mt-2">
-                    <button class="me-1 rounded btn border border-info text-info" onclick="CreateAccess()">
+                    <button class="me-1 rounded btn btn-outline-info" onclick="CreateAccess()">
                         Create Access
                     </button>
                 </div>
             </div>
 
-            <table class="table">
+            <table class="table" id="responsiveTable">
                 <thead>
-                    <tr class="d-none d-xl-table-row d-md-table-row">
+                    <tr class="d-xl-table-row d-md-table-row">
                         <th scope="col" class="bg-transparent"> Name </th>
-                        <th scope="col" class="bg-transparent"> Account Type </th>
-                        <th scope="col" class="bg-transparent"> Actions </th>
+                        <th scope="col" class="bg-transparent mobile-hide"> Account Type </th>
+                        <th scope="col" class="bg-transparent mobile-hide"> Actions </th>
                     </tr>
                 </thead>
 
                 <tbody id="tableBody">
                     @foreach (var i in Model.Roles)
                     {
-                        <tr class="d-none d-xl-table-row d-md-table-row" data-rid="@i.Roleid">
-                            <td class="bg-transparent"> @i.Name </td>
-                            <td class="bg-transparent">
+                        <tr class="d-xl-table-row d-md-table-row table-row" data-rid="@i.Roleid">
+                            <td class="bg-transparent" data-label="Name"> @i.Name </td>
+                            <td class="bg-transparent mobile-hide" data-label="Account Type">
 
                                 @if (i.Accounttype == 1)
                                 {
@@ -50,12 +50,12 @@
                                     <p>All</p>
                                 }
                             </td>
-                            <td class="bg-transparent">
+                            <td class="bg-transparent mobile-hide" data-label="Actions">
                                 <div class="d-flex">
-                                    <button class="btn border border-info text-info me-2" onclick="editRole(@i.Roleid)">
+                                    <button class="btn btn-outline-info me-2" onclick="editRole(@i.Roleid)">
                                         Edit
                                     </button>
-                                    <button class="btn border border-info text-info">
+                                    <button class="btn btn-outline-info">
                                         Delete
                                     </button>
                                 </div>
@@ -92,7 +92,6 @@
     }
 
     function editRole(id) {
-        console.log(id);
         $('#accessDiv').load("/AdminDashboard/CreateAccess?id=" + id);
     }
 </script>
