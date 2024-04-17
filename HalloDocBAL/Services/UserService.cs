@@ -2,8 +2,8 @@
 using HalloDocDAL.Contacts;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
-using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
+using System.Text;
 
 namespace HalloDocBAL.Services
 {
@@ -25,6 +25,7 @@ namespace HalloDocBAL.Services
             {
                 return false;
             }
+            register.password = Convert.ToBase64String(Encoding.UTF8.GetBytes(register.password));
             var aspuser = new Aspnetuser
             {
                 Id = Guid.NewGuid().ToString(),
@@ -49,7 +50,8 @@ namespace HalloDocBAL.Services
             var user = await _userRepository.FindByEmail(model.Email);
             if (user != null)
             {
-                if (model.Password == user.Passwordhash)
+                var password = Encoding.UTF8.GetString(Convert.FromBase64String(user.Passwordhash));
+                if (model.Password == password)
                 {
                     return user;
                 }

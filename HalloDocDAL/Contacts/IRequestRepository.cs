@@ -2,11 +2,6 @@
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using HalloDocDAL.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HalloDocDAL.Contacts
 {
@@ -27,5 +22,7 @@ namespace HalloDocDAL.Contacts
         bool EditEncounterForm(EncounterForm model);
         EncounterForm GetEncounterForm(int requestId);
         bool EmailLog(string to, string subject, string body);
+
+        Task<PagedList<EmailLog>> GetEmailLogs(int roleid, string receiverName, string Email, DateTime createdDate, DateTime sentDate, int pageNumber);
     }
 }

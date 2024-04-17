@@ -3,6 +3,7 @@ using HalloDocBAL.Services;
 using HalloDocDAL.Contacts;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
+using HalloDocDAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Rotativa.AspNetCore;
 using System.Globalization;
@@ -10,6 +11,7 @@ using System.Transactions;
 
 namespace HalloDoc.Controllers
 {
+    [AuthManager("3")]
     public class ProviderDashboardController : Controller
     {
         private readonly IAdminDashboardService _adminDashboardService;
@@ -137,10 +139,15 @@ namespace HalloDoc.Controllers
 
         public IActionResult ViewCase(int requestid)
         {
+            var user = SessionService.GetLoggedInUser(HttpContext.Session);
             var dash = new AdminDashboard();
 
             dash.regions = _adminDashboardService.GetAllRegions();
             dash.request = _adminDashboardService.GetRequestById(requestid);
+            if (dash.request == null)
+            {
+                return View("Invalid");
+            }
             return View("ViewCase", dash);
         }
 
@@ -183,6 +190,10 @@ namespace HalloDoc.Controllers
             ViewUploads viewUploads = new ViewUploads();
             viewUploads.Request = _adminDashboardService.GetRequestById(requestid);
             viewUploads.Requestwisefiles = _dashboardService.ViewDocument(requestid);
+            if (viewUploads == null)
+            {
+                return View("Invalid");
+            }
             return View(viewUploads);
         }
 
@@ -241,6 +252,10 @@ namespace HalloDoc.Controllers
         {
             string[] format = { "dd/MMMM/yyyy", "d/MMMM/yyyy" };
             AdminDashboardData ad = _adminDashboardService.GetRequestById(requestid);
+            if (ad == null)
+            {
+                return View("Invalid");
+            }
             EncounterForm ef = _adminDashboardService.GetEncounterForm(requestid);
             if (ef != null)
             {
@@ -372,6 +387,10 @@ namespace HalloDoc.Controllers
             ViewUploads viewUploads = new ViewUploads();
             viewUploads.Request = _adminDashboardService.GetRequestById(requestid);
             viewUploads.Requestwisefiles = _dashboardService.ViewDocument(requestid);
+            if (viewUploads == null)
+            {
+                return View("Invalid");
+            }
             return PartialView(viewUploads);
         }
 
@@ -405,9 +424,6 @@ namespace HalloDoc.Controllers
             bool slotAvailable = true;
             foreach (var e in events)
             {
-
-
-
                 if (e.resourceId == model.Physicianid)
                 {
                     if (model.Startdate == DateOnly.FromDateTime(e.start.Date))
@@ -418,7 +434,6 @@ namespace HalloDoc.Controllers
                             return Json(new { success = false });
                         }
                 }
-
             }
             using (var transaction = new TransactionScope())
             {

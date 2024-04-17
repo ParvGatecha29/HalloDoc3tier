@@ -3,16 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using HalloDocDAL.Models;
 using HalloDocDAL.Model;
-using Microsoft.EntityFrameworkCore;
-using HalloDocDAL.Data;
-using Microsoft.AspNetCore.Identity;
 using HalloDocBAL.Interfaces;
-using HalloDoc.Views.Home;
-using Microsoft.VisualBasic;
-using Microsoft.AspNetCore.Http;
-using HalloDocBAL.Services;
-using NuGet.Common;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace HalloDoc.Controllers;
 

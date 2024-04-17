@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HalloDocDAL.Repositories
+﻿namespace HalloDocDAL.Repositories
 {
     public class PagedList<T> : List<T>
     {

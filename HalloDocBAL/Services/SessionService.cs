@@ -1,8 +1,6 @@
 ﻿using HalloDocDAL.Models;
 using HalloDocDAL.Model;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using HalloDocDAL.Data;
 
 namespace HalloDocBAL.Services
 {

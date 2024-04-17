@@ -1,14 +1,9 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using HalloDocDAL.Data;
-using Newtonsoft.Json;
 using HalloDocDAL.Models;
-using System.ComponentModel.DataAnnotations;
 using HalloDocDAL.Model;
 using HalloDocBAL.Interfaces;
-using HalloDocBAL.Services;
 using System.IO.Compression;
-using System.Security.Cryptography;
 using HalloDocDAL.Repositories;
 
 namespace HalloDoc.Controllers;

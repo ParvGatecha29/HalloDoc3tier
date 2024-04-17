@@ -1,0 +1,98 @@
+﻿
+
+<div class="row justify-content-center">
+    <div class="row m-4 col-11">
+        <p class="col fs-4 fw-bold pb-0 mb-0 d-inline">Email Logs (Gmail)</p>
+        <div class="col mb-0 text-end">
+            <a class="text-decoration-none text-info rounded border border-info p-2" onclick="LoadDashboard()">
+                <i class="bi bi-chevron-left text-info"></i>
+                Back
+            </a>
+        </div>
+    </div>
+
+    <div class="m-4 mt-0 shadow col-11">
+        <div class="row g-2 mx-2">
+            <div class="col-md-2">
+                <div class="form-floating mb-3">
+                    <select class="form-select form-control" id="roleid" name="roleid" style="height: 58px;">
+                        <option value="1">All</option>
+                        <option value="2">Admin</option>
+                        <option value="3">Physician</option>
+                    </select>
+                    <label for="Adminstatus" class="floatingLabel">Search By Role</label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="receiverName" name="receiverName" placeholder="Receiver Name">
+                    <label for="receiverName" class="floatingLabel">Receiver Name</label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="Email" name="Email" placeholder="Email Id">
+                    <label for="Email" class="floatingLabel">Email Id</label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-floating mb-3">
+                    <input type="date" class="form-control" id="createdDate" name="createdDate" placeholder="Created Date">
+                    <label for="createdDate" class="floatingLabel">Created Date</label>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-floating mb-3">
+                    <input type="date" class="form-control" id="sentDate" name="sentDate" placeholder="Sent Date">
+                    <label for="sentDate" class="floatingLabel">Sent Date</label>
+                </div>
+            </div>
+
+            <div class="col text-end">
+                <button type="button" class="me-1 btn btn-info text-white" style="height: 58px;" onclick="SearchData()">
+                    Search
+                </button>
+                <button type="button" class="btn border border-info text-info" style="height: 58px;" onclick="ClearSearchData()">
+                    Clear
+                </button>
+            </div>
+        </div>
+
+        <div id="emailLogTable"></div>
+
+        <div class="mb-4 pb-4"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#emailLogTable").load('@Url.Action("LoadEmailLogTable", "AdminDashboard")');
+    });
+
+    function SearchData() {
+        var roleid = $('#roleid').val();
+        var receiverName = $('#receiverName').val();
+        var Email = $('#Email').val();
+        var createdDate = $('#createdDate').val();
+        var sentDate = $('#sentDate').val();
+
+        $.ajax({
+            url: "LoadEmailLogTable",
+            type: "Post",
+            data: { roleid: roleid, receiverName: receiverName, Email: Email, createdDate: createdDate, sentDate: sentDate },
+            success: function (result) {
+                $("#emailLogTable").html(result);
+            }
+        });
+    }
+
+    function ClearSearchData() {
+        $('#roleid').val(1);
+        $('#receiverName').val("");
+        $('#Email').val("");
+        $('#createdDate').val("");
+        $('#sentDate').val("");
+
+        SearchData();
+    }
+</script>

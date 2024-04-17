@@ -13,11 +13,22 @@ linklight.rel = "stylesheet";
 linklight.href = "//cdn.jsdelivr.net/npm/@sweetalert2/theme-minimal/minimal.css";
 
 const currentTheme = localStorage.getItem("theme");
-document.documentElement.setAttribute("data-bs-theme", currentTheme);
+if (currentTheme != null) {
+    document.documentElement.setAttribute("data-bs-theme", currentTheme);
+}
+else {
+    document.documentElement.setAttribute("data-bs-theme", "light");
+    localStorage.setItem("theme", "light");
+}
+
 if (currentTheme == "dark") {
     document.body.classList.toggle("dark-theme");
     document.head.appendChild(linkdark);
 } else if (currentTheme == "light") {
+    document.body.classList.toggle("light-theme");
+    document.head.appendChild(linklight);
+}
+else {
     document.body.classList.toggle("light-theme");
     document.head.appendChild(linklight);
 }

@@ -4,11 +4,8 @@ using HalloDocDAL.Contacts;
 using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Repositories;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
-using NuGet.Protocol.Plugins;
 using Rotativa.AspNetCore;
-using System.Configuration;
 using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -119,6 +119,13 @@
 </div>
 
 <script>
+    $(".requiredcr").change(function () {
+        var div = $(this);
+        if ($(div).find('input').val() != "") {
+            var span = $(div).children('span');
+            span.hide();
+        }
+    })
     $('#createRequestForm').on('submit', function (e) {
         e.preventDefault();
         var data = new FormData(this);

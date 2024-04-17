@@ -3,15 +3,8 @@ using HalloDocDAL.Contacts;
 using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HalloDocDAL.Repositories
 {
@@ -207,11 +200,12 @@ namespace HalloDocDAL.Repositories
 
         public List<Dashboard> GetRequestByEmail(string email)
         {
-            var requestData = _context.Requests
-        .Where(req => req.Email == email)
+            var requestData = _context.Requestclients
+                .Include(_ => _.Request)
+        .Where(req => req.Email == email || req.Request.Email == email)
         .Select(req => new
         {
-            Request = req,
+            Request = req.Request,
             FilesGroup = _context.Requestwisefiles
                 .Where(file => file.Requestid == req.Requestid)
                 .ToList()
@@ -410,6 +404,56 @@ namespace HalloDocDAL.Repositories
             _context.Emaillogs.Add(log);
             _context.SaveChanges();
             return true;
+        }
+
+        public async Task<PagedList<EmailLog>> GetEmailLogs(int roleid, string receiverName, string Email, DateTime createdDate, DateTime sentDate, int pageNumber)
+        {
+            var data = _context.Emaillogs
+                .Select(r => new EmailLog
+                {
+                    Id = (int)r.Emaillogid,
+                    RecipientName = r.Requestid != null ?
+                        _context.Requests.FirstOrDefault(p => p.Requestid == r.Requestid).Firstname + " " + _context.Requests.FirstOrDefault(p => p.Requestid == r.Requestid).Lastname
+                        : (r.Physicianid != null ?
+                        _context.Physicians.FirstOrDefault(p => p.Physicianid == r.Physicianid).Firstname + " " + _context.Physicians.FirstOrDefault(p => p.Physicianid == r.Physicianid).Lastname
+                        : _context.Admins.FirstOrDefault(p => p.Adminid == r.Adminid).Firstname + " " + _context.Admins.FirstOrDefault(p => p.Adminid == r.Adminid).Lastname),
+                    Action = r.Subjectname,
+                    RoleName = _context.Roles.FirstOrDefault(p => p.Roleid == r.Roleid).Name,
+                    Email = r.Emailid,
+                    ConfirmationNumber = r.Confirmationnumber,
+                    isSent = (bool)r.Isemailsent ? "Yes" : "No",
+                    sentTries = (int)r.Senttries,
+                    cdate = r.Createdate,
+                    sdate = (DateTime)r.Sentdate,
+                    SentDate = ((DateTime)r.Sentdate).ToString("MMM dd, yyyy"),
+                    CreatedDate = r.Createdate.ToString("MMM dd, yyyy h:mm tt")
+                }).AsQueryable();
+
+            if (Email != null)
+            {
+                data = data.Where(r => r.Email.Contains(Email));
+            }
+            if (receiverName != null)
+            {
+                data = data.Where(r => r.RecipientName.Contains(receiverName));
+            }
+            if (createdDate != default(DateTime))
+            {
+                var date = createdDate.Date;
+                data = data.Where(r => r.cdate != null && r.cdate.Date == date.Date);
+            }
+            if (sentDate != default(DateTime))
+            {
+                var date = sentDate.Date;
+                data = data.Where(r => r.sdate != null && r.sdate.Date == date.Date);
+            }
+
+            List<EmailLog> list = data.ToList();
+
+            list = list.Skip((pageNumber - 1) * 5).Take(5).ToList();
+
+            PagedList<EmailLog> pageList = await PagedList<EmailLog>.CreateAsync(list, data.Count(), pageNumber, 5);
+            return pageList;
         }
     }
 }

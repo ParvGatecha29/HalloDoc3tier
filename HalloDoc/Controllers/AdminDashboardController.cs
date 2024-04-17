@@ -1,24 +1,14 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using HalloDocDAL.Model;
 using HalloDocBAL.Interfaces;
 using HalloDocDAL.Models;
 using HalloDocBAL.Services;
 using HalloDocDAL.Contacts;
-using System.Net.Mime;
-using Microsoft.AspNetCore.Routing.Constraints;
 using HalloDocDAL.Repositories;
 using System.Globalization;
 using Rotativa.AspNetCore;
-using System.Security.Policy;
 using OfficeOpenXml;
-using Microsoft.DotNet.Scaffolding.Shared;
-using System.Drawing;
-using System.Collections;
 using System.Transactions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Web.Providers.Entities;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace HalloDoc.Controllers;
 [AuthManager("1")]
@@ -31,6 +21,7 @@ public class AdminDashboardController : Controller
     private readonly IOrderService _orderService;
     private readonly IUserService _userService;
     private readonly IRequestService _requestService;
+    private readonly IRequestRepository _requestRepository;
     private readonly IUserRepository _userRepository;
     private readonly IRecordsRepository _recordsRepository;
     int[] newcase = { 1 };
@@ -39,8 +30,9 @@ public class AdminDashboardController : Controller
     int[] concludecase = { 6 };
     int[] toclosecase = { 3, 7, 8 };
     int[] unpaidcase = { 9 };
-    public AdminDashboardController(IUserRepository userRepository, IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService, IRecordsRepository recordsRepository)
+    public AdminDashboardController(IRequestRepository requestRepository, IUserRepository userRepository, IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService, IRecordsRepository recordsRepository)
     {
+        _requestRepository = requestRepository;
         _adminDashboardService = adminDashboardService;
         _emailService = emailService;
         _dashboardService = dashboardService;
@@ -155,12 +147,20 @@ public class AdminDashboardController : Controller
 
         dash.regions = _adminDashboardService.GetAllRegions();
         dash.request = _adminDashboardService.GetRequestById(requestid);
+        if(dash.request == null)
+        {
+            return View("Invalid");
+        }
         return View("ViewCase", dash);
     }
 
     public IActionResult ViewNotes(int requestid)
     {
         var dash = _adminDashboardService.GetNotes(requestid);
+        if (dash == null)
+        {
+            return View("Invalid");
+        }
         return PartialView("ViewNotes", dash);
     }
 
@@ -248,6 +248,10 @@ public class AdminDashboardController : Controller
         ViewUploads viewUploads = new ViewUploads();
         viewUploads.Request = _adminDashboardService.GetRequestById(requestid);
         viewUploads.Requestwisefiles = _dashboardService.ViewDocument(requestid);
+        if (viewUploads == null)
+        {
+            return View("Invalid");
+        }
         return View(viewUploads);
     }
 
@@ -279,6 +283,10 @@ public class AdminDashboardController : Controller
         var orders = new Orders();
         orders.requestid = requestid;
         orders.healthprofessionaltypes = _orderService.GetAllPrfessions();
+        if (orders == null)
+        {
+            return View("Invalid");
+        }
         return View(orders);
     }
 
@@ -329,6 +337,10 @@ public class AdminDashboardController : Controller
     {
         string[] format = { "dd/MMMM/yyyy", "d/MMMM/yyyy" };
         AdminDashboardData ad = _adminDashboardService.GetRequestById(requestid);
+        if (ad == null)
+        {
+            return View("Invalid");
+        }
         EncounterForm ef = _adminDashboardService.GetEncounterForm(requestid);
         if (ef != null)
         {
@@ -396,7 +408,12 @@ public class AdminDashboardController : Controller
     {
         ViewUploads viewUploads = new ViewUploads();
         viewUploads.Request = _adminDashboardService.GetRequestById(requestid);
+
         viewUploads.Requestwisefiles = _dashboardService.ViewDocument(requestid);
+        if (viewUploads == null)
+        {
+            return View("Invalid");
+        }
         return View(viewUploads);
     }
 
@@ -731,6 +748,10 @@ public class AdminDashboardController : Controller
         prov.physician = _adminDashboardService.GetPhysiciansById(physicianid);
         prov.regions = _adminDashboardService.GetAllRegions();
         prov.phyregions = _adminDashboardService.GetPhysicianRegions(physicianid);
+        if (prov.physician == null)
+        {
+            return View("Invalid");
+        }
         return PartialView(prov);
     }
 
@@ -1336,6 +1357,17 @@ public class AdminDashboardController : Controller
 
 
         return Json(new { success = true });
+    }
+
+    public IActionResult EmailLog()
+    {
+        return View();
+    }
+
+    public async Task<IActionResult> LoadEmailLogTable(int roleid, string receiverName, string Email, DateTime createdDate, DateTime sentDate, int pageNumber)
+    {
+        var logs = await _requestRepository.GetEmailLogs( roleid,  receiverName,  Email,  createdDate,  sentDate,  1);
+        return PartialView("EmailLogTable", logs);
     }
 }
 

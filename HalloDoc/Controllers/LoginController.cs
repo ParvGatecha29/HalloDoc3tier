@@ -1,20 +1,10 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using HalloDocDAL.Data;
-using Newtonsoft.Json;
-using HalloDocDAL.Models;
-using System.ComponentModel.DataAnnotations;
 using HalloDocDAL.Model;
 using HalloDocBAL.Interfaces;
-using Microsoft.AspNetCore.Http;
 using HalloDocBAL.Services;
-using System.Net.Mail;
-using HalloDocDAL.Repositories;
-using System.Web.Providers.Entities;
-using Microsoft.AspNetCore.Http.HttpResults;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using NuGet.Common;
 
 namespace HalloDoc.Controllers;
 
