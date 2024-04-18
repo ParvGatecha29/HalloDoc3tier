@@ -497,17 +497,23 @@ textarea:focus {
         }
 
         #responsiveTable tr {
-            border: 1px solid #ccc;
-            padding: 8px;
+            border: 2px solid #ccc;
+            padding: 15px;
             margin-bottom: 5px;
+            /*background-color: inherit;*/
         }
 
         #responsiveTable td {
             border: none;
-            border-bottom: 1px solid #eee;
+            /*border-bottom: 0.5px solid #eee;*/
             position: relative;
             padding-left: 50%;
             text-align: left;
+        }
+        #responsiveTable .mobile-hide {
+         
+            border-top: 0.1px solid #eee;
+           
         }
 
             #responsiveTable td:before {

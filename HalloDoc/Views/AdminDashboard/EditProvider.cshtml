@@ -468,71 +468,6 @@
                 $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
     });
 
-    // // Reset Password
-    // $(document).on('click', '#PhysicianResetPassword', function () {
-    //     var Password = $('#PhysicianPassword').val();
-    //     var phyid = $('#adminID').val();
-
-    //     $.ajax({
-    //         url: '/AdminDashboard/EditPhysician',
-    //         type: 'POST',
-    //         data: { Password: Password, adminID: phyid },
-    //         success: function (result) {
-    //             if (result.success) {
-    //                 $("#providerdiv").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
-    //                 toastr.success("Password Updated!");
-    //             }
-    //             else {
-    //                 $('#resetpassword').text("Password is required!");
-    //             }
-    //         },
-    //     });
-    // });
-
-    // // Save Physician Account
-    // $(document).on('click', '#savePhysicianAccount', function () {
-    //     var phyid = $('#adminID').val();
-    //     var username = $('#PhysicianUsername').val();
-    //     var Status = 1;
-    //     var Role = 1;
-
-    //     var count = 3;
-
-    //     if(username == null)
-    //     {
-    //          $('#username').text("Username is required!");
-    //          count--;
-    //     }
-    //     if(Status == null)
-    //     {
-    //          $('#status').text("Status is required!");
-    //          count--;
-    //     }
-    //     if(Role == null)
-    //     {
-    //          $('#role').text("Role is required!");
-    //          count--;
-    //     }
-
-    //     if (count == 3) { 
-    //         $.ajax({
-    //             url: '/AdminDashboard/EditPhysician',
-    //             type: 'POST',
-    //             data: { Password: Password, adminID: phyid },
-    //             success: function (result) {
-    //                 if (result.success) {
-    //                     $("#dashboard").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
-    //                     toastr.success("Account Data Updated!");
-    //                 }
-    //             }
-    //         });
-    //     }
-    //     else
-    //     {
-    //         toastr.error("Please provide valid data!");
-    //     }
-    // });
-
     $('#PhysicianInfo').submit(function(e) {       
         e.preventDefault();
 
@@ -564,10 +499,6 @@
                     }
                 }
             });
-        }
-        else
-        {
-            toastr.error("Please provide valid data!");
         }
     });
 
@@ -603,10 +534,6 @@
                 }
             });
         }
-        else
-        {
-            toastr.error("Please provide valid data!");
-        }
     });
 
     $('#ProviderInfo').submit(function(e) {       
@@ -640,10 +567,6 @@
                     }
                 }
             });
-        }
-        else
-        {
-            toastr.error("Please provide valid data!");
         }
     });
 

@@ -1,14 +1,14 @@
 ﻿@model HalloDocDAL.Model.ScheduleModel
 
 <div class="table-responsive">
-    <table class="table">
+    <table class="table" id="responsiveTable">
         <thead>
             <tr class="bg-secondary-subtle">
-                <th scope="col" class="bg-transparent"> <input type="checkbox" id="selectAll" /> </th>
+                <th scope="col" class="bg-transparent  mobile-hide"> <input type="checkbox" id="selectAll" /> </th>
                 <th scope="col" class="bg-transparent"> <p>Staff <span><i id="sort" class="bi bi-arrow-down"></i></span> </p> </th>
-                <th scope="col" class="bg-transparent"> <p>Day</p> </th>
-                <th scope="col" class="bg-transparent"> <p>Time</p> </th>
-                <th scope="col" class="bg-transparent"> <p>Region</p> </th>
+                <th scope="col" class="bg-transparent mobile-hide"> <p>Day</p> </th>
+                <th scope="col" class="bg-transparent mobile-hide"> <p>Time</p> </th>
+                <th scope="col" class="bg-transparent mobile-hide"> <p>Region</p> </th>
             </tr>
         </thead>
 
@@ -17,12 +17,12 @@
             {
                 if (item.Status == 0)
                 {
-                    <tr>
-                        <td class="bg-transparent"> <input type="checkbox" class="checkbox" name="selectedShifts" value="@item.ShiftDetailId" /> </td>
-                        <td class="bg-transparent"> <p>@item.PhysicianName</p> </td>
-                        <td class="bg-transparent"> <p>@item.Shiftdate</p> </td>
-                        <td class="bg-transparent"> <p>@item.Starttime - @item.Endtime;</p> </td>
-                        <td class="bg-transparent"> <p>@item.RegionName</p> </td>
+                    <tr class="table-row">
+                        <td class="bg-transparent mobile-hide" data-label="Check"> <input type="checkbox" class="checkbox" name="selectedShifts" value="@item.ShiftDetailId" /> </td>
+                        <td class="bg-transparent" data-label="Staff"> <p>@item.PhysicianName</p> </td>
+                        <td class="bg-transparent mobile-hide" data-label="Day"> <p>@item.Shiftdate</p> </td>
+                        <td class="bg-transparent mobile-hide" data-label="Time"> <p>@item.Starttime - @item.Endtime;</p> </td>
+                        <td class="bg-transparent mobile-hide" data-label="Region"> <p>@item.RegionName</p> </td>
                     </tr>
                 }
             }
@@ -30,3 +30,24 @@
     </table>
 
 </div>
+<script>
+    var tableRows = document.querySelectorAll('#responsiveTable tbody .table-row');
+    if (window.innerWidth <= 600) {
+        var details = document.querySelectorAll('.mobile-hide');
+        details.forEach(function (detail) {
+            detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+        });
+    }
+    function toggleDetails() {
+        if (window.innerWidth <= 600) {
+            var details = this.querySelectorAll('.mobile-hide');
+            details.forEach(function (detail) {
+                detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+            });
+        }
+    }
+
+    tableRows.forEach(function (row) {
+        row.addEventListener('click', toggleDetails);
+    });
+</script>

@@ -111,7 +111,22 @@
             data: { view: view }
         })
         calendar.changeView(view);
-        
+        if (window.screen.width < 700) {
+            if (calendar.view.type === 'resourceTimelineWeek') {
+                calendar.changeView('dayGridWeek');
+            }
+            if (calendar.view.type === 'resourceTimelineDay') {
+                $('.fc-daygrid-day-events').text("0/24");
+                calendar.changeView('timeGridDay');
+            }
+        } else {
+            if (calendar.view.type === 'dayGridWeek') {
+                calendar.changeView('resourceTimelineWeek');
+            }
+            if (calendar.view.type === 'timeGridDay') {
+                calendar.changeView('resourceTimelineDay');
+            }
+        }
     }
     document.addEventListener('DOMContentLoaded', function () {
         

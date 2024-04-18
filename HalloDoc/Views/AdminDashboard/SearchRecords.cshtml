@@ -151,7 +151,6 @@
             var type = $("#RequestType").val();
 
             if (!email && !fromdos && !phone && !todos && !patient && !provider && status == 0 && type == 0) {
-                toastr.error("Please Enter some Search Fields");
             } else {
                 fetchSearchRecords(email, fromdos, phone, todos, patient, provider, status, type);
             }
@@ -199,7 +198,6 @@
                 }
             },
             error: function () {
-                toastr.error("Failed to delete request.");
             }
         });
     }
@@ -231,9 +229,6 @@
                     //     setupPagination(10, '.data-mobile-row');
                     // }
                 }
-            },
-            error: function () {
-                toastr.error("Failed to fetch records.");
             }
         });
     }

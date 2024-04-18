@@ -439,7 +439,6 @@
             success: function (result) {
                 if (result.success) {
                     $("#providerdiv").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
-                    toastr.success("Password Updated!");
                 }
                 else {
                     $('#resetpassword').text("Password is required!");
@@ -481,14 +480,9 @@
                 success: function (result) {
                     if (result.success) {
                         $("#dashboard").load('@Url.Action("LoadEditPhysician", "Admin")?Physicianid=' + @Model.physician.Physicianid);
-                        toastr.success("Account Data Updated!");
                     }
                 }
             });
-        }
-        else
-        {
-            toastr.error("Please provide valid data!");
         }
     });
 
@@ -524,10 +518,6 @@
                 }
             });
         }
-        else
-        {
-            toastr.error("Please provide valid data!");
-        }
     });
 
     $('#BillingInfo').submit(function(e) {       
@@ -562,10 +552,6 @@
                 }
             });
         }
-        else
-        {
-            toastr.error("Please provide valid data!");
-        }
     });
 
     $('#ProviderInfo').submit(function(e) {       
@@ -599,10 +585,6 @@
                     }
                 }
             });
-        }
-        else
-        {
-            toastr.error("Please provide valid data!");
         }
     });
 
