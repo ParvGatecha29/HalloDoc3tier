@@ -8,10 +8,13 @@
     <div class="row m-4 col-10 col-xl-9">
         <p class="col fs-4 fw-bold pb-0 mb-0 d-inline">Conclude Care</p>
         <div class="col mb-0 text-end">
-            <a class="text-decoration-none text-info rounded border border-info p-2 i-info" asp-action="ProviderDashboard" asp-controller="ProviderDashboard">
-                <i class="bi bi-chevron-left i-info"></i>
-                Back
-            </a>
+            <button class="float-end my-4 btn btn-outline-info backBtn" onclick="location.href='@Url.Action("ProviderDashboard","ProviderDashboard")'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                     height="16" fill="currentColor" class="bi bi-chevron-left fw-medium mb-1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg>Back
+            </button>
         </div>
     </div>
 

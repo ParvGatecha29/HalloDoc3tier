@@ -10,12 +10,14 @@ namespace HalloDocBAL.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IPhysicianRepository _physicianRepository;
         private readonly IUserRepo _userRepo;
 
-        public UserService(IUserRepository userRepository, IUserRepo userRepo)
+        public UserService(IUserRepository userRepository, IUserRepo userRepo, IPhysicianRepository physicianRepository)
         {
             _userRepository = userRepository;
             _userRepo = userRepo;
+            _physicianRepository = physicianRepository;
         }
 
         public async Task<bool> SignUp(Register register)
@@ -48,8 +50,19 @@ namespace HalloDocBAL.Services
         public async Task<Aspnetuser> Login(Login model)
         {
             var user = await _userRepository.FindByEmail(model.Email);
+
             if (user != null)
             {
+                if(user.Aspnetuserroles.Any(x=> x.RoleId == "3"))
+                {
+                    Physician p = _physicianRepository.GetPhysicianByAspId(user.Id);
+                    if(p != null)
+                    {
+                        if(p.Isdeleted == true) {
+                            return null;
+                        }
+                    }
+                }
                 var password = Encoding.UTF8.GetString(Convert.FromBase64String(user.Passwordhash));
                 if (model.Password == password)
                 {

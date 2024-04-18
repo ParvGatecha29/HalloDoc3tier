@@ -35,5 +35,6 @@ namespace HalloDocDAL.Contacts
         public BusinessModel EditBusiness(int vendorid);
         public bool UpdateBusiness(BusinessModel model);
         public bool DeleteBusiness(int vendorid);
+        public bool DeleteProvider(int id);
     }
 }

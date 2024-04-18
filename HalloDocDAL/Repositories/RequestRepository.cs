@@ -100,7 +100,7 @@ namespace HalloDocDAL.Repositories
             //    }).Where(req => status.Contains(req.status)).ToList();
             IQueryable<Requestclient> reqclnt;
             List<Requestclient> req;
-            reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Include(_ => _.Region).Where(_ => status.Contains(_.Request.Status)).AsQueryable();
+            reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Include(_ => _.Region).Where(_ => status.Contains(_.Request.Status)).OrderByDescending(x => x.Request.Createddate).AsQueryable();
 
             if (reqtype != 0)
             {
@@ -157,6 +157,7 @@ namespace HalloDocDAL.Repositories
                 }
                 abc.Add(def);
             }
+            
             PagedList<AdminDashboardData> result;
             if (all)
             {

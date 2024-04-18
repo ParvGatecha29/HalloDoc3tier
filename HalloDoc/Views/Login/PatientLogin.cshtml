@@ -20,7 +20,7 @@
                     <p class="fs-2 pb-3 fw-semibold">Login To Your Account</p>
                 </div>
                 <div class="form-style">
-                    <div class="form-group pb-3 form-floating d-flex d-inline">
+                    <div class="pb-3 form-floating d-flex d-inline">
                         <input type="text" placeholder="Email" class="form-control" id="email"
                                aria-describedby="emailHelp" name="Username" asp-for=Email>
                         <span asp-validation-for="Email"></span>
@@ -39,9 +39,6 @@
                     </div>
                     <div class="pb-2">
                         <button id="btnlogin" class="btn btn-info w-100 font-weight-bold mt-2">Submit</button>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center">
-                        <div><a class="redirect-to" data-page="PatientCreate" data-controller="Login">Create New Account</a></div>
                     </div>
                     <div class="d-flex align-items-center justify-content-center">
                         <div><a class="redirect-to" data-page="ForgotPassword" data-controller="Login">Forgot Password?</a></div>

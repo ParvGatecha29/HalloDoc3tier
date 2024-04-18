@@ -388,6 +388,7 @@ namespace HalloDocDAL.Repositories
                                       join pd in _context.Physicians on s.Physicianid equals pd.Physicianid
                                       join sd in _context.Shiftdetails on s.Shiftid equals sd.Shiftid into shiftGroup
                                       from sd in shiftGroup.DefaultIfEmpty()
+                                      where pd.Isdeleted != true
 
                                       select new ScheduleModel
                                       {
@@ -439,6 +440,7 @@ namespace HalloDocDAL.Repositories
                     on shiftis.Shiftid equals shiftdetails.Shiftid
                     join regionis in _context.Regions
                     on shiftdetails.Regionid equals regionis.Regionid
+                    where shiftis.Physician.Isdeleted != true
                     select new ScheduleModel
                     {
                         Shiftid = shiftis.Shiftid,
@@ -627,6 +629,17 @@ namespace HalloDocDAL.Repositories
                 }
             }
             return false;
+        }
+        public bool DeleteProvider(int id)
+        {
+            Physician p = _context.Physicians.FirstOrDefault(x => x.Physicianid == id);
+            if (p != null)
+            {
+                p.Isdeleted = true;
+            }
+            _context.Physicians.Update(p);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

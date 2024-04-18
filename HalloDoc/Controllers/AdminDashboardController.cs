@@ -73,6 +73,7 @@ public class AdminDashboardController : Controller
         if (pageNumber == null || HttpContext.Session.GetString("state") != state.ToString())
         {
             pageNumber = "1";
+            HttpContext.Session.SetString("pageNumber", "1");
         }
         var dash = new AdminDashboard();
         dash.state = state;
@@ -780,6 +781,11 @@ public class AdminDashboardController : Controller
         return Json(new { success = false });
     }
 
+    public JsonResult DeleteProvider(int id)
+    {
+        _userRepository.DeleteProvider(id); 
+        return Json(new { success = true });
+    }
     public JsonResult EditPhysician(Provider model)
     {
         var edit = _adminDashboardService.EditPhysician(model);

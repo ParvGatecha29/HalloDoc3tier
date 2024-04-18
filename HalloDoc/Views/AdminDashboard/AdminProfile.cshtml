@@ -9,12 +9,13 @@
     <div class="row">
         <div class="col m-4 d-flex justify-content-between pt-4">
             <h3>My Profile</h3>
-            <a asp-controller="AdminDashboard" asp-action="AdminDashboard" class="btn btn-outline-info back_btn">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="currentColor">
-                    <path d="m142-480 294 294q15 15 14.5 35T435-116q-15 15-35 15t-35-15L57-423q-12-12-18-27t-6-30q0-15 6-30t18-27l308-308q15-15 35.5-14.5T436-844q15 15 15 35t-15 35L142-480Z" />
-                </svg>
-                Back
-            </a>
+            <button class="float-end my-4 btn btn-outline-info backBtn" onclick="location.href='@Url.Action("AdminDashboard","AdminDashboard")'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                     height="16" fill="currentColor" class="bi bi-chevron-left fw-medium mb-1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg>Back
+            </button>
         </div>
     </div>
     <div class="container mb-5 pb-5 request_form shadow-lg px-4">
