@@ -48,7 +48,7 @@ namespace HalloDocDAL.Repositories
 
             if (roleClaim == null)
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Login", action = "PatientLogin" }));
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "PatientLogin" }));
                 return;
             }
 
@@ -56,7 +56,7 @@ namespace HalloDocDAL.Repositories
             {
                 if (!(roleClaim.Value == _role))
                 {
-                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "Index" }));
+                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AccessDenied" }));
                     return;
                 }
             }
@@ -74,7 +74,7 @@ namespace HalloDocDAL.Repositories
                 List<string> access = menus.Split(',').ToList();
                 if (!access.Contains(_access))
                 {
-                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "Index" }));
+                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Home", action = "AccessDenied" }));
                     return;
                 }
             }

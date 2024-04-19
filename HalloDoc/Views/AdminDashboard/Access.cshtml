@@ -55,7 +55,7 @@
                                     <button class="btn btn-outline-info me-2" onclick="editRole(@i.Roleid)">
                                         Edit
                                     </button>
-                                    <button class="btn btn-outline-info">
+                                    <button class="btn btn-outline-info" onclick="deleteRole(@i.Roleid)">
                                         Delete
                                     </button>
                                 </div>
@@ -71,21 +71,7 @@
 </div>
 
 <script>
-    var dash = document.getElementById("dashboard-tab");
-    var providerLoc = document.getElementById("providerlocation-tab");
-    var profile = document.getElementById("myprofile-tab");
-    var provider = document.getElementById("providers-tab");
-    var partner = document.getElementById("partners-tab");
-    var access = document.getElementById("access-tab");
-    var records = document.getElementById("records-tab");
-
-    dash.classList.remove("active");
-    providerLoc.classList.remove("active");
-    profile.classList.remove("active");
-    provider.classList.remove("active");
-    partner.classList.remove("active");
-    access.classList.add("active");
-    records.classList.remove("active");
+    document.getElementById("access-tab").classList.add("active");
 
     function CreateAccess() {
         $('#accessDiv').load("/AdminDashboard/CreateAccess");
@@ -93,5 +79,25 @@
 
     function editRole(id) {
         $('#accessDiv').load("/AdminDashboard/CreateAccess?id=" + id);
+    }
+
+    function deleteRole(id) {
+        $.ajax({
+            url: "/AdminDashboard/DeleteRole",
+            data: { id : id },
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: "Success!",
+                        text: "Role Deleted",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).finally(() => {
+                        location.reload();
+                    });
+                }
+            }
+        })
     }
 </script>

@@ -6,6 +6,7 @@ namespace HalloDocDAL.Contacts
     {
         Task<bool> AddUser(Aspnetuser user);
         Task<Aspnetuser> FindByEmail(string email);
+        Task<Aspnetuser> FindById(string email);
         bool IsUserBlocked(string email, string phone);
         Task<User> GetByEmail(string email);
         Task<bool> EditAspUser(Aspnetuser user);
@@ -36,5 +37,7 @@ namespace HalloDocDAL.Contacts
         public bool UpdateBusiness(BusinessModel model);
         public bool DeleteBusiness(int vendorid);
         public bool DeleteProvider(int id);
+        public bool DeleteRole(int id);
+        public bool RegisterAdmin(AdminProfile model);
     }
 }

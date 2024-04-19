@@ -118,6 +118,7 @@
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li><button class="dropdown-item" id="account-tab" data-bs-toggle="tab">Account</button></li>
+                                        <li><button class="dropdown-item" id="admin-tab" data-bs-toggle="tab">Admin</button></li>
                                         <li><button class="dropdown-item" id="user-tab" data-bs-toggle="tab">User</button></li>
                                     </ul>
                                 </li>
@@ -222,6 +223,10 @@
 
             $('#blockhistory-tab').click(function () {
                 window.location.href = '@Url.Action("BlockHistory","AdminDashboard")';
+            })
+
+            $('#admin-tab').click(function () {
+                window.location.href = '@Url.Action("CreateAdmin","AdminDashboard")';
             })
         });
 

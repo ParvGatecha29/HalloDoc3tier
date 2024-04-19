@@ -3,6 +3,7 @@ using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using System.Data.Entity;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HalloDocDAL.Repositories
 {
@@ -85,6 +86,109 @@ namespace HalloDocDAL.Repositories
                 p.Businessname = model.physician.Businessname;
                 p.Businesswebsite = model.physician.Businesswebsite;
                 p.Adminnotes = model.physician.Adminnotes;
+            }
+
+            else if (model.formtype == 5)
+            {
+                var file = model.sign;
+                var filePath = "";
+                if (file != null)
+                {
+                    if (file.Length > 0)
+                    {
+                        var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/documents/Physician", p.Physicianid.ToString());
+                        if (!Directory.Exists(uploadsFolderPath))
+                        {
+                            Directory.CreateDirectory(uploadsFolderPath);
+                        }
+                        filePath = Path.Combine(uploadsFolderPath, "Sign.png");
+                        p.Photo = filePath;
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            file.CopyToAsync(stream);
+                        }
+                    }
+                }
+
+                var ICA = model.ICA;
+                var ICAPath = "";
+                if (ICA != null)
+                {
+                    if (ICA.Length > 0)
+                    {
+                        p.Isagreementdoc = true;
+                        var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/documents/Physician", p.Physicianid.ToString());
+                        if (!Directory.Exists(uploadsFolderPath))
+                        {
+                            Directory.CreateDirectory(uploadsFolderPath);
+                        }
+                        ICAPath = Path.Combine(uploadsFolderPath, "ICA.pdf");
+                        using (var stream = new FileStream(ICAPath, FileMode.Create))
+                        {
+                            ICA.CopyToAsync(stream);
+                        }
+                    }
+                }
+
+                var BackgroundCheck = model.BackgroundCheck;
+                var BackgroundCheckPath = "";
+                if (BackgroundCheck != null)
+                {
+                    if (BackgroundCheck.Length > 0)
+                    {
+                        p.Isbackgrounddoc = true;
+                        var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/documents/Physician", p.Physicianid.ToString());
+                        if (!Directory.Exists(uploadsFolderPath))
+                        {
+                            Directory.CreateDirectory(uploadsFolderPath);
+                        }
+                        BackgroundCheckPath = Path.Combine(uploadsFolderPath, "BC.pdf");
+                        using (var stream = new FileStream(BackgroundCheckPath, FileMode.Create))
+                        {
+                            BackgroundCheck.CopyToAsync(stream);
+                        }
+                    }
+                }
+                var Hippa = model.Hippa;
+                var HippaPath = "";
+                if (Hippa != null)
+                {
+                    if (Hippa.Length > 0)
+                    {
+                        p.Iscredentialdoc = true;
+                        var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/documents/Physician", p.Physicianid.ToString());
+                        if (!Directory.Exists(uploadsFolderPath))
+                        {
+                            Directory.CreateDirectory(uploadsFolderPath);
+                        }
+                        HippaPath = Path.Combine(uploadsFolderPath, "CRED.pdf");
+                        using (var stream = new FileStream(HippaPath, FileMode.Create))
+                        {
+                            Hippa.CopyToAsync(stream);
+                        }
+                    }
+                }
+                var NDA = model.NDA;
+                var NDAPath = "";
+                if (NDA != null)
+                {
+                    if (NDA.Length > 0)
+                    {
+                        p.Isnondisclosuredoc = true;
+                        var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/documents/Physician", p.Physicianid.ToString());
+                        if (!Directory.Exists(uploadsFolderPath))
+                        {
+                            Directory.CreateDirectory(uploadsFolderPath);
+                        }
+                        NDAPath = Path.Combine(uploadsFolderPath, "NDA.pdf");
+                        using (var stream = new FileStream(NDAPath, FileMode.Create))
+                        {
+                            NDA.CopyToAsync(stream);
+                        }
+                    }
+                }
+                _context.Physicians.Update(p);
+                _context.SaveChanges();
             }
             _context.Physicians.Update(p);
             _context.SaveChanges();

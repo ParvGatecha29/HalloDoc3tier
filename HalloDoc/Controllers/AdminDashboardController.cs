@@ -1375,5 +1375,78 @@ public class AdminDashboardController : Controller
         var logs = await _requestRepository.GetEmailLogs( roleid,  receiverName,  Email,  createdDate,  sentDate,  1);
         return PartialView("EmailLogTable", logs);
     }
+
+    public IActionResult CreateAdmin()
+    {
+        AdminProfile profile = new AdminProfile();
+        profile.roles = _adminDashboardService.GetRoles();
+        profile.regions = _adminDashboardService.GetAllRegions();
+        profile.regions = _adminDashboardService.GetAllRegions();
+        return View(profile);
+    }
+    public JsonResult RegisterAdmin(AdminProfile model)
+    {
+        var user = SessionService.GetLoggedInUser(HttpContext.Session);
+        model.aspId = user.Id;
+        _userRepository.RegisterAdmin(model);
+        return Json(new { success = true, });
+    }
+
+    public async Task<IActionResult> EditUser(string id)
+    {
+        Aspnetuser user = await _userRepository.FindById(id);
+        if(user != null) { 
+            if(user.Aspnetuserroles.Any(x => x.RoleId == "1"))
+            {
+                Admin admin = _adminDashboardService.GetAdminById(id);
+
+                AdminProfile profile = new AdminProfile
+                {
+                    adminId = admin.Adminid,
+                    Username = admin.Firstname,
+                    Status = admin.Status.ToString(),
+                    Role = admin.Roleid.ToString(),
+                    FirstName = admin.Firstname,
+                    LastName = admin.Lastname,
+                    Email = admin.Email,
+                    ConfirmEmail = admin.Email,
+                    Phone = admin.Mobile,
+                    Address1 = admin.Address1,
+                    Address2 = admin.Address2,
+                    City = admin.City,
+                    Zip = admin.Zip,
+                    RegionId = admin.Regionid,
+                    Phone1 = admin.Altphone
+                };
+                profile.regions = _adminDashboardService.GetAllRegions();
+                profile.adminregions = _adminDashboardService.GetAdminRegions(HttpContext.Session.GetString("userId"));
+                return PartialView("EditAdmin",profile);
+            }
+            if (user.Aspnetuserroles.Any(x => x.RoleId == "2"))
+            {
+                var physician = _adminDashboardService.GetPhysiciansByAspId(id);
+                Provider prov = new Provider();
+                prov.physician = _adminDashboardService.GetPhysiciansById(physician.Physicianid);
+                prov.regions = _adminDashboardService.GetAllRegions();
+                prov.phyregions = _adminDashboardService.GetPhysicianRegions(physician.Physicianid);
+                if (prov.physician == null)
+                {
+                    return View("Invalid");
+                }
+                return PartialView("EditProvider", prov);
+            }
+        }
+        return NotFound();
+
+    }
+
+    public JsonResult DeleteRole(int id)
+    {
+        if (_userRepository.DeleteRole(id))
+        {
+            return Json(new { success = true, });
+        }
+        return Json(new { success = false, });
+    }
 }
 

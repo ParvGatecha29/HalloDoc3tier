@@ -13,7 +13,6 @@ namespace HalloDocBAL.Services
             if (!string.IsNullOrEmpty(session.GetString("userId")))
             {
                 userInfo = new UserInfo();
-                userInfo.aspId = session.GetString("aspuserId");
                 userInfo.Id = session.GetString("userId");
                 userInfo.Email = session.GetString("Email");
                 userInfo.Role = session.GetString("Role");

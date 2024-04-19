@@ -1,0 +1,221 @@
+﻿@model HalloDocDAL.Model.AdminProfile
+@{
+    Layout = "_adminDash";
+}
+<div class="row justify-content-center mb-5 pb-5">
+    <div class="row m-4 col-xl-8 col-md-9 col-11">
+        <p class="col fs-4 fw-bold pb-0 mb-0 d-inline">Create Admin Account</p>
+        <div class="col mb-0 text-end">
+            <a class="text-decoration-none text-info rounded border border-info p-2 useraccess-tab">
+                <i class="bi bi-chevron-left text-info"></i>
+                Back
+            </a>
+        </div>
+    </div>
+
+    <div class="m-4 shadow col-xl-8 col-md-9 col-11">
+        <form method="post" id="CreateAdmin" class="pb-3">
+            <!-- Account Information -->
+            <p class="fs-5 fw-bold">Account Information</p>
+            <div class="row g-2">
+                <div class="col-md-4 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="username" placeholder="User Name" asp-for="Username" disabled>
+                        <label for="username" class="floatingLabel">User Name</label>
+                    </div>
+                    <span id="Username" asp-validation-for="Username" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="password" placeholder="Password" asp-for="Password">
+                        <label for="password" class="floatingLabel">Password</label>
+                    </div>
+                    <span id="Password" asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4 col-12 mb-3">
+                    <div class="form-floating mb-3">
+                        <select class="form-select form-control" id="AdminRole" style="height: 58px;" asp-for="Roleid">
+                            @foreach(var i in Model.roles)
+                            {
+                                if(i.Accounttype == 1)
+                                {
+                                    <option value="@i.Roleid"> @i.Name </option>   
+                                }
+                            }
+                        </select>
+                        <label for="PhysicianRole" class="floatingLabel">Role</label>
+                    </div>                    
+                    <span id="AdminRole" asp-validation-for="Roleid" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Administrator Information -->
+            <p class="fs-5 fw-bold">Administrator Information</p>
+            <div class="row g-2">
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="AdminFirstname" placeholder="First Name" asp-for="FirstName">
+                        <label for="AdminFirstname" class="floatingLabel">First Name</label>
+                    </div>
+                    <span id="FirstName" asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="AdminLastname" placeholder="Last Name" asp-for="LastName">
+                        <label for="AdminLastname" class="floatingLabel">Last Name</label>
+                    </div>
+                    <span id="LastName" asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="AdminEmail" placeholder="Email" asp-for="Email">
+                        <label for="AdminEmail" class="floatingLabel">Email</label>
+                    </div>
+                    <span id="Email" asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="AdminConfirmEmail" placeholder="Email" asp-for="ConfirmEmail">
+                        <label for="AdminConfirmEmail" class="floatingLabel">Confirm Email</label>
+                    </div>
+                    <span id="ConfirmEmail" asp-validation-for="ConfirmEmail" class="text-danger"></span>
+                </div>
+
+                <div class="col-12 col-md-6 mb-3 z-3">
+                    <div class="form-floating">
+                        <input type="tel" class="form-control p-3 ps-5" placeholder="(201) 555-0123" asp-for="Phone">
+                    </div>
+                    <span id="Phone" asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+
+                <div class="col-lg-6 col-12 d-flex flex-wrap mb-3">
+                    @foreach (var i in Model.regions)
+                    {
+                        <div class="form-check d-flex d-inline-block">
+                            <input class="PhysicianInput border border-dark mt-1 me-2" type="checkbox" value="@i.Regionid" name="adminChecked">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                @i.Name
+                            </label>
+                        </div>
+                    }
+                    <span id="selectedRegions" asp-validation-for="selectedRegions" class="text-danger"></span>
+                </div>                
+                <input type="hidden" asp-for="selectedRegions" id="SelectedRegionIds" />
+            </div>
+
+            <!-- Mailing & Billing Information -->
+            <p class="fs-5 fw-bold">Mailing & Billing Information</p>
+            <div class="row g-2">
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="MailingAddress1" placeholder="Address1" asp-for="Address1">
+                        <label for="MailingAddress1" class="floatingLabel">Address1</label>
+                    </div>
+                    <span id="Address1" asp-validation-for="Address1" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="MailingAddress2" placeholder="Address2" asp-for="Address2">
+                        <label for="MailingAddress2" class="floatingLabel">Address2</label>
+                    </div>
+                    <span id="Address2" asp-validation-for="Address2" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="MailingCity" placeholder="City" asp-for="City">
+                        <label for="MailingCity" class="floatingLabel">City</label>
+                    </div>
+                    <span id="City" asp-validation-for="City" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="Physicianstate" style="height: 58px;" asp-for="Stateid">
+                            @foreach(var i in Model.regions)
+                            {
+                                <option value="@i.Regionid"> @i.Name </option>
+                            }
+                        </select>
+                        <label for="Physicianstate" class="floatingLabel">State</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-12 mb-3">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="MailingZipcode" placeholder="Zip" asp-for="Zip">
+                        <label for="MailingZipcode" class="floatingLabel">Zip</label>
+                    </div>
+                    <span id="Zip" asp-validation-for="Zip" class="text-danger"></span>
+                </div>
+
+                <div class="col-12 col-md-6 mb-3 z-3">
+                    <div class="form-floating">
+                        <input type="tel" class="form-control p-3 ps-5" id="MailingMobile" asp-for="Phone1" placeholder="(201) 555-0123">
+                    </div>
+                    <span id="Phone1" asp-validation-for="Phone1" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-success text-light">Create Account</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('#CreateAdmin').on('submit', function (e) {
+        e.preventDefault();
+        var data = new FormData(this);
+
+        $.ajax({
+            url: "RegisterAdmin",
+            type: "Post",
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                if (result.success) {
+                    Swal.fire({
+                        title: "Good job!",
+                        text: "Account Created",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).finally(() => {
+                        location.reload();
+                    });
+                }
+                else {
+                    $.each(result.errors, function (key, value) {
+                        var idvalue = key.substring(key.lastIndexOf('.') + 1);
+                        var id = '#' + idvalue;
+
+                        $(id).text(value);
+                    });
+                    toastr.error("Please provide valid data.");
+                }
+            }
+        });
+    });
+
+    // script for phone number
+    phoneInputField = document.querySelectorAll("input[type='tel']");
+    for (var i = 0; i < phoneInputField.length; i++) {
+        const phoneInput = window.intlTelInput(phoneInputField[i], {
+            utilsScript:
+                "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+            nationalMode: false,
+            showSelectedDialCode: true,
+            autoInsertDialCode: true,
+            formatOnDisplay: false,
+        });
+    }
+</script>

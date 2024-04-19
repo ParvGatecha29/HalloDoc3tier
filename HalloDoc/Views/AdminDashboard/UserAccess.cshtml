@@ -11,9 +11,7 @@
         <div class="m-4 mt-0 shadow col-10 col-xl-9">
             <div class="mx-2">
                 <div class="d-flex justify-content-end mt-2">
-                    <button class="me-1 rounded btn border border-info text-info" onclick="CreateAccess()">
-                        Create Access
-                    </button>
+                    
                 </div>
             </div>
 
@@ -32,7 +30,7 @@
                 <tbody id="tableBody">
                     @foreach (var i in Model.Users)
                     {
-                        <tr class="d-none d-xl-table-row d-md-table-row" data-pid="@i.Aspnetuser?.PhysicianAspnetusers.FirstOrDefault()?.Physicianid">
+                        <tr class="d-none d-xl-table-row d-md-table-row tr" data-pid="@i.Aspnetuser.Id">
                             <td class="bg-transparent">
                                 @if (i.Aspnetuser != null)
                                 {
@@ -92,11 +90,12 @@
 
     $(".editProvider").click(function () {
         var physicianid = $(this).closest('.tr').data('pid');
+        console.log(physicianid);
         $.ajax({
-            url: '@Url.Action("EditProvider","AdminDashboard")',
-            data: { physicianid: physicianid },
+            url: '@Url.Action("EditUser","AdminDashboard")',
+            data: { id: physicianid },
             success: function (result) {
-                $('#providerdiv').html(result);
+                $('#accessDiv').html(result);
             }
         });
     })

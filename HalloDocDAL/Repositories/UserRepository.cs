@@ -3,7 +3,10 @@ using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using System.Data;
+using System.Text;
+using System.Web.Providers.Entities;
 
 namespace HalloDocDAL.Repositories
 {
@@ -28,7 +31,12 @@ namespace HalloDocDAL.Repositories
             return await _context.Aspnetusers.Include(_ => _.Aspnetuserroles).FirstOrDefaultAsync(x => x.Email == email);
         }
 
-        public async Task<User> GetByEmail(string email)
+        public async Task<Aspnetuser> FindById(string id)
+        {
+            return await _context.Aspnetusers.Include(_ => _.Aspnetuserroles).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Models.User> GetByEmail(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
         }
@@ -294,7 +302,7 @@ namespace HalloDocDAL.Repositories
 
         public List<Role> GetRoles()
         {
-            return _context.Roles.ToList();
+            return _context.Roles.Where(x=> x.Isdeleted != true).ToList();
         }
 
         public List<Menu> GetMenus(int AccountType)
@@ -457,7 +465,7 @@ namespace HalloDocDAL.Repositories
 
         }
 
-        public List<User> GetUsers()
+        public List<Models.User> GetUsers()
         {
             var users = _context.Users.Include(_ => _.Aspnetuser).ThenInclude(_ => _.Aspnetuserroles);
             if(users.Any(x => x.Aspnetuser != null ? x.Aspnetuser.Aspnetuserroles.Any(y => y.RoleId == "1") : false)){
@@ -638,6 +646,65 @@ namespace HalloDocDAL.Repositories
                 p.Isdeleted = true;
             }
             _context.Physicians.Update(p);
+            _context.SaveChanges();
+            return true;
+        }
+
+        public bool DeleteRole(int id)
+        {
+            Role role = _context.Roles.FirstOrDefault(x => x.Roleid == id);
+            if (role != null)
+            {
+                role.Isdeleted = true;
+            }
+            _context.Roles.Update(role);
+            _context.SaveChanges();
+            return true;
+        }
+        public bool RegisterAdmin(AdminProfile model)
+        {
+            model.Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(model.Password));
+            Aspnetuser aspuser = new Aspnetuser
+            {
+                Id = Guid.NewGuid().ToString(),
+                Email = model.Email,
+                Passwordhash = model.Password,
+                Phonenumber = model.Phone,
+                Username = model.Email,
+                Createddate = DateTime.Now,
+            };
+            _context.Aspnetusers.Add(aspuser);
+            _context.SaveChanges();
+
+            Aspnetuserrole role = new Aspnetuserrole
+            {
+                UserId = aspuser.Id,
+                RoleId = "1"
+            };
+            _context.Aspnetuserroles.Add(role);
+            _context.SaveChanges();
+
+            Admin admin = new Admin
+            {
+                Aspnetuserid = aspuser.Id,
+                Firstname = model.FirstName,
+                Lastname = model.LastName,
+                Email = model.Email,
+                Mobile = model.Phone,
+                Address1 = model.Address1,
+                Address2 = model.Address2,
+                City = model.City,
+                Status = 1,
+                Roleid = model.Roleid,
+                Regionid = model.Stateid,
+                Zip = model.Zip,
+                Altphone = model.Phone1,
+                Createdby = "1",
+                Createddate = DateTime.Now,
+                Isdeleted = false
+            };
+
+            _context.Admins.Add(admin);
             _context.SaveChanges();
             return true;
         }

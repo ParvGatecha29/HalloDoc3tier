@@ -160,6 +160,7 @@
 
         <!-- Mailing & Billing Information -->
         <form id="BillingInfo">
+            <input type="hidden" asp-for="physician.Physicianid"/>
         <input type="hidden" name="formtype" value="3" />
 
         <p class="fs-5 fw-bold">Mailing & Billing Information</p>
@@ -210,6 +211,7 @@
 
         <form id="ProviderInfo">
         <!-- Provider Profile -->
+        <input type="hidden" asp-for="physician.Physicianid"/>
         <input type="hidden" name="formtype" value="4" />
 
         <p class="fs-5 fw-bold">Provider Profile</p>
@@ -277,7 +279,10 @@
         <div class="mb-1 py-2"></div>
 
         <p class="fs-5 fw-bold">Onboarding</p>
-        <table class="table table-borderless">
+        <form enctype="multipart/form-data" id="savedocs">
+            <input type="hidden" asp-for="physician.Physicianid"/>
+            <input type="hidden" name="formtype" value="5" />
+            <table class="table table-borderless">
                 <tbody>
                     <tr>
                         <th scope="row" class="bg-transparent"> 
@@ -299,7 +304,7 @@
                     @if ((bool)Model.physician.Isagreementdoc)
                     {
                         <td>
-                            <a class="btn btn-info text-light" href="~/Physician/@Model.physician.Physicianid/ICA.pdf">View</a>
+                            <a class="btn btn-info text-light" href="~/documents/Physician/@Model.physician.Physicianid/ICA.pdf">View</a>
                         </td>
                     }
                     
@@ -323,7 +328,7 @@
                         @if ((bool)Model.physician.Isbackgrounddoc)
                     {
                         <td>
-                            <a class="btn btn-info text-light" href="~/Physician/@Model.physician.Physicianid/BC.pdf">View</a>
+                            <a class="btn btn-info text-light" href="~/documents/Physician/@Model.physician.Physicianid/BC.pdf">View</a>
                         </td>
                     }
                     </tr>
@@ -346,7 +351,7 @@
                         @if ((bool)Model.physician.Iscredentialdoc)
                     {
                         <td>
-                            <a class="btn btn-info text-light" href="~/Physician/@Model.physician.Physicianid/CRED.pdf">View</a>
+                            <a class="btn btn-info text-light" href="~/documents/Physician/@Model.physician.Physicianid/CRED.pdf">View</a>
                         </td>
                     }
                     </tr>
@@ -369,17 +374,17 @@
                         @if ((bool)Model.physician.Isnondisclosuredoc)
                     {
                         <td>
-                            <a class="btn btn-info text-light" href="~/Physician/@Model.physician.Physicianid/NDA.pdf">View</a>
+                            <a class="btn btn-info text-light" href="~/documents/Physician/@Model.physician.Physicianid/NDA.pdf">View</a>
                         </td>
                     }
                     </tr>
                 </tbody>
             </table>
-
-        <div class="d-flex justify-content-end">
-            <button type="button" class="btn btn-info text-light me-2">Save</button>
+            <div class="d-flex justify-content-end">
+            <button type="submit" id="savefile" class="btn btn-info text-light me-2">Save</button>
             <button type="button" class="btn btn-danger text-light" id="deleteaccount">Delete Account</button>
         </div>
+        </form>
     </div>
 </div>
 <script>
@@ -569,6 +574,24 @@
             });
         }
     });
+    $('#savedocs').submit(function(e) {       
+        e.preventDefault();
+
+        var data = new FormData(this);
+            $.ajax({
+                url: '/AdminDashboard/EditPhysician',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+                    }
+                }
+            });
+    });
+
 
     $("#deleteaccount").click(function () {
         $.ajax({

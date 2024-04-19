@@ -1,0 +1,330 @@
+﻿@model HalloDocDAL.Model.AdminProfile;
+<div class="container">
+    <div class="row">
+        <div class="col m-4 d-flex justify-content-between pt-4">
+            <button class="float-end my-4 btn btn-outline-info backBtn" onclick="location.href='@Url.Action("AdminDashboard","AdminDashboard")'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                     height="16" fill="currentColor" class="bi bi-chevron-left fw-medium mb-1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+                </svg>Back
+            </button>
+        </div>
+    </div>
+    <div class="container mb-5 pb-5 request_form shadow-lg px-4">
+
+        <div class="row">
+            <h3 class="mt-4">Account Information</h3>
+        </div>
+        <form method="post" asp-controller="AdminDashboard" asp-action="EditProfile">
+            <input asp-for="adminId" hidden />
+            <input asp-for="formtype" type="number" hidden value="3" />
+            <div class="row">
+                <div class="col-lg-6 col-12 form-floating temp mt-4">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Username" disabled type="text" required class="form-control inputs border" placeholder="User Name">
+                        <label for="floatingInput" class="floating-label">User Name</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12 form-floating temp mt-4">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Password" class="form-control inputs border" placeholder="Password">
+                        <label for="floatingInput" class="input_labels floating-label">Password</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-12 form-floating mt-3 temp">
+                    <div class="form-floating mb-3">
+                        <select asp-for="Status" disabled class="adminInfoInput form-select inputs">
+                            <option value="0" selected>--- Select Status ---</option>
+                        </select>
+                        <label for="" class="input_labels floating-label">Status</label>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12 form-floating mt-3 temp">
+                    <div class="form-floating mb-3">
+                        <select asp-for="Role" disabled class="adminInfoInput form-select inputs">
+                            <option value="0" selected>--- Select Role ---</option>
+
+                        </select>
+                        <label for="" class="input_labels floating-label">Role</label>
+                    </div>
+                </div>
+            </div>
+            <div class="text-end mt-3">
+                <button type="submit" class="btn btn-info mx-1">Reset Password</button>
+            </div>
+        </form>
+
+
+
+
+        <div class="row mt-4">
+            <h4>Administrator Information</h4>
+        </div>
+        <form method="post" asp-controller="AdminDashboard" asp-action="EditProfile" id="profileEdit">
+            <input asp-for="adminId" hidden />
+            <input asp-for="formtype" type="number" hidden value="1" />
+            <div class="row">
+                <div class="col-lg-6 col-12 form-floating temp mt-4">
+                    <div class="form-floating mb-3 requiredprofile">
+                        <input asp-for="FirstName" disabled type="text" id="FirstName" class="adminInfoInput form-control inputs border" placeholder="First Name">
+                        <label for="FirstName" class="floating-label">First Name</label>
+                        <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12 form-floating temp mt-4">
+                    <div class="form-floating mb-3 requiredprofile">
+                        <input asp-for="LastName" disabled type="text" class="adminInfoInput form-control inputs border" mailto:placeholder="name@example.com">
+                        <label for="floatingInput" class="input_labels floating-label">Last Name</label>
+                        <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-12 form-floating  mt-4">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Email" disabled type="email" class="adminInfoInput form-control border" mailto:placeholder="name@example.com">
+                        <label for="floatingInput" class="input_labels floating-label">Email</label>
+                        <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12 form-floating temp mt-4">
+                    <div class="form-floating mb-3 requiredprofile">
+                        <input asp-for="ConfirmEmail" disabled type="email" class="adminInfoInput form-control inputs border" mailto:placeholder="name@example.com">
+                        <label for="floatingInput" class="input_labels floating-label">Confirm Email</label>
+                        <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-12 temp mt-4 form-floating d-flex h-100 requiredprofile">
+                    <input asp-for="Phone" disabled id="phone" class="adminInfoInput py-3 form-control inputs border" type="tel" />
+                    <span style="color:red; display:none">Required!</span>
+                </div>
+                <div class="col-lg-6 col-12 d-flex mt-4">
+                    @for (int i = 0; i < Model.regions.Count; i++)
+                    {
+                        <div class="form-check mx-2 required profile">
+                            @if (Model.adminregions.Contains(@Model.regions[i].Regionid))
+                            {
+                                <input disabled class="adminInfoInput adminRegionBox border border-dark" name="selectedRegions" type="checkbox" value="@Model.regions[i].Regionid" checked>
+                            }
+                            else
+                            {
+                                <input disabled class="adminInfoInput adminRegionBox border border-dark" name="selectedRegions" type="checkbox" value="@Model.regions[i].Regionid">
+                            }
+                            <label class="form-check-label" for="flexCheckDefault">
+                                @Model.regions[i].Name
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="text-end mt-3">
+                <button type="button" id="adminEdit" class="btn btn-info mx-1 px-4" onclick="InfoEdit()">Edit</button>
+                <button type="submit" id="adminSubmit" class="btn btn-info mx-1 d-none">Submit</button>
+                <button type="reset" id="adminCancel" class="btn btn-outline-info mx-1 d-none" onclick="InfoEditCancel()">Cancel</button>
+            </div>
+        </form>
+
+
+        <div class="row mt-4">
+            <h4>Mailing & Billing Information</h4>
+        </div>
+        <form method="post" asp-controller="AdminDashboard" asp-action="EditProfile" id="billingEdit">
+            <input asp-for="adminId" hidden />
+            <input asp-for="formtype" type="number" hidden value="2" />
+            <div class="row">
+                <div class="col-lg-6 col-12 form-floating temp mt-4">
+                    <div class="form-floating mb-3 requiredbilling">
+                        <input asp-for="Address1" disabled type="text" class="billingInput form-control inputs border" placeholder=" ">
+                        <label for="floatingInput" class="input_labels floating-label">Address 1</label>
+                        <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12 form-floating temp mt-4">
+                    <div class="form-floating mb-3 requiredbilling">
+                        <input asp-for="Address2" disabled type="text" class="billingInput form-control inputs border" placeholder=" ">
+                        <label for="floatingInput" class="input_labels floating-label">Address 2</label>
+                        <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-12 form-floating temp mt-4">
+                    <div class="form-floating mb-3 requiredbilling">
+                        <input asp-for="City" disabled type="text" class="billingInput form-control inputs border" placeholder=" ">
+                        <label for="floatingInput" class="input_labels floating-label">City</label>
+                        <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12 form-floating mt-3 temp">
+                    <div class="form-floating mb-3 requiredbilling">
+                        <select asp-for="RegionId" disabled class="billingInput form-select inputs">
+                            <option value="0" selected>--- Select State ---</option>
+                            @for (int i = 0; i < Model.regions.Count; i++)
+                            {
+                                <option value="@Model.regions[i].Regionid">@Model.regions[i].Name</option>
+                            }
+
+                        </select>
+                        <label for="" class="input_labels floating-label">State</label>
+                        <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-12 form-floating temp mt-4">
+                    <div class="form-floating mb-3 requiredbilling">
+                        <input asp-for="Zip" disabled type="number" class="billingInput form-control inputs border" placeholder="">
+                        <label for="floatingInput" class="input_labels floating-label">Zip</label>
+                        <span style="color:red; display:none">Required!</span>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12 temp mt-4 form-floating d-flex h-100 requiredbilling">
+                    <input asp-for="Phone1" disabled id="phone1" class="billingInput py-3 form-control inputs border" type="tel" />
+                    <span style="color:red; display:none">Required!</span>
+                </div>
+            </div>
+
+            <div class="text-end mt-3">
+                <button type="button" id="BillingEdit" class="btn btn-info mx-1 px-4" onclick="billingEdit()">Edit</button>
+                <button type="submit" id="BillingSubmit" class="btn btn-info mx-1 d-none">Submit</button>
+                <button type="reset" id="BillingCancel" class="btn btn-outline-info mx-1 d-none" onclick="billingEditCancel()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    var profile = document.getElementById("myprofile-tab").classList.add("active");
+</script>
+
+<script>
+    function billingEdit() {
+        var x = document.getElementById("BillingEdit");
+        var y = document.getElementById("BillingSubmit");
+        var z = document.getElementById("BillingCancel");
+
+        x.classList.add("d-none");
+        y.classList.remove("d-none");
+        z.classList.remove("d-none");
+
+        var w = document.getElementsByClassName("billingInput");
+        for (var i = 0; i < w.length; i++) {
+            w[i].disabled = false;
+        }
+    }
+
+    function billingEditCancel() {
+        var x = document.getElementById("BillingEdit");
+        var y = document.getElementById("BillingSubmit");
+        var z = document.getElementById("BillingCancel");
+
+        x.classList.remove("d-none");
+        y.classList.add("d-none");
+        z.classList.add("d-none");
+
+        var w = document.getElementsByClassName("billingInput");
+        for (var i = 0; i < w.length; i++) {
+            w[i].disabled = true;
+        }
+    }
+
+
+
+
+    function InfoEdit() {
+        var x = document.getElementById("adminEdit");
+        var y = document.getElementById("adminSubmit");
+        var z = document.getElementById("adminCancel");
+
+        x.classList.add("d-none");
+        y.classList.remove("d-none");
+        z.classList.remove("d-none");
+
+        var w = document.getElementsByClassName("adminInfoInput");
+        for (var i = 0; i < w.length; i++) {
+            w[i].disabled = false;
+        }
+    }
+
+    function InfoEditCancel() {
+        var x = document.getElementById("adminEdit");
+        var y = document.getElementById("adminSubmit");
+        var z = document.getElementById("adminCancel");
+
+        x.classList.remove("d-none");
+        y.classList.add("d-none");
+        z.classList.add("d-none");
+
+        var w = document.getElementsByClassName("adminInfoInput");
+        for (var i = 0; i < w.length; i++) {
+            w[i].disabled = true;
+        }
+    }
+
+    $('#profileEdit').submit(function (e) {
+        e.preventDefault();
+        var validate = true;
+        $('.requiredprofile').each(function () {
+            var div = $(this);
+            if ($(div).find('input').val() == "") {
+                Swal.fire({
+                    title: "Information required",
+                    text: "Please enter all the details",
+                    icon: "error"
+                });
+                var span = $(div).children('span');
+                span.show();
+
+                validate = false;
+            }
+        })
+
+        if (validate) {
+            Swal.fire({
+                title: "Information Updated",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            }).finally(() => {
+                this.submit();
+            });
+        }
+    })
+
+    $('#billingEdit').submit(function (e) {
+        e.preventDefault();
+        var validate = true;
+        $('.requiredbilling').each(function () {
+            var div = $(this);
+            if ($(div).find('input').val() == "") {
+                Swal.fire({
+                    title: "Information required",
+                    text: "Please enter all the details",
+                    icon: "error"
+                });
+                var span = $(div).children('span');
+                span.show();
+
+                validate = false;
+            }
+        })
+
+        if (validate) {
+            Swal.fire({
+                title: "Information Updated",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            }).finally(() => {
+                this.submit();
+            });
+        }
+    })
+</script>
