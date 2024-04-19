@@ -39,5 +39,6 @@ namespace HalloDocDAL.Contacts
         public bool DeleteProvider(int id);
         public bool DeleteRole(int id);
         public bool RegisterAdmin(AdminProfile model);
+        public void AddUserRole(Aspnetuserrole role);
     }
 }

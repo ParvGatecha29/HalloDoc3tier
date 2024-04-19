@@ -18,6 +18,7 @@
         public int status { get; set; }
         public string email { get; set; }
         public DateTime requestDate { get; set; }
+        public DateTime? acceptDate { get; set; }
         public int? regionId { get; set; }
         public string? region { get; set; }
         public string physician { get; set; }

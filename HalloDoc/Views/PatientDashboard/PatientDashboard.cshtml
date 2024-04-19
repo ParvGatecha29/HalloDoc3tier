@@ -122,11 +122,27 @@
                             <td data-label="Created Date">@item.Createddate</td>
                             @if (item.Status == 1)
                             {
+                                <td class="mobile-hide" data-label="Current Status">New</td>
+                            }
+                            else if(item.Status == 2)
+                            {
+                                <td class="mobile-hide" data-label="Current Status">Pending</td>
+                            }
+                            else if (item.Status == 3 || item.Status == 7 || item.Status == 8)
+                            {
+                                <td class="mobile-hide" data-label="Current Status">To close</td>
+                            }
+                            else if (item.Status == 4 || item.Status == 5)
+                            {
                                 <td class="mobile-hide" data-label="Current Status">Active</td>
                             }
-                            else
+                            else if (item.Status == 6)
                             {
-                                <td class="mobile-hide" data-label="Current Status">Inactive</td>
+                                <td class="mobile-hide" data-label="Current Status">Conclude</td>
+                            }
+                            else if (item.Status == 9)
+                            {
+                                <td class="mobile-hide" data-label="Current Status">Unpaid</td>
                             }
                             @if (item.Filename != null)
                             {
@@ -162,7 +178,6 @@
 </div>
 
 
-@section DashboardScript{
     <script>
         document.getElementById("continueButton").addEventListener("click", function () {
             var selectedOption = document.querySelector('input[name="options-outlined"]:checked').id;
@@ -176,7 +191,7 @@
             }
         });
     </script>
-}
+
 <script>
     $(document).ready(function () {
         // Event delegation for dynamically added content

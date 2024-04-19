@@ -1240,6 +1240,11 @@ public class AdminDashboardController : Controller
         HttpContext.Session.SetString("pagepatient", pageNumber.ToString());
     }
 
+    public void ChangePageBlock(int pageNumber)
+    {
+        HttpContext.Session.SetString("pagepatient", pageNumber.ToString());
+    }
+
     public IActionResult PatientHistory()
     {
         return View();
@@ -1266,10 +1271,10 @@ public class AdminDashboardController : Controller
         return View();
     }
 
-    public IActionResult GetBlockedPatients(string? FirstName, string? LastName, string? Phone, string? Email)
+    public async  Task<IActionResult> GetBlockedPatients(string? FirstName, string? LastName, string? Phone, string? Email)
     {
-        List<PatientHistory> records = new List<PatientHistory>();
-        records = _recordsRepository.GetBlockedPatients(FirstName, LastName, Phone, Email);
+        int pageNumber = int.Parse(HttpContext.Session.GetString("pageblock") ?? "1");
+        PagedList<PatientHistory> records = await _recordsRepository.GetBlockedPatients(FirstName, LastName, Phone, Email, pageNumber);
         return PartialView("BlockHistoryPartial", records);
     }
 
@@ -1356,12 +1361,7 @@ public class AdminDashboardController : Controller
 
     public JsonResult UnblockRequest(int requestid)
     {
-
         _requestService.UnblockRequest(requestid);
-
-
-
-
         return Json(new { success = true });
     }
 
@@ -1372,7 +1372,7 @@ public class AdminDashboardController : Controller
 
     public async Task<IActionResult> LoadEmailLogTable(int roleid, string receiverName, string Email, DateTime createdDate, DateTime sentDate, int pageNumber)
     {
-        var logs = await _requestRepository.GetEmailLogs( roleid,  receiverName,  Email,  createdDate,  sentDate,  1);
+        var logs = await _requestRepository.GetEmailLogs( roleid,  receiverName,  Email,  createdDate,  sentDate,  pageNumber);
         return PartialView("EmailLogTable", logs);
     }
 
@@ -1447,6 +1447,13 @@ public class AdminDashboardController : Controller
             return Json(new { success = true, });
         }
         return Json(new { success = false, });
+    }
+
+    public JsonResult ContactProvider(int id, string message)
+    {
+        Physician physician = _adminDashboardService.GetPhysiciansById(id);
+        _emailService.SendEmail(physician.Email,"Admin Message", message);
+        return Json(new {success = true});
     }
 }
 

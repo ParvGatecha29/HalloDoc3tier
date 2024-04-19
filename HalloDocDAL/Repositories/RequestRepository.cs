@@ -149,6 +149,7 @@ namespace HalloDocDAL.Repositories
                     phone = item.Phonenumber ?? "",
                     regionId = item.Regionid,
                     region = item.Region != null ? item.Region.Name : "",
+                    acceptDate = item.Request.Accepteddate,
                     isFinalized = item.Request.EncounterForms.FirstOrDefault(x => x.RequestId == item.Requestid) != null ? item.Request.EncounterForms.FirstOrDefault(x => x.RequestId == item.Requestid).IsFinalize : false
                 };
                 foreach (var item1 in item.Request.Requeststatuslogs)
@@ -287,12 +288,18 @@ namespace HalloDocDAL.Repositories
                 Notes = data.notes,
                 Createddate = DateTime.Now
             };
-            if (newstatus == 2 && data.physicianId != 0)
+            if (newstatus == 2)
             {
-                request.Status = 1;
-                rsl.Transtophysicianid = data.physicianId;
-                request.Physicianid = data.physicianId;
-                request.Accepteddate = DateTime.Now;
+                if(data.physicianId != 0)
+                {
+                    request.Status = 1;
+                    rsl.Transtophysicianid = data.physicianId;
+                    request.Physicianid = data.physicianId;
+                }
+                else
+                {
+                    request.Accepteddate = DateTime.Now;
+                }
             }
             if (newstatus == 1)
             {

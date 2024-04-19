@@ -55,6 +55,7 @@
 
     </tbody>
 </table>
+<div class="d-flex justify-content-between">
 <div class="d-flex justify-content-center">
     <p>
         @first - @last of @Model.TotalCount
@@ -86,6 +87,7 @@
             <a class="page-link border-secondary-subtle rounded theme-color theme-background" onclick="changepage(@nextPage)">&raquo;</a>
         </li>
     </ul>
+</div>
 </div>
 <script>
     var tableRows = document.querySelectorAll('#responsiveTable tbody .table-row');

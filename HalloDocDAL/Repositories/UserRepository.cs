@@ -133,7 +133,7 @@ namespace HalloDocDAL.Repositories
             else if (profile.formtype == 3)
             {
                 Aspnetuser user = _context.Aspnetusers.FirstOrDefault(x => x.Id == admin.Aspnetuserid);
-                user.Passwordhash = profile.Password;
+                user.Passwordhash = Convert.ToBase64String(Encoding.UTF8.GetBytes(profile.Password));
                 _context.Aspnetusers.Update(user);
             }
             _context.Admins.Update(admin);
@@ -707,6 +707,12 @@ namespace HalloDocDAL.Repositories
             _context.Admins.Add(admin);
             _context.SaveChanges();
             return true;
+        }
+
+        public void AddUserRole(Aspnetuserrole role)
+        {
+            _context.Aspnetuserroles.Add(role);
+            _context.SaveChanges();
         }
     }
 }

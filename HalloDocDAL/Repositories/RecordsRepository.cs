@@ -31,11 +31,9 @@ namespace HalloDocDAL.Repositories
                           }).Where(item =>
                               (string.IsNullOrEmpty(FirstName) || item.FirstName.ToLower().Contains(FirstName)) &&
                               (string.IsNullOrEmpty(LastName) || item.LastName.ToLower().Contains(LastName)) &&
-                              (string.IsNullOrEmpty(Email)
-|| item.Email.Contains(Email)) &&
-                              (string.IsNullOrEmpty(Phone)
-|| item.PhoneNumber.Contains(Phone))
-                                                );
+                              (string.IsNullOrEmpty(Email) || item.Email.Contains(Email)) &&
+                              (string.IsNullOrEmpty(Phone) || item.PhoneNumber.Contains(Phone))
+                          );
             var resultl = result.Skip((pageNumber - 1) * 10).Take(10).ToList();
             PagedList<PatientHistory> resultlist;
             resultlist = await PagedList<PatientHistory>.CreateAsync(resultl, result.Count(), pageNumber, 10);
@@ -43,9 +41,9 @@ namespace HalloDocDAL.Repositories
             return resultlist;
         }
 
-        public List<PatientHistory> GetBlockedPatients(string? FirstName, string? LastName, string? Phone, string? Email)
+        public async Task<PagedList<PatientHistory>> GetBlockedPatients(string? FirstName, string? LastName, string? Phone, string? Email, int pageNumber = 1)
         {
-            List<PatientHistory> result = (from b in _context.Blockrequests
+            var result = (from b in _context.Blockrequests
                                            join r in _context.Requests on b.Requestid equals r.Requestid
                                            select new PatientHistory
                                            {
@@ -54,17 +52,20 @@ namespace HalloDocDAL.Repositories
                                                Email = b.Email,
                                                PhoneNumber = b.Phonenumber,
                                                CreatedDate = b.Createddate.ToString(),
-                                               IsActive = b.Isactive
+                                               IsActive = b.Isactive,
+                                               RequestId = r.Requestid
                                            }).Where(item =>
                                                (string.IsNullOrEmpty(FirstName) || item.FirstName.ToLower().Contains(FirstName)) &&
                                                (string.IsNullOrEmpty(LastName) || item.LastName.ToLower().Contains(LastName)) &&
-                                               (string.IsNullOrEmpty(Email)
-|| item.Email.Contains(Email)) &&
-                                               (string.IsNullOrEmpty(Phone)
-|| item.PhoneNumber.Contains(Phone))
-                                                ).ToList();
+                                               (string.IsNullOrEmpty(Email) || item.Email.Contains(Email)) &&
+                                               (string.IsNullOrEmpty(Phone) || item.PhoneNumber.Contains(Phone))
+                                                );
 
-            return result;
+            var resultl = result.Skip((pageNumber - 1) * 10).Take(10).ToList();
+            PagedList<PatientHistory> resultlist;
+            resultlist = await PagedList<PatientHistory>.CreateAsync(resultl, result.Count(), pageNumber, 10);
+
+            return resultlist;
         }
        
         public List<PatientHistory> GetPatientRequests(int userid)

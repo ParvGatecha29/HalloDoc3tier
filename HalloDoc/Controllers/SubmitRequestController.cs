@@ -100,6 +100,16 @@ public class SubmitRequestController : Controller
             {
                 var reg = new Register
                 {
+                    FirstName = model.firstName,
+                    LastName = model.lastName,
+                    Date = model.date,
+                    Month = model.month,
+                    Year = model.year,
+                    Phone = model.phone,
+                    State = model.state,
+                    City = model.city,
+                    Street = model.street,
+                    Zipcode = model.zipcode,
                     Email = model.email,
                     password = model.password
                 };

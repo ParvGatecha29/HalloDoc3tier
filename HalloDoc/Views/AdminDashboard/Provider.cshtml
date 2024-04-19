@@ -86,7 +86,7 @@
             </div>
             <div class="modal-body">
                 <form method="post" id="ContactProviderForm">
-                    <input type="hidden" id="CPPhysicianID" />
+                    <input type="hidden" id="PhysicianID" name="id"/>
                     <p> Choose Communication to send message </p>
 
                     <div class="form-check">
@@ -110,7 +110,7 @@
 
                     <div class="form-group mb-3">
                         <div class="mb-3 form-floating">
-                            <textarea class="form-control" placeholder="" id="CPmessage" style="height: 100px" required></textarea>
+                            <textarea class="form-control" placeholder="" name="message" id="message" style="height: 100px" required></textarea>
                             <label for="CPmessage" class="floating-label"> Message </label>
                         </div>
                     </div>
@@ -156,6 +156,26 @@
     })
 
     $(document).on("click", ".contactProvider", function () {
+        $("#PhysicianID").val($(this).closest('.tr').data('pid'));
         $("#contactModal").modal('show');
     });
+    $("#ContactProviderForm").submit(function (e) {
+        e.preventDefault();
+        var id = $("#PhysicianID").val();
+        var message = $("#message").val();
+
+        $.ajax({
+            url:"/AdminDashboard/ContactProvider",
+            data: {id : id, message: message},
+            success: function (response) {
+                Swal.fire({
+                    title: "Email Sent",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                $("#contactModal").modal('hide');
+            }
+        })
+    })
 </script>

@@ -2,6 +2,8 @@
 using HalloDocDAL.Contacts;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Win32;
 using System.Diagnostics;
 using System.Text;
 
@@ -35,14 +37,30 @@ namespace HalloDocBAL.Services
                 Passwordhash = register.password,
                 Username = register.Email,
                 Createddate = DateTime.Now,
+                Phonenumber = register.Phone
             };
             await _userRepository.AddUser(aspuser);
 
+            Aspnetuserrole role = new Aspnetuserrole
+            {
+                UserId = aspuser.Id,
+                RoleId = "2"
+            };
+            _userRepository.AddUserRole(role);
             var user = new User
             {
+                Mobile = register.Phone,
+                Street = register.Street,
+                City = register.City,
+                State = register.State,
+                Zipcode = register.Zipcode,
+                Intdate = register.Date,
+                Strmonth = register.Month,
+                Intyear = register.Year,
                 Email = register.Email,
                 Firstname = register.Email,
-                Aspnetuserid = aspuser.Id
+                Aspnetuserid = aspuser.Id,
+                Createddate = DateTime.Now
             };
             return await _userRepo.AddUser(user);
         }
@@ -128,6 +146,7 @@ namespace HalloDocBAL.Services
         {
             Debug.WriteLine(model.Email);
             var user = await _userRepository.FindByEmail(model.Email);
+            model.Passwordhash = Convert.ToBase64String(Encoding.UTF8.GetBytes(model.Passwordhash));
             user.Passwordhash = model.Passwordhash;
             return await _userRepository.EditAspUser(user);
         }

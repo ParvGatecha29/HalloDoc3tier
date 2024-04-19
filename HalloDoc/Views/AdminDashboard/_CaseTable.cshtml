@@ -146,8 +146,7 @@
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #00ADEF" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})">Orders</a>
                                 </div>
                                 <div class="d-flex gap-3">
-                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125">Doctors Note</a>
-                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Encounter</a>
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22" onclick="Encounter(@obj.requestId,@obj.isFinalized.ToString().ToLower())">Encounter</a>
                                 </div>
                             </div>
                         }
@@ -163,9 +162,7 @@
                                     <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #EE9125" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})">Orders</a>
                                 </div>
                                 <div class="d-flex gap-3">
-                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #145545">Doctors Note</a>
-                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22">Encounter</a>
-
+                                    <a role="button" class="btn w-50 btn-transparent border border-1 text-white rounded-5" style="background-color: #228B22" onclick="Encounter(@obj.requestId,@obj.isFinalized.ToString().ToLower())">Encounter</a>
                                 </div>
                             </div>
                         }
@@ -289,7 +286,7 @@
                             @if (obj.status == 9 || obj.status == 2 || obj.status == 3 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 7 || obj.status == 8)
                             {
                                 <td>@obj.pname</td>
-                                <td>DateOfService</td>
+                                <td>@obj.acceptDate</td>
                             }
 
                             @if (obj.status == 1 || obj.status == 2 || obj.status == 4 || obj.status == 5 || obj.status == 6 || obj.status == 9)
@@ -387,9 +384,8 @@
                                             <li><a class="dropdown-item theme-color viewnotes"><i class="fa-solid fa-notes-medical p-2"></i> View Notes</a></li>
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("Orders","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-solid fa-cart-plus p-2"></i> Orders</a></li>
                                             <li><a class="dropdown-item theme-color" href="@Url.Action("CloseCase","AdminDashboard",new{requestid = @obj.requestId})"><i class="fa-regular fa-circle-xmark p-2"></i> Close Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky p-2"></i> Doctors Note</a></li>
                                             <li><a class="dropdown-item theme-color clearCase" href="#"><i class="fa-regular fa-circle-xmark"></i> Clear Case</a></li>
-                                            <li><a class="dropdown-item theme-color" href="#"><i class="fa-regular fa-note-sticky p-2"></i> Encounter</a></li>
+                                        <li><a class="dropdown-item theme-color" href="#" onclick="Encounter(@obj.requestId,@obj.isFinalized.ToString().ToLower())"><i class="fa-regular fa-note-sticky p-2"></i> Encounter</a></li>
                                         </ul>
                                    
                                 }
@@ -1042,6 +1038,7 @@
     });
 
     function Encounter(rid, isFinalized) {
+        console.log("u")
         if (isFinalized) {
             $("#encounterModal").modal('show');
             $(".requestId").val(rid);

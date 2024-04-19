@@ -9,7 +9,7 @@ namespace HalloDocDAL.Contacts
         public Task<PagedList<SearchRecord>> GetSearchRecords(string? Email, DateTime? FromDoS, string? Phone, string? Patient, string? Provider, int RequestStatus, int RequestType, DateTime? ToDoS, int pageNumber);
         public bool DeletePatientRequest(int requestid);
         public Task<PagedList<PatientHistory>> GetPatients(string? FirstName, string? LastName, string? Phone, string? Email, int pageNumber);
-        public List<PatientHistory> GetBlockedPatients(string? FirstName, string? LastName, string? Phone, string? Email);
+        public Task<PagedList<PatientHistory>> GetBlockedPatients(string? FirstName, string? LastName, string? Phone, string? Email,int pageNumber);
         public List<PatientHistory> GetPatientRequests(int userid);
     }
 }

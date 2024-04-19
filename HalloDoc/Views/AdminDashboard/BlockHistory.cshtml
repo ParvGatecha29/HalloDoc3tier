@@ -108,6 +108,7 @@
     }
 
     function unblock(id) {
+        console.log(id)
         $.ajax({
             url : "/AdminDashboard/UnblockRequest",
             data: {requestid: id},
@@ -125,6 +126,16 @@
                 }
             }
         })
+    }
+
+    function changepage(pageNumber) {
+        $.ajax({
+            url: '@Url.Action("ChangePageBlock", "AdminDashboard")',
+            data: { pageNumber: pageNumber },
+            success: function () {
+                fetchPatientRecords();
+            }
+        });
     }
 </script>
 
