@@ -818,6 +818,7 @@ public class AdminDashboardController : Controller
         {
             access.edit = 1;
             access.roleid = id;
+            access.roleName = _adminDashboardService.GetRoles().Where(x => x.Roleid == id).FirstOrDefault().Name;
         }
         return PartialView(access);
     }
@@ -873,9 +874,6 @@ public class AdminDashboardController : Controller
         bool slotAvailable = true;
         foreach (var e in events)
         {
-
-
-
             if (e.resourceId == model.Physicianid)
             {
                 if (model.Startdate == DateOnly.FromDateTime(e.start.Date))
@@ -963,8 +961,6 @@ public class AdminDashboardController : Controller
     [HttpGet]
     public IActionResult GetPhysicianShift(int region)
     {
-
-
         // Retrieve physicians associated with the specified region
         var physicians = _adminDashboardService.GetPhysiciansByRegion(region);
 
@@ -1216,9 +1212,16 @@ public class AdminDashboardController : Controller
 
     public void ChangePageSearch(int pageNumber)
     {
-        HttpContext.Session.SetString("pagesearch", pageNumber.ToString());
+        if (pageNumber != 0)
+        {
+            HttpContext.Session.SetString("pagesearch", pageNumber.ToString());
+        }
     }
 
+    public void ClearSearchPage()
+    {
+        HttpContext.Session.SetString("pagesearch","1");
+    }
     public async Task<IActionResult> GetSearchRecords(string? Email, DateTime? FromDoS, string? Phone, string? Patient, string? Provider, int RequestStatus, int RequestType, DateTime? ToDoS)
     {
         int pageNumber = int.Parse(HttpContext.Session.GetString("pagesearch") ?? "1");

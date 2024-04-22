@@ -45,8 +45,11 @@ namespace HalloDocDAL.Repositories
                     requestId = r.Requestid,
                     requestDate = r.Createddate,
                     regionId = rc.Regionid,
-                    physicianId = r.Physicianid ?? 0
-                }).ToList();
+                    physicianId = r.Physicianid ?? 0,
+                    isDeleted = r.Isdeleted
+                })
+                .Where(x => x.isDeleted != true)
+                .ToList();
             return data;
         }
 
@@ -100,11 +103,20 @@ namespace HalloDocDAL.Repositories
             //    }).Where(req => status.Contains(req.status)).ToList();
             IQueryable<Requestclient> reqclnt;
             List<Requestclient> req;
-            reqclnt = _context.Requestclients.Include(_ => _.Request).ThenInclude(_ => _.Physician).Include(_ => _.Request).ThenInclude(_ => _.Requeststatuslogs).Include(_ => _.Request).ThenInclude(_ => _.EncounterForms).Include(_ => _.Region).Where(_ => status.Contains(_.Request.Status)).OrderByDescending(x => x.Request.Createddate).AsQueryable();
+            reqclnt = _context.Requestclients
+                .Include(_ => _.Request)
+                .ThenInclude(_ => _.Physician)
+                .Include(_ => _.Request)
+                .ThenInclude(_ => _.Requeststatuslogs)
+                .Include(_ => _.Request)
+                .ThenInclude(_ => _.EncounterForms)
+                .Include(_ => _.Region)
+                .Where(_ => status.Contains(_.Request.Status) && _.Request.Isdeleted != true)
+                .OrderByDescending(x => x.Request.Createddate);
 
             if (reqtype != 0)
             {
-                reqclnt = reqclnt.Where(_ => _.Request.Requesttypeid == reqtype).AsQueryable();
+                reqclnt = reqclnt.Where(_ => _.Request.Requesttypeid == reqtype);
             }
             if (region != 0)
             {

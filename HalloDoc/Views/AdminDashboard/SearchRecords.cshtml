@@ -128,6 +128,9 @@
         });
 
         $("#SearchFilter").on("click", function () {
+            $.ajax({
+                url: "/AdminDashboard/ClearSearchPage"
+            })
             var email = $("#Email").val();
             var fromdos = $("#FromDoS").val();
             var phone = $("#Phone").val();
@@ -208,13 +211,6 @@
                     location.reload();
                 } else {
                     $('#SearchRecords').html(response);
-                    var windowsize = $(window).width();
-                    // if (windowsize > 766) {
-                    //     setupPagination(10, '.data-row');
-                    // }
-                    // else {
-                    //     setupPagination(10, '.data-mobile-row');
-                    // }
                 }
             }
         });

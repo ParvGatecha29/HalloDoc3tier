@@ -144,6 +144,10 @@
                             {
                                 <td class="mobile-hide" data-label="Current Status">Unpaid</td>
                             }
+                            else if (item.Status == 10)
+                            {
+                                <td class="mobile-hide" data-label="Current Status">Clear</td>
+                            }
                             @if (item.Filename != null)
                             {
                                 <td class="mobile-hide" data-label="Document">

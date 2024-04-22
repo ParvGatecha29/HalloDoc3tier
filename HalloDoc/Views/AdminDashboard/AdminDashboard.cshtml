@@ -200,7 +200,7 @@
                         </path>
                     </svg>
                 </label>
-                <input type="text" class="form-control ps-5" placeholder="Search Patients" value="@Accessor.HttpContext.Session.GetString("search")" id="search" onkeyup="search()">
+                <input type="text" class="form-control ps-5" placeholder="Search Patients" value="@Accessor.HttpContext.Session.GetString("search")" id="search">
             </div>
 
             <div class="d-flex form-group normal-input rounded align-items-center ms-2 position-relative">
@@ -435,6 +435,19 @@
         });
     }
 
+    const debounce = (func, delay) => {
+        let debounceTimer
+        return function () {
+            const context = this
+            const args = arguments
+            clearTimeout(debounceTimer)
+            debounceTimer
+                = setTimeout(() => func.apply(context, args), delay)
+        }
+    }
+    $("input").on("input", debounce(function () {
+        search();
+    }, 500));
     function search() {
         var input;
         input = document.getElementById("search").value.toLowerCase();

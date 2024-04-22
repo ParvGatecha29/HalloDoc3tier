@@ -35,13 +35,13 @@
                     case 6:
                         return "Conclude";
                     case 7:
-                        return "Cancelled";
-                    case 8:
                         return "CancelledByPatient";
-                    case 9:
+                    case 8:
                         return "Closed";
-                    case 10:
+                    case 9:
                         return "Unpaid";
+                    case 10:
+                        return "Clear";
                     case 11:
                         return "Blocked";
                     default:

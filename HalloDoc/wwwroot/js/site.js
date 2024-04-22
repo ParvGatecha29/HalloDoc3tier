@@ -143,5 +143,13 @@ document.addEventListener('DOMContentLoaded', function () {
             formatOnDisplay: false,
         })
     };
+
+
+    //$(document).ajaxSend(function () {
+    //    $("#spinner-div").fadeIn(250);
+    //});
+    //$(document).ajaxComplete(function () {
+    //    $("#spinner-div").fadeOut(250);
+    //});
 });
 

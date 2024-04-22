@@ -338,6 +338,9 @@ namespace HalloDocDAL.Repositories
                 _context.Roles.Add(role);
                 _context.SaveChanges();
             }
+            Role rolee = _context.Roles.FirstOrDefault(x=>x.Roleid ==  model.roleid);
+            rolee.Name = model.roleName;
+            rolee.Accounttype = (short)model.accountType;
             foreach (var menu in model.selectedMenus)
             {
                 if (_context.Rolemenus.FirstOrDefault(x => x.Roleid == model.roleid && x.Menuid == menu) == null)
