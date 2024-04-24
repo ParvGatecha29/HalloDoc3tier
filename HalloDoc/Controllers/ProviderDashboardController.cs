@@ -23,7 +23,7 @@ namespace HalloDoc.Controllers
         private readonly IRequestService _requestService;
         private readonly IUserRepository _userRepository;
         private readonly IRecordsRepository _recordsRepository;
-        
+
         public ProviderDashboardController(IUserRepository userRepository, IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService, IRecordsRepository recordsRepository)
         {
             _adminDashboardService = adminDashboardService;
@@ -91,8 +91,8 @@ namespace HalloDoc.Controllers
             }
             UserInfo user = SessionService.GetLoggedInUser(HttpContext.Session);
             Physician physician = _adminDashboardService.GetPhysiciansByEmail(user.Email);
-            dash.pagedList = await _adminDashboardService.GetRequestsByStatus(status, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search, false,physician.Physicianid);
-            
+            dash.pagedList = await _adminDashboardService.GetRequestsByStatus(status, int.Parse(reqtype), int.Parse(pageNumber), int.Parse(region), search, false, physician.Physicianid);
+
             dash.regions = _adminDashboardService.GetAllRegions();
             HttpContext.Session.SetString("state", state.ToString());
             return PartialView("_CaseTable", dash);
@@ -158,7 +158,7 @@ namespace HalloDoc.Controllers
         }
         public JsonResult UpdateNotes(int requestid, string notes)
         {
-            var dash = _adminDashboardService.UpdateNotes(requestid, notes,true);
+            var dash = _adminDashboardService.UpdateNotes(requestid, notes, true);
             return Json(new { success = true });
         }
 
@@ -397,7 +397,7 @@ namespace HalloDoc.Controllers
         public JsonResult ConcludeRequest(int Requestid)
         {
             _requestService.TransferCase(Requestid, "", 8);
-            return Json(new { success = true});
+            return Json(new { success = true });
         }
 
         public IActionResult MySchedule()
@@ -517,7 +517,7 @@ namespace HalloDoc.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetEvents(int region,int Physicianid)
+        public IActionResult GetEvents(int region, int Physicianid)
         {
             var mappedEvents = _userRepository.GetMappedEvents(region);
             mappedEvents = mappedEvents.Where(x => x.resourceId == Physicianid).ToList();
@@ -643,7 +643,7 @@ namespace HalloDoc.Controllers
             shiftdetail.Status = (short)((shiftdetail.Status == 0) ? 1 : 0);
 
             _userRepository.UpdateShiftDetails(shiftdetail);
-            return RedirectToAction("GetEvents",new { Physicianid = shiftdetail.Shift.Physicianid});
+            return RedirectToAction("GetEvents", new { Physicianid = shiftdetail.Shift.Physicianid });
 
         }
     }

@@ -1,8 +1,10 @@
-﻿using HalloDocDAL.Contacts;
+﻿using GoogleMaps.LocationServices;
+using HalloDocDAL.Contacts;
 using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using System.Data.Entity;
+using System.Net;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HalloDocDAL.Repositories
@@ -80,6 +82,27 @@ namespace HalloDocDAL.Repositories
                 p.City = model.physician.City;
                 p.Zip = model.physician.Zip;
                 p.Altphone = model.physician.Altphone;
+                var address = model.physician.Address1 + " " + model.physician.Address2 + " " + model.physician.City + " " + _context.Regions.FirstOrDefault(r => r.Regionid == model.physician.Regionid).Name;
+                var locationService = new GoogleLocationService("AIzaSyARrk6kY-nnnSpReeWotnQxCAo_MoI4qbU");
+                var point = locationService.GetLatLongFromAddress(address);
+
+                var latitude = point.Latitude;
+                var longitude = point.Longitude;
+
+                var physicianLocation = _context.Physicianlocations.FirstOrDefault(x => x.Physicianid == model.physician.Physicianid);
+                if (physicianLocation == null)
+                {
+                    physicianLocation = new Physicianlocation();
+                    physicianLocation.Physicianid = model.physician.Physicianid;
+                    physicianLocation.Createddate = DateTime.Now;
+                }
+                physicianLocation.Latitude = (decimal?)latitude;
+                physicianLocation.Longitude = (decimal?)longitude;
+                physicianLocation.Address = address;
+                
+
+                _context.Physicianlocations.Update(physicianLocation);
+                _context.SaveChanges();
             }
             else if (model.formtype == 4)
             {

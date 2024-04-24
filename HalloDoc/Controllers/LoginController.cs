@@ -1,10 +1,10 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using HalloDocDAL.Model;
-using HalloDocBAL.Interfaces;
+﻿using HalloDocBAL.Interfaces;
 using HalloDocBAL.Services;
-using System.Security.Claims;
+using HalloDocDAL.Model;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace HalloDoc.Controllers;
 
@@ -25,7 +25,7 @@ public class LoginController : Controller
 
     public async Task<IActionResult> PatientLogin()
     {
-        if(HttpContext.Session.GetString("email") != null)
+        if (HttpContext.Session.GetString("email") != null)
         {
             var user = await _userService.CheckUser(HttpContext.Session.GetString("email"));
             var token = Request.Cookies["jwt"];
@@ -66,7 +66,8 @@ public class LoginController : Controller
     public async Task<JsonResult> PatientLogin([FromBody] Login model)
     {
         var result = await _userService.Login(model);
-        if (result != null) {
+        if (result != null)
+        {
             var jwtToken = _jwtService.GenerateToken(result);
             Response.Cookies.Append("jwt", jwtToken);
             HttpContext.Session.SetString("email", model.Email);
@@ -97,20 +98,21 @@ public class LoginController : Controller
     {
         HttpContext.Session.Clear();
         Response.Cookies.Delete("jwt");
-        return RedirectToAction("PatientLogin","Login");
+        return RedirectToAction("PatientLogin", "Login");
     }
 
     public async Task<JsonResult> PatientSignUp([FromBody] Register model)
     {
-        if(ModelState.IsValid)
+        if (ModelState.IsValid)
         {
-            if(model.password != model.confirmpassword)
+            if (model.password != model.confirmpassword)
             {
                 return Json(new { success = false, message = "Passwords donot match" });
             }
 
             var result = await _userService.SignUp(model);
-            if (!result) { 
+            if (!result)
+            {
                 return Json(new { success = false, message = "User already registered" });
             }
             HttpContext.Session.SetString("email", model.Email);
@@ -130,10 +132,10 @@ public class LoginController : Controller
     {
         var token = _tokenService.GenerateToken(toEmail);
         _tokenService.StoreToken(toEmail, token);
-        var link = "https://localhost:44319/Login/ResetPassword?token="+token;
+        var link = "https://localhost:44319/Login/ResetPassword?token=" + token;
         var subject = "Reset Your Password";
         var body = $"Please reset your password by clicking <a href='{link}'>here</a>.";
-        
+
         _emailService.SendEmail(toEmail, subject, body);
         return Json(new { success = true, redirectUrl = @Url.Action("PatientLogin", "Login") });
     }
@@ -150,7 +152,7 @@ public class LoginController : Controller
             return Json(new { success = true, redirectUrl = @Url.Action("PatientLogin", "Login") });
         }
 
-        return Json(new { success = false, message ="Reset Failed" });
+        return Json(new { success = false, message = "Reset Failed" });
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

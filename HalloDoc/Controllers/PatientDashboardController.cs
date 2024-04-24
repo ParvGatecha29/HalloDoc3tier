@@ -1,10 +1,10 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using HalloDocDAL.Models;
+﻿using HalloDocBAL.Interfaces;
 using HalloDocDAL.Model;
-using HalloDocBAL.Interfaces;
-using System.IO.Compression;
+using HalloDocDAL.Models;
 using HalloDocDAL.Repositories;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.IO.Compression;
 
 namespace HalloDoc.Controllers;
 
@@ -59,10 +59,10 @@ public class PatientDashboardController : Controller
         var formFiles = formCollection.Files;
         Debug.WriteLine(formFiles.Count);
         Debug.WriteLine(rid);
-        var i = await _dashboardService.UploadDocument(formFiles,rid);
+        var i = await _dashboardService.UploadDocument(formFiles, rid);
         if (i != null)
         {
-            return Json(new { success = true});
+            return Json(new { success = true });
         }
         return Json(new { success = false });
     }
@@ -73,7 +73,7 @@ public class PatientDashboardController : Controller
         var tempFileName = Guid.NewGuid().ToString() + ".zip";
         var tempFilePath = Path.Combine(Path.GetTempPath(), tempFileName);
 
-        using(var zip = ZipFile.Open(tempFilePath, ZipArchiveMode.Create))
+        using (var zip = ZipFile.Open(tempFilePath, ZipArchiveMode.Create))
         {
             foreach (var document in selectedDocuments)
             {
@@ -112,7 +112,7 @@ public class PatientDashboardController : Controller
     public async Task<ActionResult> DownloadOne(string id)
     {
         var document = await _dashboardService.GetDocument(id);
-        if(document != null)
+        if (document != null)
         {
             var uploadsFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "documents", document.Requestid.ToString());
             var filePath = Path.Combine(uploadsFolderPath, document.Filename);
@@ -131,10 +131,10 @@ public class PatientDashboardController : Controller
     public async Task<JsonResult> EditProfile([FromBody] User model)
     {
 
-            await _userService.EditUser(model);
+        await _userService.EditUser(model);
 
-            return Json(new { success = true, redirectUrl = Url.Action("PatientDashboard", "PatientDashboard") });
-        
+        return Json(new { success = true, redirectUrl = Url.Action("PatientDashboard", "PatientDashboard") });
+
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

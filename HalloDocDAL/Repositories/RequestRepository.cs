@@ -56,51 +56,7 @@ namespace HalloDocDAL.Repositories
         public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search, bool all,int physicianid)
         {
             int pageSize = 10;
-            //        var data = _context.Requests
-            //// Join Requests with RequestClient
-            //.GroupJoin(_context.Requestclients,
-            //           request => request.Requestid,
-            //           client => client.Requestid,
-            //           (request, clientGroup) => new { request, clientGroup })
-            //.SelectMany(
-            //    rc => rc.clientGroup.DefaultIfEmpty(),
-            //    (rc, client) => new { rc.request, client })
-            //// Join the above with RequestStatusLog
-            //.GroupJoin(_context.Requeststatuslogs,
-            //           rc => rc.request.Requestid,
-            //           status => status.Requestid,
-            //           (rc, statusGroup) => new { rc.request, rc.client, statusGroup })
-            //.SelectMany(
-            //    rcs => rcs.statusGroup.DefaultIfEmpty(),
-            //    (rcs, status) => new { rcs.request, rcs.client, status })
-            //// Join the above with Physician
-            //.GroupJoin(_context.Physicians,
-            //           rcs => rcs.request.Physicianid,
-            //           physician => physician.Physicianid,
-            //           (rcs, physicianGroup) => new { rcs.request, rcs.client, rcs.status, physicianGroup })
-            //.SelectMany(
-            //    rcsp => rcsp.physicianGroup.DefaultIfEmpty(),
-            //    (rcsp, physician) => new AdminDashboardData
-            //    {
-            //        requestId = rcsp.request.Requestid,
-            //        firstName = rcsp.client != null ? rcsp.client.Firstname : null,
-            //        lastName = rcsp.client != null ? rcsp.client.Lastname : null,
-            //        status = rcsp.request.Status,
-            //        requestor = rcsp.request.Firstname,
-            //        pname = physician != null ? physician.Firstname : null,
-            //        notes = rcsp.status != null ? rcsp.status.Notes : null,
-            //        requesttype = rcsp.request.Requesttypeid,
-            //        dobdate = rcsp.client != null ? rcsp.client.Intdate : null,
-            //        dobmonth = rcsp.client != null ? rcsp.client.Strmonth : null,
-            //        dobyear = rcsp.client != null ? rcsp.client.Intyear : null,
-            //        email = rcsp.client != null ? rcsp.client.Email : null,
-            //        requestDate = rcsp.request.Createddate,
-            //        address = rcsp.client != null ? rcsp.client.Street +","+ rcsp.client.City +","+ rcsp.client.State: null,
-            //        cphone = rcsp.request.Phonenumber,
-            //        phone = rcsp.client !=null ? rcsp.client.Phonenumber : null,
-            //        regionId = rcsp.client != null ? rcsp.client.Regionid : null,
-
-            //    }).Where(req => status.Contains(req.status)).ToList();
+           
             IQueryable<Requestclient> reqclnt;
             List<Requestclient> req;
             reqclnt = _context.Requestclients
@@ -142,6 +98,7 @@ namespace HalloDocDAL.Repositories
 
             foreach (var item in req)
             {
+                var regionname = item.Region != null ? item.Region.Name : "";
                 AdminDashboardData def = new AdminDashboardData
                 {
                     requestId = item.Requestid,
@@ -156,7 +113,7 @@ namespace HalloDocDAL.Repositories
                     dobmonth = item.Strmonth ?? "",
                     dobyear = item.Intyear,
                     requestDate = item.Request.Createddate,
-                    address = item.Street + item.City + item.State,
+                    address = item.Street + ", " + item.City + ", " + regionname,
                     cphone = item.Request.Phonenumber ?? "",
                     phone = item.Phonenumber ?? "",
                     regionId = item.Regionid,
@@ -198,7 +155,7 @@ namespace HalloDocDAL.Repositories
                     requestor = r.Firstname + r.Lastname,
                     reqdate = r.Createddate,
                     phone = r.Phonenumber,
-                    address = rc.Street + rc.City + rc.State,
+                    address = rc.Street +", "+ rc.City +", "+ rc.State,
                     requesttype = r.Requesttypeid,
                     status = r.Status,
                     email = r.Email,

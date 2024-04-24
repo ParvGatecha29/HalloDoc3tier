@@ -185,7 +185,13 @@
             </div>
             <div class="col-md-6 col-12 mb-3">
                 <div class="form-floating">
-                    <input type="text" class="form-control mailingInput" id="MailingState" placeholder="State"  disabled>
+                    <select class="p-2 px-3 form-control w-100 regionDropdown" id="state" asp-for="physician.Regionid">
+                           <option value="0" selected disabled>State</option>
+                            @foreach (var region in Model.regions)
+                            {
+                                <option value="@region.Regionid">@region.Name - (@region.Abbreviation)</option>
+                            }
+                    </select>
                     <label for="MailingState" class="floating-label">State</label>
                 </div>
             </div>
@@ -204,7 +210,7 @@
 
         <div class="d-flex justify-content-end">
             <button type="button" id="editMailing" class="btn btn-info text-light">Edit</button>
-            <button type="button" id="saveMailing" class="btn btn-info text-light me-2" style="display: none">Save</button>
+            <button type="submit" id="saveMailing" class="btn btn-info text-light me-2" style="display: none">Save</button>
             <button type="button" id="cancelMailing" class="btn btn-info text-light" style="display: none">Cancel</button>
         </div>
         </form>
@@ -500,7 +506,15 @@
                 contentType: false,
                 success: function (result) {
                     if (result.success) {
-                        $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Details Updated",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).finally(() => {
+                            $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+                        });
                     }
                 }
             });
@@ -534,7 +548,15 @@
                 contentType: false,
                 success: function (result) {
                     if (result.success) {
-                        $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Details Updated",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).finally(() => {
+                            $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+                        });
                     }
                 }
             });
@@ -568,7 +590,15 @@
                 contentType: false,
                 success: function (result) {
                     if (result.success) {
-                        $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Details Updated",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).finally(() => {
+                            $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+                        });
                     }
                 }
             });
@@ -586,7 +616,15 @@
                 contentType: false,
                 success: function (result) {
                     if (result.success) {
-                        $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Details Updated",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).finally(() => {
+                            $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+                        });
                     }
                 }
             });
@@ -605,15 +643,14 @@
                             icon: "success",
                             showConfirmButton: false,
                             timer: 1500
-                        }).finally(() => {
+                    }).finally(() => {
                             if (review) {
                                 window.location.reload()
                             }
                             else {
                                 window.location.reload()
                             }
-
-                        });
+                    });
                 }
             }
         })

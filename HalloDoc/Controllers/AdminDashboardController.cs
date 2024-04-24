@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using HalloDocDAL.Model;
-using HalloDocBAL.Interfaces;
-using HalloDocDAL.Models;
+﻿using HalloDocBAL.Interfaces;
 using HalloDocBAL.Services;
 using HalloDocDAL.Contacts;
+using HalloDocDAL.Model;
+using HalloDocDAL.Models;
 using HalloDocDAL.Repositories;
-using System.Globalization;
-using Rotativa.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
+using Rotativa.AspNetCore;
+using System.Globalization;
 using System.Transactions;
 
 namespace HalloDoc.Controllers;
@@ -148,7 +148,7 @@ public class AdminDashboardController : Controller
 
         dash.regions = _adminDashboardService.GetAllRegions();
         dash.request = _adminDashboardService.GetRequestById(requestid);
-        if(dash.request == null)
+        if (dash.request == null)
         {
             return View("Invalid");
         }
@@ -783,7 +783,7 @@ public class AdminDashboardController : Controller
 
     public JsonResult DeleteProvider(int id)
     {
-        _userRepository.DeleteProvider(id); 
+        _userRepository.DeleteProvider(id);
         return Json(new { success = true });
     }
     public JsonResult EditPhysician(Provider model)
@@ -1220,7 +1220,7 @@ public class AdminDashboardController : Controller
 
     public void ClearSearchPage()
     {
-        HttpContext.Session.SetString("pagesearch","1");
+        HttpContext.Session.SetString("pagesearch", "1");
     }
     public async Task<IActionResult> GetSearchRecords(string? Email, DateTime? FromDoS, string? Phone, string? Patient, string? Provider, int RequestStatus, int RequestType, DateTime? ToDoS)
     {
@@ -1274,7 +1274,7 @@ public class AdminDashboardController : Controller
         return View();
     }
 
-    public async  Task<IActionResult> GetBlockedPatients(string? FirstName, string? LastName, string? Phone, string? Email)
+    public async Task<IActionResult> GetBlockedPatients(string? FirstName, string? LastName, string? Phone, string? Email)
     {
         int pageNumber = int.Parse(HttpContext.Session.GetString("pageblock") ?? "1");
         PagedList<PatientHistory> records = await _recordsRepository.GetBlockedPatients(FirstName, LastName, Phone, Email, pageNumber);
@@ -1375,7 +1375,7 @@ public class AdminDashboardController : Controller
 
     public async Task<IActionResult> LoadEmailLogTable(int roleid, string receiverName, string Email, DateTime createdDate, DateTime sentDate, int pageNumber)
     {
-        var logs = await _requestRepository.GetEmailLogs( roleid,  receiverName,  Email,  createdDate,  sentDate,  pageNumber);
+        var logs = await _requestRepository.GetEmailLogs(roleid, receiverName, Email, createdDate, sentDate, pageNumber);
         return PartialView("EmailLogTable", logs);
     }
 
@@ -1398,8 +1398,9 @@ public class AdminDashboardController : Controller
     public async Task<IActionResult> EditUser(string id)
     {
         Aspnetuser user = await _userRepository.FindById(id);
-        if(user != null) { 
-            if(user.Aspnetuserroles.Any(x => x.RoleId == "1"))
+        if (user != null)
+        {
+            if (user.Aspnetuserroles.Any(x => x.RoleId == "1"))
             {
                 Admin admin = _adminDashboardService.GetAdminById(id);
 
@@ -1423,7 +1424,7 @@ public class AdminDashboardController : Controller
                 };
                 profile.regions = _adminDashboardService.GetAllRegions();
                 profile.adminregions = _adminDashboardService.GetAdminRegions(HttpContext.Session.GetString("userId"));
-                return PartialView("EditAdmin",profile);
+                return PartialView("EditAdmin", profile);
             }
             if (user.Aspnetuserroles.Any(x => x.RoleId == "2"))
             {
@@ -1455,8 +1456,8 @@ public class AdminDashboardController : Controller
     public JsonResult ContactProvider(int id, string message)
     {
         Physician physician = _adminDashboardService.GetPhysiciansById(id);
-        _emailService.SendEmail(physician.Email,"Admin Message", message);
-        return Json(new {success = true});
+        _emailService.SendEmail(physician.Email, "Admin Message", message);
+        return Json(new { success = true });
     }
 }
 

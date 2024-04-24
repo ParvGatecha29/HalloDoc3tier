@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using HalloDocDAL.Data;
+﻿using HalloDocDAL.Data;
 using HalloDocDAL.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HalloDoc.Controllers
 {
@@ -17,9 +17,9 @@ namespace HalloDoc.Controllers
         // GET: Aspnetusers
         public async Task<IActionResult> Index()
         {
-              return _context.Aspnetusers != null ? 
-                          View(await _context.Aspnetusers.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Aspnetusers'  is null.");
+            return _context.Aspnetusers != null ?
+                        View(await _context.Aspnetusers.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Aspnetusers'  is null.");
         }
 
         // GET: Aspnetusers/Details/5
@@ -145,14 +145,14 @@ namespace HalloDoc.Controllers
             {
                 _context.Aspnetusers.Remove(aspnetuser);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool AspnetuserExists(string id)
         {
-          return (_context.Aspnetusers?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Aspnetusers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

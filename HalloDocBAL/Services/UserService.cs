@@ -58,7 +58,8 @@ namespace HalloDocBAL.Services
                 Strmonth = register.Month,
                 Intyear = register.Year,
                 Email = register.Email,
-                Firstname = register.Email,
+                Firstname = register.FirstName,
+                Lastname = register.LastName,
                 Aspnetuserid = aspuser.Id,
                 Createddate = DateTime.Now
             };

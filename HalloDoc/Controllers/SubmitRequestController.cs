@@ -1,9 +1,8 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-
-using HalloDocDAL.Models;
+﻿using HalloDocBAL.Interfaces;
 using HalloDocDAL.Model;
-using HalloDocBAL.Interfaces;
+using HalloDocDAL.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace HalloDoc.Controllers;
 
@@ -91,7 +90,7 @@ public class SubmitRequestController : Controller
         model.room = formcollection["roomNum"];
         model.typeid = 1;
         model.document = formcollection.Files;
-       
+
         if (!_userService.IsUserBlocked(model.email, model.phone))
         {
             var aspuser = new Aspnetuser();

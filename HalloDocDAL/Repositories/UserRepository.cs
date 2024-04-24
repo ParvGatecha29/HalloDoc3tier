@@ -1,4 +1,5 @@
-﻿using HalloDocDAL.Contacts;
+﻿using GoogleMaps.LocationServices;
+using HalloDocDAL.Contacts;
 using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
@@ -162,6 +163,8 @@ namespace HalloDocDAL.Repositories
             _context.Aspnetuserroles.Add(role);
             _context.SaveChanges();
 
+           
+
             var data = new Physician
             {
                 Aspnetuserid = user.Id,
@@ -188,7 +191,25 @@ namespace HalloDocDAL.Repositories
 
             _context.Physicians.Add(data);
             _context.SaveChanges();
+            var address = model.physician.Address1 + " " + model.physician.Address2 + " " + model.physician.City + " " + _context.Regions.FirstOrDefault(r => r.Regionid == model.physician.Regionid).Name;
+            var locationService = new GoogleLocationService("AIzaSyARrk6kY-nnnSpReeWotnQxCAo_MoI4qbU");
+            var point = locationService.GetLatLongFromAddress(address);
 
+            var latitude = point.Latitude;
+            var longitude = point.Longitude;
+
+            var physicianLocation = new Physicianlocation
+            {
+                Physicianid = data.Physicianid,
+                Latitude = (decimal?)latitude,
+                Longitude = (decimal?)longitude,
+                Createddate = DateTime.Now,
+                Physicianname = model.physician.Firstname + " " + model.physician.Lastname,
+                Address = address
+            };
+
+            _context.Physicianlocations.Add(physicianLocation);
+            _context.SaveChanges();
             var list = model.selectedRegions;
 
             foreach (var i in list)
