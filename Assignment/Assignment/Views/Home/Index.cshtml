@@ -1,0 +1,156 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center px-5 py-4">
+    <input type="text" placeholder="Search" class="form-control" id="search" onkeyup="search()" />
+    <div id="patients">
+    </div>
+</div>
+<div id="modal">
+    <partial name="AddPatient" />
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#patients").load("/Home/GetPatients");
+
+        $.ajax({
+            url: '@Url.Action("GetDoctors","Home")',
+            type: 'POST',
+            success: function (data) {
+                var doctors = $('#doctors');
+                $.each(data, function (i, doctor) {
+                    doctors.append($('<option>', {
+                        value: doctor.specialist
+                    }));
+                });
+            },
+            error: function (error) {
+                console.error('Error fetching Doctors:', error)
+            }
+        });
+
+        $('[data-bs-dismiss=modal]').on('click', function (e) {
+            document.getElementById("addpatientform").reset();
+            $("span").hide();
+        })
+    })
+
+    $("#addpatient").click(function () {
+        $("#addPatientModal").modal("show");
+    })
+    $(".required").change(function () {
+        var div = $(this);
+        if ($(div).find('input').val() != "") {
+            var span = $(div).children('span');
+            span.hide();
+        }
+    })
+    $(".addpatientform").submit(function (e) {
+        e.preventDefault()
+        var validate = true;
+        $('.required').each(function () {
+            var div = $(this);
+            if ($(div).find('input').val() == "") {
+                Swal.fire({
+                    title: "Information required",
+                    text: "Please enter all the details",
+                    icon: "error"
+                });
+                var span = $(div).children('span');
+                span.show();
+
+                validate = false;
+            }
+            else {
+                var span = $(div).children('span');
+                span.hide();
+            }
+        })
+        console.log(validate);
+        if (validate) {
+            Swal.fire({
+                title: "Patient List Updated",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            }).finally(() => {
+                $("#addPatientModal").hide();
+                $("#patients").load("/Home/GetPatients");
+                this.submit()
+            });
+        }
+        
+    })
+
+    function deletePatient(patientid){
+        $.ajax({
+            url: "/Home/DeletePatient",
+            data: {patientid: patientid},
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: "Patient Deleted",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).finally(() => {
+                        $("#patients").load("/Home/GetPatients");
+                    });
+                }
+            }
+        })
+    }
+
+    function editPatient(patientid) {
+        $.ajax({
+            url: "/Home/EditPatient",
+            data: { patientid: patientid },
+            success: function (response) {
+                $("#modal").html(response)
+                $("#addPatientModal").modal("show");
+            }
+        })
+    }
+
+    function changepage(pageNumber) {
+        $.ajax({
+            url: '@Url.Action("ChangePage", "Home")',
+            data: { pageNumber: pageNumber },
+            success: function (response) {
+                if (response.success) {
+                    $("#patients").load("/Home/GetPatients");
+                }
+            }
+        });
+    }
+
+    function changepagesize() {
+        console.log("hi")
+        var pagesize = $("#pagesize").val();
+        $.ajax({
+            url: '@Url.Action("ChangePageSize", "Home")',
+            data: { pageSize: pagesize },
+            success: function (response) {
+                if (response.success) {
+                    $("#patients").load("/Home/GetPatients");
+                }
+            }
+        });
+    }
+    
+    function search() {
+        var search = $("#search").val();
+        $.ajax({
+            url: '@Url.Action("SearchPatients", "Home")',
+            data: { search: search },
+            success: function (response) {
+                if (response.success) {
+                    $("#patients").load("/Home/GetPatients");
+                }
+            }
+        });
+    }
+</script>

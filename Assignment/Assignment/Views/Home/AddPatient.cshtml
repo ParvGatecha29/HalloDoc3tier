@@ -1,0 +1,102 @@
+﻿@model AssignmentDAL.Model.TableView
+
+<div class="modal fade " id="addPatientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-white" id="exampleModalLongTitle">Patient form</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="addpatientform" id="addpatientform" asp-action="AddPatient" asp-controller="Home">
+                    <input hidden asp-for="Patientid" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating required mb-3">
+                                <input type="text" class=" form-control" id="fname" asp-for="Firstname" placeholder=" ">
+                                <label for="fname" class=" floating-label">First Name</label>
+                                <span asp-validation-for="Firstname" class="text-danger" style="display:none">Please enter First Name</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 required">
+                                <input type="text" class=" form-control" id="lname" asp-for="Lastname" placeholder=" ">
+                                <label for="lname" class=" floating-label">Last Name</label>
+                                <span asp-validation-for="Lastname" class="text-danger" style="display:none">Please enter Last Name</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating required mb-3">
+                                <input type="text" class=" form-control" id="email" asp-for="Email" placeholder=" ">
+                                <label for="fname" class=" floating-label">Email</label>
+                                <span asp-validation-for="Email" class="text-danger" style="display:none">Please enter Email</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 required">
+                                <input type="text" class=" form-control" id="age" asp-for="Age" placeholder=" ">
+                                <label for="lname" class=" floating-label">Age</label>
+                                <span asp-validation-for="Age" class="text-danger" style="display:none">Please enter Age</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class=" required mb-3">
+                                <p>Gender</p>
+                                <label for="html"><input type="radio" id="html" asp-for="Gender" value="Male" class="mx-1">Male</label>
+                                <label for="css"><input type="radio" id="css" asp-for="Gender" value="Female" class="mx-1">Female</label>
+                                <label for="javascript"><input type="radio" id="javascript" asp-for="Gender" class="mx-1" value="Others">Others</label>
+                                <span asp-validation-for="Gender" class="text-danger" style="display:none">Please enter Gender</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 required">
+                                <input type="text" class=" form-control" id="Phonenumber" asp-for="Phonenumber" placeholder=" ">
+                                <label for="lname" class=" floating-label">Phone Number</label>
+                                <span asp-validation-for="Phonenumber" class="text-danger" style="display:none">Please enter Phone Number</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-floating required mb-3">
+                                <input type="text" class=" form-control" id="disease" asp-for="Disease" placeholder=" ">
+                                <label for="fname" class=" floating-label">Disease</label>
+                                <span asp-validation-for="Disease" class="text-danger" style="display:none">Please enter Disease</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 required">
+                                <input type="text" class=" form-control" id="specialist" asp-for="Doctor" list="doctors" placeholder=" ">
+                                <div id="suggest_container" style="display:inline-block;">
+                                    <datalist id="doctors">
+                                        <option></option>
+                                    </datalist>
+                                </div>
+                                <label for="lname" class=" floating-label">Specialist</label>
+                                <span asp-validation-for="Doctor" class="text-danger" style="display:none">Please enter Specialist</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-light w-100" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-primary w-100">Save</button>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

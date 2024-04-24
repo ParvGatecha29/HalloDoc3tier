@@ -1,0 +1,17 @@
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\bin\Debug\net7.0\AssignmentBAL.deps.json
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\bin\Debug\net7.0\AssignmentBAL.runtimeconfig.json
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\bin\Debug\net7.0\AssignmentBAL.dll
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\bin\Debug\net7.0\AssignmentBAL.pdb
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\bin\Debug\net7.0\AssignmentDAL.dll
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\bin\Debug\net7.0\AssignmentDAL.pdb
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\obj\Debug\net7.0\AssignmentBAL.csproj.AssemblyReference.cache
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\obj\Debug\net7.0\AssignmentBAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\obj\Debug\net7.0\AssignmentBAL.AssemblyInfoInputs.cache
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\obj\Debug\net7.0\AssignmentBAL.AssemblyInfo.cs
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\obj\Debug\net7.0\AssignmentBAL.csproj.CoreCompileInputs.cache
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\obj\Debug\net7.0\AssignmentBAL.csproj.CopyComplete
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\obj\Debug\net7.0\AssignmentBAL.dll
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\obj\Debug\net7.0\refint\AssignmentBAL.dll
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\obj\Debug\net7.0\AssignmentBAL.pdb
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\obj\Debug\net7.0\AssignmentBAL.genruntimeconfig.cache
+D:\Projects\HalloDocMain\Assignment\AssignmentBAL\obj\Debug\net7.0\ref\AssignmentBAL.dll

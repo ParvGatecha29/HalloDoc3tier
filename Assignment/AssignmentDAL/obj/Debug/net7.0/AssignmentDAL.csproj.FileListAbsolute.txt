@@ -1,0 +1,14 @@
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\bin\Debug\net7.0\AssignmentDAL.deps.json
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\bin\Debug\net7.0\AssignmentDAL.runtimeconfig.json
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\bin\Debug\net7.0\AssignmentDAL.dll
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\bin\Debug\net7.0\AssignmentDAL.pdb
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\obj\Debug\net7.0\AssignmentDAL.csproj.AssemblyReference.cache
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\obj\Debug\net7.0\AssignmentDAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\obj\Debug\net7.0\AssignmentDAL.AssemblyInfoInputs.cache
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\obj\Debug\net7.0\AssignmentDAL.AssemblyInfo.cs
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\obj\Debug\net7.0\AssignmentDAL.csproj.CoreCompileInputs.cache
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\obj\Debug\net7.0\AssignmentDAL.dll
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\obj\Debug\net7.0\refint\AssignmentDAL.dll
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\obj\Debug\net7.0\AssignmentDAL.pdb
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\obj\Debug\net7.0\AssignmentDAL.genruntimeconfig.cache
+D:\Projects\HalloDocMain\Assignment\AssignmentDAL\obj\Debug\net7.0\ref\AssignmentDAL.dll
