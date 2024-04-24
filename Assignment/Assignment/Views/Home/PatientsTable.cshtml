@@ -74,7 +74,7 @@
 {
     <div class="d-flex justify-content-end align-items-center">
         <div class="d-flex justify-content-center">
-            <p>
+            <p class="m-0">
                 Items per page
             </p>
             <select asp-for="@Model.PageSize" class="mx-3 p-0" id="pagesize" onchange="changepagesize()">
@@ -86,19 +86,18 @@
             </select>
         </div>
         <div class="d-flex justify-content-center">
-            <p>
+            <p class="m-0">
                 @first - @last of @Model.TotalCount
             </p>
         </div>
         <div>
-            <ul class="pagination justify-content-center mt-2 mb-4 ">
+            <ul class="pagination justify-content-center m-0">
                 <li class="page-item mx-1 ">
                     <a class="page-link rounded "
                     @if (Model.hasPrevious)
                     {
                         <text>
                             onclick = "changepage(@previousPage)"
-                            
                         </text>
                     }>
                         <i class="bi bi-chevron-left text-black"></i>

@@ -100,3 +100,42 @@
         </div>
     </div>
 </div>
+<script>
+    $(".addpatientform").on("submit", function (e) {
+        e.preventDefault()
+        var validate = true;
+        $('.required').each(function () {
+            var div = $(this);
+            if ($(div).find('input').val() == "") {
+                Swal.fire({
+                    title: "Information required",
+                    text: "Please enter all the details",
+                    icon: "error"
+                });
+                var span = $(div).children('span');
+                span.show();
+
+                validate = false;
+            }
+            else {
+                var span = $(div).children('span');
+                span.hide();
+            }
+        })
+        console.log(validate);
+        if (validate) {
+            Swal.fire({
+                title: "Patient List Updated",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 1500
+            }).finally(() => {
+                $("#addPatientModal").hide();
+                $("#patients").load("/Home/GetPatients");
+                this.submit()
+            });
+        }
+
+    })
+</script>
+
