@@ -616,6 +616,7 @@ namespace HalloDocDAL.Repositories
             {
                 try
                 {
+                    vendor.Profession = model.ProfessionId;
                     vendor.Email = model.Email;
                     vendor.Phonenumber = model.PhoneNumber;
                     vendor.Businesscontact = model.BusinessContact;

@@ -15,6 +15,7 @@
 
         <!-- Account Information -->
         <form id="AccountInfo">
+            <input type="hidden" asp-for="physician.Physicianid"/>
         <input type="hidden" id="adminID" value="@Model.physician.Aspnetuserid" />
         <input type="hidden" name="formtype" value="1" />
 
@@ -29,11 +30,11 @@
             </div>
 
             <div class="col-md-6 col-12 mb-3">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="PhysicianPassword" placeholder="Password">
+                <div class="form-floating requiredAccountInfo">
+                    <input type="text" asp-for="aspphy.Passwordhash" class="form-control" id="PhysicianPassword" placeholder="Password">
                     <label for="PhysicianPassword" class="floating-label">Password</label>
                 </div>
-                <span id="resetpassword" class="text-danger"></span>
+                <span id="resetpassword" class="text-danger" style="display:none">Required!</span>
             </div>
 
             <div class="col-md-6 col-12 mb-3">
@@ -59,7 +60,7 @@
             <button type="button" id="editPhysicianAccount" class="btn btn-info text-light me-2">Edit</button>
             <button type="button" id="savePhysicianAccount" class="btn btn-info text-light me-2" style="display: none">Save</button>
             <button type="button" id="cancelPhysicianAccount" class="btn btn-info text-light me-2" style="display: none">Cancel</button>
-            <button type="button" id="PhysicianResetPassword" class="btn btn-outline-info text-info">Reset Password</button>
+            <button type="submit" id="PhysicianResetPassword" class="btn btn-outline-info text-info">Reset Password</button>
         </div>
         </form>
 
@@ -477,6 +478,48 @@
 
     $(document).on('click', '#cancelProfile', function () {
                 $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+    });
+
+    $('#AccountInfo').submit(function(e) {       
+        e.preventDefault();
+
+        var validate = true;
+        $('.requiredAccountInfo').each(function () {
+            var div = $(this);
+            
+            if ($(div).find('input').val() == "") {
+                
+                var span = $(div).children('span');
+                span.show();
+
+                validate = false;
+            }
+        });
+
+        var data = new FormData(this);
+
+        if (validate) { 
+            $.ajax({
+                url: '/AdminDashboard/EditPhysician',
+                type: 'POST',
+                data: data,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Details Updated",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).finally(() => {
+                            $("#providerdiv").load('@Url.Action("EditProvider", "AdminDashboard")?Physicianid=' + @Model.physician.Physicianid);
+                        });
+                    }
+                }
+            });
+        }
     });
 
     $('#PhysicianInfo').submit(function(e) {       

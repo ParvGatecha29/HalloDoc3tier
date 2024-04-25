@@ -3,8 +3,10 @@ using HalloDocDAL.Contacts;
 using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
+using Microsoft.Win32;
 using System.Data.Entity;
 using System.Net;
+using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HalloDocDAL.Repositories
@@ -51,6 +53,14 @@ namespace HalloDocDAL.Repositories
         public bool EditPhysician(Provider model)
         {
             Physician p = _context.Physicians.FirstOrDefault(x => x.Physicianid == model.physician.Physicianid);
+            if(model.formtype == 1)
+            {
+                var aspuser = _context.Aspnetusers.FirstOrDefault(x => x.Id == p.Aspnetuserid);
+                model.aspphy.Passwordhash = Convert.ToBase64String(Encoding.UTF8.GetBytes(model.aspphy.Passwordhash));
+                aspuser.Passwordhash = model.aspphy.Passwordhash;
+                _context.Aspnetusers.Update(aspuser);
+                _context.SaveChanges();
+            }
             if (model.formtype == 2)
             {
                 p.Firstname = model.physician.Firstname;
