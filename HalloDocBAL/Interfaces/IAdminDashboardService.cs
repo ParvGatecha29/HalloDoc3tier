@@ -39,5 +39,13 @@ namespace HalloDocBAL.Interfaces
         List<Rolemenu> GetRoleMenus(int roleid = 0);
         bool CreateAccess(Access model);
         List<User> GetAllUsers();
+        public List<TimesheetModel> SearchDataByRangeTimeSheet(DateTime startDate, int Physicianid);
+        public List<InvoicingModel> SearchDataByRangeReimbursement(DateTime startDate, int Physicianid);
+        public AdminInvoicing CheckApproved(DateTime startDate, int Physicianid);
+        public List<InvoicingModel> SearchDataById(int Id);
+        public bool SaveTimeSheet(List<InvoicingModel> invoicingModels, int Physicianid, string aspuserid);
+        public void ApproveTimesheet(DateTime startDate, int Physicianid, string aspuserid, int bonus, string adminDescription);
+        public Physicianpayrate GetPayrateData(int Physicianid);
+
     }
 }

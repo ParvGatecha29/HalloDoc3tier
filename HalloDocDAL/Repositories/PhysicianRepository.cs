@@ -53,7 +53,7 @@ namespace HalloDocDAL.Repositories
         public bool EditPhysician(Provider model)
         {
             Physician p = _context.Physicians.FirstOrDefault(x => x.Physicianid == model.physician.Physicianid);
-            if(model.formtype == 1)
+            if (model.formtype == 1)
             {
                 var aspuser = _context.Aspnetusers.FirstOrDefault(x => x.Id == p.Aspnetuserid);
                 model.aspphy.Passwordhash = Convert.ToBase64String(Encoding.UTF8.GetBytes(model.aspphy.Passwordhash));
@@ -109,7 +109,7 @@ namespace HalloDocDAL.Repositories
                 physicianLocation.Latitude = (decimal?)latitude;
                 physicianLocation.Longitude = (decimal?)longitude;
                 physicianLocation.Address = address;
-                
+
 
                 _context.Physicianlocations.Update(physicianLocation);
                 _context.SaveChanges();
@@ -231,6 +231,55 @@ namespace HalloDocDAL.Repositories
         public List<Physicianlocation> GetProviders()
         {
             return _context.Physicianlocations.ToList();
+        }
+
+        public Physicianpayrate GetPayRate(int id)
+        {
+            return _context.Physicianpayrates.FirstOrDefault(x => x.PhysicianId == id);
+        }
+        public bool SavePayRate(int Physicianid, int rate, int type)
+        {
+
+            var check = _context.Physicianpayrates.Any(p => p.PhysicianId == Physicianid);
+
+            if (!check)
+            {
+                var payrate = new Physicianpayrate
+                {
+                    PhysicianId = Physicianid
+                };
+                _context.Physicianpayrates.Add(payrate);
+                _context.SaveChanges();
+            }
+
+            var data = _context.Physicianpayrates.FirstOrDefault(p => p.PhysicianId == Physicianid);
+            switch (type)
+            {
+                case 1:
+                    data.NightShiftWeekend = rate;
+                    break;
+                case 2:
+                    data.Shift = rate;
+                    break;
+                case 3:
+                    data.HouseCallNightWeekend = rate;
+                    break;
+                case 4:
+                    data.PhoneConsult = rate;
+                    break;
+                case 5:
+                    data.PhoneConsultNightWeekend = rate;
+                    break;
+                case 6:
+                    data.BatchTesting = rate;
+                    break;
+                case 7:
+                    data.HouseCall = rate;
+                    break;
+            }
+            _context.Physicianpayrates.Update(data);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

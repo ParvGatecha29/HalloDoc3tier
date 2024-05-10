@@ -200,7 +200,13 @@
 
                         $(id).text(value);
                     });
-                    toastr.error("Please provide valid data.");
+                    Swal.fire({
+                        title: "Error",
+                        text: "Please enter valid data",
+                        icon: "Error",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
                 }
             }
         });

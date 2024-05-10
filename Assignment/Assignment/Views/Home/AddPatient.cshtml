@@ -1,6 +1,6 @@
 ﻿@model AssignmentDAL.Model.TableView
 
-<div class="modal fade " id="addPatientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade addPatientModal" id="addPatientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -136,6 +136,11 @@
             });
         }
 
+    })
+
+    $('[data-bs-dismiss=modal]').on('click', function (e) {
+        document.getElementsByClassName("addpatientform").reset();
+        $("span").hide();
     })
 </script>
 

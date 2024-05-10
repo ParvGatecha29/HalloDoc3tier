@@ -1,9 +1,11 @@
 ﻿
 using HalloDocBAL.Interfaces;
 using HalloDocDAL.Contacts;
+using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using HalloDocDAL.Repositories;
+using System.Globalization;
 
 namespace HalloDocBAL.Services
 {
@@ -13,9 +15,11 @@ namespace HalloDocBAL.Services
         private readonly IPhysicianRepository _physicianRepository;
         private readonly IRequestWiseFilesRepository _requestWiseFilesRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ApplicationDbContext _context;
 
-        public AdminDashboardService(IRequestRepository requestRepository, IPhysicianRepository physicianRepository, IRequestWiseFilesRepository requestWiseFilesRepository, IUserRepository userRepository)
+        public AdminDashboardService(ApplicationDbContext context, IRequestRepository requestRepository, IPhysicianRepository physicianRepository, IRequestWiseFilesRepository requestWiseFilesRepository, IUserRepository userRepository)
         {
+            _context = context;
             _requestRepository = requestRepository;
             _physicianRepository = physicianRepository;
             _requestWiseFilesRepository = requestWiseFilesRepository;
@@ -282,7 +286,217 @@ namespace HalloDocBAL.Services
             return role;
         }
 
-        
+        public List<TimesheetModel> SearchDataByRangeTimeSheet(DateTime startDate, int Physicianid)
+        {
+            DateTime currentDate = startDate;
+            List<TimesheetModel> model = new List<TimesheetModel>();
 
+            for (var i = 0; i < 15; i++)
+            {
+                var item = new TimesheetModel();
+                item.Date = currentDate.ToString("dd/MM/yyyy");
+
+                model.Add(item);
+                currentDate = currentDate.AddDays(1);
+            }
+
+            return model;
+        }
+
+        public List<InvoicingModel> SearchDataByRangeReimbursement(DateTime startDate, int Physicianid)
+        {
+            DateTime currentDate = startDate;
+            List<InvoicingModel> model = new List<InvoicingModel>();
+
+            for (var i = 0; i < 15; i++)
+            {
+                var item = new InvoicingModel();
+                item.Date = currentDate.ToString("dd/MM/yyyy");
+
+                var invoice = _context.Invoicings.FirstOrDefault(a => a.Startdate == startDate && a.Physicianid == Physicianid);
+
+                if (invoice != null)
+                {
+                    var timesheet = _context.Timesheets.FirstOrDefault(r => r.Invoiceid == invoice.Id && r.Date == currentDate && r.Isdeleted != true);
+
+                    if (timesheet != null)
+                    {
+                        item.BillName = timesheet.Billname ?? "";
+                        item.Item = timesheet.Item ?? "";
+                        item.Amount = timesheet.Amount ?? 0;
+                    }
+                }
+
+                if (item.BillName != "" || item.Item != "" || item.Amount != 0)
+                {
+                    model.Add(item);
+                }
+                currentDate = currentDate.AddDays(1);
+            }
+
+            return model;
+        }
+
+        public AdminInvoicing CheckApproved(DateTime startDate, int Physicianid)
+        {
+            var data = _context.Invoicings.FirstOrDefault(r => r.Startdate == startDate && r.Physicianid == Physicianid);
+
+            if (data != null)
+            {
+                var model = new AdminInvoicing
+                {
+                    Id = data.Id,
+                    PhysicianId = Physicianid,
+                    StartDate = data.Startdate.ToString("dd-MM-yyyy"),
+                    EndDate = data.Enddate.ToString("dd-MM-yyyy"),
+                    status = "pending",
+                    isApproved = data.Isapproved,
+                    isFinalize = data.Isfinalize,
+                    physicianName = _context.Physicians.FirstOrDefault(r => r.Physicianid == Physicianid).Firstname + " " + _context.Physicians.FirstOrDefault(r => r.Physicianid == Physicianid).Lastname
+                };
+                return model;
+            }
+
+            return null;
+        }
+
+        public List<InvoicingModel> SearchDataById(int Id)
+        {
+            var invoice = _context.Invoicings.FirstOrDefault(a => a.Id == Id);
+
+            if (invoice != null)
+            {
+                List<InvoicingModel> model = new List<InvoicingModel>();
+                DateTime currentDate = invoice.Startdate;
+
+                for (var i = 0; i < 15; i++)
+                {
+                    var item = new InvoicingModel();
+                    item.Date = currentDate.ToString("dd/MM/yyyy");
+
+                    var timesheet = _context.Timesheets.FirstOrDefault(r => r.Invoiceid == invoice.Id && r.Date == currentDate && r.Isdeleted != true);
+
+                    if (timesheet != null)
+                    {
+                        item.isWeekEnd = timesheet.Weekend ?? false;
+                        item.TotalHours = timesheet.Totalhours ?? 0;
+                        item.HouseCall = timesheet.Housecall ?? 0;
+                        item.Consult = timesheet.Consult ?? 0;
+                        item.Item = timesheet.Item ?? "";
+                        item.Amount = timesheet.Amount ?? 0;
+                        item.BillName = timesheet.Billname ?? "";
+                        item.IsDeleted = timesheet.Isdeleted ?? false;
+                    }
+
+                    model.Add(item);
+                    currentDate = currentDate.AddDays(1);
+                }
+                return model;
+            }
+
+            return null;
+        }
+
+        public bool SaveTimeSheet(List<InvoicingModel> invoicingModels, int Physicianid, string aspuserid)
+        {
+            int Adminid = _context.Admins.FirstOrDefault(r => r.Aspnetuserid == aspuserid).Adminid;
+            var startDate = DateTime.ParseExact(invoicingModels.FirstOrDefault().Date, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+            var invoicing = _context.Invoicings.FirstOrDefault(r => r.Startdate == startDate && r.Physicianid == Physicianid);
+            var count = 0;
+
+            foreach (var i in invoicingModels)
+            {
+                if (count == 15)
+                {
+                    break;
+                }
+                count++;
+                if (i.TotalHours != 0 || i.HouseCall != 0 || i.Consult != 0)
+                {
+                    var isExists = _context.Timesheets.FirstOrDefault(r => r.Invoiceid == invoicing.Id && r.Date == DateTime.ParseExact(i.Date, "dd-MM-yyyy", CultureInfo.InvariantCulture) && r.Isdeleted != true);
+
+                    if (isExists != null)
+                    {
+                        isExists.Invoiceid = invoicing.Id;
+                        isExists.Date = DateTime.ParseExact(i.Date, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                        isExists.Totalhours = i.TotalHours;
+                        isExists.Weekend = i.isWeekEnd;
+                        isExists.Housecall = i.HouseCall;
+                        isExists.Consult = i.Consult;
+
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        var timesheet = new HalloDocDAL.Models.Timesheet
+                        {
+                            Invoiceid = invoicing.Id,
+                            Date = DateTime.ParseExact(i.Date, "dd-MM-yyyy", CultureInfo.InvariantCulture),
+                            Totalhours = i.TotalHours,
+                            Weekend = i.isWeekEnd,
+                            Housecall = i.HouseCall,
+                            Consult = i.Consult
+                        };
+                        _context.Timesheets.Add(timesheet);
+                        _context.SaveChanges();
+                    }
+                }
+            }
+            return false;
+        }
+
+        public void ApproveTimesheet(DateTime startDate, int Physicianid, string aspuserid, int bonus, string adminDescription)
+        {
+            int Adminid = _context.Admins.FirstOrDefault(r => r.Aspnetuserid == aspuserid).Adminid;
+            var invoicing = _context.Invoicings.FirstOrDefault(r => r.Startdate == startDate && r.Physicianid == Physicianid);
+
+            if (invoicing != null)
+            {
+                invoicing.Isapproved = true;
+                invoicing.Bonus = bonus;
+                invoicing.Admindescription = adminDescription;
+                invoicing.Modifiedby = Adminid;
+                invoicing.Modifieddate = DateTime.Now;
+
+                _context.SaveChanges();
+            }
+        }
+
+        public Physicianpayrate GetPayrateData(int Physicianid)
+        {
+            var data = _context.Physicianpayrates.FirstOrDefault(r => r.PhysicianId == Physicianid);
+
+            if (data != null)
+            {
+                var model = new Physicianpayrate
+                {
+                    PhysicianId = (int)data.PhysicianId,
+                    NightShiftWeekend = data.NightShiftWeekend ?? 0,
+                    Shift = data.Shift ?? 0,
+                    HouseCallNightWeekend = data.HouseCallNightWeekend ?? 0,
+                    PhoneConsult = data.PhoneConsult ?? 0,
+                    PhoneConsultNightWeekend = data.PhoneConsultNightWeekend ?? 0,
+                    BatchTesting = data.BatchTesting ?? 0,
+                    HouseCall = data.HouseCall ?? 0
+                };
+                return model;
+            }
+            else
+            {
+                var model = new Physicianpayrate
+                {
+                    PhysicianId = Physicianid,
+                    NightShiftWeekend = 0,
+                    Shift = 0,
+                    HouseCallNightWeekend = 0,
+                    PhoneConsult = 0,
+                    PhoneConsultNightWeekend = 0,
+                    BatchTesting = 0,
+                    HouseCall = 0
+                };
+                return model;
+            }
+        }
     }
 }

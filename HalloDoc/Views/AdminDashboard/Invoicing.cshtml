@@ -1,0 +1,83 @@
+﻿@model List<HalloDocDAL.Models.Physician>
+@{
+    Layout = "_adminDash";
+}
+
+<div class="row justify-content-center mb-5 pb-5" id="dashboard">
+    <div class="row my-4 mx-0 col-xl-6 col-md-8 col-11">
+        <p class="col fs-4 fw-bold pb-0 mb-0 d-inline">Timesheets</p>
+        <div class="col mb-0 text-end">
+            <a class="text-decoration-none text-info rounded border border-info p-2" onclick="LoadDashboard()">
+                <i class="bi bi-chevron-left text-info"></i>
+                Back
+            </a>
+        </div>
+    </div>
+
+    <div class="m-4 shadow col-xl-6 col-md-8 col-11">
+        <div class="mx-2">
+            <div class="d-inline d-md-flex align-items-center justify-content-between">
+                <div class="d-flex ms-2 mt-3 mb-1">
+                    <select id="physician">
+                        @foreach (var i in Model)
+                        {
+                            <option value="@i.Physicianid">@i.Firstname @i.Lastname</option>
+                        }
+                    </select>
+                    <input type="text" id="datepicker" name="selectedDate">
+                    <button class="btn btn-info text-light ms-3" onclick="SearchDataByRange()">Search</button>
+                </div>
+            </div>
+
+            <div id="timeSheet">
+                <p class="text-secondary">No Record(s) Found</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var start, midMonth, end;
+
+    function updateDateRange(selectedDate) {
+        var selectedMoment = moment(selectedDate);
+
+        if (selectedMoment.date() <= 15) {
+            start = selectedMoment.clone().startOf('month');
+            midMonth = selectedMoment.clone().date(15);
+            end = midMonth.clone();
+        } else {
+            start = selectedMoment.clone().date(16).startOf('day');
+            midMonth = selectedMoment.clone().endOf('month');
+            end = selectedMoment.clone().endOf('month');
+        }
+
+        $("#datepicker").val(start.format("MMMM D, YYYY") + " - " + end.format("MMMM D, YYYY"));
+    }
+
+    $("#datepicker").daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        minDate: moment().subtract(1, 'year'),
+        maxDate: moment(),
+        locale: {
+            format: 'MM/DD/YYYY'
+        }
+    }, function (selectedDate, end) {
+        updateDateRange(selectedDate);
+    });
+
+    $("#datepicker").on('apply.daterangepicker', function (ev, picker) {
+        var selectedDate = picker.startDate;
+        updateDateRange(selectedDate);
+    });
+
+    updateDateRange(moment());
+
+    function SearchDataByRange() {
+        var startDate = start.format("YYYY-MM-DD");
+        var physicianid = $('#physician').val();
+        console.log(startDate);
+        $('#timeSheet').load('@Url.Action("SearchDataByRange", "AdminDashboard")?startDate=' + startDate + "&Physicianid=" + physicianid);
+    }
+</script>

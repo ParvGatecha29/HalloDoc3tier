@@ -31,16 +31,20 @@
                 console.error('Error fetching Doctors:', error)
             }
         });
-
-        $('[data-bs-dismiss=modal]').on('click', function (e) {
-            document.getElementById("addpatientform").reset();
-            $("span").hide();
-        })
     })
 
     $("#addpatient").click(function () {
-        $("#addPatientModal").modal("show");
+
+        $.ajax({
+            url: "/Home/EditPatient",
+            data: { patientid: 0 },
+            success: function (response) {
+                $("#modal").html(response)
+                $("#addPatientModal").modal("show");
+            }
+        })
     })
+
     $(".required").change(function () {
         var div = $(this);
         if ($(div).find('input').val() != "") {

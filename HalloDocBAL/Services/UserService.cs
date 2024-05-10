@@ -72,12 +72,13 @@ namespace HalloDocBAL.Services
 
             if (user != null)
             {
-                if(user.Aspnetuserroles.Any(x=> x.RoleId == "3"))
+                if (user.Aspnetuserroles.Any(x => x.RoleId == "3"))
                 {
                     Physician p = _physicianRepository.GetPhysicianByAspId(user.Id);
-                    if(p != null)
+                    if (p != null)
                     {
-                        if(p.Isdeleted == true) {
+                        if (p.Isdeleted == true)
+                        {
                             return null;
                         }
                     }
@@ -156,6 +157,39 @@ namespace HalloDocBAL.Services
         {
             var user = _userRepository.IsUserBlocked(email, phone); ;
             return user;
+        }
+
+        public Payrate GetPayrateById(int id)
+        {
+
+            var Payrate = _physicianRepository.GetPayRate(id);
+            if (Payrate != null)
+            {
+
+                var pay = new Payrate
+                {
+                    Physicianid = (int)Payrate.PhysicianId,
+                    BatchTesting = Payrate.BatchTesting,
+                    NightShiftWeekend = Payrate.NightShiftWeekend,
+                    Shift = Payrate.Shift,
+                    HouseCallsNightWeekend = Payrate.HouseCallNightWeekend,
+                    PhoneConsults = Payrate.PhoneConsult,
+                    PhoneConsultsNightWeekend = Payrate.PhoneConsultNightWeekend,
+                    HouseCalls = Payrate.HouseCall,
+                };
+                return pay;
+            }
+            var payrate = new Payrate
+            {
+                Physicianid = id
+            };
+
+            return payrate;
+        }
+
+        public bool SavePayRate(int Physicianid, int rate, int type)
+        {
+            return _physicianRepository.SavePayRate(Physicianid,rate, type);
         }
     }
 }

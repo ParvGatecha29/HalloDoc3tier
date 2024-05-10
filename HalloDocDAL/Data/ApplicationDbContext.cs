@@ -44,6 +44,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Healthprofessionaltype> Healthprofessionaltypes { get; set; }
 
+    public virtual DbSet<Invoicing> Invoicings { get; set; }
+
     public virtual DbSet<Menu> Menus { get; set; }
 
     public virtual DbSet<Orderdetail> Orderdetails { get; set; }
@@ -53,6 +55,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Physicianlocation> Physicianlocations { get; set; }
 
     public virtual DbSet<Physiciannotification> Physiciannotifications { get; set; }
+
+    public virtual DbSet<Physicianpayrate> Physicianpayrates { get; set; }
 
     public virtual DbSet<Physicianregion> Physicianregions { get; set; }
 
@@ -87,6 +91,8 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<Shiftdetailregion> Shiftdetailregions { get; set; }
 
     public virtual DbSet<Smslog> Smslogs { get; set; }
+
+    public virtual DbSet<Timesheet> Timesheets { get; set; }
 
     public virtual DbSet<Token> Tokens { get; set; }
 
@@ -534,6 +540,42 @@ public partial class ApplicationDbContext : DbContext
                 .HasColumnName("professionname");
         });
 
+        modelBuilder.Entity<Invoicing>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("invoicing_pkey");
+
+            entity.ToTable("invoicing");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Admindescription)
+                .HasColumnType("character varying")
+                .HasColumnName("admindescription");
+            entity.Property(e => e.Bonus).HasColumnName("bonus");
+            entity.Property(e => e.Createdby).HasColumnName("createdby");
+            entity.Property(e => e.Createddate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("createddate");
+            entity.Property(e => e.Enddate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("enddate");
+            entity.Property(e => e.Invoicetotal).HasColumnName("invoicetotal");
+            entity.Property(e => e.Isapproved).HasColumnName("isapproved");
+            entity.Property(e => e.Isfinalize).HasColumnName("isfinalize");
+            entity.Property(e => e.Modifiedby).HasColumnName("modifiedby");
+            entity.Property(e => e.Modifieddate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("modifieddate");
+            entity.Property(e => e.Physicianid).HasColumnName("physicianid");
+            entity.Property(e => e.Startdate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("startdate");
+
+            entity.HasOne(d => d.Physician).WithMany(p => p.Invoicings)
+                .HasForeignKey(d => d.Physicianid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("invoicing_physicianid_fkey");
+        });
+
         modelBuilder.Entity<Menu>(entity =>
         {
             entity.HasKey(e => e.Menuid).HasName("menu_pkey");
@@ -716,6 +758,19 @@ public partial class ApplicationDbContext : DbContext
                 .HasForeignKey(d => d.Physicianid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("physiciannotification_physicianid_fkey");
+        });
+
+        modelBuilder.Entity<Physicianpayrate>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("physicianpayrate_pkey");
+
+            entity.ToTable("physicianpayrate");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+
+            entity.HasOne(d => d.Physician).WithMany(p => p.Physicianpayrates)
+                .HasForeignKey(d => d.PhysicianId)
+                .HasConstraintName("physicianpayrate_PhysicianId_fkey");
         });
 
         modelBuilder.Entity<Physicianregion>(entity =>
@@ -1304,6 +1359,36 @@ public partial class ApplicationDbContext : DbContext
                 .HasColumnName("sentdate");
             entity.Property(e => e.Senttries).HasColumnName("senttries");
             entity.Property(e => e.Smstemplate).HasColumnName("smstemplate");
+        });
+
+        modelBuilder.Entity<Timesheet>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("timesheet_pkey");
+
+            entity.ToTable("timesheet");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Amount).HasColumnName("amount");
+            entity.Property(e => e.Billname)
+                .HasMaxLength(250)
+                .HasColumnName("billname");
+            entity.Property(e => e.Consult).HasColumnName("consult");
+            entity.Property(e => e.Date)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("date");
+            entity.Property(e => e.Housecall).HasColumnName("housecall");
+            entity.Property(e => e.Invoiceid).HasColumnName("invoiceid");
+            entity.Property(e => e.Isdeleted).HasColumnName("isdeleted");
+            entity.Property(e => e.Item)
+                .HasMaxLength(250)
+                .HasColumnName("item");
+            entity.Property(e => e.Totalhours).HasColumnName("totalhours");
+            entity.Property(e => e.Weekend).HasColumnName("weekend");
+
+            entity.HasOne(d => d.Invoice).WithMany(p => p.Timesheets)
+                .HasForeignKey(d => d.Invoiceid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("timesheet_invoiceid_fkey");
         });
 
         modelBuilder.Entity<Token>(entity =>

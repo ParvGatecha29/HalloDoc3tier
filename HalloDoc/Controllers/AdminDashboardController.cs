@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using Rotativa.AspNetCore;
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Transactions;
 
 namespace HalloDoc.Controllers;
@@ -24,13 +25,14 @@ public class AdminDashboardController : Controller
     private readonly IRequestRepository _requestRepository;
     private readonly IUserRepository _userRepository;
     private readonly IRecordsRepository _recordsRepository;
+    private readonly IJwtService _jwtService;
     int[] newcase = { 1 };
     int[] pendingcase = { 2 };
     int[] activecase = { 4, 5 };
     int[] concludecase = { 6 };
     int[] toclosecase = { 3, 7, 8 };
     int[] unpaidcase = { 9 };
-    public AdminDashboardController(IRequestRepository requestRepository, IUserRepository userRepository, IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService, IRecordsRepository recordsRepository)
+    public AdminDashboardController(IJwtService jwtService,IRequestRepository requestRepository, IUserRepository userRepository, IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService, IRecordsRepository recordsRepository)
     {
         _requestRepository = requestRepository;
         _adminDashboardService = adminDashboardService;
@@ -42,8 +44,9 @@ public class AdminDashboardController : Controller
         _requestService = requestService;
         _userRepository = userRepository;
         _recordsRepository = recordsRepository;
+        _jwtService = jwtService;
     }
-
+  
     public IActionResult AdminDashboard()
     {
         var dash = new AdminDashboard();
@@ -334,7 +337,7 @@ public class AdminDashboardController : Controller
         return Json(new { success = true });
     }
 
-    public IActionResult Encounter(int requestid)
+    public IActionResult Encounter(int requestid) 
     {
         string[] format = { "dd/MMMM/yyyy", "d/MMMM/yyyy" };
         AdminDashboardData ad = _adminDashboardService.GetRequestById(requestid);
@@ -738,11 +741,13 @@ public class AdminDashboardController : Controller
         prov.physicians = _adminDashboardService.GetPhysiciansByRegion(regionid);
         return PartialView("ProviderTable", prov);
     }
+
     public bool CurrentView(string view)
     {
         HttpContext.Session.SetString("view", view);
         return true;
     }
+    
     public IActionResult EditProvider(int physicianid)
     {
         Provider prov = new Provider();
@@ -1098,13 +1103,6 @@ public class AdminDashboardController : Controller
 
     }
 
-
-    //public IActionResult GetReviewShift(int region)
-    //{
-    //    var shifts = _userRepository.GetReviewShifts(region);
-    //    return PartialView("RequestedShiftPartial", shifts);
-    //}
-
     [HttpPost]
     public IActionResult ApprovedShifts(List<int> selectedIds)
     {
@@ -1222,6 +1220,7 @@ public class AdminDashboardController : Controller
     {
         HttpContext.Session.SetString("pagesearch", "1");
     }
+
     public async Task<IActionResult> GetSearchRecords(string? Email, DateTime? FromDoS, string? Phone, string? Patient, string? Provider, int RequestStatus, int RequestType, DateTime? ToDoS)
     {
         int pageNumber = int.Parse(HttpContext.Session.GetString("pagesearch") ?? "1");
@@ -1387,6 +1386,7 @@ public class AdminDashboardController : Controller
         profile.regions = _adminDashboardService.GetAllRegions();
         return View(profile);
     }
+
     public JsonResult RegisterAdmin(AdminProfile model)
     {
         var user = SessionService.GetLoggedInUser(HttpContext.Session);
@@ -1459,5 +1459,76 @@ public class AdminDashboardController : Controller
         _emailService.SendEmail(physician.Email, "Admin Message", message);
         return Json(new { success = true });
     }
+
+    public IActionResult EnterPayRate(int id)
+    {
+        Payrate model = new Payrate();
+        model = _userService.GetPayrateById(id);
+        return PartialView("Payrate", model);
+    }
+
+    public JsonResult SavePayrate(int Physicianid, int rate, int type)
+    {
+        var suc = _userService.SavePayRate(Physicianid,rate, type);
+        return Json(new {success = suc});
+    }
+
+    public IActionResult Invoicing()
+    {
+        List<Physician> list = new List<Physician>();
+        list = _adminDashboardService.GetPhysiciansByRegion(0);
+
+        return View("Invoicing", list);
+    }
+
+    public IActionResult SearchDataByRange(DateTime startDate, int Physicianid)
+    {
+        InvoicingView model = new InvoicingView();
+        model.timesheets = _adminDashboardService.SearchDataByRangeTimeSheet(startDate, Physicianid);
+        model.invoicing = _adminDashboardService.SearchDataByRangeReimbursement(startDate, Physicianid);
+        model.Sheet = _adminDashboardService.CheckApproved(startDate, Physicianid);
+        model.PhysicianId = Physicianid;
+
+        return PartialView("_timeSheet", model);
+    }
+
+    public IActionResult LoadApproveInvoicing(int Id, int PhysicianId, string startDate)
+    {
+        var date = DateTime.ParseExact(startDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+        InvoicingView model = new InvoicingView();
+        model.invoicing = _adminDashboardService.SearchDataById(Id);
+        model.Physicianpayrate = _adminDashboardService.GetPayrateData(PhysicianId);
+        model.Sheet = _adminDashboardService.CheckApproved(date, PhysicianId);
+        model.PhysicianId = PhysicianId;
+
+        return PartialView("_approveInvoicing", model);
+    }
+
+    public IActionResult SaveTimeSheet(List<InvoicingModel> invoicingModels, int Physicianid)
+    {
+        var token = Request.Cookies["jwt"];
+        var aspuserid = "";
+        if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+        {
+            aspuserid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+        }
+
+        _adminDashboardService.SaveTimeSheet(invoicingModels, Physicianid, aspuserid);
+        return Json(new { success = true });
+    }
+
+    public IActionResult ApproveTimesheet(DateTime startDate, int Physicianid, int bonus, string adminDescription)
+    {
+        var token = Request.Cookies["jwt"];
+        var aspuserid = "";
+        if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+        {
+            aspuserid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+        }
+
+        _adminDashboardService.ApproveTimesheet(startDate, Physicianid, aspuserid, bonus, adminDescription);
+        return Json(new { success = true });
+    }
+
 }
 

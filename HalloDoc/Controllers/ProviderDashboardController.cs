@@ -7,6 +7,7 @@ using HalloDocDAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Rotativa.AspNetCore;
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Transactions;
 
 namespace HalloDoc.Controllers
@@ -23,8 +24,9 @@ namespace HalloDoc.Controllers
         private readonly IRequestService _requestService;
         private readonly IUserRepository _userRepository;
         private readonly IRecordsRepository _recordsRepository;
+        private readonly IJwtService _jwtService;
 
-        public ProviderDashboardController(IUserRepository userRepository, IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService, IRecordsRepository recordsRepository)
+        public ProviderDashboardController(IJwtService jwtService,IUserRepository userRepository, IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService, IRecordsRepository recordsRepository)
         {
             _adminDashboardService = adminDashboardService;
             _emailService = emailService;
@@ -35,6 +37,7 @@ namespace HalloDoc.Controllers
             _requestService = requestService;
             _userRepository = userRepository;
             _recordsRepository = recordsRepository;
+            _jwtService = jwtService;
         }
         public IActionResult ProviderDashboard()
         {
@@ -645,6 +648,98 @@ namespace HalloDoc.Controllers
             _userRepository.UpdateShiftDetails(shiftdetail);
             return RedirectToAction("GetEvents", new { Physicianid = shiftdetail.Shift.Physicianid });
 
+        }
+
+        public IActionResult Invoicing()
+        {
+            return View();
+        }
+        public IActionResult SearchDataByRange(DateTime startDate)
+        {
+            var token = Request.Cookies["jwt"];
+            var aspuserid = "";
+            if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+            {
+                aspuserid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+            }
+
+            InvoicingView model = new InvoicingView();
+            model.timesheets = _dashboardService.SearchDataByRangeTimeSheet(startDate, aspuserid);
+            model.isFinalize = _dashboardService.CheckFinalize(startDate, aspuserid);
+
+            return PartialView("_timeSheet", model);
+        }
+
+        public IActionResult LoadFinalizeInvoicing(DateTime startDate)
+        {
+            var token = Request.Cookies["jwt"];
+            var aspuserid = "";
+            if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+            {
+                aspuserid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+            }
+
+            InvoicingView model = new InvoicingView();
+            model.invoicing = _dashboardService.SearchDataByRangeInvoicing(startDate, aspuserid);
+            model.PhysicianId = _adminDashboardService.GetPhysiciansByAspId(aspuserid).Physicianid;
+            model.startDate = startDate;
+
+            return PartialView("_finalizeInvoicing", model);
+        }
+
+        public IActionResult LoadTimeSheetReimbursement(DateTime startDate)
+        {
+            var token = Request.Cookies["jwt"];
+            var aspuserid = "";
+            if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+            {
+                aspuserid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+            }
+
+            InvoicingView model = new InvoicingView();
+            model.PhysicianId = _adminDashboardService.GetPhysiciansByAspId(aspuserid).Physicianid;
+            model.invoicing = _dashboardService.SearchDataByRangeReimbursement(startDate, aspuserid);
+
+            return PartialView("_timeSheetReimbursement", model);
+        }
+
+        public IActionResult SaveTimeSheet(List<InvoicingModel> invoicingModels)
+        {
+            var token = Request.Cookies["jwt"];
+            var aspuserid = "";
+            if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+            {
+                aspuserid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+            }
+
+            _dashboardService.SaveTimeSheet(invoicingModels, aspuserid);
+            return Json(new { success = true });
+        }
+
+        public IActionResult SaveReimbursement(InvoicingModel invoicingModels)
+        {
+            var token = Request.Cookies["jwt"];
+            var aspuserid = "";
+            if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+            {
+                aspuserid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+            }
+
+            _dashboardService.SaveReimbursement(invoicingModels, aspuserid);
+            return Json(new { success = true });
+        }
+
+        public IActionResult FinalizeTimesheet(DateTime startDate)
+        {
+            var token = Request.Cookies["jwt"];
+            var aspuserid = "";
+            if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+            {
+                aspuserid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+            }
+
+            _dashboardService.FinalizeTimesheet(startDate, aspuserid);
+            return Json(new { success = true });
         }
     }
 }

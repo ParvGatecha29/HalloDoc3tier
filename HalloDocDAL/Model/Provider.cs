@@ -10,7 +10,6 @@ namespace HalloDocDAL.Model
         public List<Physician> physicians {  get; set; }
         public List<Region> regions { get; set; }
         public List<Physicianregion> phyregions { get; set; }
-
         public List<int> selectedRegions { get; set; }
         public IFormFile sign { get; set; }
         public IFormFile ICA { get; set; }

@@ -699,6 +699,16 @@
         })
     })
 
+    $("#EnterPayRate").click(function () {
+        $.ajax({
+            url: "/AdminDashboard/EnterPayRate",
+            data: {id: @Model.physician.Physicianid},
+            success: function(response){
+                $("#providerdiv").html(response);
+            }
+        })
+    })
+
     // script for phone number
     phoneInputField = document.querySelectorAll("input[type='tel']");
     for (var i = 0; i < phoneInputField.length; i++) {

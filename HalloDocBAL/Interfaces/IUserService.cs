@@ -13,5 +13,8 @@ namespace HalloDocBAL.Interfaces
         Task<bool> EditUser(User model);
         Task<bool> EditAspNetUser(Aspnetuser user);
         bool IsUserBlocked(string email, string phone);
+        Payrate GetPayrateById(int id);
+
+        bool SavePayRate(int Physicianid, int rate, int type);
     }
 }

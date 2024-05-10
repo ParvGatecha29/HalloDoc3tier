@@ -79,11 +79,15 @@ public partial class Physician
 
     public virtual ICollection<EncounterForm> EncounterForms { get; set; } = new List<EncounterForm>();
 
+    public virtual ICollection<Invoicing> Invoicings { get; set; } = new List<Invoicing>();
+
     public virtual Aspnetuser? ModifiedbyNavigation { get; set; }
 
     public virtual ICollection<Physicianlocation> Physicianlocations { get; set; } = new List<Physicianlocation>();
 
     public virtual ICollection<Physiciannotification> Physiciannotifications { get; set; } = new List<Physiciannotification>();
+
+    public virtual ICollection<Physicianpayrate> Physicianpayrates { get; set; } = new List<Physicianpayrate>();
 
     public virtual ICollection<Physicianregion> Physicianregions { get; set; } = new List<Physicianregion>();
 

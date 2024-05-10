@@ -12,5 +12,7 @@ namespace HalloDocDAL.Contacts
         List<Physicianregion> GetPhysicianRegions(int id);
         bool EditPhysician(Provider model);
         List<Physicianlocation> GetProviders();
+        Physicianpayrate GetPayRate(int id);
+        bool SavePayRate(int Physicianid, int rate, int type);
     }
 }
