@@ -34,6 +34,10 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Casetag> Casetags { get; set; }
 
+    public virtual DbSet<Chat> Chats { get; set; }
+
+    public virtual DbSet<Chatdatum> Chatdata { get; set; }
+
     public virtual DbSet<Concierge> Concierges { get; set; }
 
     public virtual DbSet<Emaillog> Emaillogs { get; set; }
@@ -367,6 +371,49 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<Chat>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("chats_pkey");
+
+            entity.ToTable("chats");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Adminid).HasColumnName("adminid");
+            entity.Property(e => e.Createdby).HasColumnName("createdby");
+            entity.Property(e => e.Createddate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("createddate");
+            entity.Property(e => e.Patientid).HasColumnName("patientid");
+            entity.Property(e => e.Physicianid).HasColumnName("physicianid");
+            entity.Property(e => e.Requestid).HasColumnName("requestid");
+        });
+
+        modelBuilder.Entity<Chatdatum>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("chatdata_pkey");
+
+            entity.ToTable("chatdata");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Chatid).HasColumnName("chatid");
+            entity.Property(e => e.Date)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("date");
+            entity.Property(e => e.Isdeleted).HasColumnName("isdeleted");
+            entity.Property(e => e.Message).HasColumnName("message");
+            entity.Property(e => e.Messageby)
+                .HasMaxLength(250)
+                .HasColumnName("messageby");
+            entity.Property(e => e.Sendername)
+                .HasMaxLength(250)
+                .HasColumnName("sendername");
+
+            entity.HasOne(d => d.Chat).WithMany(p => p.Chatdata)
+                .HasForeignKey(d => d.Chatid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("chatdata_chatid_fkey");
         });
 
         modelBuilder.Entity<Concierge>(entity =>

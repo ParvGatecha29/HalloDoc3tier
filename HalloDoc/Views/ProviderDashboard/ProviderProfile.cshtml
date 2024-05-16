@@ -58,7 +58,7 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <button type="button" id="editPhysicianAccount" class="btn btn-info text-light me-2">Edit</button>
+            <button type="button" id="editPhysicianAccount" class="btn btn-info text-light me-2 d-none">Edit</button>
             <button type="button" id="savePhysicianAccount" class="btn btn-info text-light me-2" style="display: none">Save</button>
             <button type="reset" id="cancelPhysicianAccount" class="btn btn-info text-light me-2" style="display: none">Cancel</button>
             <button type="button" id="PhysicianResetPassword" class="btn btn-outline-info text-info">Reset Password</button>
@@ -154,7 +154,7 @@
 
             <div class="d-flex justify-content-end">
                 <button type="button" id="EnterPayRate" class="btn btn-info text-light me-2">Enter Payrate</button>
-                <button type="button" id="editPhysician" class="btn btn-info text-light">Edit</button>
+                <button type="button" id="editPhysician" class="btn btn-info text-light  d-none">Edit</button>
                 <button type="submit" id="savePhysician" class="btn btn-info text-light me-2" style="display: none">Save</button>
                 <button type="reset" id="cancelPhysician" class="btn btn-info text-light" style="display: none">Cancel</button>
             </div>
@@ -204,7 +204,7 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <button type="button" id="editMailing" class="btn btn-info text-light">Edit</button>
+            <button type="button" id="editMailing" class="btn btn-info text-light d-none">Edit</button>
             <button type="button" id="saveMailing" class="btn btn-info text-light me-2" style="display: none">Save</button>
             <button type="reset" id="cancelMailing" class="btn btn-info text-light" style="display: none">Cancel</button>
         </div>
@@ -271,7 +271,7 @@
         </div>
 
         <div class="d-flex justify-content-end">
-            <button type="button" id="editProfile" class="btn btn-info text-light">Edit</button>
+            <button type="button" id="editProfile" class="btn btn-info text-light d-none">Edit</button>
             <button type="button" id="saveProfile" class="btn btn-info text-light me-2" style="display: none">Save</button>
             <button type="button" id="cancelProfile" class="btn btn-info text-light" style="display: none">Cancel</button>
         </div>
@@ -347,85 +347,6 @@
 </div>
 <script>
     document.getElementById("myprofile-tab").classList.add("active");
-    $(document).on('click', '#editPhysicianAccount', function () {
-        let input = document.getElementsByClassName('physicianAccountInput');
-        for (var i = 0; i < input.length; i++) {
-            input[i].disabled = false;
-        }
-
-        var editBtn = document.getElementById("editPhysicianAccount");
-        editBtn.style.display = "none";
-
-        var saveBtn = document.getElementById("savePhysicianAccount");
-        saveBtn.style.display = "block";
-
-        var cancelBtn = document.getElementById("cancelPhysicianAccount");
-        cancelBtn.style.display = "block";
-    });
-
-    $(document).on('click', '#cancelPhysicianAccount', function () {
-        location.reload();
-    });
-
-    $(document).on('click', '#editPhysician', function () {
-        let input = document.getElementsByClassName('physicianInput');
-        for (var i = 0; i < input.length; i++) {
-            input[i].disabled = false;
-        }
-
-        var editBtn = document.getElementById("editPhysician");
-        editBtn.style.display = "none";
-
-        var saveBtn = document.getElementById("savePhysician");
-        saveBtn.style.display = "block";
-
-        var cancelBtn = document.getElementById("cancelPhysician");
-        cancelBtn.style.display = "block";
-    });
-
-    $(document).on('click', '#cancelPhysician', function () {
-                location.reload();
-    });
-
-    $(document).on('click', '#editMailing', function () {
-        let input = document.getElementsByClassName('mailingInput');
-        for (var i = 0; i < input.length; i++) {
-            input[i].disabled = false;
-        }
-
-        var editBtn = document.getElementById("editMailing");
-        editBtn.style.display = "none";
-
-        var saveBtn = document.getElementById("saveMailing");
-        saveBtn.style.display = "block";
-
-        var cancelBtn = document.getElementById("cancelMailing");
-        cancelBtn.style.display = "block";
-    });
-
-    $(document).on('click', '#cancelMailing', function () {
-       location.reload();
-    });
-
-    $(document).on('click', '#editProfile', function () {
-        let input = document.getElementsByClassName('profileInput');
-        for (var i = 0; i < input.length; i++) {
-            input[i].disabled = false;
-        }
-
-        var editBtn = document.getElementById("editProfile");
-        editBtn.style.display = "none";
-
-        var saveBtn = document.getElementById("saveProfile");
-        saveBtn.style.display = "block";
-
-        var cancelBtn = document.getElementById("cancelProfile");
-        cancelBtn.style.display = "block";
-    });
-
-    $(document).on('click', '#cancelProfile', function () {
-               location.reload();
-    });
 
     // Reset Password
     $(document).on('click', '#PhysicianResetPassword', function () {
