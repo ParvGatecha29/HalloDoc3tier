@@ -1530,6 +1530,46 @@ public class AdminDashboardController : Controller
         return Json(new { success = true });
     }
 
+    public IActionResult LoadChatPatient(int Patientid)
+    {
+        var token = Request.Cookies["jwt"];
+        var aspnetid = "";
+        if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+        {
+            aspnetid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+        }
 
+        ChatModel model = _adminDashboardService.getChatPatient(Patientid, aspnetid);
+
+        return PartialView("_chat", model);
+    }
+
+    public IActionResult LoadChatPhysician(int Physicianid)
+    {
+        var token = Request.Cookies["jwt"];
+        var aspnetid = "";
+        if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+        {
+            aspnetid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+        }
+
+        ChatModel model = _adminDashboardService.getChatPhysician(Physicianid, aspnetid);
+
+        return PartialView("_chat", model);
+    }
+
+    public IActionResult LoadGroupChat(int Patientid, int Physicianid)
+    {
+        var token = Request.Cookies["jwt"];
+        var aspnetid = "";
+        if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+        {
+            aspnetid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+        }
+
+        ChatModel model = _adminDashboardService.GetGroupChat(Patientid, Physicianid, aspnetid);
+
+        return PartialView("_groupChat", model);
+    }
 }
 

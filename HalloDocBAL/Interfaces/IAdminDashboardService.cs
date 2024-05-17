@@ -46,6 +46,10 @@ namespace HalloDocBAL.Interfaces
         public bool SaveTimeSheet(List<InvoicingModel> invoicingModels, int Physicianid, string aspuserid);
         public void ApproveTimesheet(DateTime startDate, int Physicianid, string aspuserid, int bonus, string adminDescription);
         public Physicianpayrate GetPayrateData(int Physicianid);
+        public ChatModel getChatPatient(int Patientid, string aspuserid);
+        public ChatModel getChatPhysician(int Physicianid, string aspuserid);
+        public ChatModel GetGroupChat(int Patientid, int Physicianid, string aspuserid);
+
 
     }
 }

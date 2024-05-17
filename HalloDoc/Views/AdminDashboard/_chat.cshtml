@@ -1,43 +1,43 @@
-﻿
+﻿@model HalloDocDAL.Model.ChatModel;
 
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-    <div class="offcanvas-header bg-info">
-        @if(Model.ChatModel.chatWith == "patient")
+    <div class="offcanvas-header bg-info z-3">
+        @if(Model.chatWith == "patient")
         {
             <h5 id="offcanvasRightLabel" class="text-light">
-                @Model.ChatModel.Patientname
+                @Model.Patientname
             </h5>
         }
-        else if(Model.ChatModel.chatWith == "physician")
+        else if(Model.chatWith == "physician")
         {
             <h5 id="offcanvasRightLabel" class="text-light">
-                @Model.ChatModel.PhysicianName
+                @Model.PhysicianName
             </h5>
         }
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <div class="container position-absolute bottom-0 pb-5">
-            <div class="row">
-                <div class="col-12 pe-5">
+        <div class="container-fluid position-relative h-100 pb-5">
+            <div class="row h-100 overflow-auto flex-column-reverse">
+                <div class="col-12 pe-4">
                     <ul id="messagesList"></ul>
                 </div>
             </div>
+        </div>
 
-            <input type="hidden" id="senderId" value="@Model.ChatModel.SenderId" />
-            <input type="hidden" id="senderType" value="@Model.ChatModel.SenderType" />
-            <input type="hidden" id="receiverId" value="@Model.ChatModel.ReceiverId"/>
-            <input type="hidden" id="receiverType" value="@Model.ChatModel.ReceiverType" />
+        <input type="hidden" id="senderId" value="@Model.SenderId" />
+        <input type="hidden" id="senderType" value="@Model.SenderType" />
+        <input type="hidden" id="receiverId" value="@Model.ReceiverId" />
+        <input type="hidden" id="receiverType" value="@Model.ReceiverType" />
 
-            <div class="row d-flex position-absolute bottom-0 pb-3 w-100 pe-5">
-                <div class="col-10 pe-1">
-                    <input type="text" class="form-control" id="messageInput" placeholder="Type a Message">
-                </div>
-                <div class="col-2 text-end">
-                    <button type="button" class="btn btn-info rounded" id="sendButton">
-                        <i class="bi bi-send text-light"></i>
-                    </button>
-                </div>
+        <div class="row d-flex position-absolute bottom-0 pb-3 w-100 pe-5">
+            <div class="col-10 mt-3 pe-1">
+                <input type="text" class="form-control" id="messageInput" placeholder="Type a Message">
+            </div>
+            <div class="col-2 mt-3 text-end">
+                <button type="button" class="btn btn-info rounded" id="sendButton" onclick="send(event)">
+                    <i class="bi bi-send text-light"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -46,7 +46,7 @@
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
 
-@if (Model.ChatModel.isUser)
+@if (Model.isUser)
 {
     <script>
         $(document).ready(function () {
@@ -56,129 +56,163 @@
             bsOffcanvas.show();
         });        
     </script>
-}
-else
-{
     <script>
-        toastr.error("User does not have account!");
-     </script>
-}
+        "use strict";
 
-<script>
-    "use strict";
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+        document.getElementById("sendButton").disabled = true;
 
-    var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
-    document.getElementById("sendButton").disabled = true;
+        connection.on("ReceiveMessages", function (messages) {
+            var senderType = document.getElementById("senderType").value;
 
-    connection.on("ReceiveMessages", function (messages) {
-        var senderType = document.getElementById("senderType").value;
-                
-        messages.forEach(function (message) {
+            messages.forEach(function (message) {
+                var li = document.createElement("li");
+                li.style.listStyleType = "none";
+                if (message.messageBy == senderType) {
+                    li.classList.add("d-flex")
+                    li.classList.add("justify-content-end")
+                }
+
+                var div = document.createElement("div");
+                div.textContent = `${message.message}`;
+                div.classList.add("d-flex");
+                div.classList.add("flex-column");
+                div.classList.add("bg-info");
+                div.classList.add("p-1");
+                div.classList.add("px-3");
+                div.classList.add("border");
+                div.classList.add("rounded");
+                div.classList.add("text-white");
+                div.style.wordBreak = "break-all";
+                div.style.width = "fit-content";
+                li.appendChild(div);
+
+                var li2 = document.createElement("li");
+                li2.style.listStyleType = "none";
+                li2.classList.add("mb-2");
+                if (message.messageBy == senderType) {
+                    li2.classList.add("d-flex")
+                    li2.classList.add("justify-content-end")
+                }
+
+                var div2 = document.createElement("div");
+                div2.textContent = `${message.time}`;
+                div2.style.fontSize = "12px";
+                div2.classList.add("p-1");
+                div2.classList.add("text-secondary");
+                div2.style.width = "fit-content";
+
+                li2.appendChild(div2);
+
+                document.getElementById("messagesList").appendChild(li);
+                document.getElementById("messagesList").appendChild(li2);
+            });
+            var chatHistory = document.getElementById("messagesList");
+            chatHistory.lastChild.scrollIntoView();
+        });
+
+        connection.on("ReceiveMessage", function (messageData) {
+            var senderType = document.getElementById("senderType").value;
+
             var li = document.createElement("li");
             li.style.listStyleType = "none";
-            if (message.messageBy == senderType) {
-                li.classList.add("text-end");
+            if (messageData.messageBy == senderType) {
+                li.classList.add("d-flex");
+                li.classList.add("justify-content-end");
             }
 
             var div = document.createElement("div");
-            div.textContent = `${message.message}`;
-            div.classList.add("d-inline");
+            div.textContent = `${messageData.message}`;
+            div.classList.add("d-flex");
+            div.classList.add("flex-column");
             div.classList.add("bg-info");
             div.classList.add("p-1");
             div.classList.add("px-3");
             div.classList.add("border");
             div.classList.add("rounded");
             div.classList.add("text-white");
+            div.style.wordBreak = "break-all";
+            div.style.width = "fit-content";
+
             li.appendChild(div);
 
             var li2 = document.createElement("li");
             li2.style.listStyleType = "none";
             li2.classList.add("mb-2");
-            if (message.messageBy == senderType) {
-                li2.classList.add("text-end");
+            if (messageData.messageBy == senderType) {
+                li2.classList.add("d-flex");
+                li2.classList.add("justify-content-end");
             }
 
             var div2 = document.createElement("div");
-            div2.textContent = `${message.time}`;
+            div2.textContent = `${messageData.time}`;
             div2.style.fontSize = "12px";
-            div2.classList.add("d-inline");
             div2.classList.add("p-1");
-            div2.classList.add("text-secondary");            
+            div2.classList.add("text-secondary");
+            div2.style.width = "fit-content";
             li2.appendChild(div2);
 
             document.getElementById("messagesList").appendChild(li);
             document.getElementById("messagesList").appendChild(li2);
+            var chatHistory = document.getElementById("messagesList");
+            chatHistory.lastChild.scrollIntoView();
         });
-    });
 
-    connection.on("ReceiveMessage", function (messageData) {
-        var senderType = document.getElementById("senderType").value;
-
-        var li = document.createElement("li");
-        li.style.listStyleType = "none";
-        if (messageData.messageBy == senderType) {
-            li.classList.add("text-end");
+        function getMessages(senderId, senderType, receiverId, receiverType) {
+            connection.invoke("GetMessages", senderId, senderType, receiverId, receiverType).catch(function (err) {
+                return console.error(err.toString());
+            });
         }
 
-        var div = document.createElement("div");
-        div.textContent = `${messageData.message}`;
-        div.classList.add("d-inline");
-        div.classList.add("bg-info");
-        div.classList.add("p-1");
-        div.classList.add("px-3");
-        div.classList.add("border");
-        div.classList.add("rounded");
-        div.classList.add("text-white");
-        li.appendChild(div);
+        connection.start().then(function () {
+            document.getElementById("sendButton").disabled = false;
+            var senderId = parseInt(document.getElementById("senderId").value);
+            var senderType = document.getElementById("senderType").value;
+            var receiverId = parseInt(document.getElementById("receiverId").value);
+            var receiverType = document.getElementById("receiverType").value;
 
-        var li2 = document.createElement("li");
-        li2.style.listStyleType = "none";
-        li2.classList.add("mb-2");
-        if (messageData.messageBy == senderType) {
-            li2.classList.add("text-end");
-        }
-
-        var div2 = document.createElement("div");
-        div2.textContent = `${messageData.time}`;
-        div2.style.fontSize = "12px";
-        div2.classList.add("d-inline");
-        div2.classList.add("p-1");
-        div2.classList.add("text-secondary");
-        li2.appendChild(div2);
-
-        document.getElementById("messagesList").appendChild(li);
-        document.getElementById("messagesList").appendChild(li2);
-    });
-
-    function getMessages(senderId, senderType, receiverId, receiverType) {
-        connection.invoke("GetMessages", senderId, senderType, receiverId, receiverType).catch(function (err) {
-            return console.error(err.toString());
-        });
-    }
-    
-    connection.start().then(function () {
-        document.getElementById("sendButton").disabled = false;
-        var senderId = parseInt(document.getElementById("senderId").value);
-        var senderType = document.getElementById("senderType").value;
-        var receiverId = parseInt(document.getElementById("receiverId").value);
-        var receiverType = document.getElementById("receiverType").value;
-
-        getMessages(senderId, senderType, receiverId, receiverType);
-    }).catch(function (err) {
-        return console.error(err.toString());
-    });
-
-    document.getElementById("sendButton").addEventListener("click", function (event) {
-        var senderId = parseInt(document.getElementById("senderId").value);
-        var senderType = document.getElementById("senderType").value;
-        var receiverId = parseInt(document.getElementById("receiverId").value);
-        var receiverType = document.getElementById("receiverType").value;
-        var message = document.getElementById("messageInput").value;
-
-        connection.invoke("SendMessage", senderId, senderType, receiverId, receiverType, message).catch(function (err) {
+            getMessages(senderId, senderType, receiverId, receiverType);
+        }).catch(function (err) {
             return console.error(err.toString());
         });
 
-        event.preventDefault();
-    });
-</script>
+        function send(event) {
+            var senderId = parseInt(document.getElementById("senderId").value);
+            var senderType = document.getElementById("senderType").value;
+            var receiverId = parseInt(document.getElementById("receiverId").value);
+            var receiverType = document.getElementById("receiverType").value;
+            var message = document.getElementById("messageInput").value;
+
+            if (message.length > 0) {
+                connection.invoke("SendMessage", senderId, senderType, receiverId, receiverType, message).catch(function (err) {
+                    return console.error(err.toString());
+                });
+            }
+
+            document.getElementById("messageInput").value = "";
+            event.preventDefault();
+        }
+
+        var chatHistory = document.getElementById("messagesList");
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+
+        var myOffcanvas = document.getElementById('offcanvasRight')
+        myOffcanvas.addEventListener('hidden.bs.offcanvas', function () {
+            connection.stop();
+        })
+    </script>
+}
+else
+{
+    <script>
+        Swal.fire({
+            title: "Account not found",
+            text: "User does not have an account",
+            icon: "error",
+            showConfirmButton: false,
+            timer: 1500
+        })
+     </script>
+}
+
+

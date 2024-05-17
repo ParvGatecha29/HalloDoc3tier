@@ -499,6 +499,104 @@ namespace HalloDocBAL.Services
             }
         }
 
+        public ChatModel getChatPatient(int Patientid, string aspuserid)
+        {
+            var Adminid = _context.Admins.FirstOrDefault(r => r.Aspnetuserid == aspuserid).Adminid;
+            var patient = _context.Users.FirstOrDefault(r => r.Userid == Patientid);
 
+            if (patient == null)
+            {
+                var model = new ChatModel
+                {
+                    Adminid = Adminid,
+                    Patientid = Patientid,
+                    isUser = false
+                };
+                return model;
+            }
+            else
+            {
+                var model = new ChatModel
+                {
+                    Adminid = Adminid,
+                    Patientid = Patientid,
+                    chatWith = "patient",
+                    isUser = true,
+                    Patientname = patient.Firstname,
+                    SenderId = Adminid,
+                    SenderType = "Admin",
+                    ReceiverId = Patientid,
+                    ReceiverType = "Patient"
+                };
+                return model;
+            }
+        }
+
+        public ChatModel getChatPhysician(int Physicianid, string aspuserid)
+        {
+            var Adminid = _context.Admins.FirstOrDefault(r => r.Aspnetuserid == aspuserid).Adminid;
+            var physician = _context.Physicians.FirstOrDefault(r => r.Physicianid == Physicianid);
+
+            if (physician == null)
+            {
+                var model = new ChatModel
+                {
+                    Adminid = Adminid,
+                    Physicianid = Physicianid,
+                    isUser = false
+                };
+                return model;
+            }
+            else
+            {
+                var model = new ChatModel
+                {
+                    Adminid = Adminid,
+                    Physicianid = Physicianid,
+                    chatWith = "physician",
+                    isUser = true,
+                    PhysicianName = physician.Firstname + " " + physician.Lastname,
+                    SenderId = Adminid,
+                    SenderType = "Admin",
+                    ReceiverId = Physicianid,
+                    ReceiverType = "Physician"
+                };
+                return model;
+            }
+        }
+
+        public ChatModel GetGroupChat(int Patientid, int Physicianid, string aspuserid)
+        {
+            var Adminid = _context.Admins.FirstOrDefault(r => r.Aspnetuserid == aspuserid).Adminid;
+            var physician = _context.Physicians.FirstOrDefault(r => r.Physicianid == Physicianid);
+            var patient = _context.Users.FirstOrDefault(r => r.Userid == Patientid);
+
+            if (patient == null)
+            {
+                var model = new ChatModel
+                {
+                    Adminid = Adminid,
+                    Physicianid = Physicianid,
+                    Patientid = Patientid,
+                    isUser = false
+                };
+                return model;
+            }
+            else
+            {
+                var model = new ChatModel
+                {
+                    Adminid = Adminid,
+                    Physicianid = Physicianid,
+                    Patientid = Patientid,
+                    isUser = true,
+                    Patientname = patient.Firstname + " " + patient.Lastname,
+                    PhysicianName = physician.Firstname + " " + physician.Lastname,
+                    SenderId = Adminid,
+                    SenderType = "Admin"
+                };
+                return model;
+            }
+        }
     }
 }

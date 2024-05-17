@@ -101,6 +101,7 @@ namespace HalloDocDAL.Repositories
                 var regionname = item.Region != null ? item.Region.Name : "";
                 AdminDashboardData def = new AdminDashboardData
                 {
+                    patientId = item.Request.Userid ?? 0,
                     requestId = item.Requestid,
                     firstName = item.Firstname,
                     lastName = item.Lastname ?? "",
@@ -119,6 +120,7 @@ namespace HalloDocDAL.Repositories
                     regionId = item.Regionid,
                     region = item.Region != null ? item.Region.Name : "",
                     acceptDate = item.Request.Accepteddate,
+                    physicianId = item.Request.Physicianid ?? 0,
                     isFinalized = item.Request.EncounterForms.FirstOrDefault(x => x.RequestId == item.Requestid) != null ? item.Request.EncounterForms.FirstOrDefault(x => x.RequestId == item.Requestid).IsFinalize : false
                 };
                 foreach (var item1 in item.Request.Requeststatuslogs)

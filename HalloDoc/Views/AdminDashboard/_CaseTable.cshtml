@@ -231,6 +231,8 @@
                         {
                             <th scope="col" class="bg-secondary bg-opacity-25">Notes</th>
                         }
+                        
+                        <th scope="col" class="bg-secondary bg-opacity-25">Chat With</th>
                         <th scope="col" class="bg-secondary bg-opacity-25">Actions</th>
 
 
@@ -323,7 +325,32 @@
                             {
                                 <td>@obj.notes</td>
                             }
-
+                            <td class="align-middle text-light" style="background: none">
+                                <div class="d-flex flex-wrap">
+                                    @if (obj.physicianId != 0)
+                                    {
+                                        <button type="button" class="btn border border-light text-light me-1 mb-1" onclick="LoadChatPatient(@obj.patientId)">
+                                            <i class="bi bi-person text-light"></i>
+                                            <span>Patient</span>
+                                        </button>
+                                        <button type="button" class="btn border border-light text-light me-1 mb-1" onclick="LoadChatPhysician(@obj.physicianId)">
+                                            <i class="bi bi-person-plus text-light"></i>
+                                            <span>Physician</span>
+                                        </button>
+                                        <button type="button" class="btn border border-light text-light mb-1" onclick="LoadGroupChat(@obj.patientId, @obj.physicianId)">
+                                            <i class="bi bi-people text-light"></i>
+                                            <span>Group Chat</span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn border border-light text-light me-1 mb-1" onclick="LoadChatPatient(@obj.patientId)">
+                                            <i class="bi bi-person text-light"></i>
+                                            <span>Patient</span>
+                                        </button>
+                                    }
+                                </div>
+                            </td>
                             <td>
                                 @if (@obj.status == 1)
                                 {
@@ -410,6 +437,8 @@
                     }
                 </tbody>
             </table>
+
+            <div id="chat"></div>
         </div>
         @if (Model.pagedList.Count > 0)
         {
@@ -1047,6 +1076,18 @@
             location.href = "/AdminDashboard/Encounter?requestid=" + rid;
         }
     }
+    function LoadChatPatient(patientid) {
+        $("#chat").load("/AdminDashboard/LoadChatPatient?Patientid=" + patientid);
+    }
 
+    function LoadChatPhysician(physicianid) {
+        $("#chat").load("/AdminDashboard/LoadChatPhysician?Physicianid=" + physicianid);
+    }
+
+    function LoadGroupChat(patientid, physicianid) {
+        $("#chat").load("/AdminDashboard/LoadGroupChat?Patientid=" + patientid + "&Physicianid=" + physicianid);
+    }
+
+    
 
 </script>

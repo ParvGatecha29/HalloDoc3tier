@@ -4,6 +4,7 @@ using HalloDocDAL.Contacts;
 using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Repositories;
+using HelloDoc_BAL.Services;
 using Newtonsoft.Json.Serialization;
 using Rotativa.AspNetCore;
 using System.Net;
@@ -45,7 +46,7 @@ builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
 });
-
+builder.Services.AddSignalR();
 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 var app = builder.Build();
 
@@ -64,6 +65,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 app.UseRotativa();
+app.MapHub<ChatHub>("/chathub");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
