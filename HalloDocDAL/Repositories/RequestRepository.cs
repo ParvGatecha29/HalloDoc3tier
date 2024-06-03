@@ -53,10 +53,10 @@ namespace HalloDocDAL.Repositories
             return data;
         }
 
-        public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search, bool all,int physicianid)
+        public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search, bool all, int physicianid)
         {
             int pageSize = 10;
-           
+
             IQueryable<Requestclient> reqclnt;
             List<Requestclient> req;
             reqclnt = _context.Requestclients
@@ -82,7 +82,7 @@ namespace HalloDocDAL.Repositories
             {
                 reqclnt = reqclnt.Where(_ => _.Firstname.ToLower().Contains(search) || _.Lastname.ToLower().Contains(search) || _.Request.Firstname.ToLower().Contains(search)).AsQueryable();
             }
-            if(physicianid != 0)
+            if (physicianid != 0)
             {
                 reqclnt = reqclnt.Where(_ => _.Request.Physicianid == physicianid).AsQueryable();
             }
@@ -129,7 +129,7 @@ namespace HalloDocDAL.Repositories
                 }
                 abc.Add(def);
             }
-            
+
             PagedList<AdminDashboardData> result;
             if (all)
             {
@@ -157,7 +157,7 @@ namespace HalloDocDAL.Repositories
                     requestor = r.Firstname + r.Lastname,
                     reqdate = r.Createddate,
                     phone = r.Phonenumber,
-                    address = rc.Street +", "+ rc.City +", "+ rc.State,
+                    address = rc.Street + ", " + rc.City + ", " + rc.State,
                     requesttype = r.Requesttypeid,
                     status = r.Status,
                     email = r.Email,
@@ -165,7 +165,7 @@ namespace HalloDocDAL.Repositories
                     requestDate = r.Createddate,
                     regionId = rc.Regionid,
                     confirmationNo = r.Confirmationnumber,
-                    isFinalized = _context.EncounterForms.FirstOrDefault(x => x.RequestId == id) != null ? _context.EncounterForms.FirstOrDefault(x => x.RequestId == id).IsFinalize  :  false,
+                    isFinalized = _context.EncounterForms.FirstOrDefault(x => x.RequestId == id) != null ? _context.EncounterForms.FirstOrDefault(x => x.RequestId == id).IsFinalize : false,
 
                 }).FirstOrDefault(req => req.requestId == id);
             return data;
@@ -193,7 +193,9 @@ namespace HalloDocDAL.Repositories
             Status = req.Request.Status,
             confirmationNo = req.Request.Confirmationnumber,
             Filename = file != null ? file.Filename : null,
-            DocumentCount = req.FilesGroup.Count
+            DocumentCount = req.FilesGroup.Count,
+            Physicianid = req.Request.Physicianid
+
         })
         .GroupBy(request => request.Requestid).Select(g => g.First())
         .ToList();
@@ -261,7 +263,7 @@ namespace HalloDocDAL.Repositories
             };
             if (newstatus == 2)
             {
-                if(data.physicianId != 0)
+                if (data.physicianId != 0)
                 {
                     request.Status = 1;
                     rsl.Transtophysicianid = data.physicianId;

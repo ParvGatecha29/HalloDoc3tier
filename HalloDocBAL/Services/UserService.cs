@@ -1,9 +1,8 @@
 ﻿using HalloDocBAL.Interfaces;
 using HalloDocDAL.Contacts;
+using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Win32;
 using System.Diagnostics;
 using System.Text;
 
@@ -14,12 +13,14 @@ namespace HalloDocBAL.Services
         private readonly IUserRepository _userRepository;
         private readonly IPhysicianRepository _physicianRepository;
         private readonly IUserRepo _userRepo;
+        private readonly ApplicationDbContext _context;
 
-        public UserService(IUserRepository userRepository, IUserRepo userRepo, IPhysicianRepository physicianRepository)
+        public UserService(ApplicationDbContext context, IUserRepository userRepository, IUserRepo userRepo, IPhysicianRepository physicianRepository)
         {
             _userRepository = userRepository;
             _userRepo = userRepo;
             _physicianRepository = physicianRepository;
+            _context = context;
         }
 
         public async Task<bool> SignUp(Register register)
@@ -189,7 +190,92 @@ namespace HalloDocBAL.Services
 
         public bool SavePayRate(int Physicianid, int rate, int type)
         {
-            return _physicianRepository.SavePayRate(Physicianid,rate, type);
+            return _physicianRepository.SavePayRate(Physicianid, rate, type);
+        }
+
+        public ChatModel GetChatPatient(int Patientid, string aspuserid)
+        {
+            var Physicianid = _context.Physicians.FirstOrDefault(r => r.Aspnetuserid == aspuserid).Physicianid;
+            var patient = _context.Users.FirstOrDefault(r => r.Userid == Patientid);
+
+            if (patient == null)
+            {
+                var model = new ChatModel
+                {
+                    Physicianid = Physicianid,
+                    Patientid = Patientid,
+                    isUser = false
+                };
+                return model;
+            }
+            else
+            {
+                var model = new ChatModel
+                {
+                    Physicianid = Physicianid,
+                    Patientid = Patientid,
+                    chatWith = "patient",
+                    isUser = true,
+                    Patientname = patient.Firstname,
+                    SenderId = Physicianid,
+                    SenderType = "Physician",
+                    ReceiverId = Patientid,
+                    ReceiverType = "Patient"
+                };
+                return model;
+            }
+        }
+
+        public ChatModel GetChatAdmin(int Adminid, string aspuserid)
+        {
+            var Physicianid = _context.Physicians.FirstOrDefault(r => r.Aspnetuserid == aspuserid).Physicianid;
+
+            var model = new ChatModel
+            {
+                Adminid = Adminid,
+                Physicianid = Physicianid,
+                chatWith = "admin",
+                isUser = true,
+                SenderId = Physicianid,
+                SenderType = "Physician",
+                ReceiverId = Adminid,
+                ReceiverType = "Admin"
+            };
+            return model;
+        }
+
+        public ChatModel GetGroupChat(int Adminid, int Patientid, string aspuserid)
+        {
+            var admin = _context.Admins.FirstOrDefault(r => r.Adminid == Adminid);
+            var Physicianid = _context.Physicians.FirstOrDefault(r => r.Aspnetuserid == aspuserid).Physicianid;
+            var patient = _context.Users.FirstOrDefault(r => r.Userid == Patientid);
+
+            if (patient == null)
+            {
+                var model = new ChatModel
+                {
+                    Adminid = Adminid,
+                    Physicianid = Physicianid,
+                    Patientid = Patientid,
+                    isUser = false
+                };
+                return model;
+            }
+            else
+            {
+                var model = new ChatModel
+                {
+                    Adminid = Adminid,
+                    Physicianid = Physicianid,
+                    Patientid = Patientid,
+                    isUser = true,
+                    Patientname = patient.Firstname + " " + patient.Lastname,
+                    AdminName = admin.Firstname + " " + admin.Lastname,
+                    SenderId = Physicianid,
+                    SenderType = "Physician"
+                };
+                return model;
+            }
         }
     }
 }

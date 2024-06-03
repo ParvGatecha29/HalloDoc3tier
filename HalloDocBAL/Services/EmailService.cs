@@ -1,8 +1,8 @@
-﻿using HalloDocDAL.Model;
-using System.Net.Mail;
-using System.Net;
-using HalloDocBAL.Interfaces;
+﻿using HalloDocBAL.Interfaces;
 using HalloDocDAL.Contacts;
+using HalloDocDAL.Model;
+using System.Net;
+using System.Net.Mail;
 
 namespace HalloDocBAL.Services
 {

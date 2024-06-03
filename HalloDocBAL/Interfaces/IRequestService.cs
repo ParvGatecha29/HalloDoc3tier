@@ -9,7 +9,7 @@ namespace HalloDocBAL.Interfaces
         Task<bool> BusinessRequest(Req model);
         bool AddNotes(AdminDashboardData data);
         bool AcceptCase(int requestid);
-        bool TransferCase(int requestid, string description, int status=0);
+        bool TransferCase(int requestid, string description, int status = 0);
         bool UnblockRequest(int requestid);
     }
 }

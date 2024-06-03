@@ -16,5 +16,9 @@ namespace HalloDocBAL.Interfaces
         Payrate GetPayrateById(int id);
 
         bool SavePayRate(int Physicianid, int rate, int type);
+        public ChatModel GetChatPatient(int Patientid, string aspuserid);
+        public ChatModel GetChatAdmin(int Adminid, string aspuserid);
+        public ChatModel GetGroupChat(int Adminid, int Patientid, string aspuserid);
+
     }
 }

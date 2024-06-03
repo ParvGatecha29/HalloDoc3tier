@@ -5,7 +5,7 @@ namespace HalloDocDAL.Model
 {
     public class AdminProfile
     {
-        public int formtype {  get; set; }
+        public int formtype { get; set; }
         public int? adminId { get; set; }
         public string? aspId { get; set; }
         public string? Username { get; set; }
@@ -33,7 +33,7 @@ namespace HalloDocDAL.Model
         public List<int> adminregions { get; set; }
         public List<int> selectedRegions { get; set; }
         public List<Role> roles { get; set; }
-      
+
 
 
     }

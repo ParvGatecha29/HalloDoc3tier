@@ -201,6 +201,7 @@
                         {
                             <th scope="col" class="bg-secondary bg-opacity-25">Status</th>
                         }
+                        <th scope="col" class="bg-secondary bg-opacity-25">Chat with</th>
                         <th scope="col" class="bg-secondary bg-opacity-25">Actions</th>
 
                     </tr>
@@ -263,7 +264,24 @@
                                 </td>
                             }
 
-
+                            <td class="align-middle text-light" style="background: none">
+                                <div class="d-flex flex-wrap">
+                                    
+                                        <button type="button" class="btn border border-light text-light me-1 mb-1" onclick="LoadChatAdmin(2)">
+                                            <i class="bi bi-person text-light"></i>
+                                            <span>Admin</span>
+                                        </button>
+                                        <button type="button" class="btn border border-light text-light me-1 mb-1" onclick="LoadChatPatient(@obj.patientId)">
+                                            <i class="bi bi-person-plus text-light"></i>
+                                            <span>Patient</span>
+                                        </button>
+                                        <button type="button" class="btn border border-light text-light mb-1" onclick="LoadGroupChat(2, @obj.patientId)">
+                                            <i class="bi bi-people text-light"></i>
+                                            <span>Group Chat</span>
+                                        </button>
+                                    
+                                </div>
+                            </td>
                             <td>
                                 @if (@obj.status == 1)
                                 {
@@ -327,6 +345,8 @@
                     }
                 </tbody>
             </table>
+            <div id="chat">
+            </div>
         </div>
         @if(Model.pagedList.Count > 0)
         {
@@ -910,6 +930,7 @@
     $(document).on("click", ".clearCase", function () {
         $("#clearCaseModal").modal('show');
         $(".requestId").val($(this).closest('.tr').data('rid'));
+
     });
 
     $(document).on("click", ".sendAgreement", function () {
@@ -1054,4 +1075,17 @@
             },
         });
     }
+
+    function LoadChatAdmin(Adminid) {
+        $("#chat").load("/ProviderDashboard/LoadChatAdmin?Adminid=" + Adminid);
+    }
+
+    function LoadChatPatient(Patientid) {
+        $("#chat").load("/ProviderDashboard/LoadChatPatient?Patientid=" + Patientid);
+    }
+
+    function LoadGroupChat(Adminid, Patientid) {
+        $("#chat").load("/ProviderDashboard/LoadGroupChat?Adminid=" + Adminid + "&Patientid=" + Patientid);
+    }
+    askNotificationPermission();
 </script>

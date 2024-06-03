@@ -48,6 +48,7 @@ namespace HalloDocBAL.Interfaces
         public Physicianpayrate GetPayrateData(int Physicianid);
         public ChatModel getChatPatient(int Patientid, string aspuserid);
         public ChatModel getChatPhysician(int Physicianid, string aspuserid);
+        public ChatModel getChatAdmin(int AdminId, string aspuserid);
         public ChatModel GetGroupChat(int Patientid, int Physicianid, string aspuserid);
 
 

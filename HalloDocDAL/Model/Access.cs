@@ -12,7 +12,7 @@ namespace HalloDocDAL.Model
         public string roleName { get; set; }
         public int accountType { get; set; }
         public string userid { get; set; }
-        public int edit {  get; set; }
-        public int roleid {  get; set; }
+        public int edit { get; set; }
+        public int roleid { get; set; }
     }
 }

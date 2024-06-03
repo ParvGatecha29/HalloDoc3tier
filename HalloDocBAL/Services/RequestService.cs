@@ -227,7 +227,7 @@ namespace HalloDocBAL.Services
                 requestId = requestid,
                 notes = description
             };
-            if(status == 0)
+            if (status == 0)
             {
                 _requestRepository.transferRequest(dash, 1);
             }

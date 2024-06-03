@@ -26,7 +26,7 @@ namespace HalloDocDAL.Repositories
         {
             return _context.Healthprofessionals.FirstOrDefault(x => x.Vendorid == vendorid);
         }
-        
+
         public bool AddOrder(Orderdetail order)
         {
             _context.Orderdetails.Add(order);

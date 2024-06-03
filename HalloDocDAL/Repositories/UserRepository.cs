@@ -4,10 +4,8 @@ using HalloDocDAL.Data;
 using HalloDocDAL.Model;
 using HalloDocDAL.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Win32;
 using System.Data;
 using System.Text;
-using System.Web.Providers.Entities;
 
 namespace HalloDocDAL.Repositories
 {
@@ -163,7 +161,7 @@ namespace HalloDocDAL.Repositories
             _context.Aspnetuserroles.Add(role);
             _context.SaveChanges();
 
-           
+
 
             var data = new Physician
             {
@@ -323,7 +321,7 @@ namespace HalloDocDAL.Repositories
 
         public List<Role> GetRoles()
         {
-            return _context.Roles.Where(x=> x.Isdeleted != true).ToList();
+            return _context.Roles.Where(x => x.Isdeleted != true).ToList();
         }
 
         public List<Menu> GetMenus(int AccountType)
@@ -359,7 +357,7 @@ namespace HalloDocDAL.Repositories
                 _context.Roles.Add(role);
                 _context.SaveChanges();
             }
-            Role rolee = _context.Roles.FirstOrDefault(x=>x.Roleid ==  model.roleid);
+            Role rolee = _context.Roles.FirstOrDefault(x => x.Roleid == model.roleid);
             rolee.Name = model.roleName;
             rolee.Accounttype = (short)model.accountType;
             foreach (var menu in model.selectedMenus)
@@ -492,7 +490,8 @@ namespace HalloDocDAL.Repositories
         public List<Models.User> GetUsers()
         {
             var users = _context.Users.Include(_ => _.Aspnetuser).ThenInclude(_ => _.Aspnetuserroles);
-            if(users.Any(x => x.Aspnetuser != null ? x.Aspnetuser.Aspnetuserroles.Any(y => y.RoleId == "1") : false)){
+            if (users.Any(x => x.Aspnetuser != null ? x.Aspnetuser.Aspnetuserroles.Any(y => y.RoleId == "1") : false))
+            {
                 users.Include(x => x.Aspnetuser).ThenInclude(x => x.Admins);
             }
             if (users.Any(x => x.Aspnetuser != null ? x.Aspnetuser.Aspnetuserroles.Any(y => y.RoleId == "2") : false))

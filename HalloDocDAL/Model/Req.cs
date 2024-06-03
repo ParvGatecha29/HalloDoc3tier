@@ -8,12 +8,12 @@ namespace HalloDocDAL.Model
         [Required]
         public string? firstName { get; set; }
 
-        
+
         public string? lastName { get; set; }
 
         public DateTime dob { get; set; }
-        public int? date {  get; set; }
-        
+        public int? date { get; set; }
+
         public string? month { get; set; }
 
         public int? year { get; set; }
@@ -22,10 +22,10 @@ namespace HalloDocDAL.Model
         public string? email { get; set; }
         public int? userid { get; set; }
 
-     
+
         public string? phone { get; set; }
 
-        public string? street { get; set;}
+        public string? street { get; set; }
 
         public string? city { get; set; }
 
@@ -40,7 +40,7 @@ namespace HalloDocDAL.Model
 
         public string? password { get; set; }
 
-        public string? confirmpassword { get; set;}
+        public string? confirmpassword { get; set; }
 
         public string? cfirstName { get; set; }
         public string? clastName { get; set; }

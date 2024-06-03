@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace HalloDocDAL.Models;
+﻿namespace HalloDocDAL.Models;
 
 public partial class Requestclient
 {

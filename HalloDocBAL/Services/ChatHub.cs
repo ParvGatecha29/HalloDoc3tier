@@ -16,6 +16,7 @@ namespace HelloDoc_BAL.Services
 
         public async Task SendMessage(int senderId, string senderType, int receiverId, string receiverType, string message)
         {
+
             if (senderType == "Admin")
             {
                 if (receiverType == "Patient")
@@ -47,10 +48,15 @@ namespace HelloDoc_BAL.Services
 
                     _context.Chatdata.Add(chatmessage);
                     _context.SaveChanges();
+
+
+                    var messageData = new { Message = message, MessageBy = senderType, Time = DateTime.Now.ToShortTimeString(), ChatId = chats.Id };
+
+                    await Clients.All.SendAsync("ReceiveMessage", messageData);
                 }
-                else if(receiverType == "Physician")
+                else if (receiverType == "Physician")
                 {
-                    var data = _context.Chats.Any(r => r.Adminid == senderId && r.Physicianid == receiverId);
+                    var data = _context.Chats.Any(r => r.Adminid == senderId && r.Physicianid == receiverId && r.Patientid == null);
 
                     if (!data)
                     {
@@ -65,7 +71,7 @@ namespace HelloDoc_BAL.Services
                         _context.SaveChanges();
                     }
 
-                    var chats = _context.Chats.FirstOrDefault(r => r.Adminid == senderId && r.Physicianid == receiverId);
+                    var chats = _context.Chats.FirstOrDefault(r => r.Adminid == senderId && r.Physicianid == receiverId && r.Patientid == null);
                     var chatmessage = new Chatdatum
                     {
                         Chatid = chats.Id,
@@ -77,6 +83,10 @@ namespace HelloDoc_BAL.Services
 
                     _context.Chatdata.Add(chatmessage);
                     _context.SaveChanges();
+
+                    var messageData = new { Message = message, MessageBy = senderType, Time = DateTime.Now.ToShortTimeString(), ChatId = chats.Id };
+
+                    await Clients.All.SendAsync("ReceiveMessage", messageData);
                 }
             }
             else if (senderType == "Patient")
@@ -110,8 +120,12 @@ namespace HelloDoc_BAL.Services
 
                     _context.Chatdata.Add(chatmessage);
                     _context.SaveChanges();
+
+                    var messageData = new { Message = message, MessageBy = senderType, Time = DateTime.Now.ToShortTimeString(), ChatId = chats.Id };
+
+                    await Clients.All.SendAsync("ReceiveMessage", messageData);
                 }
-                else if(receiverType == "Physician")
+                else if (receiverType == "Physician")
                 {
                     var data = _context.Chats.Any(r => r.Patientid == senderId && r.Physicianid == receiverId);
 
@@ -140,11 +154,15 @@ namespace HelloDoc_BAL.Services
 
                     _context.Chatdata.Add(chatmessage);
                     _context.SaveChanges();
+
+                    var messageData = new { Message = message, MessageBy = senderType, Time = DateTime.Now.ToShortTimeString(), ChatId = chats.Id };
+
+                    await Clients.All.SendAsync("ReceiveMessage", messageData);
                 }
             }
-            else if(senderType == "Physician")
+            else if (senderType == "Physician")
             {
-                if(receiverType == "Admin")
+                if (receiverType == "Admin")
                 {
                     var data = _context.Chats.Any(r => r.Physicianid == senderId && r.Adminid == receiverId);
 
@@ -173,8 +191,12 @@ namespace HelloDoc_BAL.Services
 
                     _context.Chatdata.Add(chatmessage);
                     _context.SaveChanges();
+
+                    var messageData = new { Message = message, MessageBy = senderType, Time = DateTime.Now.ToShortTimeString(), ChatId = chats.Id };
+
+                    await Clients.All.SendAsync("ReceiveMessage", messageData);
                 }
-                else if(receiverType == "Patient")
+                else if (receiverType == "Patient")
                 {
                     var data = _context.Chats.Any(r => r.Physicianid == senderId && r.Patientid == receiverId);
 
@@ -203,12 +225,14 @@ namespace HelloDoc_BAL.Services
 
                     _context.Chatdata.Add(chatmessage);
                     _context.SaveChanges();
+
+                    var messageData = new { Message = message, MessageBy = senderType, Time = DateTime.Now.ToShortTimeString(), ChatId = chats.Id };
+
+                    await Clients.All.SendAsync("ReceiveMessage", messageData);
                 }
             }
 
-            var messageData = new { Message = message, MessageBy = senderType, Time = DateTime.Now.ToShortTimeString() };
 
-            await Clients.All.SendAsync("ReceiveMessage", messageData);
         }
 
         public async Task GetMessages(int senderId, string senderType, int receiverId, string receiverType)
@@ -222,52 +246,52 @@ namespace HelloDoc_BAL.Services
                     var messages = await _context.Chatdata
                         .Where(cd => cd.Chatid == chat.Id)
                         .OrderBy(cd => cd.Date)
-                        .Select(cd => new { Message = cd.Message, MessageBy = cd.Messageby, Time = cd.Date.ToShortTimeString() })
+                        .Select(cd => new { Message = cd.Message, MessageBy = cd.Messageby, Time = cd.Date.ToShortTimeString(), ChatId = chat.Id })
                         .ToListAsync();
-
-                    await Clients.Caller.SendAsync("ReceiveMessages", messages);
+                    var ChatId = chat.Id;
+                    await Clients.Caller.SendAsync("ReceiveMessages", messages, ChatId);
                 }
-                else if(receiverType == "Physician")
+                else if (receiverType == "Physician")
                 {
-                    var chat = _context.Chats.FirstOrDefault(c => c.Adminid == senderId && c.Physicianid == receiverId);
+                    var chat = _context.Chats.FirstOrDefault(c => c.Adminid == senderId && c.Physicianid == receiverId && c.Patientid == null);
 
                     var messages = await _context.Chatdata
                         .Where(cd => cd.Chatid == chat.Id)
                         .OrderBy(cd => cd.Date)
-                        .Select(cd => new { Message = cd.Message, MessageBy = cd.Messageby, Time = cd.Date.ToShortTimeString() })
+                        .Select(cd => new { Message = cd.Message, MessageBy = cd.Messageby, Time = cd.Date.ToShortTimeString(), ChatId = chat.Id })
                         .ToListAsync();
-
-                    await Clients.Caller.SendAsync("ReceiveMessages", messages);
+                    var ChatId = chat.Id;
+                    await Clients.Caller.SendAsync("ReceiveMessages", messages, ChatId);
                 }
             }
             else if (senderType == "Patient")
             {
-                if(receiverType == "Admin")
+                if (receiverType == "Admin")
                 {
                     var chat = _context.Chats.FirstOrDefault(c => c.Adminid == receiverId && c.Patientid == senderId);
 
                     var messages = await _context.Chatdata
                         .Where(cd => cd.Chatid == chat.Id)
                         .OrderBy(cd => cd.Date)
-                        .Select(cd => new { Message = cd.Message, MessageBy = cd.Messageby, Time = cd.Date.ToShortTimeString() })
+                        .Select(cd => new { Message = cd.Message, MessageBy = cd.Messageby, Time = cd.Date.ToShortTimeString(), ChatId = chat.Id })
                         .ToListAsync();
-
-                    await Clients.Caller.SendAsync("ReceiveMessages", messages);
+                    var ChatId = chat.Id;
+                    await Clients.Caller.SendAsync("ReceiveMessages", messages, ChatId);
                 }
-                else if(receiverType == "Physician")
+                else if (receiverType == "Physician")
                 {
                     var chat = _context.Chats.FirstOrDefault(c => c.Patientid == senderId && c.Physicianid == receiverId);
 
                     var messages = await _context.Chatdata
                         .Where(cd => cd.Chatid == chat.Id)
                         .OrderBy(cd => cd.Date)
-                        .Select(cd => new { Message = cd.Message, MessageBy = cd.Messageby, Time = cd.Date.ToShortTimeString() })
+                        .Select(cd => new { Message = cd.Message, MessageBy = cd.Messageby, Time = cd.Date.ToShortTimeString(), ChatId = chat.Id })
                         .ToListAsync();
-
-                    await Clients.Caller.SendAsync("ReceiveMessages", messages);
+                    var ChatId = chat.Id;
+                    await Clients.Caller.SendAsync("ReceiveMessages", messages, ChatId);
                 }
             }
-            else if(senderType == "Physician")
+            else if (senderType == "Physician")
             {
                 if (receiverType == "Admin")
                 {
@@ -278,20 +302,20 @@ namespace HelloDoc_BAL.Services
                         .OrderBy(cd => cd.Date)
                         .Select(cd => new { Message = cd.Message, MessageBy = cd.Messageby, Time = cd.Date.ToShortTimeString() })
                         .ToListAsync();
-
-                    await Clients.Caller.SendAsync("ReceiveMessages", messages);
+                    var ChatId = chat.Id;
+                    await Clients.Caller.SendAsync("ReceiveMessages", messages, ChatId);
                 }
-                else if(receiverType == "Patient")
+                else if (receiverType == "Patient")
                 {
                     var chat = _context.Chats.FirstOrDefault(c => c.Physicianid == senderId && c.Patientid == receiverId);
 
                     var messages = await _context.Chatdata
                         .Where(cd => cd.Chatid == chat.Id)
                         .OrderBy(cd => cd.Date)
-                        .Select(cd => new { Message = cd.Message, MessageBy = cd.Messageby, Time = cd.Date.ToShortTimeString() })
+                        .Select(cd => new { Message = cd.Message, MessageBy = cd.Messageby, Time = cd.Date.ToShortTimeString(), ChatId = chat.Id })
                         .ToListAsync();
-
-                    await Clients.Caller.SendAsync("ReceiveMessages", messages);
+                    var ChatId = chat.Id;
+                    await Clients.Caller.SendAsync("ReceiveMessages", messages, ChatId);
                 }
             }
         }
@@ -299,7 +323,7 @@ namespace HelloDoc_BAL.Services
         public async Task SendMessageGroup(int adminId, int patientId, int physicianId, string senderType, string message)
         {
             var data = _context.Chats.Any(r => r.Adminid == adminId && r.Patientid == patientId && r.Physicianid == physicianId);
-            
+
             if (!data)
             {
                 var chat = new Chat
@@ -310,11 +334,11 @@ namespace HelloDoc_BAL.Services
                     Createddate = DateTime.Now
                 };
 
-                if(senderType == "Admin")
+                if (senderType == "Admin")
                 {
                     chat.Createdby = adminId;
                 }
-                else if(senderType == "Patient")
+                else if (senderType == "Patient")
                 {
                     chat.Createdby = patientId;
                 }
@@ -354,7 +378,7 @@ namespace HelloDoc_BAL.Services
             _context.Chatdata.Add(chatmessage);
             _context.SaveChanges();
 
-            var messageData = new { Message = message, MessageBy = senderType, SenderName = chatmessage.Sendername, Time = DateTime.Now.ToShortTimeString() };
+            var messageData = new { Message = message, MessageBy = senderType, SenderName = chatmessage.Sendername, Time = DateTime.Now.ToShortTimeString(), ChatId = chats.Id };
 
             await Clients.All.SendAsync("ReceiveMessage", messageData);
         }
@@ -366,10 +390,10 @@ namespace HelloDoc_BAL.Services
             var messages = await _context.Chatdata
                 .Where(cd => cd.Chatid == chat.Id)
                 .OrderBy(cd => cd.Date)
-                .Select(cd => new { Message = cd.Message, MessageBy = cd.Messageby, SenderName = cd.Sendername, Time = cd.Date.ToShortTimeString() })
+                .Select(cd => new { Message = cd.Message, MessageBy = cd.Messageby, SenderName = cd.Sendername, Time = cd.Date.ToShortTimeString(), ChatId = chat.Id })
                 .ToListAsync();
-
-            await Clients.Caller.SendAsync("ReceiveMessages", messages);
+            var ChatId = chat.Id;
+            await Clients.Caller.SendAsync("ReceiveMessages", messages, ChatId);
         }
     }
 }

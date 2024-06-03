@@ -1,5 +1,5 @@
-﻿using HalloDocDAL.Models;
-using HalloDocDAL.Model;
+﻿using HalloDocDAL.Model;
+using HalloDocDAL.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace HalloDocBAL.Services
@@ -24,7 +24,7 @@ namespace HalloDocBAL.Services
 
         public static void SetLoggedInUser(ISession session, Aspnetuser user)
         {
-            
+
             if (user != null)
             {
                 session.SetString("userId", user.Id);

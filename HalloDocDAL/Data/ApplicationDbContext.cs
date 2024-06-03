@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using HalloDocDAL.Models;
+﻿using HalloDocDAL.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HalloDocDAL.Data;

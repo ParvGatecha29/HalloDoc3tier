@@ -2,11 +2,11 @@
 {
     public class AdminDashboardData
     {
-        public int requestId {  get; set; }
-        public int patientId {  get; set; }
-        public string name {  get; set; }
-        public string firstName {  get; set; }
-        public string lastName {  get; set; }
+        public int requestId { get; set; }
+        public int patientId { get; set; }
+        public string name { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
         public int? dobyear { get; set; }
         public string dobmonth { get; set; }
         public int? dobdate { get; set; }

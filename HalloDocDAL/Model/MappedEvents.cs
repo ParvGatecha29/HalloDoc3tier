@@ -10,7 +10,7 @@ namespace HalloDocDAL.Model
         public DateTime start { get; set; }
         public DateTime end { get; set; }
         public int? ShiftDetailId { get; set; }
-        public IQueryable<Region> region { get; set;}
+        public IQueryable<Region> region { get; set; }
         public int status { get; set; }
     }
 }

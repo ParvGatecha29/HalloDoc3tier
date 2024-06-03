@@ -723,7 +723,10 @@
 </div>
 
 <script>
+ 
     $(document).ready(function () {
+        askNotificationPermission();
+
 
         $('#formcancel').on('submit', function (e) {
             e.preventDefault();
@@ -991,6 +994,7 @@
             }
 
         });
+
         $("#downenc").click(function () {
             var rid = $('.requestId').val();
             $.ajax({
@@ -1034,9 +1038,6 @@
         $(".requestId").val($(this).closest('.tr').data('rid'));
     });
 
-
-
-
     $(document).on("click", ".sendAgreement", function () {
         $("#sendAgreementModal").modal('show');
         $(".requestId").val($(this).closest('.tr').data('rid'));
@@ -1076,6 +1077,7 @@
             location.href = "/AdminDashboard/Encounter?requestid=" + rid;
         }
     }
+
     function LoadChatPatient(patientid) {
         $("#chat").load("/AdminDashboard/LoadChatPatient?Patientid=" + patientid);
     }
@@ -1088,6 +1090,5 @@
         $("#chat").load("/AdminDashboard/LoadGroupChat?Patientid=" + patientid + "&Physicianid=" + physicianid);
     }
 
-    
 
 </script>

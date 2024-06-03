@@ -32,7 +32,7 @@ public class AdminDashboardController : Controller
     int[] concludecase = { 6 };
     int[] toclosecase = { 3, 7, 8 };
     int[] unpaidcase = { 9 };
-    public AdminDashboardController(IJwtService jwtService,IRequestRepository requestRepository, IUserRepository userRepository, IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService, IRecordsRepository recordsRepository)
+    public AdminDashboardController(IJwtService jwtService, IRequestRepository requestRepository, IUserRepository userRepository, IAdminDashboardService adminDashboardService, IEmailService emailService, IDashboardService dashboardService, IRequestWiseFilesRepository requestWiseFilesRepository, IOrderService orderService, IUserService userService, IRequestService requestService, IRecordsRepository recordsRepository)
     {
         _requestRepository = requestRepository;
         _adminDashboardService = adminDashboardService;
@@ -46,7 +46,7 @@ public class AdminDashboardController : Controller
         _recordsRepository = recordsRepository;
         _jwtService = jwtService;
     }
-  
+
     public IActionResult AdminDashboard()
     {
         var dash = new AdminDashboard();
@@ -337,7 +337,7 @@ public class AdminDashboardController : Controller
         return Json(new { success = true });
     }
 
-    public IActionResult Encounter(int requestid) 
+    public IActionResult Encounter(int requestid)
     {
         string[] format = { "dd/MMMM/yyyy", "d/MMMM/yyyy" };
         AdminDashboardData ad = _adminDashboardService.GetRequestById(requestid);
@@ -535,7 +535,7 @@ public class AdminDashboardController : Controller
 
         return Json(new { success = true });
     }
-    
+
     public async Task<IActionResult> Export(bool all)
     {
         var reqtype = HttpContext.Session.GetString("reqtype");
@@ -747,7 +747,7 @@ public class AdminDashboardController : Controller
         HttpContext.Session.SetString("view", view);
         return true;
     }
-    
+
     public IActionResult EditProvider(int physicianid)
     {
         Provider prov = new Provider();
@@ -1469,8 +1469,8 @@ public class AdminDashboardController : Controller
 
     public JsonResult SavePayrate(int Physicianid, int rate, int type)
     {
-        var suc = _userService.SavePayRate(Physicianid,rate, type);
-        return Json(new {success = suc});
+        var suc = _userService.SavePayRate(Physicianid, rate, type);
+        return Json(new { success = suc });
     }
 
     public IActionResult Invoicing()

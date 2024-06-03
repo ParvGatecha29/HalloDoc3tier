@@ -11,5 +11,6 @@
         public int Requestid { get; internal set; }
         public string? Filename { get; internal set; }
         public int DocumentCount { get; internal set; }
+        public int? Physicianid { get; set; }
     }
 }

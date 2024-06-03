@@ -6,7 +6,7 @@ namespace HalloDocDAL.Model
     {
         public List<Healthprofessionaltype> healthprofessionaltypes { get; set; }
 
-        public string contact {  get; set; }
+        public string contact { get; set; }
         public string email { get; set; }
         public string fax { get; set; }
         public string orderdetails { get; set; }

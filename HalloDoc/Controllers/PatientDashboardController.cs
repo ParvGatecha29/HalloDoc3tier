@@ -4,6 +4,7 @@ using HalloDocDAL.Models;
 using HalloDocDAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO.Compression;
 
 namespace HalloDoc.Controllers;
@@ -12,11 +13,13 @@ public class PatientDashboardController : Controller
 {
     private readonly IDashboardService _dashboardService;
     private readonly IUserService _userService;
+    private readonly IJwtService _jwtService;
 
-    public PatientDashboardController(IDashboardService dashboardService, IUserService userService)
+    public PatientDashboardController(IDashboardService dashboardService, IUserService userService, IJwtService jwtService)
     {
         _dashboardService = dashboardService;
         _userService = userService;
+        _jwtService = jwtService;
     }
 
     [AuthManager("2")]
@@ -141,5 +144,47 @@ public class PatientDashboardController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    public IActionResult LoadChatAdmin(int Adminid)
+    {
+        var token = Request.Cookies["jwt"];
+        var aspnetid = "";
+        if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+        {
+            aspnetid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+        }
+
+        ChatModel model = _dashboardService.GetChatAdmin(Adminid, aspnetid);
+
+        return PartialView("_chat", model);
+    }
+
+    public IActionResult LoadChatPhysician(int Physicianid)
+    {
+        var token = Request.Cookies["jwt"];
+        var aspnetid = "";
+        if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+        {
+            aspnetid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+        }
+
+        ChatModel model = _dashboardService.GetChatPhysician(Physicianid, aspnetid);
+
+        return PartialView("_chat", model);
+    }
+
+    public IActionResult LoadGroupChat(int Adminid, int Physicianid)
+    {
+        var token = Request.Cookies["jwt"];
+        var aspnetid = "";
+        if (_jwtService.ValidateToken(token, out JwtSecurityToken jwtToken))
+        {
+            aspnetid = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId").Value;
+        }
+
+        ChatModel model = _dashboardService.GetGroupChat(Adminid, Physicianid, aspnetid);
+
+        return PartialView("_groupChat", model);
     }
 }

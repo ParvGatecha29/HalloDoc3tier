@@ -16,7 +16,7 @@ namespace HalloDocBAL.Services
         private readonly IRequestWiseFilesRepository _requestWiseFilesRepository;
         private readonly ApplicationDbContext _context;
 
-        public DashboardService(ApplicationDbContext context,IRequestRepository requestRepository, IRequestWiseFilesRepository requestWiseFilesRepository)
+        public DashboardService(ApplicationDbContext context, IRequestRepository requestRepository, IRequestWiseFilesRepository requestWiseFilesRepository)
         {
             _context = context;
             _requestRepository = requestRepository;
@@ -363,5 +363,78 @@ namespace HalloDocBAL.Services
                 _context.SaveChanges();
             }
         }
+
+        public ChatModel GetChatAdmin(int Adminid, string aspuserid)
+        {
+            var Userid = _context.Users.FirstOrDefault(r => r.Aspnetuserid == aspuserid).Userid;
+
+            var model = new ChatModel
+            {
+                Adminid = Adminid,
+                Patientid = Userid,
+                chatWith = "admin",
+                isUser = true,
+                SenderId = Userid,
+                SenderType = "Patient",
+                ReceiverId = Adminid,
+                ReceiverType = "Admin"
+            };
+            return model;
+        }
+
+        public ChatModel GetChatPhysician(int Physicianid, string aspuserid)
+        {
+            var Userid = _context.Users.FirstOrDefault(r => r.Aspnetuserid == aspuserid).Userid;
+            var physician = _context.Physicians.FirstOrDefault(r => r.Physicianid == Physicianid);
+
+            if (physician == null)
+            {
+                var model = new ChatModel
+                {
+                    Patientid = Userid,
+                    Physicianid = Physicianid,
+                    isUser = false
+                };
+                return model;
+            }
+            else
+            {
+                var model = new ChatModel
+                {
+                    Patientid = Userid,
+                    Physicianid = Physicianid,
+                    chatWith = "physician",
+                    isUser = true,
+                    PhysicianName = physician.Firstname + " " + physician.Lastname,
+                    SenderId = Userid,
+                    SenderType = "Patient",
+                    ReceiverId = Physicianid,
+                    ReceiverType = "Physician"
+                };
+                return model;
+            }
+        }
+
+        public ChatModel GetGroupChat(int adminid, int Physicianid, string aspuserid)
+        {
+            var admin = _context.Admins.FirstOrDefault(r => r.Adminid == adminid);
+            var physician = _context.Physicians.FirstOrDefault(r => r.Physicianid == Physicianid);
+            var userid = _context.Users.FirstOrDefault(r => r.Aspnetuserid == aspuserid).Userid;
+
+            var model = new ChatModel
+            {
+                Adminid = adminid,
+                Physicianid = Physicianid,
+                Patientid = userid,
+                isUser = true,
+                AdminName = admin.Firstname + " " + admin.Lastname,
+                PhysicianName = physician.Firstname + " " + physician.Lastname,
+                SenderId = userid,
+                SenderType = "Patient"
+            };
+            return model;
+        }
+
+
     }
 }

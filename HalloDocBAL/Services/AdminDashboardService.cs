@@ -25,7 +25,7 @@ namespace HalloDocBAL.Services
             _requestWiseFilesRepository = requestWiseFilesRepository;
             _userRepository = userRepository;
         }
-        
+
         public List<AdminDashboardData> GetRequests()
         {
             var data = _requestRepository.GetAllRequests();
@@ -34,10 +34,10 @@ namespace HalloDocBAL.Services
 
         public async Task<PagedList<AdminDashboardData>> GetRequestsByStatus(int[] status, int reqtype, int pageNumber, int region, string search, bool all, int physicianid)
         {
-            var data = await _requestRepository.GetRequestsByStatus(status, reqtype, pageNumber, region, search, all,physicianid);
+            var data = await _requestRepository.GetRequestsByStatus(status, reqtype, pageNumber, region, search, all, physicianid);
             return data;
         }
-      
+
         public AdminDashboardData GetRequestById(int id)
         {
             var data = _requestRepository.GetRequestById(id);
@@ -597,6 +597,11 @@ namespace HalloDocBAL.Services
                 };
                 return model;
             }
+        }
+
+        public ChatModel getChatAdmin(int AdminId, string aspuserid)
+        {
+            throw new NotImplementedException();
         }
     }
 }

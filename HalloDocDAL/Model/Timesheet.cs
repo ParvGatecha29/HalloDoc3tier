@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HalloDocDAL.Model
+﻿namespace HalloDocDAL.Model
 {
     public class Timesheet
     {
@@ -12,7 +6,7 @@ namespace HalloDocDAL.Model
         public string shift { get; set; }
         public string NightShiftWeekend { get; set; }
         public string HouseCall { get; set; }
-        public string HouseCallNightWeekend { get; set;}
+        public string HouseCallNightWeekend { get; set; }
         public int PhoneConsults { get; set; }
         public int PhoneConsultsNightWeekend { get; set; }
         public string BatchTesting { get; set; }

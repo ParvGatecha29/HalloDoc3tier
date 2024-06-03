@@ -153,3 +153,61 @@ document.addEventListener('DOMContentLoaded', function () {
     //});
 });
 
+
+// Function to request notification permission
+function askNotificationPermission() {
+    console.log("hello");
+    if ('Notification' in window && navigator.serviceWorker) {
+        Notification.requestPermission().then(status => {
+            console.log('Notification permission status:', status);
+            if (status === 'granted') {
+                initializeServiceWorker();
+            } else {
+                console.warn('Notification permission not granted');
+            }
+        });
+    }
+}
+
+// Function to initialize the service worker
+function initializeServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(function (registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(function (error) {
+                console.error('Service Worker registration failed:', error);
+            });
+    }
+}
+
+// Function to display notification
+function displayNotification(user, message) {
+
+    if (Notification.permission === 'granted') {
+
+        navigator.serviceWorker.getRegistration().then(function (reg) {
+            console.log(navigator);
+            if (reg) {
+                console.log("hiii");
+
+                const options = {
+                    body: `${user}: ${message}`,
+                    // icon: 'images/icon.png',
+                    // vibrate: [100, 50, 100],
+                    data: {
+                        dateOfArrival: Date.now(),
+                        primaryKey: 1
+                    }
+                };
+                reg.showNotification('New Message', options);
+            }
+        });
+    } else {
+        console.warn('Notification permission not granted');
+    }
+}
+
+// Call the function to ask for notification permission when the page loads
+

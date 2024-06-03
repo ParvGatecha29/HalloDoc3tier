@@ -18,5 +18,8 @@ namespace HalloDocBAL.Interfaces
         public bool SaveTimeSheet(List<InvoicingModel> invoicingModels, string aspuserid);
         public bool SaveReimbursement(InvoicingModel invoicingModels, string aspuserid);
         public void FinalizeTimesheet(DateTime startDate, string aspuserid);
+        public ChatModel GetChatAdmin(int Adminid, string aspuserid);
+        public ChatModel GetChatPhysician(int Physicianid, string aspuserid);
+        public ChatModel GetGroupChat(int adminid, int Physicianid, string aspuserid);
     }
 }

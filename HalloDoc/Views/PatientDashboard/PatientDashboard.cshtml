@@ -112,6 +112,7 @@
                     <tr>
                         <th>Created Date</th>
                         <th class="mobile-hide">Current Status</th>
+                        <th class="mobile-hide"> Chat With </th>
                         <th class="mobile-hide">Document</th>
                     </tr>
                 </thead>
@@ -148,6 +149,32 @@
                             {
                                 <td class="mobile-hide" data-label="Current Status">Clear</td>
                             }
+                            <td class="align-middle text-light" style="background: none">
+                                <div class="d-flex flex-wrap">
+                                    @if (item.Physicianid != null)
+                                    {
+                                        <button type="button" class="btn btn-outline-info me-1 mb-1" onclick="LoadChatAdmin(2)">
+                                            <i class="bi bi-person text-light"></i>
+                                            <span>Admin</span>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-info me-1 mb-1" onclick="LoadChatPhysician(@item.Physicianid)">
+                                            <i class="bi bi-person-plus text-light"></i>
+                                            <span>Physician</span>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-info mb-1" onclick="LoadGroupChat(2, @item.Physicianid)">
+                                            <i class="bi bi-people text-light"></i>
+                                            <span>Group Chat</span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-outline-info me-1 mb-1" onclick="LoadChatAdmin(2)">
+                                            <i class="bi bi-person text-light"></i>
+                                            <span>Admin</span>
+                                        </button>
+                                    }
+                                </div>
+                            </td>
                             @if (item.Filename != null)
                             {
                                 <td class="mobile-hide" data-label="Document">
@@ -164,6 +191,9 @@
                     }
                 </tbody>
             </table>
+            <div id="chat">
+
+            </div>
         </div>
         <div class="tab-pane fade p-4 tab" id="profile" role="tabpanel" aria-labelledby="profile-tab">
             <partial name="_ProfilePartial" />
@@ -180,6 +210,7 @@
         <a href="#" class="text-white text-decoration-none fs-6">Privacy Policy</a>
     </footer>
 </div>
+<script src="~/js/site.js" asp-append-version="true"></script>
 
 
     <script>
@@ -210,4 +241,17 @@
         });
     });
 
+
+    function LoadChatAdmin(Adminid) {
+        $("#chat").load("/PatientDashboard/LoadChatAdmin?Adminid=" + Adminid);
+    }
+
+    function LoadChatPhysician(physicianid) {
+        $("#chat").load("/PatientDashboard/LoadChatPhysician?Physicianid=" + physicianid);
+    }
+
+    function LoadGroupChat(Adminid, physicianid) {
+        $("#chat").load("/PatientDashboard/LoadGroupChat?Adminid=" + Adminid + "&Physicianid=" + physicianid);
+    }
+    askNotificationPermission();
 </script>

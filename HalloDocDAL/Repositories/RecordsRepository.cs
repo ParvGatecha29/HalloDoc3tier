@@ -1,7 +1,7 @@
 ﻿using HalloDocDAL.Contacts;
 using HalloDocDAL.Data;
-using HalloDocDAL.Models;
 using HalloDocDAL.Model;
+using HalloDocDAL.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HalloDocDAL.Repositories
@@ -44,21 +44,21 @@ namespace HalloDocDAL.Repositories
         public async Task<PagedList<PatientHistory>> GetBlockedPatients(string? FirstName, string? LastName, string? Phone, string? Email, int pageNumber = 1)
         {
             var result = (from b in _context.Blockrequests
-                                           join r in _context.Requests on b.Requestid equals r.Requestid
-                                           select new PatientHistory
-                                           {
-                                               FirstName = r.Firstname,
-                                               LastName = r.Lastname,
-                                               Email = b.Email,
-                                               PhoneNumber = b.Phonenumber,
-                                               CreatedDate = b.Createddate.ToString(),
-                                               IsActive = b.Isactive,
-                                               RequestId = r.Requestid
-                                           }).Where(item =>
-                                               (string.IsNullOrEmpty(FirstName) || item.FirstName.ToLower().Contains(FirstName)) &&
-                                               (string.IsNullOrEmpty(LastName) || item.LastName.ToLower().Contains(LastName)) &&
-                                               (string.IsNullOrEmpty(Email) || item.Email.Contains(Email)) &&
-                                               (string.IsNullOrEmpty(Phone) || item.PhoneNumber.Contains(Phone))
+                          join r in _context.Requests on b.Requestid equals r.Requestid
+                          select new PatientHistory
+                          {
+                              FirstName = r.Firstname,
+                              LastName = r.Lastname,
+                              Email = b.Email,
+                              PhoneNumber = b.Phonenumber,
+                              CreatedDate = b.Createddate.ToString(),
+                              IsActive = b.Isactive,
+                              RequestId = r.Requestid
+                          }).Where(item =>
+                              (string.IsNullOrEmpty(FirstName) || item.FirstName.ToLower().Contains(FirstName)) &&
+                              (string.IsNullOrEmpty(LastName) || item.LastName.ToLower().Contains(LastName)) &&
+                              (string.IsNullOrEmpty(Email) || item.Email.Contains(Email)) &&
+                              (string.IsNullOrEmpty(Phone) || item.PhoneNumber.Contains(Phone))
                                                 );
 
             var resultl = result.Skip((pageNumber - 1) * 10).Take(10).ToList();
@@ -67,7 +67,7 @@ namespace HalloDocDAL.Repositories
 
             return resultlist;
         }
-       
+
         public List<PatientHistory> GetPatientRequests(int userid)
         {
             List<PatientHistory> result = (from r in _context.Requests
@@ -90,7 +90,7 @@ namespace HalloDocDAL.Repositories
                                            }).ToList();
             return result;
         }
-        
+
         public DateTime? GetDateofService(int requestid)
         {
             Requeststatuslog? log = _context.Requeststatuslogs.OrderByDescending(x => x.Createddate).FirstOrDefault(x => x.Requestid == requestid && x.Status == 6 && x.Physicianid != null);
@@ -154,58 +154,58 @@ namespace HalloDocDAL.Repositories
 
         public async Task<PagedList<SearchRecord>> GetSearchRecords(string? Email, DateTime? FromDoS, string? Phone, string? Patient, string? Provider, int RequestStatus, int RequestType, DateTime? ToDoS, int pageNumber)
         {
-                var data = _context.Requests
-                    .Include(r => r.Requestclients)
-                    .Include(r => r.Requestnotes)
-                    .Where(r => r.Isdeleted != true)
-                    .Select(r => new SearchRecord
-                    {
-                        RequestId = r.Requestid,
-                        Requestor = r.Firstname+r.Lastname,
-                        PatientName = r.Requestclients.FirstOrDefault().Firstname + " " + r.Requestclients.FirstOrDefault().Lastname,
-                        Email = r.Requestclients.FirstOrDefault().Email,
-                        PhoneNumber = r.Requestclients.FirstOrDefault().Phonenumber,
-                        Address = r.Requestclients.FirstOrDefault().Address,
-                        Zip = r.Requestclients.FirstOrDefault().Zipcode,
-                        RequestStatus = r.Status,
-                        PhysicianName = _context.Physicians.FirstOrDefault(n => n.Physicianid == r.Physicianid).Firstname != null ? _context.Physicians.FirstOrDefault(n => n.Physicianid == r.Physicianid).Firstname : "",
-                        PhysicianNote = r.Requestnotes.FirstOrDefault().Physiciannotes,
-                        AdminNotes = r.Requestnotes.FirstOrDefault().Adminnotes,
-                        PatientNote = r.Requestclients.FirstOrDefault().Notes,
-                        RequestTypeId = r.Requesttypeid
-                    }).AsQueryable();
+            var data = _context.Requests
+                .Include(r => r.Requestclients)
+                .Include(r => r.Requestnotes)
+                .Where(r => r.Isdeleted != true)
+                .Select(r => new SearchRecord
+                {
+                    RequestId = r.Requestid,
+                    Requestor = r.Firstname + r.Lastname,
+                    PatientName = r.Requestclients.FirstOrDefault().Firstname + " " + r.Requestclients.FirstOrDefault().Lastname,
+                    Email = r.Requestclients.FirstOrDefault().Email,
+                    PhoneNumber = r.Requestclients.FirstOrDefault().Phonenumber,
+                    Address = r.Requestclients.FirstOrDefault().Address,
+                    Zip = r.Requestclients.FirstOrDefault().Zipcode,
+                    RequestStatus = r.Status,
+                    PhysicianName = _context.Physicians.FirstOrDefault(n => n.Physicianid == r.Physicianid).Firstname != null ? _context.Physicians.FirstOrDefault(n => n.Physicianid == r.Physicianid).Firstname : "",
+                    PhysicianNote = r.Requestnotes.FirstOrDefault().Physiciannotes,
+                    AdminNotes = r.Requestnotes.FirstOrDefault().Adminnotes,
+                    PatientNote = r.Requestclients.FirstOrDefault().Notes,
+                    RequestTypeId = r.Requesttypeid
+                }).AsQueryable();
 
-                if (RequestStatus != 0)
-                {
-                    data = data.Where(r => r.RequestStatus == RequestStatus);
-                }
-                if (Patient != null)
-                {
-                    data = data.Where(r => r.PatientName.Contains(Patient));
-                }
-                if (RequestType != 0)
-                {
-                    data = data.Where(r => r.RequestTypeId == RequestType);
-                }
-                if (Provider != null)
-                {
-                    data = data.Where(r => r.PhysicianName.Contains(Provider));
-                }
-                if (Email != null)
-                {
-                    data = data.Where(r => r.Email == Email);
-                }
-                if (Phone != null)
-                {
-                    data = data.Where(r => r.PhoneNumber == Phone);
-                }
+            if (RequestStatus != 0)
+            {
+                data = data.Where(r => r.RequestStatus == RequestStatus);
+            }
+            if (Patient != null)
+            {
+                data = data.Where(r => r.PatientName.Contains(Patient));
+            }
+            if (RequestType != 0)
+            {
+                data = data.Where(r => r.RequestTypeId == RequestType);
+            }
+            if (Provider != null)
+            {
+                data = data.Where(r => r.PhysicianName.Contains(Provider));
+            }
+            if (Email != null)
+            {
+                data = data.Where(r => r.Email == Email);
+            }
+            if (Phone != null)
+            {
+                data = data.Where(r => r.PhoneNumber == Phone);
+            }
 
-                List<SearchRecord> list = data.ToList();
+            List<SearchRecord> list = data.ToList();
 
-                list = list.Skip((pageNumber - 1) * 10).Take(10).ToList();
+            list = list.Skip((pageNumber - 1) * 10).Take(10).ToList();
 
-                PagedList<SearchRecord> pageList = await PagedList<SearchRecord>.CreateAsync(list, data.Count(), pageNumber, 10);
-                return pageList;
+            PagedList<SearchRecord> pageList = await PagedList<SearchRecord>.CreateAsync(list, data.Count(), pageNumber, 10);
+            return pageList;
         }
 
         public bool DeletePatientRequest(int requestid)
